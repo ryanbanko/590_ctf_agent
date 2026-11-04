@@ -67,10 +67,19 @@ One command selects a challenge and runs the existing agent:
 uv run --frozen --env-file .env python -m ctf_agent run-challenge --challenge pwn-baby-boi
 ```
 
-Run it from `/Users/ryanbanko/590_final` with Docker running. The workspace has
-solver/guard images, the pinned dataset, and the eleven checked challenge
-directories. Host credentials remain in `.env`. See [README](README.md) for fresh
-setup, tool contracts, architecture, limits and result interpretation.
+Run it from the repository root (the folder containing `README.md` and
+`pyproject.toml`) with Docker running. Each teammate must install dependencies,
+build solver/guard images, obtain the pinned dataset and configure their local
+`.env`; these are not supplied by a GitHub clone. The recorded verification
+machine had all eleven checked challenge directories. See [README](README.md)
+for teammate setup, tool contracts, architecture, limits and result interpretation.
+
+The portability review found personal checkout paths only in current documentation;
+the application already uses repository-relative defaults. Instructions now work
+from any checkout location and distinguish local setup from committed files.
+Historical evidence retains its original paths as provenance. This was a
+documentation-only correction, checked with a path scan and local-link validation;
+it made no model calls, downloads or container runs.
 
 `run-challenge` replaces `run-development`. It uses `nyuctf==1.1.1` to load the
 selected ID, stages only listed contestant files, starts the supplied services
@@ -132,9 +141,10 @@ The earlier live synthetic model check succeeded autonomously with two model
 requests and two tools, 837 input/100 output tokens, estimated **$0.0001337**.
 Native hosted usage/cost readback and cleanup passed.
 
-The user's real development attempt is retained locally at
-[runs/development/development-3d5f96fbcaa9/run.json](runs/development/development-3d5f96fbcaa9/run.json),
-with attempt ID `1f905c41c9a8`. It made **six model calls and six tool calls**,
+The user's real development attempt was saved locally at
+`runs/development/development-3d5f96fbcaa9/run.json`, with attempt ID `1f905c41c9a8`.
+That Git-ignored record is not included in teammates' clones. It made
+**six model calls and six tool calls**,
 used 7,042 input/1,466 output tokens, cost an estimated **$0.00118394**, and stopped
 on `command_timeout` without a submission or verified success. Attempt time was
 51.797599 seconds; complete launch time was 59.837572 seconds. Saved trace audit
@@ -187,8 +197,8 @@ assistance disclosed in README. Original requirements: [ASSIGNMENT.md](ASSIGNMEN
 Historical evidence remains unchanged. Its commands and test counts describe the
 recorded milestone; use README for current commands. The user requested a local
 Git checkpoint of the Section 1 handoff, including code, configuration, documentation
-and retained evidence. Use `git log -1 --oneline` for that checkpoint; the original
-baseline is `028f560`. This save is not a frozen scoring release. Credentials,
+and retained evidence: `84a5f74`. The original baseline is `028f560`; later changes
+can be inspected with `git log --oneline`. This save is not a frozen scoring release. Credentials,
 downloaded datasets and temporary `runs/` records remain Git-ignored.
 
 | Milestone | Records |

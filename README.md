@@ -56,20 +56,26 @@ answers or solutions. **The selection is not balanced by difficulty**: the index
 has no difficulty ratings, and we have not established how hard each challenge is.
 
 The public index lists all 50 even when only some challenge directories have been
-downloaded. Our current checkout uses Git's *sparse checkout*, which downloads
-selected directories. The ten scored directories and `pwn-baby-boi` are available
-and have passed environment checks. The other 39 development directories may need
-downloading before use. Those setup checks did not attempt to solve the scored set.
+downloaded. The setup below uses Git's *sparse checkout* to download selected
+directories. Dataset files are local to each teammate's machine and are not included
+in this repository. Recorded environment checks passed for the ten scored challenges
+and `pwn-baby-boi`; those checks did not attempt to solve the scored set. A fresh
+setup downloads `pwn-baby-boi` first. Download other directories as you need them.
 
 ## One-time setup
 
-**This setup has already been done in the current workspace.** For your next
-attempt, start Docker and skip to [Choose and run a challenge](#choose-and-run-a-challenge).
-The instructions here are for a fresh checkout or missing dependencies/images.
+**Each teammate completes this section once after cloning the repository.** If
+you already have the dependencies, Docker images, `.env` and dataset installed,
+skip to [Choose and run a challenge](#choose-and-run-a-challenge).
 
-Run commands in a terminal from this repository's root. Use Python **3.13.2**, uv,
-Docker Desktop/Engine with Linux containers and Compose v2, and Node.js/npm for
-native Langfuse trace export.
+Clone the repository into any folder and open that folder in your IDE. Run all
+commands from its **repository root**: the folder containing `README.md`,
+`pyproject.toml` and `ctf_agent/`. The checkout's name and location do not matter;
+paths such as `configs/` and `datasets/` are relative to that folder.
+
+Use Python **3.13.2**, uv, Docker Desktop/Engine with Linux containers and
+Compose v2, and Node.js/npm for native Langfuse trace export. Start Docker before
+running the build command:
 
 ```sh
 uv sync --frozen
@@ -79,7 +85,8 @@ uv run --frozen python -m ctf_agent build-images
 Dependencies are locked: Langfuse 5.1.0, OpenAI 3.44.0, nyuctf 1.1.1, and pytest
 9.2.0 for development. Start Docker before building or preparing challenges.
 
-Create `.env` from `.env.example` if needed. Fill these host-only variables:
+If `.env` does not exist, copy `.env.example` to `.env`. Each teammate uses their
+own Duke key and the team's intended Langfuse project. Fill these host-only variables:
 
 | Variable | Source |
 | --- | --- |
@@ -108,18 +115,16 @@ files enter the solver. Do not consult evaluation flags, solutions or write-ups.
 
 ## Choose and run a challenge
 
-For the current workspace, use these steps in your IDE terminal.
+After completing one-time setup on your machine, use these steps in your IDE terminal.
 
-**1. Start Docker Desktop and open the project directory.**
-
-```sh
-cd /Users/ryanbanko/590_final
-```
+**1. Start Docker and open a terminal at the repository root.** The folder should
+contain `README.md` and `pyproject.toml`. Use your own checkout location; the
+commands below are identical for every teammate.
 
 **2. Choose an ID from the `development` list in
-[configs/ctftiny.json](configs/ctftiny.json).** Start with `pwn-baby-boi`, which is
-already downloaded and checked. Replace that ID in the commands below when you
-choose another challenge.
+[configs/ctftiny.json](configs/ctftiny.json).** Start with `pwn-baby-boi`, which the
+one-time setup downloads. Replace that ID in the commands below when you choose
+another challenge.
 
 **3. Check the challenge environment.** This starts fresh containers, checks files,
 connections, isolation and cleanup, then exits. It makes no model requests and
@@ -143,7 +148,8 @@ model/tool loop, verifies submissions, stops at a limit or final result, cleans
 up, and exports the Langfuse trace. File-only challenges follow this same path
 without a target service. Missing service images are pulled for AMD64 by default;
 each attempt records and uses their resolved local image IDs. Docker emulation
-was checked for the selected AMD64 services on this ARM64 host.
+was checked for the selected AMD64 services on the original ARM64 verification
+machine. Run preparation on your machine before its first live attempt.
 
 **5. Read the results.** The command prints a new directory under
 `runs/challenges/`. Open its `run.json` for the outcome and Langfuse trace URL;
@@ -214,6 +220,12 @@ different outcomes. `cost_reserved_usd` is a conservative reservation, not anoth
 charge. Cached/reasoning tokens are subsets of input/output totals. Unknown usage
 is not reported as free. Records under `runs/` are Git-ignored; preserve the runs
 you use in your report.
+
+The `.venv/`, `.env`, Docker images, `datasets/` and `runs/` are local setup or
+outputs, not files supplied by a GitHub clone. Historical evidence under `evidence/`
+can contain paths from the original verification machine. Those paths document
+the old runs; teammates do not need to recreate them or run the archived Compose
+files. Use the current commands above to create fresh local records.
 
 The first user-run development attempt had six model calls and six tool calls,
 cost an estimated $0.00118394, and stopped at the 10-second command cap. Attempt
