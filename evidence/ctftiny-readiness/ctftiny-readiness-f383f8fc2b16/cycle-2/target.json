@@ -1,0 +1,15 @@
+{
+  "network": "ctf590-target-d5e133df509e-net",
+  "container": "dcf0540656febd2193f569b3b0b77349f229b49536f80e936393811af05d4a87",
+  "cleanup_errors": [],
+  "gateway": "172.19.255.254",
+  "address": "172.19.0.1",
+  "image_id": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+  "endpoints": [
+    {
+      "address": "172.19.0.1",
+      "protocol": "tcp",
+      "port": 8000
+    }
+  ]
+}

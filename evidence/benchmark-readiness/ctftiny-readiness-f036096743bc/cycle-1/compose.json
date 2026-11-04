@@ -1,0 +1,55 @@
+{
+  "services": {
+    "smug-dino": {
+      "command": null,
+      "entrypoint": null,
+      "image": "sha256:3d6ff9e053698b18be5fb7f608f56b7a1852963a980bc9f8c33d62d4d83d8d42",
+      "networks": {
+        "ctfnet": {
+          "aliases": [
+            "web.chal.csaw.io"
+          ]
+        }
+      },
+      "pull_policy": "never",
+      "labels": {
+        "ctf590.managed": "true"
+      },
+      "cap_drop": [
+        "ALL"
+      ],
+      "cap_add": [
+        "CHOWN",
+        "SETUID",
+        "SETGID"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "dns": [
+        "127.0.0.1"
+      ],
+      "mem_limit": "256m",
+      "memswap_limit": "256m",
+      "cpus": 0.5,
+      "pids_limit": 64,
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,nodev,size=16m"
+      ],
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-size": "1m",
+          "max-file": "1"
+        }
+      },
+      "platform": "linux/amd64"
+    }
+  },
+  "networks": {
+    "ctfnet": {
+      "name": "ctf590-target-022f94ef87eb-net",
+      "external": true
+    }
+  }
+}

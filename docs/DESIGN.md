@@ -1,243 +1,167 @@
 # Design choices and alternatives
 
-The [assignment](../ASSIGNMENT.md) requires adaptive behavior, isolation, trusted
-verification, enforced limits, and complete evidence. It does not prescribe a
-class architecture, agent framework, trace format, or provider. CTFTiny is the
-benchmark goal; [the original resources](REFERENCES.md) preserve how reviewed
-NYU conventions support it. The user's preference is understandable code and
-minimal maintenance across runtime, setup, dependencies, tests, and configuration.
+The [assignment](../ASSIGNMENT.md) requires adaptive tool use, solver/evaluator
+separation, enforced limits, trusted verification and complete records. CTFTiny
+is the active benchmark. [Original references](REFERENCES.md) explain how the
+NYU package and conventions informed this setup. Functions, dictionaries and
+resource-owning context managers keep the implementation understandable without
+an agent framework or application class hierarchy.
 
-## Runner, loop, and tools
+## One challenge path
 
-The trusted runner owns containers, the deadline/watchdog, counters, evaluator
-answer, and Langfuse root observation. The loop receives only public task text and
-bounded `respond` / `call_tool` functions. It has no lifecycle-state dictionary,
-answer key, SDK client, or container control handles. Both functions are ordinary
-closures created by the runner; they retain access to resources without sending
-those resources to the model or SDK observation inputs.
+`run-challenge --challenge ID` loads an indexed challenge through the installed
+`nyuctf` package and uses the same lifecycle, agent, tools and evaluator for every
+selected ID. The existing manifest supplies the development/scored result label.
+A separate scoring agent or CLI mode would duplicate behavior; separation belongs
+in the challenge selection and experiment records. The ten reserved IDs remain
+held out from development solving.
 
-`submit_flag` remains one of the three tools. Its dispatcher branch verifies exact
-equality inside the trusted runner. There is no extra verifier interface exposed
-to the loop. `tools.py` holds schemas, validation, and command/file dispatch; it no
-longer receives the expected answer. The answer is absent from state/results and
-is never separately traced. Candidate submissions and verdicts remain observable.
+`challenge.py` owns trusted loading, public-data construction, file staging and
+target lifetime. `launch.py` owns host clients, orchestration, provenance and native
+trace export. `agent.py` keeps the conversation loop and Responses adapter together.
+Splitting those responsibilities into separate model/target/records/budget modules
+added navigation without a current maintenance benefit. No provider registry,
+generic benchmark adapter or campaign ledger is needed.
 
-The runner yields an operator/controller record containing functions, result
-metadata, output directory, and container identifiers for trusted inspection.
-`run_agent(public_task, run["respond"], run["call_tool"])` receives only the two
-functions. That record is not a second public/private copy of execution state.
-Private control state holds the lock, deadline, watchdog event, sandbox, root
-observation, and reference to result counters. The answer stays in lexical scope.
+The loader verifies the pinned Git revision, canonical index hash, clean checkout
+and complete disjoint split, with ten reserved IDs. Missing local challenge files
+fail with a preparation error. `CTFChallenge` includes private metadata and the
+answer key; its package object stays on the trusted host. Only name, category,
+description, listed filenames and allowed endpoints form the public task.
 
-`AttemptStopped` is one small `RuntimeError` subclass carrying a reason string.
-It gives bounded functions a precise way to report enforced termination without
-exposing private state. The loop catches only that exception; unrelated runtime
-errors propagate. This is a concrete exception boundary, not an application class
-model. Ordinary functions/dictionaries remain preferable to a controller class or
-provider/dispatcher registry at the present scale.
+## Supplied targets and contestant files
 
-A context manager owns attempt lifetime: prepare, yield the bounded functions,
-then stop/clean up and write the result even on exceptions or interruption.
-This is Python's standard resource-lifetime pattern. Replacing it with repeated
-manual setup/finally blocks would duplicate cleanup. The model loop and tools do
-not own container lifetime. Target staging/reset for CTFTiny remains separate work.
+File-only entries create no service but retain a fresh isolated solver network.
+Service-backed entries use their supplied Compose image, service name, alias and
+internal port. Ordinary Compose canonicalization supplies dictionaries rather than
+requiring a YAML dependency. The runtime removes published host ports and Docker
+socket mounts, rejects other mounts/unsupported arrangements, and attaches services
+to a fresh isolated internal bridge. The original dataset files stay unchanged.
 
-<a id="context-passed-between-turns"></a>
-<a id="what-remains-after-the-loop"></a>
+Package lifecycle helpers would run the original Compose configuration directly.
+A small controlled runtime configuration is required to retain the assignment's
+access boundaries. A per-challenge adapter would add unnecessary code for the
+selected services, which all use the same conventions. Missing images are pulled;
+resolved local IDs and architecture are recorded and fixed within the attempt.
+Tags may resolve differently after a later pull; freeze recorded images alongside
+code/settings before comparison. This is not a bit-for-bit rebuild guarantee.
 
-## Context and return values
+Targets have bounded CPU/memory/PIDs/tmpfs/logs, no published ports or host mounts,
+no-new-privileges and capabilities limited to CHOWN/SETUID/SETGID. Targets use
+normal disposable writable layers: a read-only target broke Nginx's log/temp-file
+startup, and dropping CHOWN broke ownership setup. Restoring those normal startup
+capabilities is simpler than challenge-specific entrypoint patches. These target
+permissions do not change the solver's read-only, non-root, zero-capability setup.
+The model receives no target administrative shell.
 
-Each response receives full public history: common system prompt, public task,
-previous accepted assistant replies, and matching tool results. Tool schemas are
-passed separately. The loop copies history/schemas so a callback cannot mutate
-those input objects. The bound response function supplies the remaining timeout
-to the trusted scripted source or live Responses adapter.
+The selected alias maps to the service IP. Public task text replaces the literal
+benchmark hostname with that IP; the guard permits only the recorded endpoint.
+DNS stays blocked. More complex network/service arrangements fail closed rather
+than silently widening access. Preparation verifies four reserved services and the
+development example; the six remaining reserved challenges are file-only.
 
-The user chose Responses and Langfuse's automatic OpenAI integration. Chat
-Completions would require fewer format changes, but Responses supports the
-reasoning/tool flow of the selected model. `model.py` translates the existing
-message contract into native input items. A live assistant reply carries its
-original `response_items` alongside the tool/text projection used by the loop.
-On the next request the adapter replays those original items, including any
-encrypted reasoning, then links tool results through `call_id`. This avoids a
-second hidden conversation store and keeps scripted fixtures compatible.
-`store=False` keeps conversation management explicit in our process.
+Only explicitly listed contestant files are transferred. Validation rejects
+traversal, private metadata/build names, duplicate paths and symlinks. A tar stream
+goes through fixed Docker exec arguments to Python's standard data-filtered
+extractor, as UID/GID 1000, into the solver's bounded `/workspace` tmpfs. Docker cp
+refused the read-only solver root, including its writable tmpfs; streaming preserves
+that control without another dependency or mount. Records retain names/sizes/hashes.
 
-For one tool per turn:
+## Runner, agent and tools
 
-```text
-Request 1 = system + task
-Request 2 = system + task + assistant tool request + matching tool result
-Request 3 = the same history + next assistant request + matching result
-```
+`run_attempt()` owns resources, the deadline/watchdog, counters, answer key,
+Langfuse root observation and final result. It yields a small operator record;
+`run_agent(public_task, respond, call_tool)` receives only public text and two
+bounded functions. Closures keep private state outside model messages and trace
+inputs. The answer is used only by trusted exact-equality verification.
 
-Several tools in one response run sequentially before another response is requested.
-The runner validates the envelope and unique call IDs, parses/validates tool inputs
-at their boundary, and enforces model-turn/tool/time caps. Malformed JSON becomes
-a validation observation and consumes tool budget. Final text stops without
-verified success; a correct `submit_flag` stops immediately with no extra model
-request. Bounded functions reject all later requests after stopping.
+`submit_flag` is one of the three existing tools, not a separate evaluator API.
+Candidates and verdicts are recorded; the expected answer is never separately
+exposed. The other tools run commands and write files only inside the solver.
+Their [contracts](../README.md#architecture-and-tool-contracts) cover validation,
+outputs, timeout and error behavior. Host validation and worker filesystem checks
+protect distinct boundaries and remain separate.
 
-The solver workspace/process state persists between tools in an attempt. Files are
-not automatically included in the conversation; content enters through supplied
-public text or tool observations. Each attempt starts fresh. There is no context
-compaction, cross-attempt memory, retrieval store, or token-aware fitting. Byte and
-turn bounds make records finite. The live adapter now rejects requests above a
-32 KiB serialized-input bound; it does not compact history or implement a general
-token-aware context-fitting system.
+The agent retains the system prompt, public task, assistant replies and matching
+tool observations. Calls execute sequentially; the next model request sees their
+results. Verified success prevents later actions, including remaining sibling calls.
+Wrong submissions and ordinary command errors permit continuation. Text-only replies
+end without verified success. Hard limits, command timeout, scope denial, guard loss
+and protocol failures stop the attempt. `AttemptStopped` is a small exception that
+carries the enforced reason; unrelated errors propagate.
 
-The loop returns a reason string, not its messages or final prose. Leaving the
-attempt context performs cleanup, flushes the SDK, writes `summary.json`, and
-updates `run["result"]`. That result records final status/counters/timing and the
-Langfuse trace ID. Root output captures the result before export; final local timing
-also includes `trace_flush_seconds`. Cleanup failure is surfaced after records
-are written. The summary and evaluator result—not a model's success claim—support
-later evaluation.
+Context is public history plus workspace files, which are not automatically inserted
+into prompts. There is no compaction, cross-attempt memory or planning subsystem.
+The Responses adapter replays native output items, including encrypted reasoning,
+and links function results by call ID. The serialized-input bound stops oversized
+requests. Add context-fitting behavior only when development evidence warrants it.
 
-## Langfuse as the sole detailed tracing system
+A context manager owns resource cleanup even on exceptions/interruption. The
+independent watchdog stops the solver while a response is pending. A Python callback
+cannot be forcibly interrupted; live HTTP calls disable retries and have bounded
+transport timeouts. Remote cancellation and billing cancellation are not guaranteed.
 
-The user chose a full Langfuse migration rather than a hybrid/custom backend.
-The prior JSONL writer, event sequence counter, trace-file lock, and application
-`tracing.py` module were removed. Previous evidence remains historical. Runtime
-tracing uses the official SDK directly, without another tracing interface/registry.
+## Limits and accounting
 
-| Activity | Native Langfuse representation | Safe recorded data |
-| --- | --- | --- |
-| One complete attempt | Root observation | Public task, run/challenge IDs, configuration, image IDs, result before flushing. |
-| Scripted response | Runner generation observation | Full messages/schemas, turn/timeout metadata, accepted reply. |
-| Live Responses request | Automatic OpenAI integration generation | Actual native input/tools, output, model/settings, timing, and usage. |
-| Tool request | Tool observation | Validated arguments, step, returned observation; rejected raw arguments omitted. |
-| Guard/stopping/cleanup incidents | Events attached explicitly to root | Packet-denial evidence, stop trigger, infrastructure/cleanup failures. |
+The same existing hard limits cover wall time, model turns, tool calls, command
+runtime, output bytes, file writes and container resources. Live settings come from
+`configs/development.toml`, over shared defaults; no limits changed in the current
+setup milestone. Per-attempt request/output/cost bounds remain, with ordinary usage
+records instead of a persistent spending subsystem. Review costs between attempts.
 
-SDK observation contexts supply start/end timing and exception records. The runner
-updates only application-specific inputs, outputs, and statuses. `run_attempt()` is
-not automatically argument-captured: its expected answer and client stay private.
-Scripted callback exceptions are sanitized inside generation scope; their rejected
-or late outputs remain omitted. Live automatic generations retain provider outputs
-and usage, including replies later rejected/discarded by the runner. The output-token
-cap bounds generation; explicit runner events record rejection/discard and no late
-reply executes tools. A standard HTTP response hook raises a status-only error before
-the OpenAI/Langfuse integrations can record a raw provider error body. SDK public-key
-scope metadata is a public project identifier; gateway tokens and Langfuse secret
-keys stay outside trace data and solver containers.
+`make_responder()` returns a function and non-secret usage dictionary, fresh per
+attempt. Conservative input/output reservations precede dispatch and remain charged
+against the cap after failures/timeouts. API usage supplies token counts and local
+cost estimates from the configured gateway rates. Cached/reasoning subsets are not
+double counted. Missing usage is unknown and stops the attempt. These are estimates,
+not an independent invoice audit. README lists current settings.
 
-Background guard/watchdog threads hold the root observation and create native
-child events through it. They do not depend on implicit thread-local context
-propagation or an application log lock. The SDK handles observation synchronization.
-The controller lock remains necessary for first-stop ownership. An unexpected
-solver-kill error can replace the initial trigger with infrastructure failure;
-both the trigger and failed kill remain in the trace.
+## Tracing and evidence
 
-Runtime dependencies are pinned `langfuse==5.1.0` and `openai==3.44.0`, including their
-locked transitive dependencies. This adds setup cost in exchange
-for established instrumentation, trace structure, and a hosted review interface.
-The user accepted that tradeoff. An agent framework, tracing wrapper framework,
-self-hosted observability stack, and generic exporter are unnecessary here.
+Langfuse is the sole detailed tracing system. Native OpenAI instrumentation creates
+live generation observations; scripted tests use manual generations. Tool results,
+incidents, stopping and cleanup are root-linked observations/events. Trusted setup
+functions are not automatically decorated: package objects, expected answers,
+credentials, locks and controller state must never become trace arguments.
 
-`summary.json`, suite configuration, source hashes, and resolved image IDs remain
-ordinary result/provenance artifacts. They do not duplicate the detailed transcript.
-SDK flushing happens after solver cleanup; the application owner shuts down its
-client at process exit. Standard SDK export failures do not skip stopping/cleanup,
-but a local result/trace ID alone does not prove hosted evidence is complete.
-One hosted synthetic check now verifies authentication, ingestion, readback/export,
-and trace completeness for the configured project. A later two-request live
-synthetic check verified actual usage and automatic generation parentage.
-General availability remains unverified. No custom retry, durable fallback log, or hosting
-system has been introduced. Cloud setup followed the earlier SDK/local milestone.
+`summary.json`, `run.json`, source hashes and image IDs are ordinary results and
+provenance, not another detailed log backend. SDK flushing happens after solver
+cleanup; the application owner shuts down the client. The official pinned CLI
+exports hosted observations, and the launcher audits counts, completion, parentage,
+credentials and cleanup. Missing evidence prevents marking the launch complete.
+No fallback tracing backend or custom durable exporter is introduced.
 
-The explicit `langfuse-check` command delegates to test support, reuses the existing
-scripted flow, and uses the normal SDK exporter. A bounded poll of the documented
-observations API handles asynchronous ingestion and cursor pagination; it does not
-retry model requests or add runtime tracing machinery. Raw hosted exports are
-verification artifacts. The official CLI independently read back the same records.
-The installed [official skill](https://github.com/langfuse/skills) guided the review.
-No replacement instrumentation was needed: the current messages/tools input format
-already matches the SDK's native model-integration convention. `model-check` now
-performs the separately approved live synthetic check and uses the official CLI
-for readback. Live requests have no surrounding manual generation observation.
+Rejected arguments are not traced as accepted input. Late replies execute no tools;
+automatic live instrumentation may retain their bounded provider output/usage with
+an explicit discard event. A normal HTTP hook removes raw provider error bodies
+before automatic tracing sees them. Secret credentials stay host-side; the SDK's
+public project identifier appears in native instrumentation metadata.
 
-## Model budget and accounting
+`reasoning.summary: auto` uses native response replay/capture without another call.
+The one approved benign compatibility request returned an empty summary; readable
+summaries are unconfirmed. Tool arguments/results and visible assistant text remain
+available for inspection. No explanatory prompt/performance change was added during
+this environment milestone; those experiments belong to Section 2.
 
-`make_responder()` returns an ordinary function and a non-secret usage dictionary,
-fresh per attempt. The runner copies that accounting into results after every
-source invocation, including failure and late response. The loop receives neither
-the client nor usage/controller data. No provider registry or application class
-has been added. Model settings are one small dictionary for this approved check;
-general model configuration and scored model selection are separate future work.
+## Verification scope
 
-The user confirmed $1/day and approved one attempt capped at four generation
-requests and $0.10. `gpt-6-luna` uses low reasoning and 1,024 output tokens/request.
-Before dispatch, serialized request bytes conservatively bound byte-level token
-input, with 1,024 tokens of framing allowance and a 1.25x cache-write price reserve.
-Every reservation remains spent against the cap even after errors/timeouts; no
-input cache discount is assumed for the reservation. The adapter stops before
-dispatch if request count, input size, or cumulative reservation exceeds its limit.
-Rates are a gateway metadata snapshot, not an independently verified invoice.
+Fast tests check contracts, loop recovery/context, trusted verification, model
+transport and split labeling with substitutes. Synthetic Docker tests establish
+resource/isolation/incident boundaries. The preparation command separately checks
+real contestant staging and target startup without model calls or solving. These
+layers protect different boundaries; repeating the entire suite for every routine
+edit is unnecessary.
 
-Token counts come from API usage, with cached/reasoning subsets distinguished to
-avoid double counting. Costs are local estimates from those counts and gateway
-rates; automatic hosted cost inference agreed for the verified trace. Missing usage
-or failed transport leaves cost unknown and stops the attempt. Client retries are
-disabled. Timeout is at most 20 seconds, clipped to the remaining attempt time;
-the independent watchdog still stops the solver, but remote cancellation/billing
-and a strict host transport deadline are not guaranteed by these settings.
+The selected ten and `pwn-baby-boi` each passed two fresh preparation cycles with
+file hashes/ownership, private boundaries, permitted TCP connect-and-close,
+independent packet-denial evidence, solver stopping, reset and cleanup. Native SDK
+spans use the established local in-memory exporter; no hosted credentials or uploads
+are needed. Invoke each preparation through a separate CLI process: repeatedly
+creating/shutting down the same Langfuse project client in one diagnostic process
+reused SDK state and produced empty later exports. No application workaround was
+needed for the normal one-invocation lifecycle.
 
-## Testing and evidence
-
-The approved CTFTiny readiness work starts with a metadata-only split and a small
-trusted loading/staging module. It uses the existing three tools and solver controls.
-Contestant files are selected from the package's explicit file list, with traversal,
-private metadata names, and symlinks rejected. Docker's standard tar input copies
-binary files as UID/GID 1000 before model execution in the implemented staging
-path; actual container transfer remains unverified. Returned records contain file
-names, sizes, and hashes rather than contents. Public task construction whitelists
-description/name/category, file inventory, and permitted endpoints. Package objects
-and expected answers stay trusted. Current verification is offline only; the dataset
-revision/dependency and actual target lifecycle remain pending. Target-specific
-Compose decisions will follow inspection rather than speculative support for all tasks.
-
-Pytest discovers ordinary function tests and Docker-marked scenarios. One small
-launcher adds source/image provenance, JUnit/suite results, and cleanup checks.
-It has no hard-coded case count. Fixed synthetic targets and scripted sources live
-under `tests/`; the application contains no synthetic service or control suite.
-
-Local tests initialize the real SDK with its supported `span_exporter` argument and
-OpenTelemetry's standard `InMemorySpanExporter`. No hosted credentials or network
-upload is needed. Tests inspect actual native spans, link them to summary trace
-IDs, and save SDK-native `otel-spans.json` for Docker verification only. This is
-SDK output capture, not a second application tracing backend. Failure tests cover
-an exporter reporting failure and disabled tracing preventing solver startup.
-The separate hosted check requires explicit credentials and uploads only its
-synthetic attempt. Five fast cases cover hosted audit/completeness, leakage
-rejection, pagination/ingestion waiting, and deadline behavior using API DTOs.
-
-Pure validation tables test the validator directly; loop checks cover context,
-recovery, verification, and stopping. Docker checks establish concrete isolation,
-network, resource, interruption, and cleanup behavior. These layers exercise
-different boundaries; reducing repetition does not mean removing distinct probes.
-
-## Other retained decisions
-
-- Host argument validation and worker symlink/directory-descriptor protection
-  remain separate boundaries. Sharing them across images would weaken ownership.
-- Host pipe bounds and solver stdout/stderr bounds protect different processes.
-  The two incremental readers have different jobs and are not a generic utility.
-- The watchdog independently stops the solver during waits. Callbacks must honor
-  their timeout; arbitrary Python callbacks cannot be forcibly interrupted here.
-  Live transport has one successful synthetic check; interrupted remote billing is unverified.
-- Solver, target, and trusted guard stay separate. Commands have no administrative
-  target shell, host mounts, Docker socket, answer key, or credentials. Langfuse
-  activity is host-side and grants no solver internet access.
-- Docker CLI argument lists remain simpler than adding a Docker SDK; model-controlled
-  text goes to the solver over stdin. Local dependency/image pins and resolved IDs
-  support reproducibility without claiming bit-for-bit image rebuilds.
-- CTFTiny loading should later use its explicit index through `nyuctf`; preserve
-  supplied Compose definitions wherever compatible. Generic benchmark adapters,
-  held-out answer/write-up access, and current real challenge solving are excluded.
-- The strict response envelope now additionally permits native `response_items`.
-  No speculative provider support or configuration generation was added.
-
-Sources: [Langfuse SDK](https://langfuse.com/docs/observability/sdk/overview),
-[instrumentation](https://langfuse.com/docs/observability/sdk/instrumentation),
-[client/exporter reference](https://python.reference.langfuse.com/langfuse),
-[Python resource context managers](https://docs.python.org/3.13/library/contextlib.html#contextlib.contextmanager).
+The other 39 CTFTiny entries, contestant AMD64 execution and solver tool coverage
+are not verified. Preparation is not a solve, pilot, scored evaluation or improvement
+comparison. [Status](../PROJECT_STATUS.md) and [readiness evidence](../evidence/benchmark-readiness/README.md)
+record the completed scope and the Section 2 handoff.

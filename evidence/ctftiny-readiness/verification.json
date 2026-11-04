@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-04",
+  "mode": "ctftiny-readiness",
+  "passed": true,
+  "checks": {
+    "final_check_passed": true,
+    "source_hashes_match": true,
+    "cycle_1_trace_complete": true,
+    "cycle_1_answer_absent": true,
+    "cycle_2_trace_complete": true,
+    "cycle_2_answer_absent": true,
+    "credentials_absent": true,
+    "expected_answer_absent_from_all_new_evidence": true,
+    "env_git_ignored": true,
+    "historical_evidence_unchanged": true,
+    "local_document_links_resolve": true,
+    "fast_tests_56_passed": true
+  },
+  "final_check": "evidence/ctftiny-readiness/ctftiny-readiness-1924b29078cd/check.json",
+  "trace_counts": [
+    {
+      "run_id": "72023debf6fb",
+      "observations": 8,
+      "tools": 2
+    },
+    {
+      "run_id": "d74737846985",
+      "observations": 10,
+      "tools": 3
+    }
+  ],
+  "fast_tests": 56,
+  "baseline_commit": "028f56052f370ffda1e60b246de6dbec8f023dd4",
+  "new_changes_committed": false,
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "historical_evidence_files_compared": 268,
+  "missing_links": []
+}

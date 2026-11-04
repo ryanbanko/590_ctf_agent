@@ -15,7 +15,7 @@ from ctf_agent.agent import run_agent
 from ctf_agent.attempt import run_attempt
 from ctf_agent.config import load_settings
 from ctf_agent.docker import docker
-from .check_controls import collect_provenance
+from ctf_agent.launch import collect_provenance
 from .fixtures.responses import synthetic_response
 from .fixtures.target import synthetic_target
 

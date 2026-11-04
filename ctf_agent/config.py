@@ -45,3 +45,18 @@ def load_settings(path: Path) -> dict:
     settings = DEFAULTS | values
     validate_settings(settings)
     return settings
+
+
+def load_experiment(path: Path) -> tuple[dict, dict]:
+    """One explicit file for real-attempt controls and Responses settings."""
+    from .agent import MODEL_SETTINGS, validate_model_settings
+
+    with path.open("rb") as handle:
+        values = tomllib.load(handle)
+    if values.keys() != {"attempt", "model"}:
+        raise ValueError("Experiment settings require attempt and model tables")
+    settings = DEFAULTS | values["attempt"]
+    model = MODEL_SETTINGS | values["model"]
+    validate_settings(settings)
+    validate_model_settings(model)
+    return settings, model

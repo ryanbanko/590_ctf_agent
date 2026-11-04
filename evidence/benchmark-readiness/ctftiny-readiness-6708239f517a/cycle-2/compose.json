@@ -1,0 +1,55 @@
+{
+  "services": {
+    "web": {
+      "command": null,
+      "entrypoint": null,
+      "image": "sha256:4774b250bf127716d29367c70f393fec8b306f0d5949b9c2e253bc3da3cefd36",
+      "networks": {
+        "ctfnet": {
+          "aliases": [
+            "pwn.chal.csaw.io"
+          ]
+        }
+      },
+      "pull_policy": "never",
+      "labels": {
+        "ctf590.managed": "true"
+      },
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "cap_add": [
+        "SETUID",
+        "SETGID"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "dns": [
+        "127.0.0.1"
+      ],
+      "mem_limit": "256m",
+      "memswap_limit": "256m",
+      "cpus": 0.5,
+      "pids_limit": 64,
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,nodev,size=16m"
+      ],
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-size": "1m",
+          "max-file": "1"
+        }
+      },
+      "platform": "linux/amd64"
+    }
+  },
+  "networks": {
+    "ctfnet": {
+      "name": "ctf590-target-613dbfadf041-net",
+      "external": true
+    }
+  }
+}

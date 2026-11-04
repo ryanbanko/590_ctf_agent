@@ -4,7 +4,6 @@ import json
 import logging
 import os
 from pathlib import Path
-import subprocess
 import time
 import uuid
 
@@ -16,36 +15,9 @@ from ctf_agent.agent import run_agent
 from ctf_agent.attempt import run_attempt
 from ctf_agent.config import load_settings
 from ctf_agent.docker import docker
-from ctf_agent.model import MODEL_SETTINGS, make_responder, reject_gateway_errors
-from .check_controls import collect_provenance
+from ctf_agent.agent import MODEL_SETTINGS, make_responder, reject_gateway_errors
+from ctf_agent.launch import collect_provenance, read_model_trace
 from .fixtures.target import synthetic_target
-
-
-def read_model_trace(trace_id: str, model_calls: int, tool_calls: int, directory: Path):
-    """Read native observations with the official CLI after asynchronous ingestion."""
-    environment = dict(os.environ, LANGFUSE_HOST=os.environ["LANGFUSE_BASE_URL"])
-    command = ["npx", "--yes", "langfuse-cli", "api", "observations", "list",
-               "--trace-id", trace_id, "--fields", "core,basic,time,io,metadata,model,usage",
-               "--expand-metadata", "config,image_ids,model_settings", "--all", "--max-items", "100", "--json"]
-    deadline = time.monotonic() + 90
-    while time.monotonic() < deadline:
-        completed = subprocess.run(command, env=environment, capture_output=True, text=True,
-                                   timeout=min(25, max(1, deadline - time.monotonic())))
-        if completed.returncode:
-            raise RuntimeError("Langfuse CLI readback failed; raw error omitted")
-        payload = json.loads(completed.stdout)
-        # CLI versions may include the HTTP response wrapper.
-        body = payload.get("body", payload)
-        rows = body["data"]
-        generations = [row for row in rows if row["type"] == "GENERATION"]
-        tools = [row for row in rows if row["type"] == "TOOL"]
-        if (len(generations) == model_calls and len(tools) == tool_calls
-                and any(row["name"] == "sandbox_cleanup" for row in rows)
-                and all(row.get("endTime") for row in rows)):
-            (directory / "cli-observations.json").write_text(completed.stdout)
-            return rows
-        time.sleep(min(2, max(0, deadline - time.monotonic())))
-    raise TimeoutError("Complete model trace was not readable within 90 seconds")
 
 
 def check_model(config_path: Path, output_root: Path):

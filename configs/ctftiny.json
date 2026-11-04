@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/NYU-LLM-CTF/CTFTiny",
-  "revision": null,
+  "revision": "f1c9531672c45b24b7fb5f3aa44a7ac33d3602f8",
   "index_sha256": "fce7e0a0ed08d8642acf2ef759d1c5acb6ae6d45a14a7209599fd920864870a6",
   "selection": "First 10 IDs ranked by SHA-256 of UTF-8 ctf590-v1:<id>; remaining IDs are development. Uses index metadata only.",
   "scored": [
@@ -56,6 +56,5 @@
     "rev-whataxor",
     "web-poem-collection",
     "web-shreeramquest"
-  ],
-  "readiness_challenge": "pwn-baby-boi"
+  ]
 }

@@ -47,7 +47,7 @@ def watch_deadline(state: dict):
 def run_attempt(settings: dict, network: str, gateway: str, endpoints: list[dict],
                 expected_flag: str, output_root: Path, *, langfuse: Langfuse,
                 label: str = "synthetic", public_task: str = "Synthetic controls check", respond=None,
-                model_usage: dict | None = None):
+                model_usage: dict | None = None, mode: str = "synthetic-controls"):
     """Own one run and yield bounded respond/call_tool functions plus result metadata.
 
     The answer stays in this trusted scope. Neither the loop nor Langfuse receives
@@ -60,14 +60,14 @@ def run_attempt(settings: dict, network: str, gateway: str, endpoints: list[dict
     directory = output_root / run_id
     directory.mkdir(parents=True, exist_ok=False, mode=0o700)
     started = time.monotonic()
-    result = {"run_id": run_id, "challenge_id": label, "mode": "synthetic-controls",
+    result = {"run_id": run_id, "challenge_id": label, "mode": mode,
               "termination_reason": None, "tool_calls": 0, "model_calls": 0,
               "agent_mode": None, "scripted_turns": 0, "tokens": None, "cost_usd": 0.0,
               "cleanup_errors": []}
     try:
         with langfuse.start_as_current_observation(name="attempt", input={"task": public_task},
                 metadata={"run_id": run_id, "challenge_id": label, "config": settings,
-                          "mode": "synthetic-controls"}) as observation:
+                          "mode": mode}) as observation:
             result["trace_id"] = observation.trace_id
             if not observation.trace_id or observation.trace_id == "0" * 32:
                 raise RuntimeError("An active Langfuse tracing client is required")

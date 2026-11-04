@@ -1,0 +1,21 @@
+{
+  "network": "ctf590-target-bca5de25a820-net",
+  "container": "e61972fb09a36c339ed321e3e234f3cd0b85eaafb9429063610b00ed6d3a8801",
+  "containers": {
+    "web": "e61972fb09a36c339ed321e3e234f3cd0b85eaafb9429063610b00ed6d3a8801"
+  },
+  "images": {
+    "web": "sha256:4774b250bf127716d29367c70f393fec8b306f0d5949b9c2e253bc3da3cefd36"
+  },
+  "endpoints": [
+    {
+      "address": "172.19.0.1",
+      "protocol": "tcp",
+      "port": 8000
+    }
+  ],
+  "cleanup_errors": [],
+  "gateway": "172.19.255.254",
+  "address": "172.19.0.1",
+  "image_id": "sha256:4774b250bf127716d29367c70f393fec8b306f0d5949b9c2e253bc3da3cefd36"
+}

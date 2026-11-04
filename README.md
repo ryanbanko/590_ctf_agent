@@ -1,308 +1,309 @@
 # CTFTiny agent benchmarking
 
-This repository implements the initial system for the [course assignment](ASSIGNMENT.md).
-It provides a bounded conversation/tool loop, isolated command/file tools, trusted
-synthetic flag verification, and Langfuse tracing. Responses model access through
-Duke is verified with one synthetic attempt. CTFTiny loading and contestant-file
-staging are partly implemented; real dataset/target verification remains pending.
-No real challenge attempts have occurred.
+An initial agent for [Section 1 of the assignment](ASSIGNMENT.md): a model observes
+tool results and chooses subsequent actions, commands run in an isolated solver,
+and a trusted evaluator verifies submissions. Langfuse records model/tool activity.
+CTFTiny is the active benchmark; `nyuctf` supplies the existing dataset format and
+loader. No separate agent framework is used.
 
-Read [PROJECT_STATUS.md](PROJECT_STATUS.md) for current scope and the assignment
-roadmap. [Original resources](docs/REFERENCES.md) preserve the user's references
-and the professor's clarification; the original assignment is authoritative.
+**Section 1 setup is complete for the selected ten challenges and the development
+example.** Preparation passed for all eleven, including file staging, permitted
+connections, enforced network denial, fresh reset, and cleanup. These were
+zero-model setup checks, not solves. One earlier user-run development attempt
+made six model/tool calls and ended on a command timeout. A synthetic autonomous
+success is recorded; a real successful-run demo and Sections 2–3 remain ahead.
+See the [assignment checklist](PROJECT_STATUS.md#assignment-checklist) and
+[setup evidence](evidence/benchmark-readiness/README.md).
 
-Latest recorded verification: **53 fast tests passed** on November 3, 2026.
-The completed [model milestone](evidence/model-integration/README.md) used
-**2 model requests**, 837 input/100 output tokens, and an estimated **$0.0001337**
-for one successful synthetic attempt on native ARM64. The last full Docker suite
-passed [19 synthetic checks](evidence/langfuse/README.md); it was not repeated for
-the later work, which used focused checks and preserved the isolation implementation.
+## How the dataset and challenge selection work
 
-The approved CTFTiny readiness milestone is unfinished. Its metadata-only split
-and preliminary staging code are covered by the newer fast-test record, but the
-dataset revision, loader installation, real transfer/target checks, and launch
-command are pending. See [current status](PROJECT_STATUS.md) and
-[partial evidence](evidence/ctftiny-readiness/README.md). Completed evidence
-directories preserve historical snapshots; use this README for current commands.
+CTFTiny contains **50 challenges**. We use the `nyuctf` Python package to load
+them; you do not need a separate NYU dataset. Each challenge has an ID, such as
+`pwn-baby-boi`, and a directory containing its files and any service setup.
 
-## How to use
+Three files have different jobs:
 
-Install Python **3.13.2** and uv, then run the following from the repository root:
+| File | What it tells you |
+| --- | --- |
+| `datasets/CTFTiny/ctftiny.json` | The dataset's public index: every challenge ID, category and directory. |
+| [configs/ctftiny.json](configs/ctftiny.json) | Our selection: which IDs are `development` and which are `scored`. |
+| [configs/development.toml](configs/development.toml) | How the agent runs: model, time limits, request limits and estimated cost cap. |
+
+**The split is already set for you.** Open `configs/ctftiny.json` and look under:
+
+- **`development` — 40 challenges:** use these to practice, inspect failures and
+  test changes during Section 2. `pwn-baby-boi` is in this list.
+- **`scored` — 10 challenges:** save these for the later frozen evaluation.
+
+We have **not selected a separate set of ten development challenges**, and the
+assignment does not require one. You can start with one or two from the development
+list. The agent and command are the same for both groups; the challenge ID determines
+the result label automatically. The name `development.toml` does not choose the group.
+
+Both groups contain all six categories:
+
+| Category | Development | Scored |
+| --- | ---: | ---: |
+| Crypto | 10 | 2 |
+| Forensics | 1 | 1 |
+| Misc | 4 | 2 |
+| Pwn | 8 | 3 |
+| Reverse engineering | 15 | 1 |
+| Web | 2 | 1 |
+
+The ten scored IDs were selected by a fixed hash of their IDs, without reading
+answers or solutions. **The selection is not balanced by difficulty**: the index
+has no difficulty ratings, and we have not established how hard each challenge is.
+
+The public index lists all 50 even when only some challenge directories have been
+downloaded. Our current checkout uses Git's *sparse checkout*, which downloads
+selected directories. The ten scored directories and `pwn-baby-boi` are available
+and have passed environment checks. The other 39 development directories may need
+downloading before use. Those setup checks did not attempt to solve the scored set.
+
+## One-time setup
+
+**This setup has already been done in the current workspace.** For your next
+attempt, start Docker and skip to [Choose and run a challenge](#choose-and-run-a-challenge).
+The instructions here are for a fresh checkout or missing dependencies/images.
+
+Run commands in a terminal from this repository's root. Use Python **3.13.2**, uv,
+Docker Desktop/Engine with Linux containers and Compose v2, and Node.js/npm for
+native Langfuse trace export.
 
 ```sh
 uv sync --frozen
+uv run --frozen python -m ctf_agent build-images
 ```
 
-`uv.lock` pins runtime dependencies **Langfuse 5.1.0** and **OpenAI 3.44.0**,
-development dependency **pytest 9.2.0**, and their transitive dependencies.
-Container checks also require Docker Desktop/Engine with Linux containers and
-Docker Compose v2. The live hosted check additionally uses Node.js/npm (`npx`)
-for official Langfuse CLI readback.
+Dependencies are locked: Langfuse 5.1.0, OpenAI 3.44.0, nyuctf 1.1.1, and pytest
+9.2.0 for development. Start Docker before building or preparing challenges.
 
-**Set up keys for hosted use.** Local tests do not need credentials. For hosted
-tracing or live model access, create a local `.env` from the example once:
+Create `.env` from `.env.example` if needed. Fill these host-only variables:
+
+| Variable | Source |
+| --- | --- |
+| `LITELLM_TOKEN` | Your Duke AI Gateway key from the [Duke dashboard](https://dashboard.ai.duke.edu/). |
+| `LANGFUSE_PUBLIC_KEY` | Intended Langfuse project's API key settings. |
+| `LANGFUSE_SECRET_KEY` | Same project's key pair. |
+| `LANGFUSE_BASE_URL` | Project's regional URL, e.g. `https://us.cloud.langfuse.com`. |
+
+Keep `.env` private and Git-ignored. The configured Duke gateway does not require
+a separate `OPENAI_API_KEY`. Preparation and local tests need no keys.
+
+For a fresh workspace, download the recorded dataset version and the first
+development challenge:
 
 ```sh
-cp -n .env.example .env
-chmod 600 .env
+git clone --depth 1 --filter=blob:none --sparse https://github.com/NYU-LLM-CTF/CTFTiny.git datasets/CTFTiny
+git -C datasets/CTFTiny fetch --depth 1 origin f1c9531672c45b24b7fb5f3aa44a7ac33d3602f8
+git -C datasets/CTFTiny checkout --detach FETCH_HEAD
+git -C datasets/CTFTiny sparse-checkout set ctftiny/pwn/baby_boi
 ```
 
-Fill these variables in `.env`:
+The long revision identifies the exact dataset version we recorded. Keep that
+checkout unchanged. Additional challenge directories can be downloaded later,
+as described below. All dataset files remain host-side; only listed contestant
+files enter the solver. Do not consult evaluation flags, solutions or write-ups.
 
-| Variable | Where to get it | Needed for |
-| --- | --- | --- |
-| `LANGFUSE_PUBLIC_KEY` | Intended Langfuse project's Settings → API Keys. | Hosted tracing. |
-| `LANGFUSE_SECRET_KEY` | Same project's API key pair. | Hosted tracing. |
-| `LANGFUSE_BASE_URL` | That project's regional URL, such as `https://us.cloud.langfuse.com` for US or `https://cloud.langfuse.com` for EU. | Hosted tracing. |
-| `LITELLM_TOKEN` | Sign in to the [Duke AI Dashboard](https://dashboard.ai.duke.edu/), open AI Gateway, and create an API key. See the [Duke guide](https://ai.colab.duke.edu/colab-ai-blog/all-blogs/getting-started-with-dukes-ai-gateway-a-developers-guide/). | Live model requests through Duke. |
+## Choose and run a challenge
 
-Use your own Duke key and the Langfuse project agreed on by the team. The example
-URL is for EU; use your actual project's region. A separate `OPENAI_API_KEY` is
-not required for the configured Duke gateway. `.env` is Git-ignored and is not
-included in a fresh checkout. Keep credentials on the host, outside containers
-and trace inputs. Commands below load `.env` explicitly with uv's `--env-file`.
+For the current workspace, use these steps in your IDE terminal.
 
-**Run local checks.** Start with the fast tests; they need no Docker, keys, model
-calls, or hosted trace uploads:
+**1. Start Docker Desktop and open the project directory.**
 
 ```sh
-uv run python -m pytest -q
+cd /Users/ryanbanko/590_final
 ```
 
-For the full synthetic Docker controls check, first start Docker and build the
-images, then run `self-check`. It also needs no keys or model calls:
+**2. Choose an ID from the `development` list in
+[configs/ctftiny.json](configs/ctftiny.json).** Start with `pwn-baby-boi`, which is
+already downloaded and checked. Replace that ID in the commands below when you
+choose another challenge.
+
+**3. Check the challenge environment.** This starts fresh containers, checks files,
+connections, isolation and cleanup, then exits. It makes no model requests and
+does not try to solve the challenge. You do not need to repeat it before every
+attempt if that environment has already passed and its setup is unchanged.
 
 ```sh
-uv run python -m ctf_agent build-images
-uv run python -m ctf_agent self-check
+uv run --frozen python -m ctf_agent prepare-challenge --challenge pwn-baby-boi
 ```
 
-The default pytest selection contains 53 fast cases. `self-check` discovers the
-19 Docker-marked cases, stops on the first failure, saves provenance/JUnit results,
-and verifies cleanup. Both use the real Langfuse SDK with its supported
-OpenTelemetry in-memory exporter. The Docker suite starts only synthetic targets.
-
-**Run hosted checks when authorized.** Build the images above first. The tracing
-check requires the three `LANGFUSE_*` variables and uploads one scripted trace:
+**4. Run one agent attempt.** This command uses your `.env` credentials and makes
+paid model requests within the configured limits:
 
 ```sh
-uv run --frozen --env-file .env python -m ctf_agent langfuse-check
+uv run --frozen --env-file .env python -m ctf_agent run-challenge --challenge pwn-baby-boi
 ```
 
-The live check also requires `LITELLM_TOKEN` and makes paid model requests. Agree
-on its spending/request cap before running; each invocation starts a new attempt:
+`run-challenge` replaces `run-development`. It loads the selected challenge,
+starts fresh supplied services if present, stages its listed files, runs the same
+model/tool loop, verifies submissions, stops at a limit or final result, cleans
+up, and exports the Langfuse trace. File-only challenges follow this same path
+without a target service. Missing service images are pulled for AMD64 by default;
+each attempt records and uses their resolved local image IDs. Docker emulation
+was checked for the selected AMD64 services on this ARM64 host.
+
+**5. Read the results.** The command prints a new directory under
+`runs/challenges/`. Open its `run.json` for the outcome and Langfuse trace URL;
+use the trace to follow model calls, tool arguments and results. See
+[Read results](#read-results) for the saved files and field meanings.
+
+### Download another development challenge
+
+Look up its ID in the public `datasets/CTFTiny/ctftiny.json` index and find its
+`path`. The ID used by the agent and the directory path can differ. For example,
+`pwn-bigboy` has path `ctftiny/pwn/bigboy`. Download that directory with:
 
 ```sh
-uv run --frozen --env-file .env python -m ctf_agent model-check
+git -C datasets/CTFTiny sparse-checkout add ctftiny/pwn/bigboy
 ```
 
-See [live-check settings and limits](#live-synthetic-model-check). Check your own
-gateway account's allowance before paid runs. These commands verify synthetic
-setup only; a real CTFTiny preparation/solver launch command is still pending.
+Then use `--challenge pwn-bigboy` in the preparation and run commands above. This
+is another development ID; its environment has not been verified yet. Downloading
+files alone does not establish launch readiness or trigger a model request.
 
-The build command creates the solver, guard, and synthetic fixture images. The
-self-check creates temporary `ctf590-*` containers/networks labeled
-`ctf590.managed=true`, then removes them. Run Docker suites and hosted synthetic
-checks sequentially because cleanup verification queries that shared label.
-Check commands default to `runs/` and create a fresh directory beneath the output
-root on each invocation. Override that root with `--output`:
+To download every directory instead, use
+`git -C datasets/CTFTiny sparse-checkout disable`. This may download large assets;
+you do not need the whole dataset to run one challenge.
 
-```sh
-uv run python -m ctf_agent --config configs/initial.toml self-check --output runs
-```
+### Optional command settings
 
-Output is synthetic setup evidence, not a development pilot, scored run, or
-successful autonomous CTF demo. If uv's normal cache is restricted, set
-`UV_CACHE_DIR` to a writable directory. The synchronized `.venv/bin/python` also
-works directly in place of `uv run python`.
+Optional arguments: `--experiment` (default `configs/development.toml`),
+`--dataset`, `--manifest`, and `--output` (default `runs/challenges`).
+`prepare-challenge` accepts `--dataset`, `--manifest`, and `--output`; it saves
+under `runs/` by default. The top-level `--config` applies to setup/check commands;
+the live command uses `--experiment`.
 
-## Code responsibilities
+### Limits and estimated cost
 
-The application uses functions, closures, dictionaries, and resource-owning context
-managers. `AttemptStopped` is a small exception carrying only an enforced stop
-reason; it distinguishes termination from unrelated programming errors.
+| Limit | Current live settings |
+| --- | --- |
+| Whole attempt | 120 seconds, including solver preparation; cleanup/export add time. |
+| One command or file operation | Up to 10 seconds, clipped to remaining attempt time. |
+| Model request | Up to 20 seconds; no client retries. |
+| Model / tool calls | 8 / 20 maximum. |
+| Model input / output | 32 KiB serialized input; 2,048 output tokens per request. |
+| Solver resources | 1 CPU, 256 MiB memory, 64 PIDs, 64 MiB workspace. |
+| Tool output / file write | 16 KiB output; 64 KiB UTF-8 write. |
+| Estimated cost cap | $0.10 per attempt. |
+
+Edit `[attempt]` and `[model]` in `configs/development.toml` for your Section 2
+experiments; inherited defaults live in `ctf_agent/config.py`. A command timeout
+currently ends the attempt. Settings were not increased during this setup work.
+The conservative reservation for eight maximum-sized requests is about $0.042
+at the recorded gateway rates; actual costs depend on usage. There is no campaign
+budget system. Review saved usage between attempts; the user's planning ceiling
+for assistant-started work is under $0.50. No paid call was made in this milestone.
+
+### Read results
+
+Each invocation prints a fresh record directory:
+
+| Artifact | Meaning |
+| --- | --- |
+| `run.json` | Settings, dataset/source/image provenance, split label, result, trace URL, export audit, total time. |
+| `<run-id>/summary.json` | Stop reason, verified success, counts, available tokens/cost, timing, cleanup errors. |
+| `cli-observations.json` | Native hosted trace export containing model/tool inputs and outputs. |
+| `public-task.json`, `target/` | Public task and trusted target runtime configuration/lifecycle record. |
+
+`verified_success` means trusted verification accepted a candidate.
+`evidence_complete` means the launch's hosted trace audit passed. They describe
+different outcomes. `cost_reserved_usd` is a conservative reservation, not another
+charge. Cached/reasoning tokens are subsets of input/output totals. Unknown usage
+is not reported as free. Records under `runs/` are Git-ignored; preserve the runs
+you use in your report.
+
+The first user-run development attempt had six model calls and six tool calls,
+cost an estimated $0.00118394, and stopped at the 10-second command cap. Attempt
+time was 51.8 seconds; launch time was 59.8 seconds. It had complete saved trace
+evidence and no verified success. See [status](PROJECT_STATUS.md).
+
+If a solver/guard image is missing, rerun `build-images`. If contestant files are
+missing, materialize their indexed directory. Unsupported Compose arrangements
+fail before model execution and need review. A model/CLI error is recorded in
+`run.json`; inspect that record before repeating paid calls.
+
+## Architecture and tool contracts
+
+The trusted host loads `CTFChallenge`, owns the answer key and target lifecycle,
+and passes only public description, listed file names, and allowed endpoints to
+the agent. `run_agent(public_task, respond, call_tool)` retains public conversation
+history, executes tool requests sequentially, adds observations, and asks the
+model again. Native Responses output items are replayed between requests. A
+verified submission stops immediately; text-only replies end without success.
 
 | File | Responsibility |
 | --- | --- |
-| `ctf_agent/__main__.py` | Image builds and explicit local/hosted synthetic check commands. |
-| `ctf_agent/agent.py` | Public conversation history and dispatch through bounded model/tool functions. |
-| `ctf_agent/attempt.py` | Trusted resources, budgets, answer verification, Langfuse observations, and final result. |
-| `ctf_agent/model.py` | Responses translation, native context replay, HTTP-error handling, request/spending bounds, and usage accounting. |
-| `ctf_agent/challenge.py` | Development-only CTFTiny loading and contestant-file staging; real setup verification pending. |
-| `ctf_agent/tools.py` | Three tool schemas, argument validation, and solver command/file dispatch. |
-| `ctf_agent/sandbox.py` | Solver/guard lifetime, network monitoring, and Langfuse incident events. |
-| `ctf_agent/docker.py` | Fixed Docker invocations and bounded worker communication. |
-| `ctf_agent/config.py` | Non-secret TOML settings and validation. |
-| `tests/conftest.py` | Native SDK capture, test substitutes, and Docker fixtures. |
-| `tests/check_controls.py` | Pytest launch, source/image provenance, suite summary, and cleanup check. |
-| `tests/check_langfuse.py` | One synthetic hosted run, bounded readback, trace audit, and evidence export. |
-| `tests/check_model.py` | One explicitly approved live synthetic attempt and official-CLI trace readback. |
-| `tests/test_model.py` | Offline SDK transport checks for context, automatic tracing, budgets, errors, and late replies. |
-| `tests/test_challenge.py` | Offline public-data, file-staging, and split checks; no real dataset or Docker transfer. |
-| `tests/test_hosted_tracing.py` | Hosted audit/completeness and readback pagination/deadline checks without network. |
-| `tests/test_agent.py` | Loop behavior, context, recovery, and stopping. |
-| `tests/test_contracts.py` | Tool/configuration contracts and tracing/control failure paths. |
-| `tests/test_controls.py` | Original 17 synthetic Docker controls checks. |
-| `tests/test_agent_controls.py` | Scripted success/recovery and late-response Docker checks. |
-| `tests/fixtures/` | Synthetic target/service, scripted messages, and native SDK span inspection/export. |
-| `docker/worker.py` | Command/file operations inside the solver. |
-| `docker/guard.py` | Namespace firewall and independent packet-denial collection. |
+| `__main__.py`, `launch.py` | CLI, host clients, one real attempt, provenance and trace export. |
+| `challenge.py` | Package loading, explicit public fields, file staging, supplied target/network lifetime. |
+| `agent.py` | Conversation loop, Responses adapter, request limits and usage. |
+| `attempt.py` | Trusted evaluator, hard limits/watchdog, tool/response bounds, final summary. |
+| `tools.py` | Three tool definitions, validation, solver dispatch. |
+| `sandbox.py`, `docker.py` | Solver/guard lifecycle, denial monitoring, bounded Docker communication. |
+| `config.py` | Non-secret settings and validation. |
+| `docker/worker.py`, `docker/guard.py` | Operations inside the solver and independent namespace firewall. |
+| `tests/` | Test substitutes, synthetic targets, controls and preparation checks. |
 
-See [design and alternatives](docs/DESIGN.md) for responsibilities and decisions.
+| Tool | Input and validation | Output, timeout, errors |
+| --- | --- | --- |
+| `run_command` | Nonempty command, no NUL, at most 16 KiB; optional positive timeout within the command cap. | Bounded stdout/stderr, exit code and truncation metadata. Nonzero exit is an observation; timeout stops the attempt and solver. |
+| `write_file` | Workspace-relative path without traversal/NUL; UTF-8 content at most 64 KiB. Worker independently rejects symlinks/races. | Path/bytes-written or error observation; same bounded worker timeout as commands. |
+| `submit_flag` | Nonempty candidate, at most 4,096 UTF-8 bytes. | Candidate/verdict recorded; exact host-side equality. Wrong submissions permit continuation; success stops. No subprocess, bounded by attempt deadline. |
 
-## Loop and context
+Unknown tools/invalid arguments return validation observations and consume tool
+budget. Worker/Docker failures are terminal. The evaluator never separately
+reveals the expected answer in prompts, results, or traces.
 
-The trusted runner yields a small controller record. The loop receives only public
-task text and the two bounded callables, not that record or private runner state:
+Commands execute only in the non-root, read-only solver, with bounded tmpfs,
+no capabilities, host mounts, socket, credentials, evaluator files, or private
+challenge/build metadata. The separate trusted guard restricts connections to
+assigned endpoints; independent packet-denial evidence triggers solver stopping.
+Targets use fresh isolated internal networks, no published ports or host mounts,
+resource limits, and disposable writable layers. Ordinary target startup permits
+CHOWN/SETUID/SETGID; model tools have no administrative target shell. Supplied
+Compose arrangements outside the reviewed image/network conventions fail closed.
 
-```python
-# Schematic use after obtaining public target metadata and a configured SDK client.
-with run_attempt(..., langfuse=client, public_task=task, respond=scripted_source) as run:
-    reason = run_agent(task, run["respond"], run["call_tool"])
-# run["result"] now contains the final summary, also saved as summary.json.
+Langfuse is the sole detailed tracing system. Native model generations, tools,
+incidents, stopping and cleanup are recorded; ordinary local result/provenance
+files remain. SDK flushing alone does not establish delivery; the launcher reads
+back and audits hosted observations. Tool results and visible assistant text show
+the observable decisions. `reasoning.summary: auto` is requested, but the approved
+benign check returned no readable summary. Encrypted reasoning is not readable.
+See [reasoning evidence](evidence/reasoning-summaries/README.md).
+
+## Verification and Section 2 handoff
+
+```sh
+uv run --frozen python -m pytest -q
+uv run --frozen python -m ctf_agent self-check
 ```
 
-The runner's response source accepts `messages`, `tools`, and the remaining
-`timeout_seconds`, and returns an assistant-message dictionary with JSON-encoded
-function arguments. Sources include scripted fixtures and the live Responses
-adapter. Live replies also carry native `response_items`, preserving reasoning
-and function items for replay. `run_agent()` retains the system prompt, public task,
-assistant replies, and matching tool observations, passing copies at each turn.
-The solver workspace persists between tools; files are not automatically inserted
-into prompts. There is no history compaction, cross-attempt memory, or token-aware
-context fitting yet.
+The fast suite has 63 cases. `self-check` runs 19 synthetic Docker cases and saves
+JUnit/provenance/cleanup records. The current milestone instead ran focused real
+preparation for the ten reserved challenges plus `pwn-baby-boi`: two fresh cycles
+each, file hashes/ownership, permitted TCP connect-and-close, private boundaries,
+independent denied traffic and solver stop, reset and cleanup. No target response
+contents were read. Run Docker checks sequentially because cleanup uses a shared
+project label. Run each preparation as its own CLI process.
 
-The runner's bound response function enforces the deadline/turn cap and checks
-responses. Its tool function enforces argument validation, tool count, scope, and
-trusted verification. The expected answer stays in the runner's closure, outside
-state/results and model messages. The loop returns a reason string. A correct
-submission ends immediately; a text-only reply ends without verified success.
-[Context design](docs/DESIGN.md#context-and-return-values) explains the complete flow.
+Other explicit checks: `langfuse-check` uploads a scripted synthetic trace with no
+model calls; `model-check` makes paid synthetic model calls and requires a budget.
+Neither is needed before each development attempt. Historical records are under
+[evidence](PROJECT_STATUS.md#evidence).
 
-## Langfuse and result artifacts
+All ten reserved challenges and the development example can be prepared and
+launched through the shared command. The other 39 indexed entries have not had
+infrastructure checked. Solver tooling, AMD64 contestant-binary execution, solve
+rate and longer-run reliability are not established by preparation. Section 2
+belongs to your development experiments: inspect traces, write a hypothesis, test
+a change and run a small pilot before freezing the held-out evaluation setup.
+The full assignment also needs metrics, report and a real successful-run demo.
 
-**Langfuse is the sole detailed tracing system.** The application has no custom
-JSONL writer, event sequence counter, trace-file lock, or fallback trace backend.
-A root `attempt` observation contains public task input and selected configuration/
-run metadata. Bounded model requests create generation observations; bounded tools
-create tool observations. Live generations come automatically from
-`langfuse.openai.OpenAI`; the runner creates no duplicate generation. Scripted
-fixtures retain their manual generations. Guard, stopping, and cleanup incidents
-are native events attached to the root, including events from background threads.
-
-Trusted setup functions are not decorated with automatic argument capture. Their
-answer key, client credentials, locks, and controller objects are never trace
-inputs. Tool observations contain validated inputs and returned results, including
-candidate flags/verdicts. Rejected tool inputs are omitted. Scripted rejected/late
-replies are omitted; automatic integration retains bounded live provider replies
-and usage even if the runner discards them. Explicit events record rejection or
-discard, and such replies execute no tools. A standard HTTP response hook replaces
-provider error bodies with the HTTP status before automatic tracing observes them.
-Secret keys/tokens never enter trace inputs. The SDK's own public project identifier
-appears in native instrumentation-scope metadata.
-
-Each attempt still writes `summary.json`: run/challenge/trace IDs, outcome, tool
-and scripted/model counts, available token/cost fields, timing, and cleanup errors.
-Total time includes SDK flushing; `trace_flush_seconds` records that overhead.
-The root observation's output is the result before flushing. The self-check suite
-also retains configuration, source hashes, image IDs/architecture, and JUnit records.
-These are result/provenance artifacts, not a second detailed tracing stream.
-
-For checks only, the test exporter saves `otel-spans.json` using the SDK's native
-OpenTelemetry serialization. It captures actual SDK output without a hosted project;
-it is not an application runtime exporter. Earlier JSONL evidence remains unchanged.
-
-The `langfuse-check` command in [How to use](#how-to-use) authenticates, runs the
-five-turn scripted flow in isolated containers, flushes after cleanup, polls the
-observations API until complete, and audits the
-hosted data. It saves `check.json`, `summary.json`, and native service export
-`observations.json`, including source/image/configuration provenance. Keys never
-enter the solver or TOML. The application owner shuts down the client at exit;
-disabled tracing is rejected before solver startup.
-
-Hosted authentication, ingestion, readback/export, and cleanup passed for one
-scripted run; the official CLI independently retrieved the same observations.
-The later live check verified two automatically traced requests through the same
-project. These checks establish the recorded trace paths, while general service
-availability remains unverified. `flush()` or a trace ID alone does not prove
-hosted evidence is complete.
-An SDK export failure leaves controller cleanup and local results intact, but
-missing detailed telemetry makes a run unsuitable as complete benchmark evidence.
-
-## Live synthetic model check
-
-The completed check used Responses with automatic Langfuse integration. The user
-confirmed a **$1/day** Duke allowance for their account; teammates should check
-their own allowance. Environment setup is in [How to use](#how-to-use).
-The completed check used `gpt-6-luna`, low reasoning, four requests maximum, 1,024
-output tokens/request, no client retries, and the existing 60-second attempt limit.
-`ctf_agent/model.py` holds the small non-secret settings dictionary and gateway
-pricing snapshot. Requests are limited to 32 KiB of serialized input; a conservative
-input/output cost reservation must fit the $0.10 cap before dispatch. Reservations
-are retained for failures/timeouts. Missing usage is unknown rather than zero.
-Local costs are estimates from gateway rates; provider/gateway-side retries and
-billing are not independently audited. Transport timeout is at most 20 seconds,
-clipped to the remaining attempt time. The solver watchdog remains independent.
-
-The `model-check` command performs a new paid synthetic attempt; it is not part
-of default pytest or `self-check`. Each invocation has its own budget, so reruns require
-authorization. It saves source/image/configuration provenance, the result, and
-native observations retrieved through the official Langfuse CLI (`npx`/Node.js
-required for this hosted check). [Evidence](evidence/model-integration/README.md)
-includes the initial audit and its corrected review without repeating model calls.
-
-## Isolation and tools
-
-Model-controlled commands execute only in a non-root solver container, with no
-host mounts, Docker socket, evaluator storage, credentials, target source/build
-files, `challenge.json`, or expected-answer setting. The base filesystem is
-read-only; `/workspace` and `/tmp` are bounded tmpfs mounts. Capabilities are dropped,
-`no-new-privileges` is set, and CPU/memory/PID limits are enforced.
-
-The trusted guard shares only the solver's network namespace. It installs a
-firewall before solver startup and independently collects NFLOG packet denials.
-A fresh internal bridge uses isolated gateway mode with no published ports or host
-bridge address. DNS and unapproved endpoints are blocked. Denials, guard loss,
-command timeout, and hard budget exhaustion stop the solver. Unexpected stopping
-failures are recorded and classify the attempt as an infrastructure failure.
-
-| Tool | Inputs | Behavior and bounds |
-| --- | --- | --- |
-| `run_command` | Nonempty `command`; optional bounded `timeout_seconds`. | Shell only in the solver's `/workspace`; bounded stdout/stderr; nonzero exit is an observation. Timeout ends the attempt and kills the solver, including detached children. |
-| `write_file` | Workspace-relative `path`; UTF-8 `content`. | Rejects absolute/traversal/NUL/oversized inputs; independent worker directory-descriptor operations reject symlinks and races. |
-| `submit_flag` | Nonempty `candidate`, at most 4096 UTF-8 bytes. | Exact equality in trusted host code; records only candidate/verdict. Wrong submissions allow continuation; success prevents later actions. |
-
-Unknown tools and invalid arguments return validation observations and consume tool
-budget. The runner validates once before setting trace input; worker filesystem
-protections remain a separate boundary. Docker/protocol failures are terminal.
-Cleanup handles exceptions and interruption and attempts both container removals.
-These checks establish the listed controls, not universal container-escape prevention.
-
-`configs/initial.toml` contains implementation defaults: 60-second attempt deadline,
-20 tool calls, 20 response turns, 10-second command cap, 16 KiB command output,
-64 KiB writes, 1 solver CPU, 256 MiB memory, 64 PIDs, and 64 MiB workspace.
-The watchdog independently stops the solver during response waits. It cannot
-interrupt arbitrary host Python callbacks; an uncooperative callback can delay
-host cleanup until it returns. Live calls disable retries and set a transport timeout;
-this is not proof of strict cancellation of remote generation or billing.
-
-## Remaining work and attribution
-
-The CTFTiny readiness milestone is already approved and unfinished. The loader
-currently rejects scored IDs and an unpinned dataset. `configs/ctftiny.json` records
-ten scored IDs, 40 development IDs, and readiness candidate `pwn-baby-boi`, but its
-revision is still null. `nyuctf` is not yet installed or locked. Real file transfer,
-target reset/connectivity/cleanup, and a preparation command remain pending.
-
-AMD64 execution, real challenge suitability, and account throughput limits remain
-unverified. Context-fitting changes should follow observed development needs. The
-[status handoff](PROJECT_STATUS.md#next-action-and-handoff) includes a fresh-chat prompt.
-Later pilots, scored runs, experiments, aggregation, and report/demo work need
-separate authorization.
-
-OpenAI Codex assisted with review, design, implementation, and verification.
-[NYU reference agents](https://github.com/NYU-LLM-CTF/nyuctf_agents) informed tool and
-solver responsibilities; their framework was not vendored. Langfuse integration
-uses the [official SDK patterns](https://langfuse.com/docs/observability/sdk/instrumentation)
-and [supported exporter injection](https://python.reference.langfuse.com/langfuse).
-No individual CTFTiny answers, solutions, or write-ups were consulted.
+Work so far is attributed to **Ryan Banko**. OpenAI Codex assisted with design,
+implementation, review and verification. The [five original resources and citations](docs/REFERENCES.md)
+include NYU's package/docs and reference agents, Duke's gateway guide, and later
+Langfuse/OpenAI guidance. The reference agent framework was not vendored.
+[DESIGN.md](docs/DESIGN.md) records decisions and alternatives. The original
+[assignment](ASSIGNMENT.md) remains authoritative.

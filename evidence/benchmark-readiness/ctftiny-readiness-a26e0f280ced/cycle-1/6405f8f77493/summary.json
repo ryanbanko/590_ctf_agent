@@ -1,0 +1,19 @@
+{
+  "run_id": "6405f8f77493",
+  "challenge_id": "msc-quantum-leap",
+  "mode": "ctftiny-readiness",
+  "termination_reason": "readiness_complete",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "77f6c12e950e12859893cf8183f546ca",
+  "active_seconds": 1.100505,
+  "cleanup_seconds": 0.116189,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000184,
+  "total_seconds": 1.216974
+}

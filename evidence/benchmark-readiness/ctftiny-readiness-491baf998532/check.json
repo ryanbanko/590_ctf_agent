@@ -1,0 +1,179 @@
+{
+  "mode": "ctftiny-readiness",
+  "challenge_id": "msc-weak-password",
+  "passed": false,
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "cycles": [
+    {
+      "number": 1,
+      "target": {
+        "network": "ctf590-target-7edb988d6272-net",
+        "container": null,
+        "containers": {},
+        "images": {},
+        "endpoints": [],
+        "cleanup_errors": [],
+        "gateway": "172.19.255.254"
+      },
+      "checks": {
+        "exact_public_files": true,
+        "nonroot_no_capabilities": true,
+        "private_boundary": true,
+        "solver_no_host_mounts": true,
+        "target_no_mounts_or_published_ports": true,
+        "isolated_network": true,
+        "expected_answer_absent": true,
+        "zero_model_calls": true,
+        "solver_cleanup": true,
+        "target_cleanup": true
+      },
+      "files": [],
+      "result": {
+        "run_id": "0062a4e1b29b",
+        "challenge_id": "msc-weak-password",
+        "mode": "ctftiny-readiness",
+        "termination_reason": "readiness_complete",
+        "tool_calls": 1,
+        "model_calls": 0,
+        "agent_mode": null,
+        "scripted_turns": 0,
+        "tokens": null,
+        "cost_usd": 0.0,
+        "cleanup_errors": [],
+        "trace_id": "5058770db2c67ebfcfc57b0b87abbfe0",
+        "active_seconds": 0.974056,
+        "cleanup_seconds": 0.115833,
+        "verified_success": false,
+        "trace_flush_seconds": 0.000184,
+        "total_seconds": 1.090165
+      }
+    },
+    {
+      "number": 2,
+      "target": {
+        "network": "ctf590-target-55c233b88809-net",
+        "container": null,
+        "containers": {},
+        "images": {},
+        "endpoints": [],
+        "cleanup_errors": [],
+        "gateway": "172.19.255.254"
+      },
+      "checks": {
+        "exact_public_files": true,
+        "nonroot_no_capabilities": true,
+        "private_boundary": true,
+        "solver_no_host_mounts": true,
+        "target_no_mounts_or_published_ports": true,
+        "isolated_network": true,
+        "denial_stops_solver": true,
+        "expected_answer_absent": true,
+        "zero_model_calls": true,
+        "solver_cleanup": true,
+        "independent_denial_record": false,
+        "target_cleanup": true
+      },
+      "files": [],
+      "result": {
+        "run_id": "3f5f871413b4",
+        "challenge_id": "msc-weak-password",
+        "mode": "ctftiny-readiness",
+        "termination_reason": "scope_violation",
+        "tool_calls": 2,
+        "model_calls": 0,
+        "agent_mode": null,
+        "scripted_turns": 0,
+        "tokens": null,
+        "cost_usd": 0.0,
+        "cleanup_errors": [],
+        "trace_id": "6e31414c142fcc77bc65bd4a2cce4b67",
+        "active_seconds": 1.311566,
+        "cleanup_seconds": 0.141998,
+        "verified_success": false,
+        "trace_flush_seconds": 0.000214,
+        "total_seconds": 1.453869
+      }
+    }
+  ],
+  "checks": {
+    "fresh_reset": true,
+    "cleanup_verified": true
+  },
+  "dataset": {
+    "revision": "f1c9531672c45b24b7fb5f3aa44a7ac33d3602f8",
+    "index_sha256": "fce7e0a0ed08d8642acf2ef759d1c5acb6ae6d45a14a7209599fd920864870a6"
+  },
+  "provenance": {
+    "images": {
+      "solver": {
+        "id": "sha256:b276c0ce1372bc3f21a0d9619ad45e5940eb4bf6ae3225031968f3bbbcc66132",
+        "architecture": "arm64"
+      },
+      "guard": {
+        "id": "sha256:c5dc172d90ad2426574ad24f2dfa58bba78395016f91967fa3aa7630c8ef159c",
+        "architecture": "arm64"
+      }
+    },
+    "commit": "028f56052f370ffda1e60b246de6dbec8f023dd4",
+    "working_tree_dirty": true,
+    "source_sha256": {
+      "ctf_agent/__init__.py": "28d3922b5f0d307806451dde0034d39d22b4a4a1e21bc3e4134f523370668c9c",
+      "ctf_agent/__main__.py": "cb974a3d6f0a063f7859b393bb5e1e32d6cd164159f5d23b0d7cf08b0596a8eb",
+      "ctf_agent/agent.py": "842687dc52976ae1e44954016b17f6dfe962a1a7207e33c5e54c11235fdf1b84",
+      "ctf_agent/attempt.py": "befb396ba069d0930ebd82032ce8ec82531a3817461c3216451f80ff7b9bf998",
+      "ctf_agent/challenge.py": "6d76d85139a95c310543f7b2f72e23938930b3b1fcf0065d29b815e2471927b6",
+      "ctf_agent/config.py": "a8f5e6cf83f2833827bbaceaa57fda41065972cb892912dddfb052e9c9a94d5d",
+      "ctf_agent/docker.py": "3249797c0977d13e7291a5b354141881ed0da004c59a3ebfe3ec739b7d81b97d",
+      "ctf_agent/launch.py": "6673abba0dc4ec35139c6c584d9d06d1fc13ce8b326d04bd7e7b3889f31f0c16",
+      "ctf_agent/sandbox.py": "36a80333178d4813b5ac4990389b534a51a3237b1563abb302eef0bbe38b992c",
+      "ctf_agent/tools.py": "5f03bf95dc35a4dbb6ed5426e770ec113eb0782a2456a17ea6c6488e1a25ff3d",
+      "docker/guard.py": "15f2e25a9a3027397373d78047a01cd38c4f5e123ce9d233b0b2e1f259e0291e",
+      "docker/worker.py": "9625a10c6a1a6fda0d45306e90badc474f85456a398afd1cc484571087e3338d",
+      "docker/fixture.Dockerfile": "dd5ddd404a23facac903c375edb53a3462c61d65b0233eb936ba95649bcd0cb1",
+      "docker/guard.Dockerfile": "58142b2216aa36265423495b138b4c6bc30fd132f2b42d6a4744f72a350fe1cd",
+      "docker/solver.Dockerfile": "f70fbdc03ed325e4a35eed8cdb48d95edbc00e729aa63616e7c69614bec6f2e4",
+      "tests/__init__.py": "1d025fffce06e4da8f2265d5ad9dd40abe741a4bf50744398a980df6018b652f",
+      "tests/check_langfuse.py": "22b9758a2f3552187613f3da9b75c17db4a0438722756c214e6b22a37c80d932",
+      "tests/check_model.py": "85304be1eaa1cdf2a3290383fbfe470624d720130acdd42960fee21e37d17269",
+      "tests/check_readiness.py": "04172453bb4ee10ccb39d7122a900e8d5b381216edb5fa121c3441592132fe6c",
+      "tests/conftest.py": "4e24669ff78e89738dae69db5e5813f3fefe1d9743d02e997b1a18a64ac4ad5d",
+      "tests/fixtures/__init__.py": "11b3339d5dfd36bb6b5acac19ca1a4d0a171736a759d44c633c12317bfc83391",
+      "tests/fixtures/responses.py": "98694364ec0ab2f8b5c631f72b55a238b7d9dc29ab22285b979c3dde25867d3a",
+      "tests/fixtures/service.py": "6f6c69a915b13770879b97aeae7f654ddc8d52bac94ffdbc0bdde55d8e9be1c0",
+      "tests/fixtures/target.py": "6901f86e1c47be23642f0837f72f2d70200ff21647e3329ac29ad75ad59d9bf9",
+      "tests/fixtures/tracing.py": "4bec66162eeb11f8d4c35c5295d76e399d15d76b03edcf7eb6b1fe317e1982a1",
+      "tests/test_agent.py": "61d05b973247e29132fbb74a5676d5f1191c945b80aa7cf766caa04934611b2d",
+      "tests/test_agent_controls.py": "7a657f7942b600602a5d8e2dddf325834e490efea0872ac612159443ab493f1e",
+      "tests/test_challenge.py": "91b10057af65aeda8ace597939b78c1ae24b8aa6c76af15b5af06137865b9427",
+      "tests/test_contracts.py": "9b1189cadb8e963f22231287b3a367612131d65e93a39c17eb481fd98bde1300",
+      "tests/test_controls.py": "c90e9840d614a2ebddcafc2cccb040b217c8d92c4aa7af108b15a1c3056a5b69",
+      "tests/test_development.py": "59b5202fbd641885e87401154886ca9d2cf454bc6ebea1669bbb3a1bb65eb0b8",
+      "tests/test_hosted_tracing.py": "851aec66235229b0c7ce87952e9a4b6b7ca9fe4f24dec4400d6aa8727287b2b7",
+      "tests/test_model.py": "7599c3cb685671a3c6f2c39a5c2acc0437105f46a659898454ab60df4011dbb2",
+      "configs/development.toml": "41621ab9a2cddd1099f467ce25886032b3d4c1857ec95c4b1d4a9c87783ccada",
+      "configs/initial.toml": "a8b0611e93b21151c431970bf519a003cd9e07140cdd6e16d5e276bbfc62027e",
+      "configs/ctftiny.json": "a58e425fd87e23742331e609cdd54afdc63c80dbb9c22a199443305d32503f6f",
+      "pyproject.toml": "946d18054a3f3e77e56f9dd3c9ca1a264d7ccb777ce227e9b07905f0aaa7ce6e",
+      "uv.lock": "20a6cad09949fb65f02ccf04c834589115907ec8ddf83c37595eab52c9b449fa"
+    },
+    "docker": "28.3.2",
+    "config": {
+      "solver_image": "ctf590-solver:m1",
+      "guard_image": "ctf590-guard:m1",
+      "target_image": "ctf590-fixture:m1",
+      "wall_seconds": 60.0,
+      "max_tool_calls": 20,
+      "max_model_turns": 20,
+      "command_seconds": 10.0,
+      "max_command_bytes": 16384,
+      "max_output_bytes": 16384,
+      "max_write_bytes": 65536,
+      "memory_mb": 256,
+      "workspace_mb": 64,
+      "pids": 64,
+      "cpus": 1.0
+    }
+  },
+  "total_seconds": 3.109742
+}

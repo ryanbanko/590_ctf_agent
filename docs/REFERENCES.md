@@ -5,6 +5,12 @@ project. They informed the design and should be reviewed when working on the
 corresponding integration. Findings below describe the November 3, 2026 review;
 verify current package/API details when implementing them.
 
+Current completion status is tracked in the
+[assignment checklist](../PROJECT_STATUS.md#assignment-checklist). The initial
+review and milestone notes below preserve their historical context; the latest
+[shared-launcher preparation](#shared-ctftiny-launcher-and-selected-ten-preparation)
+verified the ten reserved CTFTiny challenges plus the development example.
+
 ## Authority and professor clarification
 
 [ASSIGNMENT.md](../ASSIGNMENT.md) preserves the original assignment and is the
@@ -33,7 +39,7 @@ Original link: <https://github.com/NYU-LLM-CTF/CTFTiny>
 - Design consequence: later use `nyuctf` with an explicit path to `ctftiny.json`.
   The assignment's scored set must come from CTFTiny, with 10 challenges kept
   separate from development. The current manifest reserves 10 scored IDs and 40
-  development IDs using metadata only; dataset pinning and validation remain pending.
+  development IDs using metadata only; the pin and index validation were subsequently completed.
 
 ## 2. NYU CTF Bench — dataset conventions and Python package
 
@@ -44,15 +50,14 @@ Original link: <https://github.com/NYU-LLM-CTF/NYU_CTF_Bench>
   splits are not CTFTiny selections.
 - We reviewed generic loader/lifecycle code and the published wheel in memory.
   At review time PyPI published 1.1.1 while repository main declared 1.1.2;
-  relevant APIs existed in the published wheel. Installation is still pending.
+  relevant APIs existed in the published wheel. Version 1.1.1 was subsequently installed and locked.
 - `CTFChallenge` holds the expected flag alongside public metadata. The lifecycle
   helpers invoke the supplied Compose file directly and do not enforce all course
   controls. Package objects must remain trusted host data; construct public task
   messages explicitly rather than serializing whole objects.
 - Design consequence: reuse package conventions and supplied target Compose files
   wherever compatible. Inspect actual target configuration before deciding that
-  an override or additional lifecycle code is needed. Real CTFTiny target
-  compatibility has not been tested or modified.
+  an override or additional lifecycle code is needed. Subsequent target compatibility checks are recorded below.
 
 Supporting sources:
 [dataset loader](https://github.com/NYU-LLM-CTF/NYU_CTF_Bench/blob/main/python/nyuctf/dataset.py),
@@ -152,7 +157,24 @@ excluded. A response hook keeps raw provider HTTP error bodies outside tracing.
 The CLI retrieved the live synthetic trace and usage/cost totals agreed with
 the local estimate. See [model evidence](../evidence/model-integration/README.md).
 
-## What is preserved versus still pending
+## Initial readiness milestone (historical)
+
+November 4 package/target verification: the sparse CTFTiny checkout is pinned to
+`f1c9531672c45b24b7fb5f3aa44a7ac33d3602f8`; its index matches the preserved hash.
+Installed/locked the published `nyuctf==1.1.1` and reviewed its installed generic
+loader/lifecycle code. Its declared `pathlib` dependency is retained rather than
+forking the package. The [NYU dataset usage guide](https://nyu-llm-ctf.github.io/docs/usage/dataset/)
+supports an explicit dataset index; CTFTiny remains the chosen dataset.
+The first readiness milestone inspected the selected development setup. Its Compose definition mounts
+the Docker socket and publishes a host port. Runtime JSON keeps the supplied
+image/alias while removing those exposures, adds target limits, and uses the
+existing isolated network/guard policy.
+[Docker Compose service controls](https://docs.docker.com/reference/compose-file/services/)
+and [bridge networking](https://docs.docker.com/engine/network/drivers/bridge/)
+informed that arrangement. The target image is pinned by digest, and actual AMD64
+target response is verified on the ARM64 host. No target solver/write-up/flag file
+was inspected; trusted `nyuctf` loading holds the answer programmatically. At that first milestone, no held-out challenge contents were opened.
+See [readiness completion evidence](../evidence/ctftiny-readiness/COMPLETED.md).
 
 All original links are retained here; external repositories/sites have not been
 vendored or fully archived. Local code, assignment, decisions, status, and
@@ -165,3 +187,42 @@ answers programmatically without exposing them to the model or separately in log
 
 Use [DESIGN.md](DESIGN.md) for decisions and alternatives and
 [PROJECT_STATUS.md](../PROJECT_STATUS.md) for current scope, findings, and open work.
+
+
+November 4 launch setup: the existing Responses integration was consolidated into
+`agent.py`; trusted target handling into `challenge.py`; and ordinary provenance
+and native trace export into `launch.py`. Current official Responses/function-call
+and Langfuse CLI documentation was reviewed. The official CLI package name is
+now `@langfuse/cli`; the application pins `@langfuse/cli@1.3.1` for native exports.
+No SDK migration or agent framework was added. Gateway metadata still reports
+the existing model prices. The user requested setup only and will check the
+system themselves; no new live model calls or challenge solving occurred.
+
+Subsequent approved reasoning-summary check: the current
+[OpenAI reasoning-summary guide](https://developers.openai.com/api/docs/guides/reasoning#reasoning-summaries)
+documents `reasoning.summary: "auto"` as an opt-in readable summary, distinct from
+raw internal reasoning. Installed OpenAI/Langfuse SDK code supports that parameter
+and native output capture. One benign request through Duke accepted it, but its
+summary array remained empty. The
+[Langfuse best-practices guidance](https://langfuse.com/docs/observability/best-practices)
+informed the native observation/usage/parentage/credential audit. The official
+CLI read back the same response. No additional provider/model experiment was run.
+
+## Shared CTFTiny launcher and selected-ten preparation
+
+The later user-approved setup milestone reuses `CTFDataset(dataset_json=...)` and
+`CTFChallenge` from the installed package. The public index and setup/file inventory
+were used to materialize the selected ten directories, without consulting evaluation
+solutions, write-ups or answer values. Trusted package loading retains answer keys
+programmatically; only listed contestant files and explicit public fields reach the
+solver. Both result labels use the same command and implementation.
+
+The [NYU dataset guide](https://nyu-llm-ctf.github.io/docs/usage/dataset/) and installed
+package code confirm the common loader conventions. Docker's existing Compose
+canonicalization and service controls support the supplied image/service/alias/port
+arrangement. Nginx startup diagnostics demonstrated that the disposable target needs
+writable log/temp storage and CHOWN; solver permissions were unchanged. Eleven
+zero-model preparation commands passed, with two fresh cycles per challenge.
+[Current evidence](../evidence/benchmark-readiness/README.md) records scope, setup
+diagnostics and remaining limits. CTFTiny is the active dataset; additional NYU
+dataset setup was deferred at the user's request.

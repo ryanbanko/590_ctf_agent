@@ -1,0 +1,19 @@
+{
+  "run_id": "a5caaef4b767",
+  "challenge_id": "web-smug-dino",
+  "mode": "ctftiny-readiness",
+  "termination_reason": "readiness_complete",
+  "tool_calls": 2,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "36df58a65858ae3e7f28a41ea046d1d2",
+  "active_seconds": 1.414962,
+  "cleanup_seconds": 0.162578,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000347,
+  "total_seconds": 1.577999
+}

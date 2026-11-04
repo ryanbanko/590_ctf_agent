@@ -1,0 +1,19 @@
+{
+  "run_id": "220f2b960757",
+  "challenge_id": "pwn-baby-boi",
+  "mode": "ctftiny-readiness",
+  "termination_reason": "readiness_complete",
+  "tool_calls": 2,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "72e8536086dca9c76f2bd99d8da1e0d7",
+  "active_seconds": 1.571924,
+  "cleanup_seconds": 0.12556,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000338,
+  "total_seconds": 1.698007
+}

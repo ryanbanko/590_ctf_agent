@@ -1,0 +1,55 @@
+{
+  "services": {
+    "game-server": {
+      "command": null,
+      "entrypoint": null,
+      "image": "sha256:5c49791d4a351cd47822c715757bd59a6ef790b2858d1ff3e108b30a7b8be9ec",
+      "networks": {
+        "ctfnet": {
+          "aliases": [
+            "pwn.chal.csaw.io"
+          ]
+        }
+      },
+      "pull_policy": "never",
+      "labels": {
+        "ctf590.managed": "true"
+      },
+      "cap_drop": [
+        "ALL"
+      ],
+      "cap_add": [
+        "CHOWN",
+        "SETUID",
+        "SETGID"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "dns": [
+        "127.0.0.1"
+      ],
+      "mem_limit": "256m",
+      "memswap_limit": "256m",
+      "cpus": 0.5,
+      "pids_limit": 64,
+      "tmpfs": [
+        "/tmp:rw,noexec,nosuid,nodev,size=16m"
+      ],
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-size": "1m",
+          "max-file": "1"
+        }
+      },
+      "platform": "linux/amd64"
+    }
+  },
+  "networks": {
+    "ctfnet": {
+      "name": "ctf590-target-aba1638bd3ef-net",
+      "external": true
+    }
+  }
+}

@@ -5,6 +5,7 @@ description = "A small, isolated agent for the CTFTiny benchmarking assignment"
 requires-python = ">=3.13,<3.14"
 dependencies = [
     "langfuse==5.1.0",
+    "nyuctf==1.1.1",
     "openai==3.44.0",
 ]
 

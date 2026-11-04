@@ -10,7 +10,7 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 import pytest
 
 from ctf_agent.agent import AttemptStopped, run_agent
-from ctf_agent.model import MODEL_SETTINGS, make_responder, reject_gateway_errors
+from ctf_agent.agent import MODEL_SETTINGS, make_responder, reject_gateway_errors
 from .fixtures.tracing import attribute, read_spans
 
 
@@ -25,7 +25,8 @@ def sdk_response(output, *, status="completed", usage=True):
 def test_native_reasoning_and_tool_results_reach_next_request_with_one_generation_per_call(local_attempt, telemetry):
     requests = []
     outputs = [
-        [{"id": "rs_test", "type": "reasoning", "summary": [], "encrypted_content": "opaque-test-context"},
+        [{"id": "rs_test", "type": "reasoning", "summary": [{"type": "summary_text",
+          "text": "Check the tool result before deciding what to do next."}], "encrypted_content": "opaque-test-context"},
          {"type": "function_call", "call_id": "call_wrong", "name": "submit_flag", "arguments": '{"candidate":"wrong"}'}],
         [{"type": "function_call", "call_id": "call_correct", "name": "submit_flag",
           "arguments": '{"candidate":"private-expected-answer"}'}],
@@ -35,7 +36,7 @@ def test_native_reasoning_and_tool_results_reach_next_request_with_one_generatio
         assert request.url.path == "/v1/responses"
         data = json.loads(request.content)
         assert data["store"] is False and data["max_output_tokens"] == 1024
-        assert data["reasoning"] == {"effort": "low"} and not data["parallel_tool_calls"]
+        assert data["reasoning"] == {"effort": "low", "summary": "auto"} and not data["parallel_tool_calls"]
         assert all(tool["type"] == "function" and tool["strict"] is False for tool in data["tools"])
         assert "private-expected-answer" not in request.content.decode()
         requests.append(data)
@@ -59,6 +60,7 @@ def test_native_reasoning_and_tool_results_reach_next_request_with_one_generatio
     assert len(generations) == 2 and not any(span.name == "scripted-response" for span in spans)
     assert all(span.parent.span_id == root.context.span_id for span in generations)
     assert all(attribute(span, "usage_details") is not None for span in generations)
+    assert "Check the tool result before deciding what to do next." in generations[0].to_json()
 
 
 @pytest.mark.parametrize("override,reason", [

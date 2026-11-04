@@ -1,0 +1,19 @@
+{
+  "run_id": "7d80737d0872",
+  "challenge_id": "pwn-puffin",
+  "mode": "ctftiny-readiness",
+  "termination_reason": "readiness_complete",
+  "tool_calls": 2,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "75b7c13f63a9070a4f4370317bd020e1",
+  "active_seconds": 1.509054,
+  "cleanup_seconds": 0.119295,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000455,
+  "total_seconds": 1.629046
+}
