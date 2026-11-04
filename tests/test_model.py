@@ -24,9 +24,12 @@ def sdk_response(output, *, status="completed", usage=True):
 
 def test_native_reasoning_and_tool_results_reach_next_request_with_one_generation_per_call(local_attempt, telemetry):
     requests = []
+    purpose = "I will submit this candidate to learn whether the evaluator accepts it."
     outputs = [
         [{"id": "rs_test", "type": "reasoning", "summary": [{"type": "summary_text",
           "text": "Check the tool result before deciding what to do next."}], "encrypted_content": "opaque-test-context"},
+         {"id": "msg_purpose", "type": "message", "role": "assistant", "status": "completed",
+          "content": [{"type": "output_text", "text": purpose, "annotations": []}]},
          {"type": "function_call", "call_id": "call_wrong", "name": "submit_flag", "arguments": '{"candidate":"wrong"}'}],
         [{"type": "function_call", "call_id": "call_correct", "name": "submit_flag",
           "arguments": '{"candidate":"private-expected-answer"}'}],
@@ -47,10 +50,10 @@ def test_native_reasoning_and_tool_results_reach_next_request_with_one_generatio
         respond, usage = make_responder(client, langfuse_public_key="pk-lf-ctf590-local")
         with local_attempt(respond, model_usage=usage) as run:
             assert run_agent("public", run["respond"], run["call_tool"]) == "success"
-    assert requests[1]["input"][-3:] == [*outputs[0],
+    assert requests[1]["input"][-4:] == [*outputs[0],
         {"type": "function_call_output", "call_id": "call_wrong", "output": '{"correct": false}'}]
     result = run["result"]
-    assert result["model_calls"] == 2 and result["scripted_turns"] == 0
+    assert result["model_calls"] == result["tool_calls"] == 2 and result["scripted_turns"] == 0
     assert result["tokens"] == {"input": 200, "output": 40, "cached_input": 20, "reasoning": 10}
     assert result["cost_usd"] == pytest.approx(0.0000382)
     assert result["cost_reserved_usd"] > result["cost_usd"]
@@ -61,6 +64,7 @@ def test_native_reasoning_and_tool_results_reach_next_request_with_one_generatio
     assert all(span.parent.span_id == root.context.span_id for span in generations)
     assert all(attribute(span, "usage_details") is not None for span in generations)
     assert "Check the tool result before deciding what to do next." in generations[0].to_json()
+    assert purpose in generations[0].to_json()
 
 
 @pytest.mark.parametrize("override,reason", [

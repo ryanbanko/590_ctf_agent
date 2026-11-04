@@ -9,12 +9,13 @@ from .sandbox import invoke_worker
 TOOL_DEFINITIONS = [
     {
         "name": "run_command",
-        "description": "Run a shell command in the isolated /workspace. A timeout ends the attempt.",
+        "description": "Run a command with /bin/sh in the isolated /workspace. Use bash explicitly for Bash syntax. A timeout ends the attempt.",
         "parameters": {
             "type": "object",
             "properties": {
                 "command": {"type": "string"},
-                "timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+                "timeout_seconds": {"type": "number", "exclusiveMinimum": 0,
+                                    "description": "Seconds to allow; omission uses the configured maximum."},
             },
             "required": ["command"],
             "additionalProperties": False,
@@ -56,7 +57,9 @@ def validate_arguments(name: str, arguments: dict, settings: dict):
         if key == "timeout_seconds":
             if (type(value) not in (int, float) or not math.isfinite(value)
                     or not 0 < value <= settings["command_seconds"]):
-                raise ValueError("timeout_seconds must be positive and within the configured cap")
+                raise ValueError(
+                    "timeout_seconds must be a finite number greater than 0 "
+                    f"and at most {settings['command_seconds']:g} seconds")
         elif not isinstance(value, str):
             raise ValueError(f"{key} must be a string")
     if name == "run_command":

@@ -27,6 +27,47 @@ def python_command(source: str) -> dict:
     return {"command": "python -I -c " + shlex.quote(source)}
 
 
+@pytest.mark.parametrize("attempt", [{"command_seconds": 30.0}], indirect=True)
+def test_solver_utilities_and_executable_workspace(attempt, target):
+    result = attempt["call_tool"]("run_command", python_command(f'''
+import json, pathlib, shutil, subprocess
+tools = ['bash', 'file', 'strings', 'readelf', 'objdump', 'xxd', 'curl', 'nc',
+         'openssl', 'unzip', 'zip', 'gcc', 'make', 'gdb']
+assert all(shutil.which(name) for name in tools)
+mounts = [line for line in pathlib.Path('/proc/mounts').read_text().splitlines()
+          if line.split()[1] in ['/workspace', '/tmp']]
+workspace_options = next(line.split()[3].split(',') for line in mounts if line.split()[1] == '/workspace')
+assert 'noexec' not in workspace_options
+assert {{'nosuid', 'nodev'}} <= set(workspace_options)
+shutil.copy('/bin/true', 'benign-true')
+subprocess.run(['./benign-true'], check=True)
+pathlib.Path('hello.c').write_text('int main(void) {{ return 0; }}\\n')
+subprocess.run(['gcc', 'hello.c', '-o', 'hello'], check=True)
+subprocess.run(['./hello'], check=True)
+header = pathlib.Path('hello').read_bytes()[:20]
+assert header[:5] == b'\\x7fELF\\x02' and int.from_bytes(header[18:20], 'little') == 62
+subprocess.run(['zip', '-q', 'hello.zip', 'hello.c'], check=True)
+assert subprocess.check_output(['unzip', '-p', 'hello.zip', 'hello.c']) == pathlib.Path('hello.c').read_bytes()
+assert 'ELF 64-bit' in subprocess.check_output(['file', 'hello'], text=True)
+assert 'ELF64' in subprocess.check_output(['readelf', '-h', 'hello'], text=True)
+assert 'main' in subprocess.check_output(['objdump', '-t', 'hello'], text=True)
+assert 'main' in subprocess.check_output(['strings', 'hello'], text=True)
+assert '7f45 4c46' in subprocess.check_output(['xxd', '-l', '4', 'hello'], text=True)
+assert 'OpenSSL' in subprocess.check_output(['openssl', 'version'], text=True)
+assert 'Make' in subprocess.check_output(['make', '--version'], text=True)
+assert 'elf64-x86-64' in subprocess.check_output(['gdb', '--batch', '-ex', 'info files', 'hello'], text=True)
+reply = subprocess.check_output(['curl', '--noproxy', '*', '--fail', '--silent', '--show-error',
+                                 '--max-time', '2', 'http://{target['address']}:8000/'])
+assert 'flag' in json.loads(reply)
+subprocess.run(['nc', '-z', '-w', '2', {target['address']!r}, '8000'], check=True)
+subprocess.run(['bash', '-c', 'cat <<< bash-ok'], check=True, capture_output=True)
+print(json.dumps({{'utilities': tools, 'mounts': mounts, 'amd64_execution': True,
+                  'compiled_execution': True, 'archive_roundtrip': True, 'permitted_curl_and_nc': True}}))
+'''))
+    assert result["exit_code"] == 0, result
+    assert json.loads(result["stdout"])["amd64_execution"]
+
+
 def test_files_tools_evaluator_success(attempt: dict, target: dict):
     result = attempt["call_tool"]("write_file", {"path": "scripts/check.py", "content": "print('observation: 5')\n"})
     assert result["bytes_written"] == 24, result
@@ -158,9 +199,12 @@ def test_ipv6_no_external_route(attempt: dict):
 
 @pytest.mark.parametrize("destination", [
     "unapproved_live_port", "internet_ip", "host_address", "embedded_dns",
-    "external_dns", "unrelated_container",
+    "external_dns", "unrelated_container", "curl_internet",
 ])
 def test_network_scope(attempt, target, settings, destination, telemetry):
+    if destination == "curl_internet":
+        check_denial(attempt, "curl --noproxy '*' --connect-timeout 2 https://198.51.100.1/", telemetry)
+        return
     with ExitStack() as stack:
         if destination == "unapproved_live_port":
             address, port = target["address"], 8001

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import subprocess
 import time
 import uuid
@@ -87,6 +87,7 @@ def run_challenge(settings: dict, dataset_json: Path, manifest_path: Path, chall
         challenge = load_challenge(dataset_json, challenge_id, manifest_path)
         report["mode"] = "scored" if challenge_id in manifest["scored"] else "development"
         files = contestant_files(challenge)
+        report["withheld_build_files"] = sorted(name for name in challenge.files if str(PurePosixPath(name)) not in files)
         report["dataset"] = {"revision": manifest["revision"], "index_sha256": manifest["index_sha256"]}
         report["phase"] = "target-startup"
         with challenge_target(challenge, directory / "target") as target:

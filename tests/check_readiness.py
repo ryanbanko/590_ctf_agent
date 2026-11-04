@@ -1,7 +1,7 @@
 """Zero-model CTFTiny preparation check, using the real SDK with local transport."""
 
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import shlex
 import time
 import uuid
@@ -35,6 +35,7 @@ def check_readiness(config_path: Path, dataset_json: Path, manifest_path: Path, 
     directory = output_root / ("ctftiny-readiness-" + uuid.uuid4().hex[:12])
     directory.mkdir(parents=True, mode=0o700)
     report = {"mode": "ctftiny-readiness", "challenge_id": challenge_id, "passed": False,
+              "withheld_build_files": sorted(name for name in challenge.files if str(PurePosixPath(name)) not in files),
               "model_calls": 0, "cost_usd": 0.0, "cycles": [], "checks": {}}
     started = time.monotonic()
     exporter = InMemorySpanExporter()
@@ -71,13 +72,18 @@ def check_readiness(config_path: Path, dataset_json: Path, manifest_path: Path, 
                     solver = json.loads(docker("inspect", run["solver"]))[0]
                     target_info = [json.loads(docker("inspect", container))[0] for container in target["containers"].values()]
                     network = json.loads(docker("network", "inspect", target["network"]))[0]
+                    backend_names = {name for info in target_info for name in info["NetworkSettings"]["Networks"]
+                                     if name != target["network"]}
+                    backends = [json.loads(docker("network", "inspect", name))[0] for name in backend_names]
                     cycle["checks"].update(
                         exact_public_files=observed["files"] == expected_files,
                         nonroot_no_capabilities=(observed["uid"] == 1000 and "CapEff:\t0000000000000000" in observed["status"]),
                         private_boundary=not observed["credential_names"] and not observed["docker_socket"] and not observed["host_marker"],
                         solver_no_host_mounts=not solver["HostConfig"]["Binds"] and all(m["Type"] == "tmpfs" for m in solver["Mounts"]),
-                        target_no_mounts_or_published_ports=all(not info["HostConfig"]["Binds"] and not info["HostConfig"]["PortBindings"]
-                            and all(mount["Type"] == "tmpfs" for mount in info["Mounts"]) for info in target_info),
+                        target_no_host_bind_mounts_or_published_ports=all(not info["HostConfig"]["Binds"] and not info["HostConfig"]["PortBindings"]
+                            and all(mount["Type"] in {"tmpfs", "volume"} for mount in info["Mounts"]) for info in target_info),
+                        isolated_target_backends=all(info["Internal"] and not info["EnableIPv6"]
+                            and info["Options"].get("com.docker.network.bridge.gateway_mode_ipv4") == "isolated" for info in backends),
                         isolated_network=network["Internal"] and network["Options"].get("com.docker.network.bridge.gateway_mode_ipv4") == "isolated")
                     for endpoint in target["endpoints"]:
                         connection = run_python(run,

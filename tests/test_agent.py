@@ -14,7 +14,9 @@ from .fixtures.responses import tool_response
 from .fixtures.tracing import attribute, read_spans
 
 
-def test_observations_drive_recovery_and_only_public_history_is_passed(local_attempt, telemetry, monkeypatch):
+@pytest.mark.parametrize("local_attempt", [{"command_seconds": 10.0}, {"command_seconds": 30.0}], indirect=True)
+def test_observations_drive_recovery_and_only_public_history_is_passed(local_attempt, telemetry, monkeypatch, request):
+    command_seconds = request.node.callspec.params["local_attempt"]["command_seconds"]
     worker = Mock(side_effect=[{"exit_code": 7, "stdout": "", "stderr": "failed"},
                                {"exit_code": 0, "stdout": "new observation", "stderr": ""}])
     monkeypatch.setattr("ctf_agent.tools.invoke_worker", worker)
@@ -25,6 +27,8 @@ def test_observations_drive_recovery_and_only_public_history_is_passed(local_att
         assert messages[0]["content"] == SYSTEM_PROMPT
         assert messages[1] == {"role": "user", "content": "Only this public task"}
         assert tools[0]["function"]["name"] == "run_command"
+        timeout = tools[0]["function"]["parameters"]["properties"]["timeout_seconds"]
+        assert timeout["maximum"] == timeout["default"] == command_seconds
         serialized = json.dumps({"messages": messages, "tools": tools})
         for private in ["private-expected-answer", "private-network", "private-gateway",
                         run["run_id"], str(run["directory"])]:
@@ -45,9 +49,12 @@ def test_observations_drive_recovery_and_only_public_history_is_passed(local_att
         assert run_agent("Only this public task", run["respond"], run["call_tool"]) == "completed_without_success"
     assert run["result"]["scripted_turns"] == 3 and run["result"]["tool_calls"] == 2
     assert worker.call_count == 2 and TOOL_DEFINITIONS[0]["name"] == "run_command"
+    assert "maximum" not in TOOL_DEFINITIONS[0]["parameters"]["properties"]["timeout_seconds"]
     spans = read_spans(telemetry, run["result"]["trace_id"])
     generations = sorted((span for span in spans if span.name == "scripted-response"), key=lambda span: span.start_time)
     assert [len(attribute(span, "input")["messages"]) for span in generations] == [2, 4, 6]
+    assert all(attribute(span, "input")["tools"][0]["function"]["parameters"]["properties"]
+               ["timeout_seconds"]["maximum"] == command_seconds for span in generations)
     assert sum(span.attributes.get("langfuse.observation.type") == "tool" for span in spans) == 2
     assert "private-expected-answer" not in "".join(span.to_json() for span in spans)
     assert run["result"]["model_calls"] == 0 and run["result"]["tokens"] is None

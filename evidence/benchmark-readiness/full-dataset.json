@@ -1,0 +1,820 @@
+{
+  "dataset_revision": "f1c9531672c45b24b7fb5f3aa44a7ac33d3602f8",
+  "revision_matches": true,
+  "index_matches": true,
+  "clean_checkout": true,
+  "challenges": 50,
+  "input_byte_limit": 262144,
+  "model_calls": 0,
+  "cases": [
+    {
+      "challenge_id": "cry-babycrypto",
+      "path": "ctftiny/cry/babycrypto",
+      "category": "crypto",
+      "split": "scored",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 432,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "cry-collision-course",
+      "path": "ctftiny/cry/Collision-Course",
+      "category": "crypto",
+      "split": "scored",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 22366,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "cry-describeme",
+      "path": "ctftiny/cry/DescribeMe",
+      "category": "crypto",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2023f-cry-describeme:latest"
+      ],
+      "files": 1,
+      "bytes": 957,
+      "fits_workspace": true,
+      "withheld_build_files": [
+        "Dockerfile"
+      ]
+    },
+    {
+      "challenge_id": "cry-ecxor",
+      "path": "ctftiny/cry/ECXOR",
+      "category": "crypto",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 3,
+      "bytes": 16748,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "cry-hybrid2",
+      "path": "ctftiny/cry/hybrid2",
+      "category": "crypto",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 3,
+      "bytes": 2924,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "cry-lupin",
+      "path": "ctftiny/cry/Lupin",
+      "category": "crypto",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 2568,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2017f-cry-lupin"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "cry-open-ellipti-ph",
+      "path": "ctftiny/cry/open-ELLIPTI-PH!",
+      "category": "crypto",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 2,
+      "bytes": 2802,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2022f-cry-open_ellipti_ph"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "cry-perfect-secrecy",
+      "path": "ctftiny/cry/perfect_secrecy",
+      "category": "crypto",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 2,
+      "bytes": 19264,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "cry-polly-crack-this",
+      "path": "ctftiny/cry/polly-crack-this",
+      "category": "crypto",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 2680,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2022f-cry-polly_crack_this"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "cry-super-curve",
+      "path": "ctftiny/cry/super_curve",
+      "category": "crypto",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 2,
+      "bytes": 3708,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2019q-cry-super_curve:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "cry-the-lengths-we-extend-ourselves",
+      "path": "ctftiny/cry/The Lengths we Extend Ourselves",
+      "category": "crypto",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 2,
+      "bytes": 2129,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2022f-cry-the_lengths_we_extend_ourselves"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "cry-beyond-quantum",
+      "path": "ctftiny/cry/Beyond-Quantum",
+      "category": "crypto",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 3,
+      "bytes": 8685,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2022q-cry-beyond_quantum"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "for-1black0white",
+      "path": "ctftiny/for/1black0white",
+      "category": "forensics",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 283,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "for-whyos",
+      "path": "ctftiny/for/whyOS",
+      "category": "forensics",
+      "split": "scored",
+      "stage": "complete",
+      "service": false,
+      "files": 2,
+      "bytes": 23700908,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "msc-algebra",
+      "path": "ctftiny/msc/algebra",
+      "category": "misc",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 0,
+      "bytes": 0,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2018q-misc-algebra:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "msc-android-dropper",
+      "path": "ctftiny/msc/android-dropper",
+      "category": "misc",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 2173619,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2023q-msc-android_dropper:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "msc-ezmaze",
+      "path": "ctftiny/msc/ezMaze",
+      "category": "misc",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 10447,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "msc-showdown",
+      "path": "ctftiny/msc/showdown",
+      "category": "misc",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 2210,
+      "fits_workspace": true,
+      "compose_supported": false,
+      "service_keys": {
+        "showdown": [
+          "build",
+          "command",
+          "entrypoint",
+          "image",
+          "networks",
+          "privileged",
+          "volumes"
+        ]
+      },
+      "withheld_build_files": [],
+      "unsupported_reason": "Supplied target requires privileged Docker; prebuilt registry image unavailable."
+    },
+    {
+      "challenge_id": "msc-weak-password",
+      "path": "ctftiny/msc/Weak-Password",
+      "category": "misc",
+      "split": "scored",
+      "stage": "complete",
+      "service": false,
+      "files": 0,
+      "bytes": 0,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "msc-quantum-leap",
+      "path": "ctftiny/msc/quantum-leap",
+      "category": "misc",
+      "split": "scored",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 21,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-bigboy",
+      "path": "ctftiny/pwn/bigboy",
+      "category": "pwn",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 8792,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2018q-pwn-bigboi:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-get-it",
+      "path": "ctftiny/pwn/get_it?",
+      "category": "pwn",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 8744,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2018q-pwn-get_it:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-password-checker",
+      "path": "ctftiny/pwn/Password-Checker",
+      "category": "pwn",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 16816,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2021q-pwn-password_checker"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-pilot",
+      "path": "ctftiny/pwn/pilot",
+      "category": "pwn",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 10472,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2017q-pwn-pilot"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-puffin",
+      "path": "ctftiny/pwn/puffin",
+      "category": "pwn",
+      "split": "scored",
+      "stage": "complete",
+      "service": true,
+      "files": 2,
+      "bytes": 8804,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2023q-pwn-puffin:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-roppity",
+      "path": "ctftiny/pwn/roppity",
+      "category": "pwn",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 2,
+      "bytes": 2038944,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2020q-pwn-roppity:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-slithery",
+      "path": "ctftiny/pwn/slithery",
+      "category": "pwn",
+      "split": "scored",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 1113,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2020q-pwn-slithery:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-target-practice",
+      "path": "ctftiny/pwn/target practice",
+      "category": "pwn",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 8640,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2023q-pwn-target_practice:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-unlimited-subway",
+      "path": "ctftiny/pwn/unlimited_subway",
+      "category": "pwn",
+      "split": "scored",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 5337,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2023q-pwn-unlimited_subway:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-baby-boi",
+      "path": "ctftiny/pwn/baby_boi",
+      "category": "pwn",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 3,
+      "bytes": 2039426,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2019q-pwn-baby_boi:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "pwn-got-milk",
+      "path": "ctftiny/pwn/got_milk",
+      "category": "pwn",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 2,
+      "bytes": 27540,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2019q-pwn-got_milk:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-a-walk-through-x86-part-2",
+      "path": "ctftiny/rev/A-Walk-Through-x86-Part-2",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 3,
+      "bytes": 25803,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-baby-mult",
+      "path": "ctftiny/rev/baby_mult",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 952,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-checker",
+      "path": "ctftiny/rev/checker",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 775,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-dockreleakage",
+      "path": "ctftiny/rev/dockREleakage",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 5859840,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-ezbreezy",
+      "path": "ctftiny/rev/ezbreezy",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 15504,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-gibberish-check",
+      "path": "ctftiny/rev/gibberish_check",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 39016,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2019q-rev-gibberish_check:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-rap",
+      "path": "ctftiny/rev/rap",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 10512,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-rebug-2",
+      "path": "ctftiny/rev/rebug 2",
+      "category": "rev",
+      "split": "scored",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 16080,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-rox",
+      "path": "ctftiny/rev/rox",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 59312,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-sourcery",
+      "path": "ctftiny/rev/sourcery",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 44186,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-tablez",
+      "path": "ctftiny/rev/tablez",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 9736,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-the-big-bang",
+      "path": "ctftiny/rev/the_big_bang",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 3866,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2022q-rev-the_big_bang"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-unvirtualization",
+      "path": "ctftiny/rev/unVirtualization",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 297056,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-whataxor",
+      "path": "ctftiny/rev/whataxor",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 2,
+      "bytes": 9320,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-beleaf",
+      "path": "ctftiny/rev/beleaf",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": false,
+      "files": 1,
+      "bytes": 7624,
+      "fits_workspace": true,
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "rev-maze",
+      "path": "ctftiny/rev/maze",
+      "category": "rev",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 1,
+      "bytes": 30240,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2021f-rev-maze:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "web-poem-collection",
+      "path": "ctftiny/web/poem-collection",
+      "category": "web",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 0,
+      "bytes": 0,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2021q-web-poem_collection:latest"
+      ],
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "web-shreeramquest",
+      "path": "ctftiny/web/ShreeRamQuest",
+      "category": "web",
+      "split": "development",
+      "stage": "complete",
+      "service": true,
+      "files": 0,
+      "bytes": 0,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "service_keys": {
+        "mongo": [
+          "command",
+          "entrypoint",
+          "environment",
+          "image",
+          "networks",
+          "restart"
+        ],
+        "nginx": [
+          "build",
+          "command",
+          "depends_on",
+          "entrypoint",
+          "image",
+          "networks",
+          "ports"
+        ],
+        "nodeserver": [
+          "build",
+          "command",
+          "depends_on",
+          "entrypoint",
+          "environment",
+          "image",
+          "networks"
+        ]
+      },
+      "withheld_build_files": []
+    },
+    {
+      "challenge_id": "web-smug-dino",
+      "path": "ctftiny/web/smug-dino",
+      "category": "web",
+      "split": "scored",
+      "stage": "complete",
+      "service": true,
+      "files": 0,
+      "bytes": 0,
+      "fits_workspace": true,
+      "compose_supported": true,
+      "images": [
+        "llmctf/2023q-web-smug_dino"
+      ],
+      "withheld_build_files": []
+    }
+  ],
+  "all_file_inventories_valid": true,
+  "all_files_fit_workspace": true,
+  "known_unsupported": [
+    "msc-showdown"
+  ],
+  "verified_environment_count": 15,
+  "verified_environment_checks": {
+    "pwn-baby-boi": "evidence/benchmark-readiness/ctftiny-readiness-4c9ac48d936b/check.json",
+    "cry-babycrypto": "evidence/benchmark-readiness/ctftiny-readiness-bb864b3c7e06/check.json",
+    "cry-collision-course": "evidence/benchmark-readiness/ctftiny-readiness-937f8aecfee2/check.json",
+    "for-whyos": "evidence/benchmark-readiness/ctftiny-readiness-cd703639d135/check.json",
+    "msc-quantum-leap": "evidence/benchmark-readiness/ctftiny-readiness-273000879bff/check.json",
+    "msc-weak-password": "evidence/benchmark-readiness/ctftiny-readiness-05579731f19e/check.json",
+    "pwn-puffin": "evidence/benchmark-readiness/ctftiny-readiness-128beda11a9f/check.json",
+    "pwn-slithery": "evidence/benchmark-readiness/ctftiny-readiness-5793a4db33a9/check.json",
+    "pwn-unlimited-subway": "evidence/benchmark-readiness/ctftiny-readiness-5f60319d554d/check.json",
+    "rev-rebug-2": "evidence/benchmark-readiness/ctftiny-readiness-3961cd094590/check.json",
+    "web-smug-dino": "evidence/benchmark-readiness/ctftiny-readiness-f036096743bc/check.json",
+    "cry-ecxor": "runs/full-dataset-setup/ctftiny-readiness-5a130fd13cab/check.json",
+    "cry-describeme": "runs/full-dataset-setup/ctftiny-readiness-6a7e91b9470e/check.json",
+    "msc-algebra": "runs/full-dataset-setup/ctftiny-readiness-16dc48d0658c/check.json",
+    "web-shreeramquest": "runs/full-dataset-setup/ctftiny-readiness-713966b3ced7/check.json"
+  },
+  "new_preparation_checks": [
+    {
+      "challenge_id": "cry-ecxor",
+      "passed": true,
+      "check": "runs/full-dataset-setup/ctftiny-readiness-5a130fd13cab/check.json"
+    },
+    {
+      "challenge_id": "cry-describeme",
+      "passed": true,
+      "check": "runs/full-dataset-setup/ctftiny-readiness-6a7e91b9470e/check.json"
+    },
+    {
+      "challenge_id": "msc-algebra",
+      "passed": true,
+      "check": "runs/full-dataset-setup/ctftiny-readiness-16dc48d0658c/check.json"
+    },
+    {
+      "challenge_id": "msc-showdown",
+      "passed": false,
+      "check": "runs/full-dataset-setup/ctftiny-readiness-47294923a47e/check.json"
+    },
+    {
+      "challenge_id": "web-shreeramquest",
+      "passed": false,
+      "check": "runs/full-dataset-setup/ctftiny-readiness-09bfe266c03d/check.json"
+    },
+    {
+      "challenge_id": "web-shreeramquest",
+      "passed": true,
+      "check": "runs/full-dataset-setup/ctftiny-readiness-713966b3ced7/check.json"
+    }
+  ],
+  "fast_tests_passed": 63,
+  "all_targets_prepared": false,
+  "source_sha256": {
+    "ctf_agent/challenge.py": "b5a7ea3239775d2a5c891fe59a9f643cd1a0f91c2863411ce480815abf701810",
+    "ctf_agent/launch.py": "25eb33f72f7370d543f07ed28885071f718da35612e9de65addbe69e6e0f0c28",
+    "tests/check_readiness.py": "c8707b757bf1785f67c19e6ca9a1b68a6bbc13d9961c915bb7bfb95f76ea506c",
+    "configs/development.toml": "f771782d86083b936e502a90b3f6f26a9d15042294a731fcddf5d85227171cf0"
+  },
+  "final_focused_tests_passed": 14,
+  "full_checkout": true
+}

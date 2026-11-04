@@ -20,13 +20,14 @@ def test_only_listed_files_and_public_fields_are_used(tmp_path, monkeypatch):
     (tmp_path / "files/program").write_bytes(binary)
     (tmp_path / "files/program").chmod(0o755)
     (tmp_path / "challenge.json").write_text('{"flag":"private-answer"}')
-    challenge = SimpleNamespace(challenge_dir=tmp_path, files=["files/program"],
+    challenge = SimpleNamespace(challenge_dir=tmp_path, files=["./files/program"],
                                 name="fixture", category="pwn", description="Public description",
                                 flag="private-answer", challenge={"private": "metadata"})
     files = contestant_files(challenge)
     task = json.loads(public_task(challenge, files, [{"address": "192.0.2.2", "port": 8000}]))
     assert set(task) == {"name", "category", "description", "files", "endpoints"}
     assert "private-answer" not in json.dumps(task) and task["files"] == ["files/program"]
+    assert task["description"] == challenge.description
     transferred = []
 
     def copy(args, data, timeout):
@@ -51,10 +52,13 @@ def test_only_listed_files_and_public_fields_are_used(tmp_path, monkeypatch):
 def test_private_paths_and_symlinks_are_rejected(tmp_path):
     (tmp_path / "link").symlink_to(tmp_path.parent)
     challenge = SimpleNamespace(challenge_dir=tmp_path)
-    for name in ["../outside", "/absolute", "challenge.json", "Dockerfile", "link/outside"]:
+    for name in ["../outside", "/absolute", "challenge.json", "../Dockerfile", "link/outside"]:
         challenge.files = [name]
         with pytest.raises(ValueError):
             contestant_files(challenge)
+    (tmp_path / "public").write_text("public handout")
+    challenge.files = ["public", "Dockerfile"]
+    assert list(contestant_files(challenge)) == ["public"]
 
 
 def test_unknown_loading_is_rejected_and_both_splits_require_pinned_data(tmp_path):
@@ -105,7 +109,17 @@ def test_runtime_compose_removes_socket_and_host_ports_without_changing_supplied
     assert service["networks"] == original["services"]["game-server"]["networks"]
     assert runtime["networks"]["ctfnet"] == {"name": "fresh-internal-network", "external": True}
     assert "read_only" not in service and service["cap_drop"] == ["ALL"]
-    for change in [{"build": "."}, {"privileged": True}, {"volumes": [{"target": "/private-host"}]}]:
+    service = original["services"]["game-server"] | {"build": ".", "restart": "always"}
+    service["networks"] = service["networks"] | {"backend": None}
+    runtime = target_compose({"services": {"game-server": service,
+        "database": {"image": "mongo", "networks": {"backend": None}}}}, "network")
+    assert not {"build", "privileged", "restart"} & runtime["services"]["game-server"].keys()
+    assert runtime["networks"]["backend"]["internal"] is True
+    assert runtime["networks"]["backend"]["enable_ipv6"] is False
+    assert "ctfnet" not in runtime["services"]["database"]["networks"]
+    with pytest.raises(ValueError, match="Privileged"):
+        target_compose({"services": {"target": service | {"privileged": True}}}, "network")
+    for change in [{"network_mode": "host"}, {"volumes": [{"target": "/private-host"}]}]:
         with pytest.raises(ValueError, match="Unsupported"):
             target_compose({"services": {"game-server": original["services"]["game-server"] | change}},
                            "network")

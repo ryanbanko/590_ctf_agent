@@ -25,9 +25,13 @@ generic benchmark adapter or campaign ledger is needed.
 
 The loader verifies the pinned Git revision, canonical index hash, clean checkout
 and complete disjoint split, with ten reserved IDs. Missing local challenge files
-fail with a preparation error. `CTFChallenge` includes private metadata and the
+fail with an actionable preparation error. Setup now downloads the full pinned
+dataset once; existing sparse checkouts use Git's `sparse-checkout disable`.
+This avoids per-challenge path lookup or maintaining an automatic downloader.
+`CTFChallenge` includes private metadata and the
 answer key; its package object stays on the trusted host. Only name, category,
 description, listed filenames and allowed endpoints form the public task.
+The workspace now has all fifty directories and a 256 KiB live input-size cap.
 
 ## Supplied targets and contestant files
 
@@ -36,7 +40,11 @@ Service-backed entries use their supplied Compose image, service name, alias and
 internal port. Ordinary Compose canonicalization supplies dictionaries rather than
 requiring a YAML dependency. The runtime removes published host ports and Docker
 socket mounts, rejects other mounts/unsupported arrangements, and attaches services
-to a fresh isolated internal bridge. The original dataset files stay unchanged.
+to a fresh isolated internal bridge. Supplied backend networks stay private and
+internal. Docker-managed target volumes are removed and checked during cleanup;
+host bind mounts remain prohibited. Privileged targets are rejected. Supplied
+build directives are not executed when using prebuilt images. The original dataset
+files stay unchanged.
 
 Package lifecycle helpers would run the original Compose configuration directly.
 A small controlled runtime configuration is required to retain the assignment's
@@ -61,13 +69,38 @@ than silently widening access. Preparation verifies four reserved services and t
 development example; the six remaining reserved challenges are file-only.
 
 Only explicitly listed contestant files are transferred. Validation rejects
-traversal, private metadata/build names, duplicate paths and symlinks. A tar stream
+traversal, private metadata names, duplicate paths and symlinks. Listed Dockerfiles
+remain outside the solver, with the omission recorded. A tar stream
 goes through fixed Docker exec arguments to Python's standard data-filtered
 extractor, as UID/GID 1000, into the solver's bounded `/workspace` tmpfs. Docker cp
 refused the read-only solver root, including its writable tmpfs; streaming preserves
 that control without another dependency or mount. Records retain names/sizes/hashes.
 
 ## Runner, agent and tools
+
+The original Python-only solver omitted ordinary CTF utilities. A synthetic probe
+also confirmed that Docker mounted `/workspace` with `noexec`, preventing even
+a copied `/bin/true` from running. The solver now explicitly permits workspace
+execution while retaining `nosuid`, `nodev`, a read-only root, non-root execution
+and zero capabilities. Numeric memory/workspace/time settings are project choices,
+not assignment-prescribed values; the assignment requires enforced bounds and scope.
+
+The normal build selects Linux AMD64 for the solver to match CTFTiny's x86
+executables, while guard/fixture images remain native. Docker Desktop provides
+emulation on Apple Silicon; native AMD64 Linux is preferable for speed and live
+debugging (see [Docker platform guidance](https://docs.docker.com/build/building/multi-platform/)).
+Distro packages supply file/binutils/xxd, curl/netcat/OpenSSL, ZIP tools,
+GCC/make/GDB and 32-bit runtime libraries. This avoids a broad analysis framework
+or custom emulator integration. Installed OS versions are recorded in
+`/opt/os-packages.txt`; image IDs remain part of attempt provenance. Baseline
+tool availability does not guarantee arbitrary binary or specialized-package support.
+Docker documents the explicit workspace option in its
+[tmpfs mount options](https://docs.docker.com/engine/storage/tmpfs/).
+
+The trusted response boundary copies the public tool definitions and inserts the
+active command timeout maximum/default before tracing and invoking the model.
+It shares no other private runner state and leaves the static definitions intact.
+Commands use `/bin/sh`; Bash syntax requires an explicit `bash` invocation.
 
 `run_attempt()` owns resources, the deadline/watchdog, counters, answer key,
 Langfuse root observation and final result. It yields a small operator record;
@@ -105,8 +138,11 @@ transport timeouts. Remote cancellation and billing cancellation are not guarant
 
 The same existing hard limits cover wall time, model turns, tool calls, command
 runtime, output bytes, file writes and container resources. Live settings come from
-`configs/development.toml`, over shared defaults; no limits changed in the current
-setup milestone. Per-attempt request/output/cost bounds remain, with ordinary usage
+`configs/development.toml`, over shared defaults. After initial setup, the user
+approved a 300-second live profile with 30-second command/model timeouts, twenty
+model turns/requests and forty tool calls. Unspecified settings inherit defaults;
+the synthetic/preparation configuration remains unchanged. Per-attempt
+request/output/cost bounds remain, with ordinary usage
 records instead of a persistent spending subsystem. Review costs between attempts.
 
 `make_responder()` returns a function and non-secret usage dictionary, fresh per
@@ -138,10 +174,16 @@ before automatic tracing sees them. Secret credentials stay host-side; the SDK's
 public project identifier appears in native instrumentation metadata.
 
 `reasoning.summary: auto` uses native response replay/capture without another call.
-The one approved benign compatibility request returned an empty summary; readable
-summaries are unconfirmed. Tool arguments/results and visible assistant text remain
-available for inspection. No explanatory prompt/performance change was added during
-this environment milestone; those experiments belong to Section 2.
+The one approved benign compatibility request returned an empty summary; a later
+development run returned readable summaries in three of seven generations. Their
+presence is not guaranteed. Tool arguments/results and visible assistant text remain
+available for inspection. The user subsequently approved one system-prompt sentence
+asking for a brief visible purpose/expected-result explanation with each tool call
+in the same response. The existing native generation output captures that text;
+no schema, tool, parser, extra turn or control-flow change was needed. This requests
+an action explanation, not private internal reasoning. Prompt wording can affect
+model behavior and token use. The reviewed development run included visible
+explanations in all seven generations; performance equivalence is unverified.
 
 ## Verification scope
 
@@ -161,7 +203,11 @@ creating/shutting down the same Langfuse project client in one diagnostic proces
 reused SDK state and produced empty later exports. No application workaround was
 needed for the normal one-invocation lifecycle.
 
-The other 39 CTFTiny entries, contestant AMD64 execution and solver tool coverage
-are not verified. Preparation is not a solve, pilot, scored evaluation or improvement
+Four later development preparations passed, bringing runtime coverage to fifteen
+challenges. All fifty file inventories were checked; the remaining thirty-five
+environments have not passed runtime preparation. `msc-showdown` is a known
+unsupported privileged target. Subsequent [solver checks](../evidence/solver-readiness/README.md)
+cover baseline utilities and benign executable handling, separately from challenge
+preparation. Preparation is not a solve, pilot, scored evaluation or improvement
 comparison. [Status](../PROJECT_STATUS.md) and [readiness evidence](../evidence/benchmark-readiness/README.md)
 record the completed scope and the Section 2 handoff.

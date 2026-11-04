@@ -1,0 +1,19 @@
+{
+  "run_id": "edf294015772",
+  "challenge_id": "wall_limit",
+  "mode": "synthetic-controls",
+  "termination_reason": "wall_limit",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "1ccc37b1d1643daa4c53f1a3b2fd7a1d",
+  "active_seconds": 3.080226,
+  "cleanup_seconds": 0.137703,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000794,
+  "total_seconds": 3.218906
+}

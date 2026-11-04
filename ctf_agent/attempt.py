@@ -1,6 +1,7 @@
 """Trusted attempt runner: resources, bounded functions, verification, and results."""
 
 from contextlib import contextmanager, nullcontext
+from copy import deepcopy
 import json
 from pathlib import Path
 import subprocess
@@ -121,6 +122,11 @@ def run_attempt(settings: dict, network: str, gateway: str, endpoints: list[dict
 
             def request_response(*, messages: list[dict], tools: list[dict]) -> dict:
                 timeout = remaining_seconds(state)
+                tools = deepcopy(tools)
+                for tool in tools:
+                    if tool["function"]["name"] == "run_command":
+                        tool["function"]["parameters"]["properties"]["timeout_seconds"].update(
+                            maximum=settings["command_seconds"], default=settings["command_seconds"])
                 if result["scripted_turns"] + result["model_calls"] >= settings["max_model_turns"]:
                     stop_attempt(state, "model_turn_limit")
                     raise AttemptStopped(result["termination_reason"])

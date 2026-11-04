@@ -6,6 +6,7 @@ import ipaddress
 import io
 import json
 from pathlib import Path, PurePosixPath
+import shlex
 import subprocess
 import tarfile
 import uuid
@@ -40,7 +41,9 @@ def load_challenge(dataset_json: Path, challenge_id: str, manifest_path: Path):
 
     dataset = CTFDataset(dataset_json=dataset_json)
     if not (dataset.basedir / dataset.get(challenge_id)["path"] / "challenge.json").is_file():
-        raise ValueError("Challenge files are missing; obtain the selected directory in the dataset checkout")
+        raise ValueError(
+            f"Challenge {challenge_id!r} is not downloaded. Complete the full dataset setup in README.md. "
+            f"For an existing sparse checkout, run: git -C {shlex.quote(str(root))} sparse-checkout disable")
     return CTFChallenge(dataset.get(challenge_id), dataset.basedir)
 
 
@@ -51,13 +54,16 @@ def contestant_files(challenge) -> dict[str, Path]:
     for name in challenge.files:
         path = PurePosixPath(name)
         if (not path.parts or path.is_absolute() or ".." in path.parts or "\x00" in name
-                or path.name in {"challenge.json", "docker-compose.yml", "docker-compose.yaml", "Dockerfile"}):
+                or path.name in {"challenge.json", "docker-compose.yml", "docker-compose.yaml"}):
             raise ValueError("Invalid contestant-file path")
         source = root
         for part in path.parts:
             source = source / part
             if source.is_symlink():
                 raise ValueError("Contestant files must not use symlinks")
+        # Course controls retain target build files even when listed as handouts.
+        if path.name == "Dockerfile":
+            continue
         if not source.is_file() or str(path) in files:
             raise ValueError("Contestant files must be unique regular files")
         files[str(path)] = source
@@ -67,6 +73,8 @@ def contestant_files(challenge) -> dict[str, Path]:
 def public_task(challenge, files: dict[str, Path], endpoints: list[dict]) -> str:
     """Whitelist public fields; never serialize the package's private metadata."""
     description = challenge.description
+    if any(str(PurePosixPath(name)) not in files for name in challenge.files):
+        description += "\nTarget build files are retained by the trusted controller, outside the solver."
     if endpoints and getattr(challenge, "server_name", None):
         description = description.replace(challenge.server_name, endpoints[0]["address"])
     task = {"name": challenge.name, "category": challenge.category,
@@ -115,13 +123,16 @@ def target_compose(supplied: dict, network: str) -> dict:
     """Keep supplied image services/aliases, removing host ports and socket mounts."""
     services = {}
     for name, original in supplied["services"].items():
+        if original.get("privileged"):
+            raise ValueError("Privileged target setup is unsupported under the current isolation controls")
         if (original.keys() - {"image", "networks", "ports", "volumes", "command", "entrypoint", "environment",
-                               "depends_on", "expose", "platform", "user", "working_dir", "hostname", "healthcheck"}
+                               "depends_on", "expose", "platform", "user", "working_dir", "hostname", "healthcheck",
+                               "build", "privileged", "restart"}
                 or not original.get("image")
-                or any(mount.get("target") != "/var/run/docker.sock" for mount in original.get("volumes", []))
-                or set(original.get("networks", {})) - {"ctfnet"}):
+                or any(mount.get("target") != "/var/run/docker.sock" for mount in original.get("volumes", []))):
             raise ValueError("Unsupported target arrangement; review its Compose setup")
-        service = {key: value for key, value in original.items() if key not in {"ports", "volumes"}}
+        service = {key: value for key, value in original.items()
+                   if key not in {"ports", "volumes", "build", "privileged", "restart"}}
         service.setdefault("networks", {"ctfnet": {}})
         service.update(pull_policy="never",
                    labels={"ctf590.managed": "true"},
@@ -131,8 +142,14 @@ def target_compose(supplied: dict, network: str) -> dict:
                    tmpfs=["/tmp:rw,noexec,nosuid,nodev,size=16m"],
                    logging={"driver": "json-file", "options": {"max-size": "1m", "max-file": "1"}})
         services[name] = service
-    return {"services": services,
-            "networks": {"ctfnet": {"name": network, "external": True}}}
+    networks = {"ctfnet": {"name": network, "external": True}}
+    for service in services.values():
+        for name in service["networks"]:
+            if name != "ctfnet":
+                networks[name] = {"internal": True, "enable_ipv6": False,
+                                  "labels": {"ctf590.managed": "true"},
+                                  "driver_opts": {"com.docker.network.bridge.gateway_mode_ipv4": "isolated"}}
+    return {"services": services, "networks": networks}
 
 
 @contextmanager
@@ -147,7 +164,7 @@ def challenge_target(challenge, directory: Path):
     directory.mkdir(parents=True, exist_ok=True)
     compose_path = directory / "compose.json"
     compose = ("compose", "--project-name", name, "-f", str(compose_path.resolve()))
-    target = {"network": network, "container": None, "containers": {}, "images": {},
+    target = {"network": network, "container": None, "containers": {}, "images": {}, "volumes": [],
               "endpoints": [], "cleanup_errors": []}
     runtime = None
     if challenge.container:
@@ -186,14 +203,15 @@ def challenge_target(challenge, directory: Path):
                 container = docker(*compose, "ps", "--all", "--quiet", service_name)
                 target["containers"][service_name] = container
                 info = json.loads(docker("inspect", container))[0]
+                target["volumes"].extend(mount["Name"] for mount in info["Mounts"] if mount["Type"] == "volume")
                 if not info["State"]["Running"]:
                     raise RuntimeError(f"Target service {service_name} exited during startup")
-                aliases = service["networks"]["ctfnet"].get("aliases", [])
+                aliases = (service["networks"].get("ctfnet") or {}).get("aliases", [])
                 if challenge.server_name in [service_name, *aliases]:
                     address = info["NetworkSettings"]["Networks"][network]["IPAddress"]
                     target.update(address=address, container=container, image_id=info["Image"],
                         endpoints=[{"address": address, "protocol": "udp" if challenge.challenge.get("proto") == "udp" else "tcp",
-                                    "port": int(challenge.port)}])
+                                    "port": int(challenge.port or challenge.challenge.get("port"))}])
             if not target["endpoints"]:
                 raise ValueError("No Compose service matches the challenge connection metadata")
         yield target
@@ -201,6 +219,9 @@ def challenge_target(challenge, directory: Path):
         if runtime is not None:
             try:
                 docker(*compose, "down", "--volumes", "--remove-orphans", "--timeout", "2", timeout=15)
+                for volume in target["volumes"]:
+                    if docker("volume", "ls", "--filter", f"name=^{volume}$", "--format", "{{.Name}}"):
+                        target["cleanup_errors"].append("Target volume removal failed")
             except (RuntimeError, subprocess.TimeoutExpired) as error:
                 target["cleanup_errors"].append(type(error).__name__ + ": target removal failed")
         if network_created:

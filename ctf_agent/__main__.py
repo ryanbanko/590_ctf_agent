@@ -33,7 +33,8 @@ def main():
     if args.command == "build-images":
         settings = load_settings(args.config)
         for role, key in [("solver", "solver_image"), ("guard", "guard_image"), ("fixture", "target_image")]:
-            subprocess.run(["docker", "build", "-f", f"docker/{role}.Dockerfile", "-t", settings[key], "."], check=True)
+            platform = ["--platform", "linux/amd64"] if role == "solver" else []
+            subprocess.run(["docker", "build", *platform, "-f", f"docker/{role}.Dockerfile", "-t", settings[key], "."], check=True)
     elif args.command == "self-check":
         # Keep the convenience command; test implementation lives under tests/.
         from tests.test_controls import self_check

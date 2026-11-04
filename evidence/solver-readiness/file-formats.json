@@ -1,0 +1,25 @@
+{
+  "scope": "Listed contestant filenames and first 20 bytes only; no solution analysis",
+  "elf_headers": {
+    "ELF64 machine=62": 20,
+    "ELF32 machine=3": 2
+  },
+  "filename_extensions": {
+    ".py": 14,
+    "(none)": 21,
+    ".txt": 8,
+    ".sage": 3,
+    ".png": 2,
+    ".apk": 1,
+    ".pt": 1,
+    ".gz": 2,
+    ".so": 3,
+    ".c": 1,
+    ".asm": 1,
+    ".bin": 1,
+    ".zip": 3,
+    ".deb": 1,
+    ".log": 1,
+    ".out": 1
+  }
+}

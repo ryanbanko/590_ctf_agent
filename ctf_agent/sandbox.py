@@ -85,11 +85,11 @@ def start_sandbox(sandbox: dict, settings: dict, network: str, gateway: str,
     remaining()
     memory = f'{settings["memory_mb"]}m'
     docker(
-        "run", "--detach", "--pull", "never", "--name", sandbox["solver"],
+        "run", "--detach", "--pull", "never", "--platform", "linux/amd64", "--name", sandbox["solver"],
         "--label", "ctf590.managed=true", "--network", f'container:{sandbox["guard"]}',
         "--user", "1000:1000", "--cap-drop", "ALL",
         "--security-opt", "no-new-privileges=true", "--read-only",
-        "--tmpfs", f'/workspace:rw,nosuid,nodev,size={settings["workspace_mb"]}m,uid=1000,gid=1000,mode=700',
+        "--tmpfs", f'/workspace:rw,exec,nosuid,nodev,size={settings["workspace_mb"]}m,uid=1000,gid=1000,mode=700',
         "--tmpfs", "/tmp:rw,nosuid,nodev,size=16m,uid=1000,gid=1000,mode=700",
         "--memory", memory, "--memory-swap", memory,
         "--pids-limit", str(settings["pids"]), "--cpus", str(settings["cpus"]),
