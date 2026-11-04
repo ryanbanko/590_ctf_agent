@@ -1,0 +1,15 @@
+{
+  "run_id": "e7f66c4c211b",
+  "challenge_id": "unrelated_container",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "verified_success": false,
+  "tool_calls": 1,
+  "model_calls": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 2.012272,
+  "cleanup_seconds": 0.136683,
+  "total_seconds": 2.148956,
+  "cleanup_errors": []
+}

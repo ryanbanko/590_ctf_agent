@@ -1,0 +1,15 @@
+{
+  "run_id": "81bf9673fd9b",
+  "challenge_id": "filesystem_credentials_privileges_output",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "verified_success": false,
+  "tool_calls": 11,
+  "model_calls": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 2.458046,
+  "cleanup_seconds": 0.117461,
+  "total_seconds": 2.575508,
+  "cleanup_errors": []
+}

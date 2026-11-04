@@ -1,0 +1,17 @@
+{
+  "run_id": "ff971f0d3079",
+  "challenge_id": "scripted_late_response_cannot_execute_tools",
+  "mode": "synthetic-controls",
+  "termination_reason": "wall_limit",
+  "verified_success": false,
+  "tool_calls": 0,
+  "model_calls": 0,
+  "agent_mode": "scripted",
+  "scripted_turns": 1,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 3.125064,
+  "cleanup_seconds": 0.132614,
+  "total_seconds": 3.257678,
+  "cleanup_errors": []
+}

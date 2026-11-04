@@ -1,0 +1,17 @@
+{
+  "run_id": "d084c39ccd04",
+  "challenge_id": "command_timeout_closed_output",
+  "mode": "synthetic-controls",
+  "termination_reason": "command_timeout",
+  "verified_success": false,
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 1.292416,
+  "cleanup_seconds": 0.128342,
+  "total_seconds": 1.420758,
+  "cleanup_errors": []
+}

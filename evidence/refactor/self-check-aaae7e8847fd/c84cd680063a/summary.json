@@ -1,0 +1,15 @@
+{
+  "run_id": "c84cd680063a",
+  "challenge_id": "guard_loss",
+  "mode": "synthetic-controls",
+  "termination_reason": "guard_failure",
+  "verified_success": false,
+  "tool_calls": 0,
+  "model_calls": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 0.655642,
+  "cleanup_seconds": 0.058501,
+  "total_seconds": 0.714144,
+  "cleanup_errors": []
+}

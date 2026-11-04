@@ -1,0 +1,97 @@
+{
+  "mode": "hosted-synthetic-check",
+  "time_utc": "2026-11-03T21:51:08.780669+00:00",
+  "langfuse_version": "5.1.0",
+  "passed": true,
+  "phase": "finished",
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "authenticated": true,
+  "provenance": {
+    "images": {
+      "solver": {
+        "id": "sha256:423db3178ae3a6e4d119c8d3b576cb107f74d2b787d1c756a0871d697f56e858",
+        "architecture": "arm64"
+      },
+      "guard": {
+        "id": "sha256:77758ec899d0576b2f6bc34f7a0737d39881ee9dfba5d0cdcb8d9b20c50a4fb6",
+        "architecture": "arm64"
+      },
+      "target": {
+        "id": "sha256:532a3d8d7805fa0151a3b36bdf0b4588c0bb7fecbf72bf2ed513fa1b64e63b80",
+        "architecture": "arm64"
+      }
+    },
+    "commit": null,
+    "source_sha256": {
+      "ctf_agent/__init__.py": "28d3922b5f0d307806451dde0034d39d22b4a4a1e21bc3e4134f523370668c9c",
+      "ctf_agent/__main__.py": "3a1c4af4d91e77f7b684e5f0cdf0db392368a1e82ba75537217f76c5e5b03d74",
+      "ctf_agent/agent.py": "53a3d7f3f3d0b1ca7907391274fbb20941d46c9422f3aaad5fe7eab609a2fe3d",
+      "ctf_agent/attempt.py": "4971c8d315e9cfc665c63cd81f738715d668d4eb8b48e08d6dbc354b987fd1de",
+      "ctf_agent/config.py": "2b854851d0f690ebbc9cc8b7e7e05b4d33a1ad85935697b7504810abfd10d695",
+      "ctf_agent/docker.py": "3249797c0977d13e7291a5b354141881ed0da004c59a3ebfe3ec739b7d81b97d",
+      "ctf_agent/sandbox.py": "36a80333178d4813b5ac4990389b534a51a3237b1563abb302eef0bbe38b992c",
+      "ctf_agent/tools.py": "5f03bf95dc35a4dbb6ed5426e770ec113eb0782a2456a17ea6c6488e1a25ff3d",
+      "docker/guard.py": "15f2e25a9a3027397373d78047a01cd38c4f5e123ce9d233b0b2e1f259e0291e",
+      "docker/worker.py": "9625a10c6a1a6fda0d45306e90badc474f85456a398afd1cc484571087e3338d",
+      "docker/fixture.Dockerfile": "dd5ddd404a23facac903c375edb53a3462c61d65b0233eb936ba95649bcd0cb1",
+      "docker/guard.Dockerfile": "58142b2216aa36265423495b138b4c6bc30fd132f2b42d6a4744f72a350fe1cd",
+      "docker/solver.Dockerfile": "f70fbdc03ed325e4a35eed8cdb48d95edbc00e729aa63616e7c69614bec6f2e4",
+      "tests/__init__.py": "1d025fffce06e4da8f2265d5ad9dd40abe741a4bf50744398a980df6018b652f",
+      "tests/check_controls.py": "e50d7eebbba09f3254b2243c72eac682c0f5ceb159f10fbeefb41be9144ec961",
+      "tests/check_langfuse.py": "541949d25f4577266e63ec8dfd7cbdc7fa238d6b6d82413e98fe08d83831b433",
+      "tests/conftest.py": "d6ebab294f62005732b41362643a87615f1d9bd12b1cdf7ffe9e41868ea9e562",
+      "tests/fixtures/__init__.py": "11b3339d5dfd36bb6b5acac19ca1a4d0a171736a759d44c633c12317bfc83391",
+      "tests/fixtures/responses.py": "98694364ec0ab2f8b5c631f72b55a238b7d9dc29ab22285b979c3dde25867d3a",
+      "tests/fixtures/service.py": "6f6c69a915b13770879b97aeae7f654ddc8d52bac94ffdbc0bdde55d8e9be1c0",
+      "tests/fixtures/target.py": "6901f86e1c47be23642f0837f72f2d70200ff21647e3329ac29ad75ad59d9bf9",
+      "tests/fixtures/tracing.py": "4bec66162eeb11f8d4c35c5295d76e399d15d76b03edcf7eb6b1fe317e1982a1",
+      "tests/test_agent.py": "61d05b973247e29132fbb74a5676d5f1191c945b80aa7cf766caa04934611b2d",
+      "tests/test_agent_controls.py": "7a657f7942b600602a5d8e2dddf325834e490efea0872ac612159443ab493f1e",
+      "tests/test_contracts.py": "9b1189cadb8e963f22231287b3a367612131d65e93a39c17eb481fd98bde1300",
+      "tests/test_controls.py": "08788a81e71588d0d7f14bcceaa67cd51c795c00525e78a7a3f0365d410e6a19",
+      "tests/test_hosted_tracing.py": "851aec66235229b0c7ce87952e9a4b6b7ca9fe4f24dec4400d6aa8727287b2b7",
+      "configs/initial.toml": "a8b0611e93b21151c431970bf519a003cd9e07140cdd6e16d5e276bbfc62027e",
+      "pyproject.toml": "a168a9bc58fb1ce1ae14d4b314f9ffd13c6dbe2971fcc036a001ad1470088e41",
+      "uv.lock": "83fd87b96e8adaedae4a4eee8da92822682573d417b29f6e11cddb966dcf12e8"
+    },
+    "docker": "28.3.2",
+    "config": {
+      "solver_image": "ctf590-solver:m1",
+      "guard_image": "ctf590-guard:m1",
+      "target_image": "ctf590-fixture:m1",
+      "wall_seconds": 60.0,
+      "max_tool_calls": 20,
+      "max_model_turns": 20,
+      "command_seconds": 10.0,
+      "max_command_bytes": 16384,
+      "max_output_bytes": 16384,
+      "max_write_bytes": 65536,
+      "memory_mb": 256,
+      "workspace_mb": 64,
+      "pids": 64,
+      "cpus": 1.0
+    }
+  },
+  "run_id": "19ef08ce7a67",
+  "trace_id": "66c8feb838d6b983f6efaf28ab31ce64",
+  "cleanup_verified": true,
+  "checks": {
+    "trace_ids_match": true,
+    "parentage": true,
+    "summary_matches": true,
+    "verified_success": true,
+    "five_turns_and_tools": true,
+    "tool_steps": true,
+    "tool_inputs_and_outputs": true,
+    "full_history": true,
+    "submission_verdicts": true,
+    "verified_observed_candidate": true,
+    "expected_answer_not_in_root": true,
+    "secret_key_not_in_trace": true,
+    "no_model_calls": true
+  },
+  "observation_count": 16,
+  "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/66c8feb838d6b983f6efaf28ab31ce64",
+  "total_seconds": 13.607838
+}

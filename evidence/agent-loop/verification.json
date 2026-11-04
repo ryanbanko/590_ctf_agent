@@ -1,0 +1,230 @@
+{
+  "time_utc": "2026-11-03T17:03:59.231881+00:00",
+  "passed": true,
+  "reports": {
+    "fast": {
+      "passed": 30,
+      "report": "evidence/agent-loop/pytest-fast-final.xml",
+      "seconds": 0.082
+    },
+    "controls": {
+      "passed": 17,
+      "report": "evidence/agent-loop/self-check-e88191f0b12b/pytest.xml",
+      "seconds": 43.064
+    },
+    "scripted_integration": {
+      "passed": 2,
+      "report": "evidence/agent-loop/scripted-integration/pytest.xml",
+      "seconds": 7.761
+    }
+  },
+  "controls_suite": "evidence/agent-loop/self-check-e88191f0b12b/suite.json",
+  "source_hashes_match": true,
+  "unchanged_source_files": [
+    "ctf_agent/tools.py",
+    "ctf_agent/sandbox.py",
+    "ctf_agent/docker.py",
+    "ctf_agent/tracing.py",
+    "docker/worker.py",
+    "docker/guard.py",
+    "docker/solver.Dockerfile",
+    "docker/guard.Dockerfile",
+    "docker/fixture.Dockerfile",
+    "tests/test_controls.py",
+    "tests/check_controls.py",
+    "tests/conftest.py",
+    "pyproject.toml",
+    "uv.lock"
+  ],
+  "previous_controls_and_limits_preserved": true,
+  "trace_sequences_and_tool_results_verified": true,
+  "scripted_request_history_sizes_replayed": true,
+  "independent_packet_denials": [
+    "internet_ip",
+    "unapproved_live_port",
+    "host_address",
+    "external_dns",
+    "embedded_dns",
+    "unrelated_container"
+  ],
+  "attempts": [
+    {
+      "run_id": "ae1f7b724e38",
+      "challenge_id": "scripted_loop_recovers_and_verifies_through_target",
+      "termination_reason": "success",
+      "agent_mode": "scripted",
+      "scripted_turns": 5,
+      "tool_calls": 5,
+      "summary": "evidence/agent-loop/scripted-integration/ae1f7b724e38/summary.json"
+    },
+    {
+      "run_id": "ff971f0d3079",
+      "challenge_id": "scripted_late_response_cannot_execute_tools",
+      "termination_reason": "wall_limit",
+      "agent_mode": "scripted",
+      "scripted_turns": 1,
+      "tool_calls": 0,
+      "summary": "evidence/agent-loop/scripted-integration/ff971f0d3079/summary.json"
+    },
+    {
+      "run_id": "177f3b28a9df",
+      "challenge_id": "tool_limit",
+      "termination_reason": "tool_limit",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/177f3b28a9df/summary.json"
+    },
+    {
+      "run_id": "20fd385069a1",
+      "challenge_id": "ipv6_no_external_route",
+      "termination_reason": "completed_without_success",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/20fd385069a1/summary.json"
+    },
+    {
+      "run_id": "28fa3a67521b",
+      "challenge_id": "internet_ip",
+      "termination_reason": "scope_violation",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/28fa3a67521b/summary.json"
+    },
+    {
+      "run_id": "319c33941c21",
+      "challenge_id": "unapproved_live_port",
+      "termination_reason": "scope_violation",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/319c33941c21/summary.json"
+    },
+    {
+      "run_id": "35474fd2efa1",
+      "challenge_id": "command_timeout_detached_child",
+      "termination_reason": "command_timeout",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/35474fd2efa1/summary.json"
+    },
+    {
+      "run_id": "36c23dde4f27",
+      "challenge_id": "host_address",
+      "termination_reason": "scope_violation",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/36c23dde4f27/summary.json"
+    },
+    {
+      "run_id": "390757ee8d5e",
+      "challenge_id": "worker_loss",
+      "termination_reason": "infrastructure_error",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/390757ee8d5e/summary.json"
+    },
+    {
+      "run_id": "4ce8738c9da8",
+      "challenge_id": "wall_limit",
+      "termination_reason": "wall_limit",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/4ce8738c9da8/summary.json"
+    },
+    {
+      "run_id": "71a4f7c3b9f2",
+      "challenge_id": "external_dns",
+      "termination_reason": "scope_violation",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/71a4f7c3b9f2/summary.json"
+    },
+    {
+      "run_id": "945375b13c0b",
+      "challenge_id": "files_tools_evaluator_success",
+      "termination_reason": "success",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 6,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/945375b13c0b/summary.json"
+    },
+    {
+      "run_id": "9dbeec11101e",
+      "challenge_id": "guard_loss",
+      "termination_reason": "guard_failure",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 0,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/9dbeec11101e/summary.json"
+    },
+    {
+      "run_id": "bb5b4d6d186e",
+      "challenge_id": "embedded_dns",
+      "termination_reason": "scope_violation",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/bb5b4d6d186e/summary.json"
+    },
+    {
+      "run_id": "c4ceaa7467cd",
+      "challenge_id": "interruption_cleanup",
+      "termination_reason": "user_cancel",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 0,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/c4ceaa7467cd/summary.json"
+    },
+    {
+      "run_id": "d084c39ccd04",
+      "challenge_id": "command_timeout_closed_output",
+      "termination_reason": "command_timeout",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/d084c39ccd04/summary.json"
+    },
+    {
+      "run_id": "ddc943121001",
+      "challenge_id": "setup_failure_cleanup",
+      "termination_reason": "infrastructure_error",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 0,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/ddc943121001/summary.json"
+    },
+    {
+      "run_id": "e49665891da0",
+      "challenge_id": "filesystem_credentials_privileges_output",
+      "termination_reason": "completed_without_success",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 11,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/e49665891da0/summary.json"
+    },
+    {
+      "run_id": "edf87197e50f",
+      "challenge_id": "unrelated_container",
+      "termination_reason": "scope_violation",
+      "agent_mode": null,
+      "scripted_turns": 0,
+      "tool_calls": 1,
+      "summary": "evidence/agent-loop/self-check-e88191f0b12b/edf87197e50f/summary.json"
+    }
+  ],
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "independent_cleanup_check": {
+    "containers": [],
+    "networks": [],
+    "method": "Separate docker ps --all and docker network ls queries with label=ctf590.managed=true returned empty output."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "run_id": "47d5b612da3e",
+  "challenge_id": "embedded_dns",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "verified_success": false,
+  "tool_calls": 1,
+  "model_calls": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 0.902736,
+  "cleanup_seconds": 0.110961,
+  "total_seconds": 1.013697,
+  "cleanup_errors": []
+}

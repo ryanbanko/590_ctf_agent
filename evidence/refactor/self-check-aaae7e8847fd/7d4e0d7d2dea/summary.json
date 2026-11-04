@@ -1,0 +1,15 @@
+{
+  "run_id": "7d4e0d7d2dea",
+  "challenge_id": "tool_limit",
+  "mode": "synthetic-controls",
+  "termination_reason": "tool_limit",
+  "verified_success": false,
+  "tool_calls": 1,
+  "model_calls": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 0.890004,
+  "cleanup_seconds": 0.129356,
+  "total_seconds": 1.01936,
+  "cleanup_errors": []
+}

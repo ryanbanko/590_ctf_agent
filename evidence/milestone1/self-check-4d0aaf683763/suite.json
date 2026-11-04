@@ -1,0 +1,151 @@
+{
+  "mode": "synthetic-controls",
+  "time_utc": "2026-11-03T16:06:26.171839+00:00",
+  "provenance": {
+    "images": {
+      "solver": {
+        "id": "sha256:d3385a7cb964e90ed5290e55c61a0d6260a23cac5a17bdf3977446b30e1df13c",
+        "architecture": "arm64"
+      },
+      "guard": {
+        "id": "sha256:3992c31a8124802c5c42775519e4daf2076651ad5770bafd4e5727c765eeacef",
+        "architecture": "arm64"
+      },
+      "target": {
+        "id": "sha256:bff6eb551c9d500d1302fb05d5d2c26704ac57e6dc040bc4d1bac1d59d5cf91c",
+        "architecture": "arm64"
+      }
+    },
+    "commit": null,
+    "source_sha256": {
+      "ctf_agent/__init__.py": "28d3922b5f0d307806451dde0034d39d22b4a4a1e21bc3e4134f523370668c9c",
+      "ctf_agent/__main__.py": "36496b0bae15e3fbd2547af82380169834a78daf3d890461ec99590e578ce453",
+      "ctf_agent/attempt.py": "cd0bcbbc4da960b6b8d4eee71005e846c13cf3235330d0089039d4f853ee15eb",
+      "ctf_agent/config.py": "f49a4bc41c69cc16d89523ac15d25d1bfdb2c1e74d9c8a69f5ee2a427e93a361",
+      "ctf_agent/docker.py": "31a81dd1998aebc0209684149a7a0c30c61be7a77e7d6d700ff1b68cc54aee01",
+      "ctf_agent/fixture.py": "3787528e09fa8c7c2d8cc88ce712b33735e77e892229aee98b26970d66f7ba33",
+      "ctf_agent/sandbox.py": "1c405d6db74d287aa23a29c2c55a2b2ec852e9b850a042f0d80d1b1d7656d5ac",
+      "ctf_agent/self_check.py": "bfb25f6e2ed48c42c8203ef2da99b5cbec7ad009637536eef4a9651aebcc321e",
+      "ctf_agent/tools.py": "e78f05c60428f9ff1d7c79400fae2f2404fc3df4df336a61078bd738d15fe2ee",
+      "ctf_agent/tracing.py": "df02a99e76443bf772434ff4689091d4cd3c9409bb914ec9ab29a4b4fa444646",
+      "docker/guard.py": "15f2e25a9a3027397373d78047a01cd38c4f5e123ce9d233b0b2e1f259e0291e",
+      "docker/worker.py": "9625a10c6a1a6fda0d45306e90badc474f85456a398afd1cc484571087e3338d",
+      "docker/fixture.Dockerfile": "dd5ddd404a23facac903c375edb53a3462c61d65b0233eb936ba95649bcd0cb1",
+      "docker/guard.Dockerfile": "58142b2216aa36265423495b138b4c6bc30fd132f2b42d6a4744f72a350fe1cd",
+      "docker/solver.Dockerfile": "f70fbdc03ed325e4a35eed8cdb48d95edbc00e729aa63616e7c69614bec6f2e4",
+      "tests/fixtures/service.py": "6f6c69a915b13770879b97aeae7f654ddc8d52bac94ffdbc0bdde55d8e9be1c0",
+      "tests/test_contracts.py": "47e284b797e3ab0d1845f29da47c467f2e4c06029013fcfd388d789dd1a627cd",
+      "configs/initial.toml": "8f8230d5acfb26cf60215b9cebdba706e6fe061713f7fe116049f49e90a69bcb",
+      "pyproject.toml": "659a410419314d5cc839749c4425f4c38aeba56a98a5ca4ee328b674dbf24e7e",
+      "uv.lock": "1e456a45b3a69fcaf9dd693e5fe59df6f307953d1229f09973d075a61718806d"
+    },
+    "docker": "28.3.2",
+    "config": {
+      "solver_image": "ctf590-solver:m1",
+      "guard_image": "ctf590-guard:m1",
+      "target_image": "ctf590-fixture:m1",
+      "wall_seconds": 60.0,
+      "max_tool_calls": 20,
+      "command_seconds": 10.0,
+      "max_command_bytes": 16384,
+      "max_output_bytes": 16384,
+      "max_write_bytes": 65536,
+      "memory_mb": 256,
+      "workspace_mb": 64,
+      "pids": 64,
+      "cpus": 1.0
+    }
+  },
+  "checks": [
+    {
+      "name": "files_tools_evaluator_success",
+      "passed": true,
+      "run_id": "1acb349a57ec"
+    },
+    {
+      "name": "filesystem_credentials_privileges_output",
+      "passed": true,
+      "run_id": "81bf9673fd9b"
+    },
+    {
+      "name": "command_timeout_detached_child",
+      "passed": true,
+      "run_id": "35b6d8ac25e8"
+    },
+    {
+      "name": "command_timeout_closed_output",
+      "passed": true,
+      "run_id": "4216e7f30743"
+    },
+    {
+      "name": "tool_limit",
+      "passed": true,
+      "run_id": "3f39f04559c6"
+    },
+    {
+      "name": "wall_limit",
+      "passed": true,
+      "run_id": "7b4789efd961"
+    },
+    {
+      "name": "guard_loss",
+      "passed": true,
+      "run_id": "a56b53096e52"
+    },
+    {
+      "name": "worker_loss",
+      "passed": true,
+      "run_id": "7f1aea5644b6"
+    },
+    {
+      "name": "ipv6_no_external_route",
+      "passed": true,
+      "run_id": "7d1bf97d41d0"
+    },
+    {
+      "name": "unapproved_live_port",
+      "passed": true,
+      "run_id": "cb443537109f"
+    },
+    {
+      "name": "internet_ip",
+      "passed": true,
+      "run_id": "5f585c6e44e9"
+    },
+    {
+      "name": "host_address",
+      "passed": true,
+      "run_id": "b4bc6f4ea70a"
+    },
+    {
+      "name": "embedded_dns",
+      "passed": true,
+      "run_id": "e08be823a9f7"
+    },
+    {
+      "name": "external_dns",
+      "passed": true,
+      "run_id": "4b5b5d48335e"
+    },
+    {
+      "name": "unrelated_container",
+      "passed": true,
+      "run_id": "f787019e6545"
+    },
+    {
+      "name": "interruption_cleanup",
+      "passed": true,
+      "run_id": "d1b632c63a9a"
+    },
+    {
+      "name": "setup_failure_cleanup",
+      "passed": true,
+      "run_id": "12a5a46df5c5"
+    }
+  ],
+  "passed": true,
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "cleanup_verified": true,
+  "total_seconds": 45.279662
+}

@@ -1,0 +1,17 @@
+{
+  "run_id": "c4ceaa7467cd",
+  "challenge_id": "interruption_cleanup",
+  "mode": "synthetic-controls",
+  "termination_reason": "user_cancel",
+  "verified_success": false,
+  "tool_calls": 0,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 0.675111,
+  "cleanup_seconds": 0.108449,
+  "total_seconds": 0.783562,
+  "cleanup_errors": []
+}

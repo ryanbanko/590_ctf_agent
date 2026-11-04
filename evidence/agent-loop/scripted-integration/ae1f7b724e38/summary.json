@@ -1,0 +1,17 @@
+{
+  "run_id": "ae1f7b724e38",
+  "challenge_id": "scripted_loop_recovers_and_verifies_through_target",
+  "mode": "synthetic-controls",
+  "termination_reason": "success",
+  "verified_success": true,
+  "tool_calls": 5,
+  "model_calls": 0,
+  "agent_mode": "scripted",
+  "scripted_turns": 5,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 1.702398,
+  "cleanup_seconds": 0.112639,
+  "total_seconds": 1.815038,
+  "cleanup_errors": []
+}

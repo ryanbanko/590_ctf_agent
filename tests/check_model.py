@@ -1,0 +1,135 @@
+"""Explicit one-attempt live synthetic check; requires operator spending approval."""
+
+import json
+import logging
+import os
+from pathlib import Path
+import subprocess
+import time
+import uuid
+
+import httpx2
+from langfuse import Langfuse
+from langfuse.openai import OpenAI
+
+from ctf_agent.agent import run_agent
+from ctf_agent.attempt import run_attempt
+from ctf_agent.config import load_settings
+from ctf_agent.docker import docker
+from ctf_agent.model import MODEL_SETTINGS, make_responder, reject_gateway_errors
+from .check_controls import collect_provenance
+from .fixtures.target import synthetic_target
+
+
+def read_model_trace(trace_id: str, model_calls: int, tool_calls: int, directory: Path):
+    """Read native observations with the official CLI after asynchronous ingestion."""
+    environment = dict(os.environ, LANGFUSE_HOST=os.environ["LANGFUSE_BASE_URL"])
+    command = ["npx", "--yes", "langfuse-cli", "api", "observations", "list",
+               "--trace-id", trace_id, "--fields", "core,basic,time,io,metadata,model,usage",
+               "--expand-metadata", "config,image_ids,model_settings", "--all", "--max-items", "100", "--json"]
+    deadline = time.monotonic() + 90
+    while time.monotonic() < deadline:
+        completed = subprocess.run(command, env=environment, capture_output=True, text=True,
+                                   timeout=min(25, max(1, deadline - time.monotonic())))
+        if completed.returncode:
+            raise RuntimeError("Langfuse CLI readback failed; raw error omitted")
+        payload = json.loads(completed.stdout)
+        # CLI versions may include the HTTP response wrapper.
+        body = payload.get("body", payload)
+        rows = body["data"]
+        generations = [row for row in rows if row["type"] == "GENERATION"]
+        tools = [row for row in rows if row["type"] == "TOOL"]
+        if (len(generations) == model_calls and len(tools) == tool_calls
+                and any(row["name"] == "sandbox_cleanup" for row in rows)
+                and all(row.get("endTime") for row in rows)):
+            (directory / "cli-observations.json").write_text(completed.stdout)
+            return rows
+        time.sleep(min(2, max(0, deadline - time.monotonic())))
+    raise TimeoutError("Complete model trace was not readable within 90 seconds")
+
+
+def check_model(config_path: Path, output_root: Path):
+    names = ("LITELLM_TOKEN", "LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY", "LANGFUSE_BASE_URL")
+    missing = [name for name in names if not os.getenv(name)]
+    if missing:
+        raise ValueError("Set host environment variables: " + ", ".join(missing))
+    directory = output_root / ("model-check-" + uuid.uuid4().hex[:12])
+    directory.mkdir(parents=True, mode=0o700)
+    # The SDK includes its public project identifier in instrumentation-scope
+    # metadata. Only the gateway token and Langfuse secret key are secrets.
+    secrets = [os.environ["LITELLM_TOKEN"], os.environ["LANGFUSE_SECRET_KEY"]]
+    logging.getLogger("langfuse").setLevel(logging.ERROR)
+    client = Langfuse(timeout=10)
+    report = {"mode": "live-synthetic-check", "passed": False, "phase": "setup",
+              "model_settings": MODEL_SETTINGS, "account_daily_limit_usd": 1.0,
+              "account_limit_source": "user-confirmed", "model_calls": 0}
+    started = time.monotonic()
+    run = None
+    try:
+        settings = load_settings(config_path)
+        report["provenance"] = collect_provenance(settings)
+        if not client.auth_check():
+            raise RuntimeError("Langfuse authentication failed")
+        # No provider requests occur until the guarded solver is running.
+        with OpenAI(api_key=os.environ["LITELLM_TOKEN"], base_url=MODEL_SETTINGS["base_url"],
+                    max_retries=0, timeout=MODEL_SETTINGS["request_seconds"],
+                    http_client=httpx2.Client(event_hooks={"response": [reject_gateway_errors]})) as model_client:
+            respond, usage = make_responder(model_client, langfuse_public_key=os.environ["LANGFUSE_PUBLIC_KEY"])
+            with synthetic_target(settings) as target:
+                task = (f'Retrieve the synthetic flag from http://{target["address"]}:8000/ and submit it. '
+                        'Use Python urllib.request in the isolated solver to fetch the JSON response. '
+                        'The response has a flag field. This is a synthetic setup check.')
+                report["phase"] = "synthetic-attempt"
+                with run_attempt(settings, target["network"], target["gateway"], target["endpoints"],
+                                 target["expected_flag"], directory, langfuse=client,
+                                 label="live-model-synthetic-check", public_task=task,
+                                 respond=respond, model_usage=usage) as run:
+                    run_agent(task, run["respond"], run["call_tool"])
+                expected = target["expected_flag"]  # Trusted audit only; never exported separately.
+        result = run["result"]
+        report.update(model_calls=result["model_calls"], run_id=result["run_id"], trace_id=result["trace_id"],
+                      phase="hosted-readback")
+        rows = read_model_trace(result["trace_id"], result["model_calls"], result["tool_calls"], directory)
+        roots = [row for row in rows if row["name"] == "attempt"]
+        generations = [row for row in rows if row["type"] == "GENERATION"]
+        tools = [row for row in rows if row["type"] == "TOOL"]
+        serialized = json.dumps(rows)
+        root = roots[0] if len(roots) == 1 else None
+        checks = {
+            "verified_success": result["verified_success"],
+            "one_generation_per_request": len(generations) == result["model_calls"] and not result["scripted_turns"],
+            "adaptive_tool_interaction": len(generations) >= 2 and any(row["name"] == "run_command" for row in tools),
+            "parentage": root is not None and all(row.get("parentObservationId") == root["id"] for row in rows if row is not root),
+            "complete_model_records": all(row.get("model") and row.get("input") and row.get("output")
+                                           and row.get("usageDetails") for row in generations),
+            "expected_answer_not_in_root": root is not None and expected not in json.dumps(root),
+            "credentials_absent": all(secret not in serialized for secret in secrets),
+            "within_cap": 0 < result["model_calls"] <= 4 and result["cost_reserved_usd"] <= 0.10,
+            "usage_available": result["usage_complete"] and result["tokens"]["input"] > 0,
+        }
+        report["checks"] = checks
+        report["trace_url"] = client.get_trace_url(trace_id=result["trace_id"])
+        report["observation_count"] = len(rows)
+        report["passed"] = all(checks.values())
+        report["phase"] = "finished"
+    except Exception as error:
+        report["error_type"] = type(error).__name__
+        raise RuntimeError(f'Model check failed during {report["phase"]}; see {directory}/check.json') from None
+    finally:
+        try:
+            client.shutdown()
+        finally:
+            if run is not None:
+                report["result"] = run["result"]
+                report["model_calls"] = run["result"]["model_calls"]
+            containers = docker("ps", "--all", "--filter", "label=ctf590.managed=true", "--format", "{{.Names}}")
+            networks = docker("network", "ls", "--filter", "label=ctf590.managed=true", "--format", "{{.Name}}")
+            report["cleanup_verified"] = not containers and not networks
+            report["passed"] = report["passed"] and report["cleanup_verified"]
+            report["total_seconds"] = round(time.monotonic() - started, 6)
+            (directory / "check.json").write_text(json.dumps(report, indent=2) + "\n")
+            print(f"Evidence: {directory}", flush=True)
+    if not report["passed"]:
+        raise RuntimeError("Model check incomplete; see check.json")
+    print(f'Live synthetic check verified: {report["trace_url"]}', flush=True)
+    return directory

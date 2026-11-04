@@ -1,0 +1,15 @@
+{
+  "run_id": "4fe1d0bd912c",
+  "challenge_id": "ipv6_no_external_route",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "verified_success": false,
+  "tool_calls": 1,
+  "model_calls": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 0.935243,
+  "cleanup_seconds": 0.118801,
+  "total_seconds": 1.054046,
+  "cleanup_errors": []
+}

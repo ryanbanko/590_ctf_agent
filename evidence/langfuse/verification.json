@@ -1,0 +1,215 @@
+{
+  "time_utc": "2026-11-03T21:28:57.707491+00:00",
+  "passed": true,
+  "tracing_backend": "langfuse",
+  "langfuse_version": "5.1.0",
+  "exporter": "OpenTelemetry InMemorySpanExporter (test-only)",
+  "hosted_delivery_verified": false,
+  "hosted_credentials_used": false,
+  "reports": {
+    "fast": {
+      "passed": 37,
+      "report": "evidence/langfuse/pytest-fast.xml",
+      "seconds": 0.127
+    },
+    "docker": {
+      "passed": 19,
+      "report": "evidence/langfuse/self-check-867a5677094f/pytest.xml",
+      "seconds": 54.421
+    }
+  },
+  "suite": "evidence/langfuse/self-check-867a5677094f/suite.json",
+  "source_hashes_match": true,
+  "previous_19_check_identities_preserved": true,
+  "configuration_limits_unchanged": true,
+  "unchanged_source_files": [
+    "ctf_agent/__main__.py",
+    "ctf_agent/config.py",
+    "ctf_agent/docker.py",
+    "docker/worker.py",
+    "docker/guard.py",
+    "docker/solver.Dockerfile",
+    "docker/guard.Dockerfile",
+    "docker/fixture.Dockerfile",
+    "tests/fixtures/target.py",
+    "tests/fixtures/service.py",
+    "configs/initial.toml"
+  ],
+  "custom_jsonl_tracer_removed": true,
+  "trace_parentage_and_summary_links_verified": true,
+  "one_native_span_and_output_per_tool_call": true,
+  "expected_answers_not_in_root_observations": true,
+  "test_secret_key_not_in_exported_spans": true,
+  "packet_denial_checks": [
+    "unapproved_live_port",
+    "internet_ip",
+    "host_address",
+    "embedded_dns",
+    "external_dns",
+    "unrelated_container"
+  ],
+  "scripted_attempts": [
+    {
+      "run_id": "9a6ef700a39a",
+      "challenge_id": "scripted_loop_recovers_and_verifies_through_target",
+      "termination_reason": "success",
+      "scripted_turns": 5,
+      "tool_calls": 5,
+      "history_message_counts": [
+        2,
+        4,
+        6,
+        8,
+        10
+      ]
+    },
+    {
+      "run_id": "e636e7154af5",
+      "challenge_id": "scripted_late_response_cannot_execute_tools",
+      "termination_reason": "wall_limit",
+      "scripted_turns": 1,
+      "tool_calls": 0,
+      "history_message_counts": [
+        2
+      ]
+    }
+  ],
+  "native_trace_exports": [
+    {
+      "run_id": "9a6ef700a39a",
+      "trace_id": "917953a38cfc5702a82dd961815291d8",
+      "span_count": 16,
+      "tool_spans": 5,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/9a6ef700a39a/otel-spans.json"
+    },
+    {
+      "run_id": "e636e7154af5",
+      "trace_id": "df623187e2faa86e289d36013bdad6ea",
+      "span_count": 7,
+      "tool_spans": 0,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/e636e7154af5/otel-spans.json"
+    },
+    {
+      "run_id": "6ddf6720af3c",
+      "trace_id": "735acb11cdc82972f34b196bea21b0ed",
+      "span_count": 12,
+      "tool_spans": 6,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/6ddf6720af3c/otel-spans.json"
+    },
+    {
+      "run_id": "7cfdcdab4bed",
+      "trace_id": "68f9766b574497923dc358543d8dc299",
+      "span_count": 17,
+      "tool_spans": 11,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/7cfdcdab4bed/otel-spans.json"
+    },
+    {
+      "run_id": "2e54c9a2f273",
+      "trace_id": "987e5e75fc4492fe4868a78ebb8aec51",
+      "span_count": 7,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/2e54c9a2f273/otel-spans.json"
+    },
+    {
+      "run_id": "16637b991d5c",
+      "trace_id": "1983d5957609f86234026055a1ee13e0",
+      "span_count": 7,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/16637b991d5c/otel-spans.json"
+    },
+    {
+      "run_id": "22773c808508",
+      "trace_id": "369afe7ed50414e067d75fb06f16e244",
+      "span_count": 7,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/22773c808508/otel-spans.json"
+    },
+    {
+      "run_id": "1b9dca513c99",
+      "trace_id": "df29874e8597812972797bfd43ba29a7",
+      "span_count": 7,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/1b9dca513c99/otel-spans.json"
+    },
+    {
+      "run_id": "d4913ad5481f",
+      "trace_id": "4bf3eda1b26a0d753ceefd34975855db",
+      "span_count": 6,
+      "tool_spans": 0,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/d4913ad5481f/otel-spans.json"
+    },
+    {
+      "run_id": "7175dfeba782",
+      "trace_id": "adcbc5ef77b0417905435f96a7d1e761",
+      "span_count": 7,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/7175dfeba782/otel-spans.json"
+    },
+    {
+      "run_id": "14e393f30db7",
+      "trace_id": "61d699738b12d1d27557f3f52b097547",
+      "span_count": 7,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/14e393f30db7/otel-spans.json"
+    },
+    {
+      "run_id": "741909dcf4bf",
+      "trace_id": "f7fc3acdad8697352602a6acf29a1e93",
+      "span_count": 8,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/741909dcf4bf/otel-spans.json"
+    },
+    {
+      "run_id": "2b401ae816f6",
+      "trace_id": "ff7afb054e18b2cabd0e5d6f73b49d95",
+      "span_count": 8,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/2b401ae816f6/otel-spans.json"
+    },
+    {
+      "run_id": "51adae676e79",
+      "trace_id": "8bc65952d5b3a712d16504c55b470a74",
+      "span_count": 8,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/51adae676e79/otel-spans.json"
+    },
+    {
+      "run_id": "06a38d43a91e",
+      "trace_id": "46529928365bd5ab62448c6d96a9ffc2",
+      "span_count": 8,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/06a38d43a91e/otel-spans.json"
+    },
+    {
+      "run_id": "70dec856fc8e",
+      "trace_id": "79cbec44294fd712d614b35c7f510d47",
+      "span_count": 8,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/70dec856fc8e/otel-spans.json"
+    },
+    {
+      "run_id": "6a8387ff0d76",
+      "trace_id": "ee24fe5768712f69361899d42c349dd8",
+      "span_count": 8,
+      "tool_spans": 1,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/6a8387ff0d76/otel-spans.json"
+    },
+    {
+      "run_id": "4169a388149b",
+      "trace_id": "0864e7058b81cb3a23b9a9e800254e2a",
+      "span_count": 6,
+      "tool_spans": 0,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/4169a388149b/otel-spans.json"
+    },
+    {
+      "run_id": "56c4dcbb5f59",
+      "trace_id": "79df6444bb3c73653bedca3c279c1e35",
+      "span_count": 3,
+      "tool_spans": 0,
+      "native_spans": "evidence/langfuse/self-check-867a5677094f/56c4dcbb5f59/otel-spans.json"
+    }
+  ],
+  "cleanup_verified_by_launcher": true,
+  "model_calls": 0,
+  "cost_usd": 0.0
+}

@@ -1,0 +1,15 @@
+{
+  "run_id": "b4bc6f4ea70a",
+  "challenge_id": "host_address",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "verified_success": false,
+  "tool_calls": 1,
+  "model_calls": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 0.889303,
+  "cleanup_seconds": 0.098573,
+  "total_seconds": 0.987876,
+  "cleanup_errors": []
+}

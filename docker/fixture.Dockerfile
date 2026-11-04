@@ -1,0 +1,5 @@
+FROM python:3.13.2-slim-bookworm@sha256:6b3223eb4d93718828223966ad316909c39813dee3ee9395204940500792b740
+COPY tests/fixtures/service.py /opt/fixture/service.py
+USER 1000:1000
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+CMD ["python", "-I", "/opt/fixture/service.py"]

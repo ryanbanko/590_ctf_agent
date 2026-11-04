@@ -1,0 +1,15 @@
+# Implementation defaults, not course-mandated budgets. No secrets belong here.
+solver_image = "ctf590-solver:m1"
+guard_image = "ctf590-guard:m1"
+target_image = "ctf590-fixture:m1"
+wall_seconds = 60.0
+max_tool_calls = 20
+max_model_turns = 20
+command_seconds = 10.0
+max_command_bytes = 16384
+max_output_bytes = 16384
+max_write_bytes = 65536
+memory_mb = 256
+workspace_mb = 64
+pids = 64
+cpus = 1.0

@@ -1,0 +1,15 @@
+{
+  "run_id": "fed117852fe6",
+  "challenge_id": "internet_ip",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "verified_success": false,
+  "tool_calls": 1,
+  "model_calls": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 0.978719,
+  "cleanup_seconds": 0.101127,
+  "total_seconds": 1.079848,
+  "cleanup_errors": []
+}

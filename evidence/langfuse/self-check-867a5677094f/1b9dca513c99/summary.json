@@ -1,0 +1,19 @@
+{
+  "run_id": "1b9dca513c99",
+  "challenge_id": "wall_limit",
+  "mode": "synthetic-controls",
+  "termination_reason": "wall_limit",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "df29874e8597812972797bfd43ba29a7",
+  "active_seconds": 3.049017,
+  "cleanup_seconds": 0.129523,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000194,
+  "total_seconds": 3.178824
+}

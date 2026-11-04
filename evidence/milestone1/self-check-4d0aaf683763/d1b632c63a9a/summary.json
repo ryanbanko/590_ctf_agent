@@ -1,0 +1,15 @@
+{
+  "run_id": "d1b632c63a9a",
+  "challenge_id": "interruption_cleanup",
+  "mode": "synthetic-controls",
+  "termination_reason": "user_cancel",
+  "verified_success": false,
+  "tool_calls": 0,
+  "model_calls": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 0.694139,
+  "cleanup_seconds": 0.119218,
+  "total_seconds": 0.813359,
+  "cleanup_errors": []
+}

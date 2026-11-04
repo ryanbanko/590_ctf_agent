@@ -1,0 +1,17 @@
+{
+  "run_id": "edf87197e50f",
+  "challenge_id": "unrelated_container",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "verified_success": false,
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 1.955534,
+  "cleanup_seconds": 0.127934,
+  "total_seconds": 2.08347,
+  "cleanup_errors": []
+}

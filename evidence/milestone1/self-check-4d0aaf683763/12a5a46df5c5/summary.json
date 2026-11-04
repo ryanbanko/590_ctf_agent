@@ -1,0 +1,15 @@
+{
+  "run_id": "12a5a46df5c5",
+  "challenge_id": "setup_failure_cleanup",
+  "mode": "synthetic-controls",
+  "termination_reason": "infrastructure_error",
+  "verified_success": false,
+  "tool_calls": 0,
+  "model_calls": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "active_seconds": 0.053422,
+  "cleanup_seconds": 0.033758,
+  "total_seconds": 0.087182,
+  "cleanup_errors": []
+}
