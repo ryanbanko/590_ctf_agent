@@ -1,0 +1,19 @@
+{
+  "run_id": "ddb1c718915f",
+  "challenge_id": "host_address",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "f45ca40c9f6daedbedd8e94da5db173a",
+  "active_seconds": 4.314641,
+  "cleanup_seconds": 0.40944,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000379,
+  "total_seconds": 4.724714
+}

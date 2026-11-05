@@ -1,0 +1,19 @@
+{
+  "run_id": "cffd6a23cd95",
+  "challenge_id": "files_tools_evaluator_success",
+  "mode": "synthetic-controls",
+  "termination_reason": "success",
+  "tool_calls": 6,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "c19676525ab81ca323e831d0b646f896",
+  "active_seconds": 6.69692,
+  "cleanup_seconds": 0.403486,
+  "verified_success": true,
+  "trace_flush_seconds": 0.000746,
+  "total_seconds": 7.10136
+}

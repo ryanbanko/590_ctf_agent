@@ -76,6 +76,7 @@ def run_attempt(settings: dict, network: str, gateway: str, endpoints: list[dict
                      "lock": threading.Lock(), "watchdog_done": threading.Event()}
             sandbox = make_sandbox(run_id, observation, lambda reason: stop_attempt(state, reason))
             state["sandbox"] = sandbox
+            sandbox["directory"] = directory
             used_ids = set()
 
             def call_tool(name: str, arguments: dict) -> dict:
@@ -112,8 +113,9 @@ def run_attempt(settings: dict, network: str, gateway: str, endpoints: list[dict
                                                      "message": str(error)[:2000]}}, level="ERROR")
                         raise AttemptStopped(result["termination_reason"]) from None
                     tool.update(output=returned)
-                    if returned.get("timed_out"):
-                        stop_attempt(state, "command_timeout")
+                    if returned.get("cleanup_confirmed") is False:
+                        stop_attempt(state, "infrastructure_error")
+                        raise AttemptStopped(result["termination_reason"])
                     elif name == "submit_flag" and returned.get("correct") is True:
                         stop_attempt(state, "success")
                         if result["termination_reason"] != "success":

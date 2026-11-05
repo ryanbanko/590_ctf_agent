@@ -1,0 +1,19 @@
+{
+  "run_id": "b81055d9d0c3",
+  "challenge_id": "scripted_loop_recovers_and_verifies_through_target",
+  "mode": "synthetic-controls",
+  "termination_reason": "success",
+  "tool_calls": 5,
+  "model_calls": 0,
+  "agent_mode": "scripted",
+  "scripted_turns": 5,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "2533eae19f2fae84180187c757a41214",
+  "active_seconds": 9.169403,
+  "cleanup_seconds": 0.415286,
+  "verified_success": true,
+  "trace_flush_seconds": 0.002004,
+  "total_seconds": 9.586914
+}

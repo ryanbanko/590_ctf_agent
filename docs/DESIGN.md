@@ -42,7 +42,7 @@ This avoids per-challenge path lookup or maintaining an automatic downloader.
 `CTFChallenge` includes private metadata and the
 answer key; its package object stays on the trusted host. Only name, category,
 description, listed filenames and allowed endpoints form the public task.
-The workspace now has all fifty directories and a 256 KiB live input-size cap.
+The workspace has all fifty directories; the live serialized-input cap is now 512 KiB.
 
 ## Supplied targets and contestant files
 
@@ -75,7 +75,7 @@ The model receives no target administrative shell.
 
 The selected alias maps to the service IP. Public task text replaces the literal
 benchmark hostname with that IP; the guard permits only the recorded endpoint.
-DNS stays blocked. More complex network/service arrangements fail closed rather
+Docker DNS and public HTTPS are additionally permitted for runtime pip, as described below. More complex network/service arrangements fail closed rather
 than silently widening access. Preparation verifies four reserved services and the
 development example; the six remaining reserved challenges are file-only.
 
@@ -116,14 +116,44 @@ versions. This leaves host dependencies and the agent interfaces unchanged.
 Both requirements files enter source provenance. Regeneration and evidence are
 documented in [the library milestone](../evidence/solver-libraries/README.md).
 
-The live profile now permits 32 KiB combined command output, sufficient for the
-roughly 17 KiB outputs seen in development. Capture still keeps the first bounded
-bytes; larger output can still hide a late traceback or final line. The command
-description advises shorter internal connection/read deadlines and explains
-fresh-process versus persistent-file behavior. It does not enforce those internal
-deadlines or create persistent sessions. The 30-second command cap and terminal
-timeout behavior remain: the observed hang did not establish a need for longer
-computation, and continuing safely would require descendant-cleanup guarantees.
+The professor approved runtime package downloads. The user requested a simple
+implementation: a separate per-attempt Docker bridge supplies ordinary NAT to the
+guard, which also joins the isolated challenge network. The solver shares that
+namespace. Existing nftables rules permit assigned endpoints, Docker's resolver
+and public IPv4 HTTPS; other private/reserved destinations and unapproved ports
+remain denied, recorded and terminal. There is no proxy, mirror or domain filter.
+The prompt permits external internet only for pip dependency installation and
+prohibits answer/write-up lookup. Purpose relies on instructions and trace review;
+this is not enforced pip-only access. [Clarification](REFERENCES.md#authority-and-professor-clarification).
+
+The solver starts a standard system-site-packages venv in `/workspace/.venv`.
+`PATH` selects it; `HOME` and `TMPDIR` use the owned, executable workspace. The live
+profile supplies 1 GiB RAM and 512 MiB workspace, which counts toward RAM. Existing
+baseline libraries avoid repeated common installs. Pip caches/version checks are
+disabled by default; the temporary no-index setting is removed. Installed Python
+versions are captured at startup and after tool calls in `packages.json`.
+
+Interactive sessions extend the existing command tool. A solver-local Unix socket
+connects the fixed Docker client to the existing worker running as PID 1. Each
+command has a small independent supervisor using Linux subreaper semantics, so
+orphaned/detached children stay attributable even with concurrent sessions. The
+supervisor drains pipes or a PTY, accepts input, enforces the command/session
+lifetime, and freezes/kills/reaps descendants at exit, close or timeout. Short
+interactive waits return `running` and a session ID; they are not execution
+timeouts. Sessions use the attempt deadline; ordinary commands use the command
+cap. Unconfirmed cleanup remains terminal. No new agent tool, third-party
+runtime dependency or host command execution is introduced.
+
+Command results retain complete output up to the configured 64 KiB live limit.
+Larger output returns beginning/end excerpts with a solver path; up to 1 MiB is
+saved per command/session and copied into ordinary attempt records. Overflow is
+explicit. Files and package snapshots do not enter model history automatically.
+A hard stop can discard in-flight output since the last read/copy; previously
+returned evidence remains. Historical evidence is preserved unchanged.
+
+GDB permissions and debugging support are unchanged and further work is deferred.
+Static inspection works; live debugging failed in the recorded Apple Silicon
+probe. Interactive terminals do not establish a fix for that separate issue.
 
 The trusted response boundary copies the public tool definitions and inserts the
 active command timeout maximum/default before tracing and invoking the model.
@@ -152,7 +182,7 @@ and investigate a blocker before ending. [Experiment 1](EXPERIMENTS.md) records
 the hypothesis and pending comparison. This changes guidance, not loop behavior;
 its effect on live persistence and cost is unmeasured.
 Wrong submissions and ordinary command errors permit continuation. Text-only replies
-end without verified success. Hard limits, command timeout, scope denial, guard loss
+end without verified success. Hard attempt/model limits, scope denial, guard loss
 and protocol failures stop the attempt. `AttemptStopped` is a small exception that
 carries the enforced reason; unrelated errors propagate.
 
@@ -171,19 +201,17 @@ transport timeouts. Remote cancellation and billing cancellation are not guarant
 
 The same existing hard limits cover wall time, model turns, tool calls, command
 runtime, output bytes, file writes and container resources. Live settings come from
-`configs/development.toml`, over shared defaults. After initial setup, the user
-approved a 300-second live profile with 30-second command/model timeouts, twenty
-model turns/requests and forty tool calls. Unspecified settings inherit defaults;
-the synthetic/preparation configuration remains unchanged. Per-attempt
-request/output/cost bounds remain, with ordinary usage
-records instead of a persistent spending subsystem. Review costs between attempts.
+`configs/development.toml`, over shared defaults. The current live profile permits 600 seconds per attempt, ordinary commands up to
+120 seconds, 60-second model requests, forty model turns/requests and eighty tool
+calls. Model input is bounded to 512 KiB serialized data and output to 4,096 tokens.
+Synthetic/preparation settings retain smaller defaults. All values are project
+choices; the assignment requires enforced limits, not those particular numbers.
 
-`make_responder()` returns a function and non-secret usage dictionary, fresh per
-attempt. Conservative input/output reservations precede dispatch and remain charged
-against the cap after failures/timeouts. API usage supplies token counts and local
-cost estimates from the configured gateway rates. Cached/reasoning subsets are not
-double counted. Missing usage is unknown and stops the attempt. These are estimates,
-not an independent invoice audit. README lists current settings.
+The user approved removing the local spending cap and all reservation accounting.
+`make_responder()` still returns a function and per-attempt usage dictionary.
+API usage supplies token counts and estimates from configured gateway rates;
+cached/reasoning subsets are not double counted. Missing usage is unknown and
+stops the attempt. Provider/account limits are separate from these controls.
 
 ## Tracing and evidence
 

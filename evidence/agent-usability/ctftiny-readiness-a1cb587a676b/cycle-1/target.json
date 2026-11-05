@@ -1,0 +1,22 @@
+{
+  "network": "ctf590-target-2edb3579e9c4-net",
+  "container": "32730625ffb9b92976beb90df6cf48d96172b2895819e958612430b7afd6ebc7",
+  "containers": {
+    "game-server": "32730625ffb9b92976beb90df6cf48d96172b2895819e958612430b7afd6ebc7"
+  },
+  "images": {
+    "game-server": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665"
+  },
+  "volumes": [],
+  "endpoints": [
+    {
+      "address": "172.19.0.1",
+      "protocol": "tcp",
+      "port": 8000
+    }
+  ],
+  "cleanup_errors": [],
+  "gateway": "172.19.255.254",
+  "address": "172.19.0.1",
+  "image_id": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665"
+}

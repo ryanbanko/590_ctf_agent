@@ -120,7 +120,8 @@ def test_solver_stopping_reports_failures_and_preserves_cleanup(telemetry, monke
         assert state["result"]["termination_reason"] == reason
         assert close_sandbox(sandbox) == []
     assert commands == [("kill", "ctf590-test-solver"),
-                        ("rm", "--force", "ctf590-test-solver"), ("rm", "--force", "ctf590-test-guard")]
+                        ("rm", "--force", "ctf590-test-solver"), ("rm", "--force", "ctf590-test-guard"),
+                        ("network", "rm", "ctf590-test-egress")]
     spans = read_spans(telemetry, observation.trace_id)
     stopping = next(span for span in spans if span.name == "attempt_stopping")
     assert attribute(stopping, "metadata.reason") == "success"
@@ -155,3 +156,29 @@ def test_disabled_tracing_cannot_start_solver(tmp_path, monkeypatch):
                 pytest.fail("Disabled tracing allowed an attempt")
     finally:
         client.shutdown()
+
+
+def test_terminal_session_argument_contract():
+    valid_id = 'a' * 32
+    for arguments in [{'command': 'python -i', 'interactive': True},
+                      {'session_id': valid_id, 'input': 'print(1)\n', 'wait_seconds': 0},
+                      {'session_id': valid_id, 'close': True}]:
+        validate_arguments('run_command', arguments, DEFAULTS)
+    for arguments in [{'session_id': '../../escape'}, {'session_id': valid_id, 'command': 'echo wrong'},
+                      {'command': 'cat', 'interactive': 'true'}, {'command': 'echo ok', 'wait_seconds': 1},
+                      {'command': 'cat', 'interactive': True, 'timeout_seconds': 2},
+                      {'session_id': valid_id, 'wait_seconds': float('nan')},
+                      {'session_id': valid_id, 'input': 'x' * 20000}]:
+        with pytest.raises(ValueError):
+            validate_arguments('run_command', arguments, DEFAULTS)
+
+
+def test_unconfirmed_command_cleanup_stops_attempt(local_attempt, monkeypatch):
+    from ctf_agent.agent import AttemptStopped
+
+    with local_attempt() as run:
+        monkeypatch.setattr('ctf_agent.tools.invoke_worker', lambda *args, **kwargs:
+                            {'timed_out': True, 'cleanup_confirmed': False})
+        with pytest.raises(AttemptStopped, match='infrastructure_error'):
+            run['call_tool']('run_command', {'command': 'sleep 10'})
+    assert run['result']['termination_reason'] == 'infrastructure_error'

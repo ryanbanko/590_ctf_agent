@@ -1,0 +1,84 @@
+.F
+=================================== FAILURES ===================================
+_______________ test_scripted_late_response_cannot_execute_tools _______________
+
+settings = {'solver_image': 'ctf590-solver:m1', 'guard_image': 'ctf590-guard:m1', 'target_image': 'ctf590-fixture:m1', 'wall_seconds': 60.0, ...}
+target = {'network': 'ctf590-fixture-44995246ccab-net', 'gateway': '172.19.255.254', 'address': '172.19.0.1', 'expected_flag': 'ctf{0f3ab24c7acb378e40b74c16}', ...}
+output_root = PosixPath('/Users/ryanbanko/590_final/evidence/agent-usability/self-check-9d4061f36ac6')
+telemetry = {'client': <langfuse._client.client.Langfuse object at 0x1042b4590>, 'exporter': <opentelemetry.sdk.trace.export.in_memory_span_exporter.InMemorySpanExporter object at 0x103310830>}
+record_property = <function record_property.<locals>.append_property at 0x104364b80>
+
+    def test_scripted_late_response_cannot_execute_tools(settings, target, output_root, telemetry, record_property):
+        label = "scripted_late_response_cannot_execute_tools"
+        record_property("check_name", label)
+    
+        def respond(*, messages, tools, timeout_seconds):
+            # An uncooperative callback must not keep the solver running or execute a late tool.
+            time.sleep(timeout_seconds + 0.1)
+            deadline = time.monotonic() + 2
+            while docker("inspect", "--format", "{{.State.Running}}", run["solver"]) != "false":
+                assert time.monotonic() < deadline, "Watchdog did not stop solver during response wait"
+                time.sleep(0.02)
+            return tool_response("run_command", {"command": "echo must-not-run-after-deadline"}, "late")
+    
+>       with run_attempt(settings | {"wall_seconds": 3}, target["network"], target["gateway"], target["endpoints"],
+                         target["expected_flag"], output_root, langfuse=telemetry["client"],
+                         label=label, public_task="Synthetic deadline check", respond=respond) as run:
+
+tests/test_agent_controls.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+ctf_agent/attempt.py:201: in run_attempt
+    start_sandbox(sandbox, settings, network, gateway, endpoints, lambda: remaining_seconds(state))
+ctf_agent/sandbox.py:106: in start_sandbox
+    invoke_worker(sandbox, {"tool": "inspect"}, timeout=min(5, remaining()))
+ctf_agent/sandbox.py:137: in invoke_worker
+    raw = bounded_exec(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ['exec', '--interactive', '--user', '1000:1000', '--workdir', '/workspace', ...]
+request = b'{"tool": "inspect"}', timeout = 0.09747679199790582, limit = 524288
+
+    def bounded_exec(args: list[str], request: bytes, timeout: float, limit: int = 524_288) -> bytes:
+        """Bound the untrusted worker's host-side output, including protocol corruption."""
+        process = subprocess.Popen(
+            ["docker", *args], stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        deadline = time.monotonic() + timeout
+        output = bytearray()
+        errors = bytearray()
+        pending = memoryview(request)
+        try:
+            with selectors.DefaultSelector() as selector:
+                for stream, events in [(process.stdin, selectors.EVENT_WRITE),
+                                       (process.stdout, selectors.EVENT_READ),
+                                       (process.stderr, selectors.EVENT_READ)]:
+                    os.set_blocking(stream.fileno(), False)
+                    selector.register(stream, events)
+                while selector.get_map():
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+>                       raise TimeoutError("Sandbox worker exceeded its host-side deadline")
+E                       TimeoutError: Sandbox worker exceeded its host-side deadline
+
+ctf_agent/docker.py:39: TimeoutError
+=========================== short test summary info ============================
+FAILED tests/test_agent_controls.py::test_scripted_late_response_cannot_execute_tools
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed, 80 deselected in 16.03s
+Evidence: evidence/agent-usability/self-check-9d4061f36ac6
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/ryanbanko/590_final/ctf_agent/__main__.py", line 73, in <module>
+    main()
+    ~~~~^^
+  File "/Users/ryanbanko/590_final/ctf_agent/__main__.py", line 49, in main
+    self_check(args.config, args.output)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ryanbanko/590_final/tests/test_controls.py", line 377, in self_check
+    raise RuntimeError(f"Controls checks failed; see {suite_dir}")
+RuntimeError: Controls checks failed; see evidence/agent-usability/self-check-9d4061f36ac6

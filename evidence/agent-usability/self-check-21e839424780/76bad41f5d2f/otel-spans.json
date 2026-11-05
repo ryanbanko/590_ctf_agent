@@ -1,0 +1,115 @@
+[
+{
+    "name": "attempt_stopping",
+    "context": {
+        "trace_id": "0xfd8d410be2fd155d3854cbc4ac3ec162",
+        "span_id": "0x2831d40ec3d024ba",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x2aef053651bfa149",
+    "start_time": "2026-11-05T02:14:46.610025Z",
+    "end_time": "2026-11-05T02:14:46.610025Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.reason": "\"infrastructure_error\""
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "b94dfb5b-1229-42fd-a08a-9a3660ddd0d2",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "sandbox_cleanup",
+    "context": {
+        "trace_id": "0xfd8d410be2fd155d3854cbc4ac3ec162",
+        "span_id": "0x3c51ed3d87b3b60a",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x2aef053651bfa149",
+    "start_time": "2026-11-05T02:14:46.699250Z",
+    "end_time": "2026-11-05T02:14:46.699250Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.errors": "[\"ctf590-76bad41f5d2f-egress: Error response from daemon: network ctf590-76bad41f5d2f-egress not found\\nexit status 1\"]"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "b94dfb5b-1229-42fd-a08a-9a3660ddd0d2",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "attempt",
+    "context": {
+        "trace_id": "0xfd8d410be2fd155d3854cbc4ac3ec162",
+        "span_id": "0x2aef053651bfa149",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-11-05T02:14:46.573143Z",
+    "end_time": "2026-11-05T02:14:46.701079Z",
+    "status": {
+        "status_code": "ERROR",
+        "description": "RuntimeError: Attempt cleanup incomplete; see summary.json"
+    },
+    "attributes": {
+        "langfuse.internal.is_app_root": true,
+        "langfuse.observation.input": "{\"task\": \"Synthetic controls check\"}",
+        "langfuse.observation.metadata.run_id": "\"76bad41f5d2f\"",
+        "langfuse.observation.metadata.challenge_id": "\"setup_failure_cleanup\"",
+        "langfuse.observation.metadata.config": "{\"solver_image\":\"ctf590-missing:653fe457a9174c83beb6f1eea2fd0aa2\",\"guard_image\":\"ctf590-guard:m1\",\"target_image\":\"ctf590-fixture:m1\",\"wall_seconds\":60.0,\"max_tool_calls\":20,\"max_model_turns\":20,\"command_seconds\":10.0,\"max_command_bytes\":16384,\"max_output_bytes\":16384,\"max_write_bytes\":65536,\"memory_mb\":256,\"workspace_mb\":64,\"pids\":64,\"cpus\":1.0}",
+        "langfuse.observation.metadata.mode": "\"synthetic-controls\"",
+        "langfuse.observation.status_message": "RuntimeError",
+        "langfuse.observation.type": "span",
+        "langfuse.observation.level": "ERROR",
+        "langfuse.observation.output": "{\"run_id\": \"76bad41f5d2f\", \"challenge_id\": \"setup_failure_cleanup\", \"mode\": \"synthetic-controls\", \"termination_reason\": \"infrastructure_error\", \"tool_calls\": 0, \"model_calls\": 0, \"agent_mode\": null, \"scripted_turns\": 0, \"tokens\": null, \"cost_usd\": 0.0, \"cleanup_errors\": [\"ctf590-76bad41f5d2f-egress: Error response from daemon: network ctf590-76bad41f5d2f-egress not found\\nexit status 1\"], \"trace_id\": \"fd8d410be2fd155d3854cbc4ac3ec162\", \"active_seconds\": 0.06449, \"cleanup_seconds\": 0.062323, \"verified_success\": false}"
+    },
+    "events": [
+        {
+            "name": "exception",
+            "timestamp": "2026-11-05T02:14:46.701065Z",
+            "attributes": {
+                "exception.type": "RuntimeError",
+                "exception.message": "Attempt cleanup incomplete; see summary.json",
+                "exception.stacktrace": "Traceback (most recent call last):\n  File \"/Users/ryanbanko/590_final/ctf_agent/attempt.py\", line 198, in run_attempt\n    image_ids[role] = docker(\"image\", \"inspect\", \"--format\", \"{{.Id}}\", settings[f\"{role}_image\"],\n                      ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                            timeout=min(5, remaining_seconds(state)))\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/ryanbanko/590_final/ctf_agent/docker.py\", line 15, in docker\n    raise RuntimeError(result.stderr.strip()[:2000] or f\"Docker exited {result.returncode}\")\nRuntimeError: Error response from daemon: No such image: ctf590-missing:653fe457a9174c83beb6f1eea2fd0aa2\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/Users/ryanbanko/590_final/.venv/lib/python3.13/site-packages/opentelemetry/trace/__init__.py\", line 602, in use_span\n    yield span\n  File \"/Users/ryanbanko/590_final/.venv/lib/python3.13/site-packages/opentelemetry/sdk/trace/__init__.py\", line 1136, in start_as_current_span\n    yield span\n  File \"/Users/ryanbanko/590_final/.venv/lib/python3.13/site-packages/langfuse/_client/client.py\", line 1365, in _start_as_current_otel_span_with_processed_media\n    yield span_class(**common_args)  # type: ignore[arg-type]\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/ryanbanko/590_final/ctf_agent/attempt.py\", line 220, in run_attempt\n    raise RuntimeError(\"Attempt cleanup incomplete; see summary.json\")\nRuntimeError: Attempt cleanup incomplete; see summary.json\n",
+                "exception.escaped": "False"
+            }
+        }
+    ],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "b94dfb5b-1229-42fd-a08a-9a3660ddd0d2",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+}
+]

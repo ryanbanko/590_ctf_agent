@@ -136,6 +136,25 @@ print(json.dumps({{'packages': {{name: importlib.metadata.version(name) for name
     assert attempt["result"]["termination_reason"] is None
 
 
+@pytest.mark.parametrize("attempt", [{"command_seconds": 120, "memory_mb": 1024, "workspace_mb": 512}], indirect=True)
+def test_runtime_pip_install_and_writable_home(attempt):
+    probe = attempt["call_tool"]("run_command", python_command(
+        "import os,pathlib,sys,importlib.util; "
+        "assert sys.prefix=='/workspace/.venv'; assert importlib.util.find_spec('humanfriendly') is None; "
+        "home=pathlib.Path.home(); assert str(home)=='/workspace'; "
+        "(home/'home-marker').write_text('writable'); "
+        "assert os.environ['TMPDIR']=='/workspace'; "
+        "(home/'space-probe').write_bytes(b'x'*(80*1024*1024)); (home/'space-probe').unlink()"))
+    assert probe["exit_code"] == 0, probe
+    result = attempt["call_tool"]("run_command", {
+        "command": "python -m pip install --quiet --retries 0 --timeout 10 humanfriendly==10.0 && "
+                   "python -c 'import humanfriendly; print(humanfriendly.format_size(1000))'"})
+    assert result["exit_code"] == 0 and not result["timed_out"], result
+    assert "1 KB" in result["stdout"]
+    packages = json.loads((attempt["directory"] / "packages.json").read_text())
+    assert packages["humanfriendly"] == "10.0"
+
+
 @pytest.mark.parametrize("attempt", [{"max_output_bytes": 32_768}], indirect=True)
 def test_larger_output_retains_observed_size_and_remains_bounded(attempt):
     result = attempt["call_tool"]("run_command", python_command(
@@ -203,11 +222,17 @@ def check_denial(attempt: dict, command: str, telemetry):
 def test_command_timeout_detached_child(attempt: dict):
     # The child creates a new session, escaping ordinary process-group cleanup.
     command = python_command(
-        "import subprocess,time; subprocess.Popen(['sleep','30'], start_new_session=True); time.sleep(30)")
+        "import subprocess,time,pathlib; child=subprocess.Popen(['sleep','30'], start_new_session=True); "
+        "pathlib.Path('detached.pid').write_text(str(child.pid)); time.sleep(30)")
     result = attempt["call_tool"]("run_command", command | {"timeout_seconds": 0.4})
-    assert result["timed_out"] and attempt["result"]["termination_reason"] == "command_timeout"
+    assert result["timed_out"] and result["cleanup_confirmed"]
+    assert attempt["result"]["termination_reason"] is None
+    proof = attempt["call_tool"]("run_command", python_command(
+        "from pathlib import Path; pid=int(Path('detached.pid').read_text()); "
+        "assert not Path(f'/proc/{pid}').exists(); print('recovered')"))
+    assert proof["exit_code"] == 0 and proof["stdout"].strip() == "recovered", proof
     running = docker("inspect", "--format", "{{.State.Running}}", attempt["solver"])
-    assert running == "false"
+    assert running == "true"
 
 
 @pytest.mark.parametrize("attempt", [{"max_tool_calls": 1}], indirect=True)
@@ -221,10 +246,12 @@ def test_tool_limit(attempt: dict):
 def test_command_timeout_closed_output(attempt: dict):
     result = attempt["call_tool"]("run_command", {
         "command": "exec >/dev/null 2>&1; sleep 30", "timeout_seconds": 0.4})
-    assert result["timed_out"] and attempt["result"]["termination_reason"] == "command_timeout"
+    assert result["timed_out"] and result["cleanup_confirmed"]
+    assert attempt["result"]["termination_reason"] is None
+    assert attempt["call_tool"]("run_command", {"command": "echo recovered"})["stdout"].strip() == "recovered"
 
 
-@pytest.mark.parametrize("attempt", [{"wall_seconds": 3, "command_seconds": 30}], indirect=True)
+@pytest.mark.parametrize("attempt", [{"wall_seconds": 8, "command_seconds": 30}], indirect=True)
 def test_wall_limit(attempt: dict):
     with pytest.raises(RuntimeError):
         attempt["call_tool"]("run_command", python_command("import time; time.sleep(30)"))
@@ -257,7 +284,7 @@ def test_ipv6_no_external_route(attempt: dict):
 
 
 @pytest.mark.parametrize("destination", [
-    "unapproved_live_port", "internet_ip", "host_address", "embedded_dns",
+    "unapproved_live_port", "internet_ip", "host_address",
     "external_dns", "unrelated_container", "curl_internet",
 ])
 def test_network_scope(attempt, target, settings, destination, telemetry):
@@ -353,3 +380,59 @@ def self_check(config_path: Path, output_root: Path) -> Path:
     if not suite["passed"]:
         raise RuntimeError(f"Controls checks failed; see {suite_dir}")
     return suite_dir
+
+
+def test_interactive_terminal_and_independent_command(attempt):
+    result = attempt['call_tool']('run_command', {
+        'command': "python -u -c \"import os; assert os.isatty(0); print(input('Name? ')); print(input('Again? '))\"",
+        'interactive': True})
+    assert result['running'] and 'Name?' in result['stdout'], result
+    session = result['session_id']
+    result = attempt['call_tool']('run_command', {'session_id': session, 'input': 'first\n'})
+    assert result['running'] and 'Again?' in result['stdout'], result
+    assert attempt['call_tool']('run_command', {'command': 'echo independent'})['stdout'].strip() == 'independent'
+    result = attempt['call_tool']('run_command', {'session_id': session, 'input': 'second\n'})
+    assert not result['running'] and result['exit_code'] == 0 and 'second' in result['stdout'], result
+    assert result['cleanup_confirmed']
+    result = attempt['call_tool']('run_command', {'session_id': session})
+    assert result['error']['kind'] == 'tool_error'
+    result = attempt['call_tool']('run_command', {'command': 'sleep 30', 'interactive': True, 'wait_seconds': 0})
+    result = attempt['call_tool']('run_command', {'session_id': result['session_id'], 'close': True})
+    assert result['closed'] and not result['running'] and result['cleanup_confirmed'], result
+
+
+def test_output_excerpt_file_and_late_diagnostic(attempt):
+    result = attempt['call_tool']('run_command', python_command("print('start-'+'x'*100000+'-end-diagnostic')"))
+    assert result['truncated'] and result['stdout'].startswith('start-')
+    assert result['stdout'].rstrip().endswith('-end-diagnostic')
+    captured = (attempt['directory'] / result['recorded_output']).read_text()
+    assert captured.startswith('start-') and captured.rstrip().endswith('-end-diagnostic')
+    assert not result['output_file_truncated'] and len(captured) == result['total_output_bytes']
+    readback = attempt['call_tool']('run_command', {'command': 'tail -c 32 ' + result['output_file']})
+    assert readback['exit_code'] == 0 and readback['stdout'].rstrip().endswith('-end-diagnostic')
+    result = attempt['call_tool']('run_command', python_command("print('x'*1100000+'-last-line')"))
+    assert result['output_file_truncated'] and result['stdout'].rstrip().endswith('-last-line')
+    assert (attempt['directory'] / result['recorded_output']).stat().st_size == 1_048_576
+
+
+def test_fresh_python_environment(attempt):
+    result = attempt['call_tool']('run_command', python_command(
+        "import pathlib,importlib.util; assert importlib.util.find_spec('humanfriendly') is None; "
+        "assert not pathlib.Path('/workspace/home-marker').exists(); "
+        "assert importlib.util.find_spec('sympy') is not None"))
+    assert result['exit_code'] == 0, result
+
+
+@pytest.mark.parametrize('attempt', [{'wall_seconds': 8}], indirect=True)
+def test_attempt_deadline_stops_unpolled_session(attempt):
+    result = attempt['call_tool']('run_command', {'command': 'sleep 30', 'interactive': True})
+    assert result['running']
+    deadline = time.monotonic() + 9
+    while attempt['result']['termination_reason'] is None:
+        assert time.monotonic() < deadline
+        time.sleep(.05)
+    assert attempt['result']['termination_reason'] == 'wall_limit'
+    # Stop reason is set just before the bounded Docker kill finishes.
+    while docker('inspect', '--format', '{{.State.Running}}', attempt['solver']) != 'false':
+        assert time.monotonic() < deadline
+        time.sleep(.05)

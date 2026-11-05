@@ -50,10 +50,20 @@ dependencies. [Requested versions](docker/solver-requirements.in) and
 [resolved dependencies](docker/solver-requirements.txt) are committed; the image
 records installed versions in `/opt/python-packages.txt`. Reedsolo is not included.
 
-These are baseline utilities, not every specialized analysis package. Add any
-needed packages to the solver Dockerfile and rebuild before a run; the solver
-has no internet access to install packages during an attempt. `curl` and `nc`
-can reach only assigned challenge endpoints, just like Python sockets.
+The solver's home and temporary directory are `/workspace`. Each attempt creates
+`/workspace/.venv`, which sees the preinstalled libraries and accepts new packages:
+`python -m pip install PACKAGE`. Python and pip select that environment automatically.
+The environment, installed additions and workspace are discarded after each attempt.
+The live profile allows 1 GiB RAM and 512 MiB workspace; tmpfs files count toward RAM.
+Re-run `build-images` after pulling these changes.
+
+The professor [approved runtime package downloads](docs/REFERENCES.md#authority-and-professor-clarification).
+The agent's rule permits external internet **only for pip dependency installation**,
+never looking up benchmark answers or write-ups. The guard allows Docker DNS and
+public HTTPS, plus assigned challenge endpoints; other private-network access is
+blocked. HTTPS connectivity is technically usable by other commands: package-only
+purpose is an instruction and trace-review policy, not an enforced domain filter.
+Native system dependencies still need image updates; pip cannot install every tool.
 
 If `.env` does not exist, copy `.env.example` to `.env`. Each teammate uses their
 own Duke key and the team's intended Langfuse project. Fill these host-only variables:
@@ -171,7 +181,10 @@ no added batch-cost gate.
 Two different development challenges per category would give **11 IDs**: crypto,
 miscellaneous, pwn, reversing and web can each supply two, but forensics has only
 `for-1black0white`. Keep the other forensics challenge in the reserved scored set.
-No 11-challenge pilot has been selected or run automatically.
+The selected eleven-ID pilot passed preparation; its latest batch stopped after
+three attempts when pip tried to reach PyPI under the previous network policy.
+Package access is now enabled; review the new setup before starting another pilot.
+See [project status](PROJECT_STATUS.md) for historical outcomes.
 
 ### Optional command settings
 
@@ -185,35 +198,47 @@ the live command uses `--experiment`.
 
 | Limit | Current live settings |
 | --- | --- |
-| Whole attempt | 300 seconds, including solver preparation; cleanup/export add time. |
-| One command or file operation | Up to 30 seconds, clipped to remaining attempt time. |
-| Model request | Up to 30 seconds; no client retries. |
-| Model / tool calls | 20 / 40 maximum. |
-| Model input / output | 256 KiB serialized input; 2,048 output tokens per request. |
-| Solver resources | 1 CPU, 256 MiB memory, 64 PIDs, 64 MiB workspace. |
-| Tool output / file write | 32 KiB combined stdout/stderr; 64 KiB UTF-8 write. |
-| Estimated cost cap | $0.10 per attempt. |
+| Whole attempt | 600 seconds, including solver preparation; cleanup/export add time. |
+| Ordinary command | Up to 120 seconds, clipped to remaining attempt time. |
+| Interactive session | Until closed, exited, or the attempt deadline; each read waits at most 5 seconds. |
+| Model request | Up to 60 seconds; no client retries. |
+| Model / tool calls | 40 / 80 maximum. |
+| Model input / output | 512 KiB serialized input; 4,096 output tokens per request. |
+| Solver resources | 1 CPU, 1 GiB memory, 64 PIDs, 512 MiB workspace. |
+| Tool output / file write | 64 KiB combined stdout/stderr; 64 KiB UTF-8 write. |
+| Saved command output | Up to 1 MiB per command; further truncation is explicit. |
 
-Edit `[attempt]` and `[model]` in `configs/development.toml` for your Section 2
-experiments; inherited defaults live in `ctf_agent/config.py`. Entries in `[attempt]`
-override those defaults, so `max_tool_calls = 40` overrides the default of 20.
-The numeric limits above are our configurable choices; the assignment requires
-enforced bounds but does not prescribe those values.
-A command timeout currently ends the attempt. The user approved these larger
-development limits after the initial setup checks; historical attempts used the
-previous settings. Both `max_model_turns` and `max_requests` are set to 20.
-The command cap remains 30 seconds: recent failure evidence showed blocking
-network I/O, not a computation that needed longer. Use connection/read deadlines
-shorter than the command cap. Each command starts a new process; files persist
-between commands, but an earlier process's connection does not automatically persist.
-For a later experiment, change `command_seconds` in `[attempt]`; the tool schema
-automatically advertises the new maximum/default. Synthetic checks retain their
-separate 10-second/16-KiB defaults unless overridden by a specific check.
-The conservative reservation for twenty maximum-sized requests is about $0.678
-at the recorded gateway rates. The $0.10 cap still applies and can stop an attempt
-before all twenty requests; actual costs depend on usage. There is no campaign
-budget system. The existing per-attempt controls and provider limits apply;
-the batch wrapper adds no separate spending gate.
+Edit `[attempt]` and `[model]` in `configs/development.toml`. Unspecified controls
+inherit `ctf_agent/config.py`; synthetic/preparation checks retain their smaller
+settings unless explicitly overridden. Both model-turn/request limits are 40.
+There is no local spending cap or reservation system; token usage and estimated
+cost are still recorded. Provider/account limits remain outside this application.
+Larger allowances permit more work but do not force the agent to use them.
+
+Ordinary command timeouts clean up that command and its descendants and return
+`timed_out: true`; the agent can recover if cleanup is confirmed. Unconfirmed
+cleanup is terminal. The whole-attempt deadline still kills the complete solver.
+Use shorter internal connection/read deadlines when useful. The command schema
+advertises the configured ordinary-command maximum/default.
+
+### Interactive commands and output
+
+The agent still uses three tools. Ordinary `run_command` calls take `command` and
+optional `timeout_seconds`. To keep a terminal alive, use `interactive: true` with
+the command. A running result supplies `session_id`. Subsequent calls use that ID
+with optional `input` (include `\n` to submit a line), `wait_seconds` (default 0.5,
+maximum 5), or `close: true`. The tool returns `running`, output and any exit code.
+Each call counts toward the tool limit. Other commands can run while a session is
+alive. Input, output, closing and timeouts appear in the existing trace.
+
+Outputs up to the configured limit are returned whole. Larger outputs return a
+beginning/end excerpt, `truncated: true`, and `output_file` inside the solver.
+The agent can inspect that file with `head`, `tail` or other commands. The file
+captures the first 1 MiB; `output_file_truncated` identifies overflow. A copy is
+saved under the attempt's `outputs/`, with the relative path in `recorded_output`.
+Interactive output is incremental per call; its saved file accumulates the session.
+Hard stops can lose output generated since the last read/copy. Read sessions
+periodically when retaining their output matters.
 
 ### Read results
 
@@ -222,14 +247,16 @@ Each invocation prints a fresh record directory:
 | Artifact | Meaning |
 | --- | --- |
 | `run.json` | Settings, dataset/source/image provenance, split label, result, trace URL, export audit, total time. |
+| `<run-id>/packages.json`, `<run-id>/outputs/` | Latest observed installed Python versions and bounded command/session output copied before cleanup. |
 | `<run-id>/summary.json` | Stop reason, verified success, counts, available tokens/cost, timing, cleanup errors. |
 | `cli-observations.json` | Native hosted trace export containing model/tool inputs and outputs. |
 | `public-task.json`, `target/` | Public task and trusted target runtime configuration/lifecycle record. |
 
 `verified_success` means trusted verification accepted a candidate.
 `evidence_complete` means the launch's hosted trace audit passed. They describe
-different outcomes. `cost_reserved_usd` is a conservative reservation, not another
-charge. Cached/reasoning tokens are subsets of input/output totals. Unknown usage
+different outcomes. Historical records may contain `cost_reserved_usd`; new runs
+retain usage/cost estimates without reservations. Cached/reasoning tokens are
+subsets of input/output totals. Unknown usage
 is not reported as free. Records under `runs/` are Git-ignored; preserve the runs
 you use in your report.
 
@@ -267,7 +294,7 @@ Three files have different jobs:
 | --- | --- |
 | `datasets/CTFTiny/ctftiny.json` | The dataset's public index: every challenge ID, category and directory. |
 | [configs/ctftiny.json](configs/ctftiny.json) | Our selection: which IDs are `development` and which are `scored`. |
-| [configs/development.toml](configs/development.toml) | How the agent runs: model, time limits, request limits and estimated cost cap. |
+| [configs/development.toml](configs/development.toml) | How the agent runs: model, time limits, request limits and token allowances. |
 
 **The split is already set for you.** Open `configs/ctftiny.json` and look under:
 
@@ -328,13 +355,13 @@ verified submission stops immediately; text-only replies end without success.
 
 | Tool | Input and validation | Output, timeout, errors |
 | --- | --- | --- |
-| `run_command` | `/bin/sh` command, no NUL, nonempty and at most 16 KiB; optional positive timeout within the command cap. Use `bash` explicitly for Bash syntax. | Bounded stdout/stderr, exit code and truncation metadata. Nonzero exit is an observation; timeout stops the attempt and solver. |
+| `run_command` | A nonempty `/bin/sh` command up to 16 KiB, or a returned session ID with input/read/close arguments. Session input is at most 16 KiB; waits are 0–5 seconds. Use `bash` explicitly for Bash syntax. | Bounded stdout/stderr, running/session ID, exit/timeout/cleanup and output-file metadata. Ordinary timeouts permit recovery after confirmed cleanup. |
 | `write_file` | Workspace-relative path without traversal/NUL; UTF-8 content at most 64 KiB. Worker independently rejects symlinks/races. | Path/bytes-written or error observation; same bounded worker timeout as commands. |
 | `submit_flag` | Nonempty candidate, at most 4,096 UTF-8 bytes. | Candidate/verdict recorded; exact host-side equality. Wrong submissions permit continuation; success stops. No subprocess, bounded by attempt deadline. |
 
 Unknown tools/invalid arguments return validation observations and consume tool
 budget. The model's tool schema includes the actual configured timeout maximum
-and default (currently 30 seconds for live runs); validation errors repeat that cap.
+and default (currently 120 seconds for ordinary live commands); validation errors repeat that cap.
 Worker/Docker failures are terminal. The evaluator never separately
 reveals the expected answer in prompts, results, or traces.
 
@@ -342,7 +369,8 @@ Commands execute only in the non-root solver with a read-only root and bounded,
 executable workspace tmpfs,
 no capabilities, host mounts, socket, credentials, evaluator files, or private
 challenge/build metadata. The separate trusted guard restricts connections to
-assigned endpoints; independent packet-denial evidence triggers solver stopping.
+assigned endpoints, Docker DNS and public HTTPS for the approved pip policy;
+independent packet-denial evidence triggers solver stopping.
 Targets use fresh isolated internal networks, no published ports or host mounts,
 resource limits, and disposable writable layers. Ordinary target startup permits
 CHOWN/SETUID/SETGID; model tools have no administrative target shell. Supplied

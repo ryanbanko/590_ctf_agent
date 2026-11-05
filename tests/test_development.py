@@ -21,7 +21,7 @@ from .test_model import sdk_response
 def test_invalid_model_cap_is_rejected_before_launch(tmp_path, invalid):
     path = tmp_path / "experiment.toml"
     text = "nan" if type(invalid) is float else "true" if invalid is True else "-1"
-    path.write_text(f"[attempt]\n[model]\nmax_cost_usd = {text}\n")
+    path.write_text(f"[attempt]\n[model]\nrequest_seconds = {text}\n")
     with pytest.raises(ValueError):
         load_experiment(path)
 

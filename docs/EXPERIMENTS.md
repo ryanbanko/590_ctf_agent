@@ -295,8 +295,9 @@ retry, parallel execution or resumption feature.
 The user prefers two different development challenges per category for breadth.
 Only one development forensics challenge exists, so this yields eleven IDs.
 Repeating a selected challenge is a separate choice through `--trials`; breadth
-and repetition measure different things. Selection and real pilot execution are
-still pending. The existing account/per-attempt limits and usage records remain;
+and repetition measure different things. The user subsequently selected and
+prepared eleven IDs; the pilot started but stopped as recorded below. The existing
+account/per-attempt limits and usage records remain;
 the user requested no additional batch-cost management.
 
 [Offline verification](../evidence/batch-wrapper/README.md): 17 batch cases and
@@ -305,3 +306,73 @@ record handling without paid model calls. No new benchmark results are claimed.
 The record audit found the required IDs and evidence already available; demo work
 is deferred. Current next step: review the wrapper, choose the development IDs,
 then run and inspect the pilot before expanding evaluation.
+
+## Temporary runtime package-index default
+
+November 4, 2026. Batch `batch-be87c5be7ce7` stopped on its first model request
+with `APITimeoutError`; the user addressed gateway access. That setup failure was
+later moved intact to `runs/archive/batch-be87c5be7ce7` to keep the active pilot
+folder tidy; all seven files and their contents were preserved. All eleven preparation
+checks passed. The next batch, `batch-8898df326849`, completed two attempts
+(`cry-ecxor`: unsuccessful; `cry-describeme`: verified success) and stopped on
+`for-1black0white`. Trace `c9c2d54214afdba7520255fbdfaeb213`, generation 5, ran
+`python3 -m pip install --quiet opencv-python-headless` after finding no QR decoder.
+The guard recorded DNS queries for `pypi.org`, stopped the solver and preserved
+complete records with successful cleanup. This was a dependency-install request.
+
+Approved temporary change: default runtime pip to `PIP_NO_INDEX=1` and disable
+its version check; state in the command description that downloads are unavailable.
+The ENV line is after build-time installs and is explicitly marked for reversal.
+The system prompt, installed libraries, firewall and batch stop policy are unchanged.
+
+Hypothesis before any further live trial: an ordinary missing-package install
+will fail locally and become a recoverable tool observation instead of triggering
+a scope stop. The model may then use existing capabilities or end unsuccessfully.
+This does not guarantee every attempted download fails softly: direct URLs,
+other download commands or overrides remain subject to the network guard.
+No decoder was added, and no new real challenge/model attempt ran during this fix.
+
+[Verification and reversal instructions](../evidence/runtime-package-policy/README.md).
+Verification: 81 fast tests and 24 synthetic Docker controls passed. A missing
+package request failed locally in about 0.42 seconds and a following command ran
+successfully in the same attempt. The new solver image is built locally. No live
+trial of the revised behavior has been made.
+
+
+## Experiment 3 — usable sessions, package installation and recovery
+
+Approved November 4, 2026, before any new live comparison. Prior traces showed a
+missing dependency leading to a scope stop, blocking reads ending an entire
+attempt, and connections mistakenly treated as persistent between commands.
+Small workspace/home constraints and beginning-only output capture were additional
+implementation limitations. GDB changes are excluded at the user's request.
+
+Hypothesis: writable Python/home/temp storage and permitted pip access let the
+agent obtain dependencies; terminal sessions preserve program interactions;
+confirmed descendant cleanup lets it recover from command timeouts; beginning/end
+excerpts and output files retain useful diagnostics. Expanded time/call/token
+allowances reduce premature stops. This bundles environment and tool changes; a
+later comparison cannot attribute an effect to any one component alone.
+
+Keep the model and reasoning effort unchanged. The live profile uses 600 seconds,
+120-second ordinary commands, 60-second requests, forty model responses, eighty
+tool calls, 512 KiB model input and 4,096 output tokens. The local spending cap
+and reservation code are removed; usage/cost estimates remain. Output is 64 KiB
+with up to 1 MiB retained per command/session. Package additions reset each attempt
+and installed versions are recorded. Public HTTPS is technically available to
+commands generally; the prompt limits its purpose to pip, not answer lookup.
+
+Verification uses synthetic commands and benign package installation only. It
+establishes tool behavior, isolation and cleanup, not improved benchmark success.
+The prior offline package milestone and old trial records remain historical.
+Current verification and reproducibility evidence: [agent usability](../evidence/agent-usability/README.md).
+After handoff, review before authorizing another development pilot.
+
+
+Environment verification completed: **82 fast tests, 27 distinct Docker cases**
+across the main run and focused completion, and two zero-model preparation cycles
+for `pwn-baby-boi`. Cleanup passed. Historical startup-deadline and absent-network
+cleanup failures remain in the evidence; the corrected behavior passed. The
+benign package installation/import command took approximately 1.66 seconds in
+the main run. No model calls or challenge-solving attempts ran, so no solve-rate
+or model-behavior improvement is claimed. Stop for review before a live pilot.

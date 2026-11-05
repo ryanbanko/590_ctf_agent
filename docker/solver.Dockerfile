@@ -12,5 +12,6 @@ RUN groupadd --gid 1000 solver && useradd --uid 1000 --gid 1000 --no-create-home
 COPY docker/worker.py /opt/ctf/worker.py
 USER 1000:1000
 WORKDIR /workspace
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PWNLIB_NOTERM=1
-CMD ["sleep", "infinity"]
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PWNLIB_NOTERM=1 HOME=/workspace
+ENV PATH=/workspace/.venv/bin:$PATH TMPDIR=/workspace PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_NO_CACHE_DIR=1
+CMD ["/usr/local/bin/python", "-I", "/opt/ctf/worker.py", "--serve"]

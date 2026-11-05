@@ -29,12 +29,18 @@ table inet ctf {
   }
   chain output {
     type filter hook output priority -300; policy drop;
-    ip daddr 127.0.0.11 jump deny
+    ip daddr 127.0.0.11 udp dport 53 accept
+    ip daddr 127.0.0.11 tcp dport 53 accept
     udp dport 53 jump deny
     tcp dport 53 jump deny
     oifname "lo" accept
     ct state established,related accept
     ALLOWED
+    ip daddr { 0.0.0.0/8, 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8,
+               169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24,
+               192.168.0.0/16, 198.18.0.0/15, 198.51.100.0/24,
+               203.0.113.0/24, 224.0.0.0/4, 240.0.0.0/4 } jump deny
+    meta nfproto ipv4 tcp dport 443 accept
     jump deny
   }
   chain input {
@@ -48,8 +54,7 @@ table inet ctf {
 }
 """.replace("ALLOWED", "\n    ".join(allowed))
     subprocess.run(["nft", "-f", "-"], input=rules, text=True, check=True)
-    # Internal networks have no default route. Supply a route through their
-    # synthetic next hop so outside probes reach OUTPUT and get audited/dropped.
+    # The separate egress bridge supplies NAT; challenge networks stay internal.
     gateway = str(ipaddress.IPv4Address(policy["gateway"]))
     subprocess.run(["ip", "route", "replace", "default", "via", gateway, "dev", "eth0"], check=True)
     collector = subprocess.Popen(

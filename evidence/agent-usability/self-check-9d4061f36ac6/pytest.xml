@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="16.026" timestamp="2026-11-04T21:11:05.705281-05:00" hostname="Ryans-MacBook-10.local"><testcase classname="tests.test_agent_controls" name="test_scripted_loop_recovers_and_verifies_through_target" file="tests/test_agent_controls.py" line="17" time="11.068"><properties><property name="check_name" value="scripted_loop_recovers_and_verifies_through_target" /><property name="run_id" value="b81055d9d0c3" /></properties></testcase><testcase classname="tests.test_agent_controls" name="test_scripted_late_response_cannot_execute_tools" file="tests/test_agent_controls.py" line="42" time="4.662"><properties><property name="check_name" value="scripted_late_response_cannot_execute_tools" /></properties><failure message="TimeoutError: Sandbox worker exceeded its host-side deadline">settings = {'solver_image': 'ctf590-solver:m1', 'guard_image': 'ctf590-guard:m1', 'target_image': 'ctf590-fixture:m1', 'wall_seconds': 60.0, ...}
+target = {'network': 'ctf590-fixture-44995246ccab-net', 'gateway': '172.19.255.254', 'address': '172.19.0.1', 'expected_flag': 'ctf{0f3ab24c7acb378e40b74c16}', ...}
+output_root = PosixPath('/Users/ryanbanko/590_final/evidence/agent-usability/self-check-9d4061f36ac6')
+telemetry = {'client': &lt;langfuse._client.client.Langfuse object at 0x1042b4590&gt;, 'exporter': &lt;opentelemetry.sdk.trace.export.in_memory_span_exporter.InMemorySpanExporter object at 0x103310830&gt;}
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x104364b80&gt;
+
+    def test_scripted_late_response_cannot_execute_tools(settings, target, output_root, telemetry, record_property):
+        label = "scripted_late_response_cannot_execute_tools"
+        record_property("check_name", label)
+    
+        def respond(*, messages, tools, timeout_seconds):
+            # An uncooperative callback must not keep the solver running or execute a late tool.
+            time.sleep(timeout_seconds + 0.1)
+            deadline = time.monotonic() + 2
+            while docker("inspect", "--format", "{{.State.Running}}", run["solver"]) != "false":
+                assert time.monotonic() &lt; deadline, "Watchdog did not stop solver during response wait"
+                time.sleep(0.02)
+            return tool_response("run_command", {"command": "echo must-not-run-after-deadline"}, "late")
+    
+&gt;       with run_attempt(settings | {"wall_seconds": 3}, target["network"], target["gateway"], target["endpoints"],
+                         target["expected_flag"], output_root, langfuse=telemetry["client"],
+                         label=label, public_task="Synthetic deadline check", respond=respond) as run:
+
+tests/test_agent_controls.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+ctf_agent/attempt.py:201: in run_attempt
+    start_sandbox(sandbox, settings, network, gateway, endpoints, lambda: remaining_seconds(state))
+ctf_agent/sandbox.py:106: in start_sandbox
+    invoke_worker(sandbox, {"tool": "inspect"}, timeout=min(5, remaining()))
+ctf_agent/sandbox.py:137: in invoke_worker
+    raw = bounded_exec(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ['exec', '--interactive', '--user', '1000:1000', '--workdir', '/workspace', ...]
+request = b'{"tool": "inspect"}', timeout = 0.09747679199790582, limit = 524288
+
+    def bounded_exec(args: list[str], request: bytes, timeout: float, limit: int = 524_288) -&gt; bytes:
+        """Bound the untrusted worker's host-side output, including protocol corruption."""
+        process = subprocess.Popen(
+            ["docker", *args], stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        deadline = time.monotonic() + timeout
+        output = bytearray()
+        errors = bytearray()
+        pending = memoryview(request)
+        try:
+            with selectors.DefaultSelector() as selector:
+                for stream, events in [(process.stdin, selectors.EVENT_WRITE),
+                                       (process.stdout, selectors.EVENT_READ),
+                                       (process.stderr, selectors.EVENT_READ)]:
+                    os.set_blocking(stream.fileno(), False)
+                    selector.register(stream, events)
+                while selector.get_map():
+                    remaining = deadline - time.monotonic()
+                    if remaining &lt;= 0:
+&gt;                       raise TimeoutError("Sandbox worker exceeded its host-side deadline")
+E                       TimeoutError: Sandbox worker exceeded its host-side deadline
+
+ctf_agent/docker.py:39: TimeoutError</failure></testcase></testsuite></testsuites>

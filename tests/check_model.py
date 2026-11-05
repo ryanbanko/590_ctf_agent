@@ -76,7 +76,7 @@ def check_model(config_path: Path, output_root: Path):
                                            and row.get("usageDetails") for row in generations),
             "expected_answer_not_in_root": root is not None and expected not in json.dumps(root),
             "credentials_absent": all(secret not in serialized for secret in secrets),
-            "within_cap": 0 < result["model_calls"] <= 4 and result["cost_reserved_usd"] <= 0.10,
+            "within_limits": 0 < result["model_calls"] <= 4,
             "usage_available": result["usage_complete"] and result["tokens"]["input"] > 0,
         }
         report["checks"] = checks

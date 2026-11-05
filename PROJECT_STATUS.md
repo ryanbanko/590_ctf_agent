@@ -2,17 +2,14 @@
 
 Last reviewed: November 4, 2026 (America/New_York).
 
-**Section 1 implementation and environment setup are complete for the selected
-ten CTFTiny challenges and the development example.** Later development traces
-revealed baseline solver-tooling and executable-workspace gaps; the approved
-environment/timeout-contract correction below addresses those. The first Section 2
-prompt change is now implemented and documented in the
-[experiment log](docs/EXPERIMENTS.md). Five subsequent user-run development trials
-have been reviewed: three verified successes, one voluntary unsuccessful ending,
-and one command timeout. The next approved setup change adds six solver libraries,
-32 KiB live output and network-deadline guidance. Repeated comparison remains
-pending. A thin sequential batch command is now implemented; no live batch has
-been run during that milestone.
+**Section 1 provided the working baseline; Section 2 comparison remains pending.**
+The latest approved usability milestone implements writable per-attempt Python,
+pip download connectivity, interactive terminal sessions, recoverable command
+timeouts, larger output with saved files, expanded limits and removal of local
+spending caps. Verification passed: **82 fast tests, 27 distinct Docker cases, and two fresh
+preparation cycles for `pwn-baby-boi`**, with cleanup verified. The Docker cases
+passed across the main run and focused completion after the recorded cleanup fix.
+No new model calls or challenge-solving attempts have run. GDB changes are explicitly deferred.
 
 ## Assignment checklist
 
@@ -29,7 +26,8 @@ been run during that milestone.
   without separately revealing the expected answer.
 - [x] Keep commands in the isolated solver and keep private metadata, answers,
   evaluator files, credentials, host mounts and Docker socket outside it.
-- [x] Restrict solver connections to permitted endpoints; retain independent
+- [x] Restrict solver connections to assigned endpoints plus professor-approved
+  package-download connectivity; retain independent
   blocked-request evidence and stop the solver on a scope violation.
 - [x] Support challenge selection, public-file staging, fresh target/network reset
   and cleanup for the selected ten plus the development example.
@@ -55,10 +53,10 @@ maps public challenge categories, file types and development-handout imports to
 potential solver packages. [Experiment 2](docs/EXPERIMENTS.md#experiment-2--solver-libraries-output-visibility-and-network-guidance)
 records the approved six-library subset (without reedsolo), 32 KiB live output,
 and internal network-deadline guidance. Dependencies are installed at image-build
-time; runtime network access remains limited to assigned challenge endpoints.
-The live command timeout stays at 30 seconds: observed blocking I/O does not
-establish a need for longer computation. The 300-second wall limit, existing
-recovery prompt and terminal timeout policy remain in place.
+time; at that milestone runtime access remained limited to assigned endpoints.
+That configuration used a 30-second command limit and 300-second wall limit
+with terminal timeout handling. The current usability milestone below supersedes
+those controls.
 This setup milestone passed **64 fast tests and 23 synthetic Docker controls**.
 After the final pwntools non-terminal setting, four focused final-image checks
 passed for library/network workflows, output limits, private filesystem boundaries
@@ -79,6 +77,7 @@ calls or API spending.
 - [x] Record Experiment 1's hypothesis before its live comparison.
 - [x] Implement the approved evidence-use/recovery system prompt.
 - [x] Add sequential batch launching with a small index of existing attempt records.
+- [x] Implement and verify the approved package/session/timeout/output usability changes.
 - [ ] Complete a repeated comparison under matched settings; one exploratory pair is reviewed.
 - [ ] Run a small development pilot and review readiness and projected resource use.
 - [ ] Freeze code, dependencies, images, dataset and settings for evaluation.
@@ -100,13 +99,93 @@ calls or API spending.
 
 ## Current implementation
 
+### Current usability milestone — complete; stop for review
+
+Approved November 4: live limits are 600 seconds, 120-second ordinary commands,
+60-second model requests, forty model turns/requests, eighty tool calls, 512 KiB
+model input, 4,096 output tokens and 64 KiB tool output. Solver RAM/workspace are
+1 GiB/512 MiB. Local spending caps/reservations are removed; usage remains recorded.
+
+`HOME`/`TMPDIR` use `/workspace`; a fresh system-site-packages venv accepts runtime
+pip installs. The guard now has separate NAT egress and allows Docker DNS/public
+HTTPS. Internet is permitted by agent instructions only for pip dependency
+installation, with answer lookup prohibited; purpose is not enforced by the
+firewall. Private-network isolation, trusted verification and scope-stop records
+remain. Interactive sessions use the existing command tool; per-command
+supervisors clean up detached descendants. Ordinary timeouts permit continuation
+after confirmed cleanup. Larger output returns beginning/end excerpts and a file
+path; package versions and bounded output copies survive in attempt records.
+
+Verification: **82 fast tests and 27 distinct Docker cases passed**, including
+pip install/import, writable home/space, fresh Python reset, PTY interaction,
+independent commands, session close, timeout recovery with detached descendants,
+output excerpts/files, private boundaries, scope incidents and cleanup. The initial
+three-second deadline probe expired during venv startup; it now allows eight
+seconds to reach runtime expiration. A later missing-image check found the egress
+network did not yet exist; cleanup now accepts Docker's absent-network wording.
+Those failed records remain; the corrected case and remaining checks passed.
+
+`prepare-challenge --challenge pwn-baby-boi` also passed two fresh cycles with the
+new venv/output directories excluded from contestant-file inventory. The benign
+pip install/import command took about 1.66 seconds in the main run. Solver and
+guard images are rebuilt locally. No GDB change, real model call or challenge
+solving occurred. [Evidence and final provenance](evidence/agent-usability/README.md).
+Stop for review before another live development pilot. Performance improvement
+and compatibility with every package/challenge are not established.
+
+### Historical runtime package policy and course clarification
+
+The following describes the preceding temporary offline milestone, superseded by
+the usability change above. Its incident and verification evidence are retained.
+
+The professor has now confirmed that runtime package downloads are acceptable;
+the concern is looking up CTFTiny answers. See [the recorded clarification](docs/REFERENCES.md#authority-and-professor-clarification).
+The user explicitly prefers minimal networking machinery. The current plan keeps
+the six preinstalled libraries, removes the temporary offline pip default, supplies
+a writable per-attempt installation location, permits practical internet egress,
+and tells the agent to use it for dependencies and never published answers.
+No proxy, mirror, CTF blacklist or custom installer is planned. This relies on
+model instructions and trace review for internet purpose, not package-only network
+enforcement. Solver isolation, private-data boundaries and hard limits remain.
+Package installation and imports need benign verification under actual resource
+limits before further live trials. No runtime changes have been made for this plan.
+
+The first gateway-timeout batch was moved intact to
+`runs/archive/batch-be87c5be7ce7`; it remains historical setup-failure evidence.
+The later batch with a verified success and scope incident remains under
+`runs/pilots/current-setup/`. Raw run records are local and Git-ignored.
+
+All eleven selected pilot environments passed the user's preparation checks.
+Batch `batch-8898df326849` then recorded `cry-ecxor` without success,
+`cry-describeme` with verified success, and `for-1black0white` with a scope stop.
+The third attempt lacked a QR decoder and ran `pip install opencv-python-headless`;
+the guard recorded and blocked DNS requests for `pypi.org`. Records were complete
+and cleanup passed. The remaining eight IDs were not attempted in that batch.
+
+Pending professor clarification, a marked, removable Dockerfile ENV line makes
+pip ignore package indexes and skip its version check at runtime. Build-time
+installation still works. The tool description tells the model downloads are
+unavailable. An ordinary missing-package request should return a local error and
+permit recovery; actual out-of-scope network requests still stop the run/batch.
+No new library, network permission or installer framework was added. This change
+does not supply the missing QR decoder or establish that the challenge can solve.
+Verification: **81 fast tests and 24 Docker controls passed**, with cleanup
+verified. A missing-package pip request returned a local error in about 0.42
+seconds; a second command succeeded in the same attempt. The solver was rebuilt
+locally. [Evidence and reversal instructions](evidence/runtime-package-policy/README.md).
+No real attempts/model calls ran during this fix. Stop for review before the
+next live pilot attempt.
+
+### Batch launcher
+
 `run-batch --challenges ID ... --trials N` now repeats the existing launcher in
 fresh processes, preserves every attempt's records, and writes a small batch
 index with existing run IDs and trace links. The experiment file is copied into
 the batch folder. It adds no parallelism, retries, resume system or batch-cost
 gate. The user requested two different development challenges per category;
 only one development forensics ID exists, allowing eleven total without using
-reserved challenges. Selection and live execution remain pending.
+reserved challenges. Those eleven IDs have now been selected and preparation
+passed; completing the live pilot remains pending after the recorded scope stop.
 Verification: **17 offline batch cases passed; 81 fast tests passed overall**.
 [Evidence](evidence/batch-wrapper/README.md). These checks simulated child results;
 no real challenge attempts or model calls were made. Stop for review before
@@ -174,7 +253,7 @@ separate model/target/records/budget modules and moved controls support into tes
 
 The full pinned dataset is now downloaded, with a clean checkout and matching
 revision/index. All **50 contestant file inventories** validate and fit the
-existing workspace. The live input-size cap is now **262,144 bytes (256 KiB)**;
+existing workspace. At that milestone the live input-size cap became **262,144 bytes (256 KiB)**;
 the broader 600-second/40-request/$0.20 profile was not applied.
 
 Compatibility stays in the existing loader/lifecycle: the older `port` field is

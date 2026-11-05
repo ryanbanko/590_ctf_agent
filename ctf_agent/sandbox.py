@@ -1,5 +1,6 @@
 """Procedural lifecycle for the solver and its trusted network guard."""
 
+import base64
 import ipaddress
 import json
 import subprocess
@@ -21,6 +22,7 @@ def validate_endpoints(endpoints: list[dict]):
 def make_sandbox(run_id: str, observation, stop):
     return {
         "solver": f"ctf590-{run_id}-solver", "guard": f"ctf590-{run_id}-guard",
+        "egress": f"ctf590-{run_id}-egress",
         "observation": observation, "stop": stop, "ready": threading.Event(),
         "closing": threading.Event(), "monitor": None, "log_process": None,
     }
@@ -56,11 +58,13 @@ def monitor_guard(sandbox: dict):
 def start_sandbox(sandbox: dict, settings: dict, network: str, gateway: str,
                   endpoints: list[dict], remaining):
     validate_endpoints(endpoints)
+    docker("network", "create", "--ipv6=false", "--label", "ctf590.managed=true", sandbox["egress"])
+    gateway = json.loads(docker("network", "inspect", sandbox["egress"]))[0]["IPAM"]["Config"][0]["Gateway"]
     policy = json.dumps({"gateway": gateway, "endpoints": endpoints})
     docker(
         "run", "--detach", "--pull", "never", "--name", sandbox["guard"],
-        "--label", "ctf590.managed=true", "--network", network,
-        "--dns", "127.0.0.1", "--cap-drop", "ALL", "--cap-add", "NET_ADMIN",
+        "--label", "ctf590.managed=true", "--network", sandbox["egress"],
+        "--cap-drop", "ALL", "--cap-add", "NET_ADMIN",
         "--cap-add", "NET_RAW", "--cap-add", "SETUID", "--cap-add", "SETGID",
         "--security-opt", "no-new-privileges=true",
         "--read-only", "--tmpfs", "/tmp:rw,noexec,nosuid,nodev,size=8m",
@@ -83,6 +87,7 @@ def start_sandbox(sandbox: dict, settings: dict, network: str, gateway: str,
         if time.monotonic() >= startup_deadline:
             raise RuntimeError("Network guard did not become ready; solver was not started")
     remaining()
+    docker("network", "connect", network, sandbox["guard"], timeout=min(5, remaining()))
     memory = f'{settings["memory_mb"]}m'
     docker(
         "run", "--detach", "--pull", "never", "--platform", "linux/amd64", "--name", sandbox["solver"],
@@ -96,6 +101,9 @@ def start_sandbox(sandbox: dict, settings: dict, network: str, gateway: str,
         "--log-opt", "max-size=1m", "--log-opt", "max-file=1", settings["solver_image"],
         timeout=min(15, remaining()),
     )
+    docker("exec", "--user", "1000:1000", sandbox["solver"], "/usr/local/bin/python", "-I", "-m", "venv",
+           "--system-site-packages", "/workspace/.venv", timeout=min(20, remaining()))
+    invoke_worker(sandbox, {"tool": "inspect"}, timeout=min(5, remaining()))
     remaining()
     sandbox["observation"].create_event(name="sandbox_ready", metadata={
         "solver": sandbox["solver"], "guard": sandbox["guard"], "endpoints": endpoints})
@@ -128,12 +136,30 @@ def audit_network(sandbox: dict, timeout: float):
 def invoke_worker(sandbox: dict, request: dict, timeout: float):
     raw = bounded_exec(
         ["exec", "--interactive", "--user", "1000:1000", "--workdir", "/workspace",
-         sandbox["solver"], "python", "-I", "/opt/ctf/worker.py"],
-        json.dumps(request).encode(), timeout,
+         sandbox["solver"], "/usr/local/bin/python", "-I", "/opt/ctf/worker.py"],
+        json.dumps(request).encode(), timeout, limit=2_097_152 if request["tool"] == "artifact" else 524_288,
     )
     result = json.loads(raw)
     if not isinstance(result, dict):
         raise RuntimeError("Sandbox worker returned an invalid result")
+    if "_worker_error" in result:
+        raise RuntimeError("Command supervisor failed: " + str(result["_worker_error"]))
+    packages = result.pop("_packages", None)
+    if packages is not None and "directory" in sandbox:
+        (sandbox["directory"] / "packages.json").write_text(json.dumps(packages, indent=2) + "\n")
+    output_id = result.pop("_output_id", None)
+    if output_id is not None and "directory" in sandbox:
+        if (not isinstance(output_id, str) or len(output_id) != 32
+                or any(c not in "0123456789abcdef" for c in output_id)):
+            raise RuntimeError("Invalid command output identifier")
+        artifact = invoke_worker(sandbox, {"tool": "artifact", "output_id": output_id}, timeout=3)
+        data = base64.b64decode(artifact["data"], validate=True)
+        if len(data) > 1_048_576:
+            raise RuntimeError("Command output file exceeds its bound")
+        outputs = sandbox["directory"] / "outputs"
+        outputs.mkdir(exist_ok=True)
+        (outputs / (output_id + ".log")).write_bytes(data)
+        result["recorded_output"] = "outputs/" + output_id + ".log"
     return result
 
 
@@ -149,6 +175,14 @@ def close_sandbox(sandbox: dict) -> list[str]:
         except subprocess.TimeoutExpired:
             errors.append(f"Timed out removing {name}")
     sandbox["closing"].set()
+    try:
+        docker("network", "rm", sandbox["egress"], timeout=5)
+    except RuntimeError as error:
+        if ("No such network" not in str(error)
+                and f"network {sandbox['egress']} not found" not in str(error)):
+            errors.append(f"{sandbox['egress']}: {error}")
+    except subprocess.TimeoutExpired:
+        errors.append("Timed out removing solver egress network")
     process = sandbox["log_process"]
     if process is not None:
         if process.poll() is None:

@@ -62,7 +62,7 @@ def check_readiness(config_path: Path, dataset_json: Path, manifest_path: Path, 
                     observed = run_python(run,
                         "import hashlib,json,os,pathlib; root=pathlib.Path('/workspace'); "
                         "print(json.dumps({'files':{str(p.relative_to(root)):{'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),"
-                        "'uid':p.stat().st_uid,'gid':p.stat().st_gid} for p in root.rglob('*') if p.is_file()},"
+                        "'uid':p.stat().st_uid,'gid':p.stat().st_gid} for p in root.rglob('*') if p.is_file() and p.relative_to(root).parts[0] not in {'.venv','.ctf-output'}},"
                         "'uid':os.getuid(),'status':pathlib.Path('/proc/self/status').read_text(),"
                         "'credential_names':list(set(os.environ)&{'LITELLM_TOKEN','LANGFUSE_SECRET_KEY','LANGFUSE_PUBLIC_KEY','LANGFUSE_BASE_URL'}),"
                         "'docker_socket':pathlib.Path('/var/run/docker.sock').exists(),"

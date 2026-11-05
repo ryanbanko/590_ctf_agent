@@ -1,0 +1,19 @@
+{
+  "run_id": "2bc6d87c6f1a",
+  "challenge_id": "guard_loss",
+  "mode": "synthetic-controls",
+  "termination_reason": "guard_failure",
+  "tool_calls": 0,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "57125bbacc11e4fd8b9bf469ed9726de",
+  "active_seconds": 3.953223,
+  "cleanup_seconds": 0.260051,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000496,
+  "total_seconds": 4.214042
+}

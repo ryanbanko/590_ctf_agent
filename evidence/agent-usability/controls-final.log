@@ -1,0 +1,46 @@
+......................F
+=================================== FAILURES ===================================
+__________________________ test_setup_failure_cleanup __________________________
+
+settings = {'solver_image': 'ctf590-solver:m1', 'guard_image': 'ctf590-guard:m1', 'target_image': 'ctf590-fixture:m1', 'wall_seconds': 60.0, ...}
+target = {'network': 'ctf590-fixture-ca9b6454ef11-net', 'gateway': '172.19.255.254', 'address': '172.19.0.1', 'expected_flag': 'ctf{59de8c85b01602efed8b210e}', ...}
+output_root = PosixPath('/Users/ryanbanko/590_final/evidence/agent-usability/self-check-21e839424780')
+record_property = <function record_property.<locals>.append_property at 0x1088d6700>
+telemetry = {'client': <langfuse._client.client.Langfuse object at 0x108253e00>, 'exporter': <opentelemetry.sdk.trace.export.in_memory_span_exporter.InMemorySpanExporter object at 0x107754830>}
+
+    def test_setup_failure_cleanup(settings, target, output_root, record_property, telemetry):
+        record_property("check_name", "setup_failure_cleanup")
+        before = set(output_root.glob("*/summary.json"))
+        invalid = settings | {"solver_image": "ctf590-missing:" + uuid.uuid4().hex}
+        with pytest.raises(RuntimeError):
+            with run_attempt(invalid, target["network"], target["gateway"], target["endpoints"],
+                             target["expected_flag"], output_root, langfuse=telemetry["client"], label="setup_failure_cleanup"):
+                pytest.fail("Started solver with a nonexistent image")
+        created = set(output_root.glob("*/summary.json")) - before
+        assert len(created) == 1
+        path = created.pop()
+        summary = json.loads(path.read_text())
+        save_spans(telemetry, path.parent, summary["trace_id"])
+        record_property("run_id", summary["run_id"])
+        assert summary["termination_reason"] == "infrastructure_error"
+>       assert summary["tool_calls"] == 0 and not summary["cleanup_errors"]
+E       AssertionError: assert (0 == 0 and not ['ctf590-76bad41f5d2f-egress: Error response from daemon: network ctf590-76bad41f5d2f-egress not found\nexit status 1'])
+
+tests/test_controls.py:338: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_controls.py::test_setup_failure_cleanup - AssertionError: a...
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 22 passed, 82 deselected in 160.82s (0:02:40)
+Evidence: evidence/agent-usability/self-check-21e839424780
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/ryanbanko/590_final/ctf_agent/__main__.py", line 73, in <module>
+    main()
+    ~~~~^^
+  File "/Users/ryanbanko/590_final/ctf_agent/__main__.py", line 49, in main
+    self_check(args.config, args.output)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ryanbanko/590_final/tests/test_controls.py", line 377, in self_check
+    raise RuntimeError(f"Controls checks failed; see {suite_dir}")
+RuntimeError: Controls checks failed; see evidence/agent-usability/self-check-21e839424780

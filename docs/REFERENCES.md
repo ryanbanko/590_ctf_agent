@@ -24,6 +24,22 @@ The professor replied, as reported by the user:
 
 > Thanks. Yeah it is basically the implementation guide there.
 
+On November 4, 2026, the user reported a further professor clarification about
+runtime package downloads:
+
+> Yes. The intention of that statement is more along the lines of you don’t want
+> the agent looking up the ctf tiny answers and submitting them. But access to
+> download packages is perfectly acceptable
+
+This authorizes package-download access; the prohibition on looking up benchmark
+answers remains. The user prefers a simple implementation rather than airtight
+package-only filtering. The approved implementation uses public HTTPS egress and
+Docker DNS needed by pip, clear model instructions and trace review, preserving solver
+isolation, private-data boundaries and hard limits. Internet connectivity is
+technically available to tools generally; command-name-only enforcement is not
+claimed. See the current design and [usability evidence](../evidence/agent-usability/README.md)
+for verification. Preserve this clarification alongside the original assignment; it is not a request to rewrite that source.
+
 Use the resources below as that setup/operation guidance while checking them
 against the assignment, especially its solver/evaluator and access boundaries.
 

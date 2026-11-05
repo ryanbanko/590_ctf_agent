@@ -56,7 +56,7 @@ def test_native_reasoning_and_tool_results_reach_next_request_with_one_generatio
     assert result["model_calls"] == result["tool_calls"] == 2 and result["scripted_turns"] == 0
     assert result["tokens"] == {"input": 200, "output": 40, "cached_input": 20, "reasoning": 10}
     assert result["cost_usd"] == pytest.approx(0.0000382)
-    assert result["cost_reserved_usd"] > result["cost_usd"]
+    assert "cost_reserved_usd" not in result
     spans = read_spans(telemetry, result["trace_id"])
     root = next(span for span in spans if span.name == "attempt")
     generations = [span for span in spans if span.name == "model-response"]
@@ -70,7 +70,6 @@ def test_native_reasoning_and_tool_results_reach_next_request_with_one_generatio
 @pytest.mark.parametrize("override,reason", [
     ({"max_requests": 0}, "model_request_limit"),
     ({"max_input_bytes": 1}, "model_input_limit"),
-    ({"max_cost_usd": 0.0}, "model_cost_limit"),
 ])
 def test_caps_prevent_http_requests(override, reason):
     def unexpected(request):
@@ -81,7 +80,7 @@ def test_caps_prevent_http_requests(override, reason):
         respond, usage = make_responder(client, MODEL_SETTINGS | override)
         with pytest.raises(AttemptStopped, match=reason):
             respond(messages=[{"role": "user", "content": "public"}], tools=[], timeout_seconds=1)
-        assert usage["model_calls"] == 0 and usage["cost_reserved_usd"] == 0
+        assert usage["model_calls"] == 0
 
 
 def test_timeout_is_not_retried_and_unknown_usage_is_not_free(local_attempt, telemetry):
@@ -98,7 +97,7 @@ def test_timeout_is_not_retried_and_unknown_usage_is_not_free(local_attempt, tel
             assert run_agent("public", run["respond"], run["call_tool"]) == "response_source_error"
     assert len(requests) == 1 and run["result"]["model_calls"] == 1
     assert run["result"]["cost_usd"] is None and not run["result"]["usage_complete"]
-    assert run["result"]["cost_reserved_usd"] > 0 and run["result"]["tool_calls"] == 0
+    assert run["result"]["tool_calls"] == 0
 
 
 def test_late_native_response_keeps_usage_but_cannot_execute_tools(local_attempt):

@@ -1,0 +1,19 @@
+{
+  "run_id": "eded71d2db46",
+  "challenge_id": "scripted_late_response_cannot_execute_tools",
+  "mode": "synthetic-controls",
+  "termination_reason": "wall_limit",
+  "tool_calls": 0,
+  "model_calls": 0,
+  "agent_mode": "scripted",
+  "scripted_turns": 1,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "18f21dd0b789f2d2d7291830cfd78d45",
+  "active_seconds": 8.132194,
+  "cleanup_seconds": 0.422803,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000543,
+  "total_seconds": 8.555737
+}

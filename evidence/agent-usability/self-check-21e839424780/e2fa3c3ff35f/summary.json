@@ -1,0 +1,19 @@
+{
+  "run_id": "e2fa3c3ff35f",
+  "challenge_id": "larger_output_retains_observed_size_and_remains_bounded",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 2,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "9a7da43c3113e6fbdf528921503de89d",
+  "active_seconds": 5.149063,
+  "cleanup_seconds": 0.409454,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000572,
+  "total_seconds": 5.559312
+}
