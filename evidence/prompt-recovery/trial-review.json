@@ -1,0 +1,231 @@
+{
+  "review_date": "2026-11-04",
+  "timezone": "America/New_York",
+  "review_mode": "Existing saved Langfuse exports and public provenance only; no challenge execution or new model calls.",
+  "new_model_calls": 0,
+  "new_model_cost_usd": 0.0,
+  "candidate_prompt_sha256": "cea149f0c9a0d532d3e5627fcd154897503ff09f059a4bef9f2d68b3339a473d",
+  "source_sha256": {
+    "ctf_agent/agent.py": "e0f146c5adf67319f468a28d36757aff5e28a18bab27ee66b9e16aee7ca10f99",
+    "ctf_agent/tools.py": "8914ee94a0cc9125a0b06c5456ff9a34a584b7eb54ed8ee3685cbd0a241162b2",
+    "ctf_agent/attempt.py": "5d7aaefe0988dd1c10fe7b7a8a692216b1b8c47c5a953489af8eb37c34ce2700",
+    "docker/worker.py": "9625a10c6a1a6fda0d45306e90badc474f85456a398afd1cc484571087e3338d",
+    "docker/solver.Dockerfile": "9156582e1d171cd8ec3ae30026fff536931632d3dedc988442cc73b0672b705c",
+    "configs/development.toml": "f771782d86083b936e502a90b3f6f26a9d15042294a731fcddf5d85227171cf0"
+  },
+  "model_settings": {
+    "model": "gpt-6-luna",
+    "base_url": "https://litellm.oit.duke.edu/v1",
+    "reasoning_effort": "low",
+    "max_requests": 20,
+    "max_output_tokens": 2048,
+    "max_input_bytes": 262144,
+    "request_seconds": 30.0,
+    "max_cost_usd": 0.1,
+    "input_usd_per_million": 0.1,
+    "output_usd_per_million": 0.5,
+    "cached_input_usd_per_million": 0.01
+  },
+  "attempt_settings": {
+    "solver_image": "ctf590-solver:m1",
+    "guard_image": "ctf590-guard:m1",
+    "target_image": "ctf590-fixture:m1",
+    "wall_seconds": 300.0,
+    "max_tool_calls": 40,
+    "max_model_turns": 20,
+    "command_seconds": 30.0,
+    "max_command_bytes": 16384,
+    "max_output_bytes": 16384,
+    "max_write_bytes": 65536,
+    "memory_mb": 256,
+    "workspace_mb": 64,
+    "pids": 64,
+    "cpus": 1.0
+  },
+  "dataset": {
+    "revision": "f1c9531672c45b24b7fb5f3aa44a7ac33d3602f8",
+    "index_sha256": "fce7e0a0ed08d8642acf2ef759d1c5acb6ae6d45a14a7209599fd920864870a6"
+  },
+  "trials": [
+    {
+      "run": "challenge-bc5088f47d97",
+      "challenge_id": "cry-ecxor",
+      "trace_id": "8bac84657d44b3b2ba2f48e43e8690f9",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/8bac84657d44b3b2ba2f48e43e8690f9",
+      "termination_reason": "completed_without_success",
+      "verified_success": false,
+      "model_calls": 7,
+      "tool_calls": 6,
+      "active_seconds": 35.069674,
+      "total_seconds": 35.400994,
+      "tokens": {
+        "input": 72673,
+        "output": 2074,
+        "cached_input": 57941,
+        "reasoning": 964
+      },
+      "cost_usd": 0.00308961,
+      "cost_reserved_usd": 0.035057125,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "evidence_checks": {
+        "one_root": true,
+        "parentage": true,
+        "expected_answer_not_in_root": true,
+        "credentials_absent": true,
+        "target_cleanup": true,
+        "solver_cleanup": true
+      }
+    },
+    {
+      "run": "challenge-97b399febefe",
+      "challenge_id": "msc-algebra",
+      "trace_id": "1ffa422163109632ce8d3aac34a969a4",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/1ffa422163109632ce8d3aac34a969a4",
+      "termination_reason": "success",
+      "verified_success": true,
+      "model_calls": 11,
+      "tool_calls": 11,
+      "active_seconds": 58.001293,
+      "total_seconds": 58.309999,
+      "tokens": {
+        "input": 73915,
+        "output": 2966,
+        "cached_input": 58751,
+        "reasoning": 479
+      },
+      "cost_usd": 0.0035869100000000004,
+      "cost_reserved_usd": 0.056371000000000004,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "evidence_checks": {
+        "one_root": true,
+        "parentage": true,
+        "expected_answer_not_in_root": true,
+        "credentials_absent": true,
+        "target_cleanup": true,
+        "solver_cleanup": true
+      }
+    },
+    {
+      "run": "challenge-04065b43cd41",
+      "challenge_id": "pwn-baby-boi",
+      "trace_id": "89aee218ef40d2f9fb2240a92c104fde",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/89aee218ef40d2f9fb2240a92c104fde",
+      "termination_reason": "command_timeout",
+      "verified_success": false,
+      "model_calls": 5,
+      "tool_calls": 5,
+      "active_seconds": 55.804458,
+      "total_seconds": 56.090363,
+      "tokens": {
+        "input": 11322,
+        "output": 1409,
+        "cached_input": 6983,
+        "reasoning": 611
+      },
+      "cost_usd": 0.00120823,
+      "cost_reserved_usd": 0.013714749999999998,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "evidence_checks": {
+        "one_root": true,
+        "parentage": true,
+        "expected_answer_not_in_root": true,
+        "credentials_absent": true,
+        "target_cleanup": true,
+        "solver_cleanup": true
+      }
+    },
+    {
+      "run": "challenge-60018c066690",
+      "challenge_id": "rev-checker",
+      "trace_id": "8f70f60aeca27f11164f7bd1e7d9a7d2",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/8f70f60aeca27f11164f7bd1e7d9a7d2",
+      "termination_reason": "success",
+      "verified_success": true,
+      "model_calls": 4,
+      "tool_calls": 4,
+      "active_seconds": 18.258996,
+      "total_seconds": 18.513124,
+      "tokens": {
+        "input": 5912,
+        "output": 1117,
+        "cached_input": 2901,
+        "reasoning": 400
+      },
+      "cost_usd": 0.00088861,
+      "cost_reserved_usd": 0.0095555,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "evidence_checks": {
+        "one_root": true,
+        "parentage": true,
+        "expected_answer_not_in_root": true,
+        "credentials_absent": true,
+        "target_cleanup": true,
+        "solver_cleanup": true
+      }
+    },
+    {
+      "run": "challenge-2feddbeaee2d",
+      "challenge_id": "web-poem-collection",
+      "trace_id": "5b7c1194f9edb44aecdc3c4ab82e615a",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/5b7c1194f9edb44aecdc3c4ab82e615a",
+      "termination_reason": "success",
+      "verified_success": true,
+      "model_calls": 5,
+      "tool_calls": 5,
+      "active_seconds": 14.070526,
+      "total_seconds": 14.340428,
+      "tokens": {
+        "input": 8905,
+        "output": 457,
+        "cached_input": 4922,
+        "reasoning": 58
+      },
+      "cost_usd": 0.00067602,
+      "cost_reserved_usd": 0.011291625,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "evidence_checks": {
+        "one_root": true,
+        "parentage": true,
+        "expected_answer_not_in_root": true,
+        "credentials_absent": true,
+        "target_cleanup": true,
+        "solver_cleanup": true
+      }
+    }
+  ],
+  "summary": {
+    "successes": 3,
+    "attempts": 5,
+    "model_calls": 32,
+    "tool_calls": 31,
+    "active_seconds": 181.204947,
+    "estimated_cost_usd": 0.00944938
+  },
+  "matched_pair": {
+    "baseline_run": "challenge-7ec6c0a359e0",
+    "baseline_trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/705cf5c1279ad9ba3798b60f1006c8eb",
+    "baseline_result": {
+      "termination_reason": "completed_without_success",
+      "verified_success": false,
+      "model_calls": 5,
+      "tool_calls": 4,
+      "active_seconds": 39.439902,
+      "cost_usd": 0.00156165
+    },
+    "candidate_run": "challenge-bc5088f47d97",
+    "same_dataset": true,
+    "same_files": true,
+    "same_images": true,
+    "same_settings": true,
+    "source_differences": [
+      "ctf_agent/agent.py"
+    ],
+    "limitations": "One sequential stochastic pair; no solve-rate improvement demonstrated."
+  },
+  "findings": "See docs/EXPERIMENTS.md for turn-level observations, hypotheses and unimplemented proposals."
+}

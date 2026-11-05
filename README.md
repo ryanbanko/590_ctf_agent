@@ -6,7 +6,8 @@ The ten scored challenges are reserved; use the forty development IDs in
 [configs/ctftiny.json](configs/ctftiny.json) for practice and Section 2.
 
 [Project checklist](PROJECT_STATUS.md#assignment-checklist) ·
-[Design](docs/DESIGN.md) · [References and attribution](docs/REFERENCES.md)
+[Design](docs/DESIGN.md) · [Section 2 experiments](docs/EXPERIMENTS.md) ·
+[References and attribution](docs/REFERENCES.md)
 
 ## One-time setup
 
@@ -42,6 +43,12 @@ pulling solver-image changes. On ARM Linux hosts, Docker needs AMD64 emulation;
 native AMD64 Linux avoids the emulation overhead and debugger limitations.
 On the verified Apple Silicon Docker setup, 64-bit and 32-bit execution pass;
 GDB static inspection works, but live debugging fails with register/ptrace errors.
+
+The solver also includes **pwntools, SymPy, NumPy, PyCryptodome (`Crypto`), requests
+and Pillow**. These are installed in the image, separate from the host runner's
+dependencies. [Requested versions](docker/solver-requirements.in) and
+[resolved dependencies](docker/solver-requirements.txt) are committed; the image
+records installed versions in `/opt/python-packages.txt`. Reedsolo is not included.
 
 These are baseline utilities, not every specialized analysis package. Add any
 needed packages to the solver Dockerfile and rebuild before a run; the solver
@@ -148,7 +155,7 @@ the live command uses `--experiment`.
 | Model / tool calls | 20 / 40 maximum. |
 | Model input / output | 256 KiB serialized input; 2,048 output tokens per request. |
 | Solver resources | 1 CPU, 256 MiB memory, 64 PIDs, 64 MiB workspace. |
-| Tool output / file write | 16 KiB output; 64 KiB UTF-8 write. |
+| Tool output / file write | 32 KiB combined stdout/stderr; 64 KiB UTF-8 write. |
 | Estimated cost cap | $0.10 per attempt. |
 
 Edit `[attempt]` and `[model]` in `configs/development.toml` for your Section 2
@@ -159,6 +166,13 @@ enforced bounds but does not prescribe those values.
 A command timeout currently ends the attempt. The user approved these larger
 development limits after the initial setup checks; historical attempts used the
 previous settings. Both `max_model_turns` and `max_requests` are set to 20.
+The command cap remains 30 seconds: recent failure evidence showed blocking
+network I/O, not a computation that needed longer. Use connection/read deadlines
+shorter than the command cap. Each command starts a new process; files persist
+between commands, but an earlier process's connection does not automatically persist.
+For a later experiment, change `command_seconds` in `[attempt]`; the tool schema
+automatically advertises the new maximum/default. Synthetic checks retain their
+separate 10-second/16-KiB defaults unless overridden by a specific check.
 The conservative reservation for twenty maximum-sized requests is about $0.678
 at the recorded gateway rates. The $0.10 cap still applies and can stop an attempt
 before all twenty requests; actual costs depend on usage. There is no campaign
@@ -303,7 +317,7 @@ of seven replies; their presence can vary between requests.
 See [reasoning evidence](evidence/reasoning-summaries/README.md).
 
 The system prompt also asks for one brief visible sentence alongside each tool
-call stating its purpose and expected result. Look for that sentence in the
+call stating its purpose or what it will test. Look for that sentence in the
 `model-response` generation's output in Langfuse. Existing instrumentation captures
 it as normal assistant text in the same request; no extra model turn, tool or
 response format was added. This is a requested action explanation, not private

@@ -88,6 +88,65 @@ def test_files_tools_evaluator_success(attempt: dict, target: dict):
     assert attempt["result"]["tool_calls"] == before
 
 
+@pytest.mark.parametrize("attempt", [{"command_seconds": 30.0}], indirect=True)
+def test_solver_python_libraries_and_network_deadline(attempt, target):
+    result = attempt["call_tool"]("run_command", python_command(f'''
+import importlib.metadata, json, socket, time
+import numpy as np
+import requests
+from Crypto.Cipher import AES
+from PIL import Image
+from pwn import ELF, context, p32, u32, remote
+from sympy import Symbol, solve
+
+context.log_level = 'error'
+assert ELF('/bin/true', checksec=False).arch == 'amd64'
+assert u32(p32(12345)) == 12345
+x = Symbol('x')
+assert solve(x + 2 - 5, x) == [3]
+assert np.dot([1, 2], [3, 4]) == 11
+cipher = AES.new(b'0123456789abcdef', AES.MODE_ECB)
+block = b'benign-test-data'
+assert cipher.decrypt(cipher.encrypt(block)) == block
+Image.new('RGB', (2, 3), 'blue').save('benign.png')
+with Image.open('benign.png') as image:
+ assert image.size == (2, 3)
+with requests.Session() as session:
+ session.trust_env = False
+ reply = session.get('http://{target['address']}:8000/', timeout=(1, 1))
+ assert reply.status_code == 200 and 'flag' in reply.json()
+with remote({target['address']!r}, 8000, timeout=1) as connection:
+ connection.send(b'GET / HTTP/1.0\\r\\n\\r\\n')
+ assert b'HTTP/1.1 200 OK' in connection.recvall(timeout=1)
+# This fixture waits for an HTTP request: reading first deliberately stalls.
+started = time.monotonic()
+with socket.create_connection(({target['address']!r}, 8000), timeout=.2) as connection:
+ try:
+  connection.recv(1)
+  raise AssertionError('Expected an internal read timeout')
+ except socket.timeout:
+  pass
+assert time.monotonic() - started < 2
+print(json.dumps({{'packages': {{name: importlib.metadata.version(name) for name in
+ ['pwntools', 'sympy', 'numpy', 'pycryptodome', 'requests', 'Pillow']}},
+ 'internal_read_timeout': True, 'elapsed_seconds': time.monotonic() - started}}))
+'''))
+    assert result["exit_code"] == 0 and not result["timed_out"], result
+    assert json.loads(result["stdout"])["internal_read_timeout"]
+    assert attempt["result"]["termination_reason"] is None
+
+
+@pytest.mark.parametrize("attempt", [{"max_output_bytes": 32_768}], indirect=True)
+def test_larger_output_retains_observed_size_and_remains_bounded(attempt):
+    result = attempt["call_tool"]("run_command", python_command(
+        "import sys; print('x' * 17000); print('diagnostic-marker', file=sys.stderr); sys.exit(7)"))
+    assert result["exit_code"] == 7 and not result["truncated"], result
+    assert len(result["stdout"]) == 17_001 and "diagnostic-marker" in result["stderr"]
+    result = attempt["call_tool"]("run_command", python_command("print('x' * 40000)"))
+    assert result["truncated"] and result["output_bytes"] > 32_768
+    assert len(result["stdout"].encode()) + len(result["stderr"].encode()) <= 32_768
+
+
 def test_filesystem_credentials_privileges_output(attempt: dict, target: dict, settings):
     container = json.loads(docker("inspect", attempt["solver"]))[0]
     host = container["HostConfig"]

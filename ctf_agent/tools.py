@@ -9,7 +9,14 @@ from .sandbox import invoke_worker
 TOOL_DEFINITIONS = [
     {
         "name": "run_command",
-        "description": "Run a command with /bin/sh in the isolated /workspace. Use bash explicitly for Bash syntax. A timeout ends the attempt.",
+        "description": (
+            "Run a command with /bin/sh starting in the isolated solver's /workspace. "
+            "Use bash explicitly for Bash syntax. Each call starts a new process; files "
+            "persist between calls, but network connections do not automatically persist. "
+            "Set connection and read deadlines shorter than timeout_seconds (or its "
+            "default) so network errors return before the command limit. A command "
+            "timeout ends the attempt."
+        ),
         "parameters": {
             "type": "object",
             "properties": {

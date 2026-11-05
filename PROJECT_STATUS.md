@@ -5,9 +5,13 @@ Last reviewed: November 4, 2026 (America/New_York).
 **Section 1 implementation and environment setup are complete for the selected
 ten CTFTiny challenges and the development example.** Later development traces
 revealed baseline solver-tooling and executable-workspace gaps; the approved
-environment/timeout-contract correction below addresses those. The user will
-carry out Section 2 experiments. Recovery changes remain a separate review;
-this correction makes no model calls, pilots or scored attempts.
+environment/timeout-contract correction below addresses those. The first Section 2
+prompt change is now implemented and documented in the
+[experiment log](docs/EXPERIMENTS.md). Five subsequent user-run development trials
+have been reviewed: three verified successes, one voluntary unsuccessful ending,
+and one command timeout. The next approved setup change adds six solver libraries,
+32 KiB live output and network-deadline guidance. Repeated comparison remains
+pending; this milestone makes no live model calls.
 
 ## Assignment checklist
 
@@ -34,17 +38,46 @@ Initial handoff verification: **63 fast tests; eleven preparation checks with 22
 [Evidence](evidence/benchmark-readiness/README.md). This establishes setup readiness
 for those challenges; it does not establish real challenge-solving success.
 
-### Section 2 — use testing to improve the agent: remaining
+### Section 2 — use testing to improve the agent: started, comparison pending
 
-User-run development attempts provide starting traces; the three most recently
-reviewed attempts informed the environment correction below. That correction has
-synthetic verification, but no real-model comparison or completed pilot. The user
-will carry out the experiments in this section.
+Earlier development attempts informed the environment correction below. Five
+subsequent trials used the revised prompt and updated solver: **3/5 verified
+successes**, 32 model calls, 31 tool calls and **$0.00944938 estimated cost**.
+All recorded exports were complete, with no recorded scope-denial events or
+cleanup errors. One exploratory `cry-ecxor` before/after pair has matched settings
+and images; both attempts failed, although the revised prompt recovered from
+more errors. This does not establish a reliable prompt effect or complete pilot.
+[Experiment 1](docs/EXPERIMENTS.md#experiment-1--evidence-use-and-recovery-prompt)
+records the approved prompt change, observed failures and proposed next changes.
+The [original toolkit review](docs/EXPERIMENTS.md#toolkit-review--original-proposal)
+maps public challenge categories, file types and development-handout imports to
+potential solver packages. [Experiment 2](docs/EXPERIMENTS.md#experiment-2--solver-libraries-output-visibility-and-network-guidance)
+records the approved six-library subset (without reedsolo), 32 KiB live output,
+and internal network-deadline guidance. Dependencies are installed at image-build
+time; runtime network access remains limited to assigned challenge endpoints.
+The live command timeout stays at 30 seconds: observed blocking I/O does not
+establish a need for longer computation. The 300-second wall limit, existing
+recovery prompt and terminal timeout policy remain in place.
+This setup milestone passed **64 fast tests and 23 synthetic Docker controls**.
+After the final pwntools non-terminal setting, four focused final-image checks
+passed for library/network workflows, output limits, private filesystem boundaries
+and curl denial. The combined library probe took about 1.35 seconds; its internal
+read deadline returned in about 0.22 seconds without ending the attempt.
+[Build, pinned versions, provenance and verification](evidence/solver-libraries/README.md).
+No real attempts or model calls ran; model API spending was $0. Stop for review
+before the next live comparison.
+Verification: **45 existing agent/contract/model-adapter tests passed** for the
+initial candidate ([evidence](evidence/prompt-recovery/pytest.xml)). The visible
+sentence now asks for the action's purpose or what it will test, without requiring
+an expected result; both existing prompt propagation/tracing cases passed after
+that refinement ([evidence](evidence/prompt-recovery/purpose-only.xml)). No live
+calls or API spending.
 
-- [ ] Annotate development trace failures using tool calls, inputs, results and
+- [x] Annotate the reviewed development trace failures using tool calls, inputs, results and
   subsequent actions, including blocked requests and stopping behavior.
-- [ ] Record a hypothesis before testing a change.
-- [ ] Compare the initial and changed configurations under controlled settings.
+- [x] Record Experiment 1's hypothesis before its live comparison.
+- [x] Implement the approved evidence-use/recovery system prompt.
+- [ ] Complete a repeated comparison under matched settings; one exploratory pair is reviewed.
 - [ ] Run a small development pilot and review readiness and projected resource use.
 - [ ] Freeze code, dependencies, images, dataset and settings for evaluation.
 - [ ] Run the ten reserved challenges with fresh trials, repeating 2–3 times as
@@ -235,8 +268,9 @@ Validation rules, timeout enforcement and stopping behavior are unchanged.
 All twelve existing contract tests passed; direct validation checks confirmed
 messages for 10-, 30- and 0.5-second caps and acceptance of each valid boundary.
 No solver commands, model requests or hosted uploads were made for this change.
-Persistence after contradictory results remains a separate, unapplied prompt
-hypothesis. No new attempt was run. The local `review.md` beside the raw records
+At that review, persistence after contradictory results remained an unapplied
+prompt hypothesis; the later approved change is recorded in
+[Experiment 1](docs/EXPERIMENTS.md). No new attempt was run then. The local `review.md` beside the raw records
 contains step references, headroom and the diagnosis. This is not a controlled
 comparison with the earlier, different challenge.
 
@@ -325,7 +359,8 @@ passes. Native AMD64 Linux is recommended when live debugging is needed.
 
 [Evidence and reproduction commands](evidence/solver-readiness/README.md).
 No new runtime module, Python dependency, model tool, recovery prompt or loop policy
-was added. Stop for review; recovery and real model comparisons remain separate.
+was added in that milestone. The subsequently approved prompt-only change is
+recorded in [Experiment 1](docs/EXPERIMENTS.md); real model comparisons remain pending.
 
 ### Remaining scope
 

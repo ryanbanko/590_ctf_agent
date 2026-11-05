@@ -97,6 +97,23 @@ tool availability does not guarantee arbitrary binary or specialized-package sup
 Docker documents the explicit workspace option in its
 [tmpfs mount options](https://docs.docker.com/engine/storage/tmpfs/).
 
+Six approved solver-only Python libraries are installed at build time: pwntools,
+SymPy, NumPy, PyCryptodome, requests and Pillow. A small requirements input names
+the direct versions; uv resolves the complete pinned list for Python 3.13.2 on
+AMD64 Linux. Docker installs that list, runs `pip check`, and records installed
+versions. This leaves host dependencies and the agent interfaces unchanged.
+Both requirements files enter source provenance. Regeneration and evidence are
+documented in [the library milestone](../evidence/solver-libraries/README.md).
+
+The live profile now permits 32 KiB combined command output, sufficient for the
+roughly 17 KiB outputs seen in development. Capture still keeps the first bounded
+bytes; larger output can still hide a late traceback or final line. The command
+description advises shorter internal connection/read deadlines and explains
+fresh-process versus persistent-file behavior. It does not enforce those internal
+deadlines or create persistent sessions. The 30-second command cap and terminal
+timeout behavior remain: the observed hang did not establish a need for longer
+computation, and continuing safely would require descendant-cleanup guarantees.
+
 The trusted response boundary copies the public tool definitions and inserts the
 active command timeout maximum/default before tracing and invoking the model.
 It shares no other private runner state and leaves the static definitions intact.
@@ -118,6 +135,11 @@ protect distinct boundaries and remain separate.
 The agent retains the system prompt, public task, assistant replies and matching
 tool observations. Calls execute sequentially; the next model request sees their
 results. Verified success prevents later actions, including remaining sibling calls.
+The current prompt asks the model to revise contradicted assumptions, diagnose
+recoverable errors, verify corrections, preserve diagnostic/completion output,
+and investigate a blocker before ending. [Experiment 1](EXPERIMENTS.md) records
+the hypothesis and pending comparison. This changes guidance, not loop behavior;
+its effect on live persistence and cost is unmeasured.
 Wrong submissions and ordinary command errors permit continuation. Text-only replies
 end without verified success. Hard limits, command timeout, scope denial, guard loss
 and protocol failures stop the attempt. `AttemptStopped` is a small exception that
@@ -178,10 +200,12 @@ The one approved benign compatibility request returned an empty summary; a later
 development run returned readable summaries in three of seven generations. Their
 presence is not guaranteed. Tool arguments/results and visible assistant text remain
 available for inspection. The user subsequently approved one system-prompt sentence
-asking for a brief visible purpose/expected-result explanation with each tool call
+asking for a brief visible action explanation with each tool call
 in the same response. The existing native generation output captures that text;
 no schema, tool, parser, extra turn or control-flow change was needed. This requests
-an action explanation, not private internal reasoning. Prompt wording can affect
+an action explanation, not private internal reasoning. The current wording asks
+for the purpose or what the action will test, without requiring an expected result.
+Prompt wording can affect
 model behavior and token use. The reviewed development run included visible
 explanations in all seven generations; performance equivalence is unverified.
 

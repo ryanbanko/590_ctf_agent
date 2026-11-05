@@ -1,0 +1,19 @@
+{
+  "run_id": "b5e671151105",
+  "challenge_id": "setup_failure_cleanup",
+  "mode": "synthetic-controls",
+  "termination_reason": "infrastructure_error",
+  "tool_calls": 0,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "9547432925ed0c3b9b358926da82c6f9",
+  "active_seconds": 0.044309,
+  "cleanup_seconds": 0.038591,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000162,
+  "total_seconds": 0.084373
+}

@@ -4,6 +4,7 @@ wall_seconds = 300.0
 command_seconds = 30.0
 max_model_turns = 20
 max_tool_calls = 40
+max_output_bytes = 32768
 
 [model]
 model = "gpt-6-luna"

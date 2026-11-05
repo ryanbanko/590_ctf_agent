@@ -1,0 +1,19 @@
+{
+  "run_id": "ccc2681e6375",
+  "challenge_id": "internet_ip",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "5a5a3eaf5f8cb59acc1814d027645cc2",
+  "active_seconds": 0.902755,
+  "cleanup_seconds": 0.126789,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000253,
+  "total_seconds": 1.029962
+}

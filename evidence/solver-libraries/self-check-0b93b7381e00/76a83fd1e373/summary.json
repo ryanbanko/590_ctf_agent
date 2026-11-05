@@ -1,0 +1,19 @@
+{
+  "run_id": "76a83fd1e373",
+  "challenge_id": "worker_loss",
+  "mode": "synthetic-controls",
+  "termination_reason": "infrastructure_error",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "758661a525e9ec2d0f3e96d9116c37eb",
+  "active_seconds": 0.772724,
+  "cleanup_seconds": 0.12398,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000206,
+  "total_seconds": 0.896998
+}

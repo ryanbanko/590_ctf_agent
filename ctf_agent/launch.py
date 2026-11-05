@@ -30,7 +30,7 @@ def collect_provenance(settings: dict, *, target_images: dict | None = None) -> 
     commit = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
     changed = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
     hashes = {}
-    for pattern in ["ctf_agent/*.py", "docker/*.py", "docker/*.Dockerfile", "tests/**/*.py",
+    for pattern in ["ctf_agent/*.py", "docker/*.py", "docker/*.Dockerfile", "docker/solver-requirements.*", "tests/**/*.py",
                     "configs/*.toml", "configs/*.json", "pyproject.toml", "uv.lock"]:
         for path in sorted(Path(".").glob(pattern)):
             hashes[str(path)] = hashlib.sha256(path.read_bytes()).hexdigest()
