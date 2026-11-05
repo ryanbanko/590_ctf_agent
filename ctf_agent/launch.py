@@ -5,7 +5,9 @@ import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
+import signal
 import subprocess
+import sys
 import time
 import uuid
 
@@ -162,3 +164,83 @@ def launch_challenge(experiment_path: Path, dataset_json: Path, manifest_path: P
                                    langfuse=client, respond=respond, model_usage=usage)
     finally:
         client.shutdown()
+
+
+def launch_batch(experiment_path: Path, dataset_json: Path, manifest_path: Path,
+                 challenge_ids: list[str], trials: int, output_root: Path) -> Path:
+    """Sequence the existing CLI in fresh processes; keep an index of its records."""
+    if type(trials) is not int or trials < 1:
+        raise ValueError("trials must be a positive integer")
+    if not challenge_ids or len(set(challenge_ids)) != len(challenge_ids):
+        raise ValueError("Provide distinct challenge IDs; use trials for repeats")
+    manifest = json.loads(manifest_path.read_text())
+    if set(challenge_ids) - set(manifest["development"] + manifest["scored"]):
+        raise ValueError("Choose challenge IDs from the manifest")
+    modes = {"scored" if cid in manifest["scored"] else "development" for cid in challenge_ids}
+    if len(modes) != 1:
+        raise ValueError("Keep development and scored challenges in separate batches")
+    load_experiment(experiment_path)
+    directory = output_root / ("batch-" + uuid.uuid4().hex[:12])
+    directory.mkdir(parents=True, exist_ok=False, mode=0o700)
+    snapshot = directory / "experiment.toml"
+    snapshot.write_bytes(experiment_path.read_bytes())
+    planned = len(challenge_ids) * trials
+    index = {"status": "running", "mode": modes.pop(), "challenges": challenge_ids,
+             "trials": trials, "planned_attempts": planned, "attempts": []}
+    index_path = directory / "batch.json"
+    started = time.monotonic()
+    print(f"Batch records: {directory}", flush=True)
+    print(f"Planned attempts: {planned}", flush=True)
+    try:
+        for trial in range(1, trials + 1):
+            for challenge_id in challenge_ids:
+                output = directory / f"attempt-{len(index['attempts']) + 1:03d}"
+                row = {"challenge_id": challenge_id, "trial": trial, "status": "started",
+                       "directory": output.name}
+                report, result = {}, {}
+                index["attempts"].append(row)
+                index_path.write_text(json.dumps(index, indent=2) + "\n")
+                command = [sys.executable, "-m", "ctf_agent", "run-challenge",
+                           "--experiment", str(snapshot.resolve()), "--dataset", str(dataset_json),
+                           "--manifest", str(manifest_path), "--challenge", challenge_id,
+                           "--output", str(output)]
+                try:
+                    with subprocess.Popen(command, start_new_session=True) as process:
+                        try:
+                            returncode = process.wait()
+                        except KeyboardInterrupt:
+                            process.send_signal(signal.SIGINT)
+                            process.wait()
+                            raise
+                finally:
+                    reports = list(output.glob("challenge-*/run.json"))
+                    if len(reports) == 1:
+                        report = json.loads(reports[0].read_text())
+                        result = report.get("result", {})
+                        row.update(record=str(reports[0].relative_to(directory)),
+                                   run_id=result.get("run_id"), trace_url=report.get("trace_url"),
+                                   outcome=result.get("termination_reason"),
+                                   verified_success=result.get("verified_success"))
+                if (returncode != 0 or len(reports) != 1 or not report.get("evidence_complete")
+                        or report.get("challenge_id") != challenge_id
+                        or not result.get("run_id") or not result.get("termination_reason")
+                        or result.get("cleanup_errors")
+                        or row["outcome"] in {"scope_violation", "guard_failure", "infrastructure_error",
+                                               "response_source_error", "model_usage_missing"}):
+                    raise RuntimeError("Batch stopped for review; inspect batch.json and the attempt records")
+                row["status"] = "completed"
+        index["status"] = "completed"
+    except KeyboardInterrupt:
+        index["status"] = "interrupted"
+        if index["attempts"]:
+            index["attempts"][-1]["status"] = "interrupted"
+        raise
+    except Exception as error:
+        index.update(status="stopped", error_type=type(error).__name__)
+        if index["attempts"]:
+            index["attempts"][-1]["status"] = "stopped"
+        raise
+    finally:
+        index["total_seconds"] = round(time.monotonic() - started, 6)
+        index_path.write_text(json.dumps(index, indent=2) + "\n")
+    return directory

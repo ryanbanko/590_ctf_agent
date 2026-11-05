@@ -282,3 +282,26 @@ the 30-second command cap. These small probes do not bound arbitrary workloads.
 No real challenge was solved or model API called during this milestone. Before
 another comparison, record this new image/configuration and use it consistently
 across both conditions. Prior results remain historical evidence.
+
+## Batch execution support
+
+`run-batch` now invokes the existing single-challenge launcher sequentially for
+explicit IDs and trial counts. A copied experiment file and small `batch.json`
+index keep each attempt discoverable through its existing run ID, verdict, trace
+link and original record. Metrics remain in the individual records. The wrapper
+does not change solver/model behavior and adds no batch-budget gate, automatic
+retry, parallel execution or resumption feature.
+
+The user prefers two different development challenges per category for breadth.
+Only one development forensics challenge exists, so this yields eleven IDs.
+Repeating a selected challenge is a separate choice through `--trials`; breadth
+and repetition measure different things. Selection and real pilot execution are
+still pending. The existing account/per-attempt limits and usage records remain;
+the user requested no additional batch-cost management.
+
+[Offline verification](../evidence/batch-wrapper/README.md): 17 batch cases and
+81 fast tests passed. Child outcomes were simulated to test orchestration and
+record handling without paid model calls. No new benchmark results are claimed.
+The record audit found the required IDs and evidence already available; demo work
+is deferred. Current next step: review the wrapper, choose the development IDs,
+then run and inspect the pilot before expanding evaluation.

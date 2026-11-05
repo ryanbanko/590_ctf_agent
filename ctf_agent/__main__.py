@@ -29,6 +29,13 @@ def main():
     run.add_argument("--manifest", type=Path, default=Path("configs/ctftiny.json"))
     run.add_argument("--challenge", required=True)
     run.add_argument("--output", type=Path, default=Path("runs/challenges"))
+    batch = commands.add_parser("run-batch", help="Run sequential LIVE attempts using the single-challenge launcher")
+    batch.add_argument("--experiment", type=Path, default=Path("configs/development.toml"))
+    batch.add_argument("--dataset", type=Path, default=Path("datasets/CTFTiny/ctftiny.json"))
+    batch.add_argument("--manifest", type=Path, default=Path("configs/ctftiny.json"))
+    batch.add_argument("--challenges", nargs="+", required=True)
+    batch.add_argument("--trials", type=int, default=1)
+    batch.add_argument("--output", type=Path, default=Path("runs/batches"))
     args = parser.parse_args()
     if args.command == "build-images":
         settings = load_settings(args.config)
@@ -52,6 +59,10 @@ def main():
         from tests.check_readiness import check_readiness
 
         check_readiness(args.config, args.dataset, args.manifest, args.output, args.challenge)
+    elif args.command == "run-batch":
+        from .launch import launch_batch
+
+        launch_batch(args.experiment, args.dataset, args.manifest, args.challenges, args.trials, args.output)
     else:
         from .launch import launch_challenge
 

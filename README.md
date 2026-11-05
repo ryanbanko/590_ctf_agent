@@ -137,6 +137,42 @@ The known exception is `msc-showdown`; its privileged Docker setup is rejected b
 the current controls. For `cry-describeme`, the listed Dockerfile stays with the
 trusted controller, and the run record identifies that omission.
 
+### Run a development batch
+
+`run-batch` repeats the existing launcher sequentially, with fresh processes,
+solver/target environments and attempt records. For example, this makes **live
+model requests** for two development challenges, one attempt each:
+
+```sh
+uv run --frozen --env-file .env python -m ctf_agent run-batch \
+  --challenges cry-ecxor msc-algebra \
+  --trials 1 --output runs/pilots/current-setup
+```
+
+Add more IDs after `--challenges`; `--trials 2` repeats every selected ID twice,
+including challenges solved on the first trial. Keep pilot and scored batches in
+separate output folders. The command rejects mixing development/scored IDs.
+
+The printed batch folder contains a copied `experiment.toml` and `batch.json`.
+The index lists each started attempt's challenge, trial, outcome, evaluator
+success, existing run ID, trace link and relative `run.json` path. `completed`
+means the scheduled attempts and records finished, not that every task was solved.
+Calls, tokens, time, cost and detailed traces remain in the existing attempt records.
+
+Ordinary unsuccessful attempts and command timeouts permit the next trial after
+cleanup. Launch failures, incomplete records, cleanup failures, scope/guard or
+infrastructure incidents, and response-source/missing-usage failures stop the
+batch for review. Ctrl-C forwards interruption to the current launcher and waits
+for its cleanup; the partial index remains. There is no automatic retry or resume.
+Do not edit code or rebuild images during a batch. The wrapper snapshots the
+experiment file and otherwise uses the existing per-attempt controls; there is
+no added batch-cost gate.
+
+Two different development challenges per category would give **11 IDs**: crypto,
+miscellaneous, pwn, reversing and web can each supply two, but forensics has only
+`for-1black0white`. Keep the other forensics challenge in the reserved scored set.
+No 11-challenge pilot has been selected or run automatically.
+
 ### Optional command settings
 
 Optional arguments: `--experiment` (default `configs/development.toml`),
@@ -176,8 +212,8 @@ separate 10-second/16-KiB defaults unless overridden by a specific check.
 The conservative reservation for twenty maximum-sized requests is about $0.678
 at the recorded gateway rates. The $0.10 cap still applies and can stop an attempt
 before all twenty requests; actual costs depend on usage. There is no campaign
-budget system. Review saved usage between attempts; the user's planning ceiling
-for assistant-started work is under $0.50. No paid call was made in this milestone.
+budget system. The existing per-attempt controls and provider limits apply;
+the batch wrapper adds no separate spending gate.
 
 ### Read results
 
@@ -212,6 +248,12 @@ If a solver/guard image is missing, rerun `build-images`. If contestant files ar
 missing, materialize their indexed directory. Unsupported Compose arrangements
 fail before model execution and need review. A model/CLI error is recorded in
 `run.json`; inspect that record before repeating paid calls.
+
+Existing identifiers are in `run.json`: `challenge_id`, `result.run_id`,
+`provenance.commit` and `provenance.working_tree_dirty`. Resolved settings are in
+`provenance.config` and `model_settings`. Tool activity, candidate submissions and
+evaluator responses are in the Langfuse trace/export; the final verdict is
+`result.verified_success`. No additional attempt-ID or logging system is needed.
 
 ## How the dataset and challenge selection work
 

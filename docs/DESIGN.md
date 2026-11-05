@@ -16,6 +16,17 @@ A separate scoring agent or CLI mode would duplicate behavior; separation belong
 in the challenge selection and experiment records. The ten reserved IDs remain
 held out from development solving.
 
+`run-batch` is one additional function in the existing launcher. It invokes
+`run-challenge` in a fresh process for each ID/trial, sequentially, and copies the
+experiment settings into the batch directory. Fresh processes avoid reusing
+Langfuse client state between attempts. A small `batch.json` indexes existing
+records and run IDs; it is not another trace backend or an aggregation framework.
+Ordinary failed attempts continue; incomplete records, cleanup/scope/infrastructure
+incidents and response-source/missing-usage failures stop the batch for review.
+On interruption it signals the child launcher and waits for its cleanup before
+recording the partial index. No parallelism, automatic retries, resumption or
+extra batch-budget subsystem is introduced.
+
 `challenge.py` owns trusted loading, public-data construction, file staging and
 target lifetime. `launch.py` owns host clients, orchestration, provenance and native
 trace export. `agent.py` keeps the conversation loop and Responses adapter together.

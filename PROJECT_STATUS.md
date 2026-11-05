@@ -11,7 +11,8 @@ prompt change is now implemented and documented in the
 have been reviewed: three verified successes, one voluntary unsuccessful ending,
 and one command timeout. The next approved setup change adds six solver libraries,
 32 KiB live output and network-deadline guidance. Repeated comparison remains
-pending; this milestone makes no live model calls.
+pending. A thin sequential batch command is now implemented; no live batch has
+been run during that milestone.
 
 ## Assignment checklist
 
@@ -77,6 +78,7 @@ calls or API spending.
   subsequent actions, including blocked requests and stopping behavior.
 - [x] Record Experiment 1's hypothesis before its live comparison.
 - [x] Implement the approved evidence-use/recovery system prompt.
+- [x] Add sequential batch launching with a small index of existing attempt records.
 - [ ] Complete a repeated comparison under matched settings; one exploratory pair is reviewed.
 - [ ] Run a small development pilot and review readiness and projected resource use.
 - [ ] Freeze code, dependencies, images, dataset and settings for evaluation.
@@ -97,6 +99,24 @@ calls or API spending.
   reproducible launch instructions; submit by November 11 at 11:59 p.m. Eastern.
 
 ## Current implementation
+
+`run-batch --challenges ID ... --trials N` now repeats the existing launcher in
+fresh processes, preserves every attempt's records, and writes a small batch
+index with existing run IDs and trace links. The experiment file is copied into
+the batch folder. It adds no parallelism, retries, resume system or batch-cost
+gate. The user requested two different development challenges per category;
+only one development forensics ID exists, allowing eleven total without using
+reserved challenges. Selection and live execution remain pending.
+Verification: **17 offline batch cases passed; 81 fast tests passed overall**.
+[Evidence](evidence/batch-wrapper/README.md). These checks simulated child results;
+no real challenge attempts or model calls were made. Stop for review before
+selecting/running the pilot.
+
+The record audit confirmed tool activity, submissions/verdicts, resolved
+configuration, commit, challenge ID and `result.run_id` are already captured.
+Existing source hashes and the dirty-working-tree flag identify uncommitted
+changes. See [README](README.md#read-results). Demo work is deferred at the user's
+request; the current focus is the batch wrapper and development pilot.
 
 One command selects a challenge and runs the existing agent:
 
