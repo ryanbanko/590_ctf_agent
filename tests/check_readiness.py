@@ -13,7 +13,7 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 from ctf_agent.agent import AttemptStopped
 from ctf_agent.attempt import run_attempt
 from ctf_agent.challenge import challenge_target, contestant_files, load_challenge, public_task, stage_files
-from ctf_agent.config import load_settings
+from ctf_agent.config import load_experiment
 from ctf_agent.docker import docker
 from ctf_agent.launch import collect_provenance
 from .fixtures.tracing import read_spans, save_spans
@@ -26,12 +26,12 @@ def run_python(run: dict, source: str) -> dict:
     return json.loads(returned["stdout"])
 
 
-def check_readiness(config_path: Path, dataset_json: Path, manifest_path: Path, output_root: Path,
+def check_readiness(experiment_path: Path, dataset_json: Path, manifest_path: Path, output_root: Path,
                     challenge_id: str = "pwn-baby-boi"):
     manifest = json.loads(manifest_path.read_text())
     challenge = load_challenge(dataset_json, challenge_id, manifest_path)
     files = contestant_files(challenge)
-    settings = load_settings(config_path)
+    settings, _ = load_experiment(experiment_path)
     directory = output_root / ("ctftiny-readiness-" + uuid.uuid4().hex[:12])
     directory.mkdir(parents=True, mode=0o700)
     report = {"mode": "ctftiny-readiness", "challenge_id": challenge_id, "passed": False,
@@ -57,7 +57,8 @@ def check_readiness(config_path: Path, dataset_json: Path, manifest_path: Path, 
                 with run_attempt(settings, target["network"], target["gateway"], target["endpoints"],
                                  challenge.flag, cycle_dir, langfuse=client, label=challenge_id,
                                  public_task=task, mode="ctftiny-readiness") as run:
-                    records = stage_files(files, run["solver"], settings["workspace_mb"] * 1024 * 1024, 5)
+                    records = stage_files(files, run["solver"], settings["workspace_mb"] * 1024 * 1024,
+                                          run["remaining_seconds"]())
                     cycle["files"] = records
                     observed = run_python(run,
                         "import hashlib,json,os,pathlib; root=pathlib.Path('/workspace'); "

@@ -9,6 +9,11 @@ The ten scored challenges are reserved; use the forty development IDs in
 [Design](docs/DESIGN.md) · [Section 2 experiments](docs/EXPERIMENTS.md) ·
 [References and attribution](docs/REFERENCES.md)
 
+The instructions below describe the current worker-based implementation. The
+[infrastructure simplification plan](docs/SIMPLIFICATION_PLAN.md) is under review,
+not implemented: writable disposable execution, removal of sessions and proposed
+solver-restart recovery have not replaced the current runtime.
+
 ## One-time setup
 
 **Each teammate completes this section once after cloning the repository.** If
@@ -22,7 +27,7 @@ commands from its **repository root**: the folder containing `README.md`,
 paths such as `configs/` and `datasets/` are relative to that folder.
 
 Use Python **3.13.2**, uv, Docker Desktop/Engine with Linux containers and
-Compose v2, and Node.js/npm for native Langfuse trace export. Start Docker before
+Compose v2. Trace export uses the installed Langfuse Python SDK. Start Docker before
 running the build command:
 
 ```sh
@@ -113,7 +118,8 @@ commands below when you choose another challenge, for example `cry-ecxor`. You d
 not need to look up or download its directory separately after full dataset setup.
 
 **3. Check the challenge environment.** This starts fresh containers, checks files,
-connections, isolation and cleanup, then exits. It makes no model requests and
+connections, isolation and cleanup using the same experiment settings as the run,
+then exits. It makes no model requests and
 does not try to solve the challenge. You do not need to repeat it before every
 attempt if that environment has already passed and its setup is unchanged.
 
@@ -171,9 +177,10 @@ Calls, tokens, time, cost and detailed traces remain in the existing attempt rec
 
 Ordinary unsuccessful attempts and command timeouts permit the next trial after
 cleanup. Launch failures, incomplete records, cleanup failures, scope/guard or
-infrastructure incidents, and response-source/missing-usage failures stop the
-batch for review. Ctrl-C forwards interruption to the current launcher and waits
-for its cleanup; the partial index remains. There is no automatic retry or resume.
+infrastructure incidents, and response-source failures stop the batch for review.
+An otherwise valid model reply without usage metadata can continue; its token
+and estimated-cost totals remain unknown. Ctrl-C forwards interruption to the
+current launcher and waits for its cleanup; the partial index remains. There is no automatic retry or resume.
 Do not edit code or rebuild images during a batch. The wrapper snapshots the
 experiment file and otherwise uses the existing per-attempt controls; there is
 no added batch-cost gate.
@@ -181,7 +188,7 @@ no added batch-cost gate.
 Two different development challenges per category would give **11 IDs**: crypto,
 miscellaneous, pwn, reversing and web can each supply two, but forensics has only
 `for-1black0white`. Keep the other forensics challenge in the reserved scored set.
-The selected eleven-ID pilot passed preparation; its latest batch stopped after
+The selected eleven-ID pilot passed preparation; an earlier batch stopped after
 three attempts when pip tried to reach PyPI under the previous network policy.
 Package access is now enabled; review the new setup before starting another pilot.
 See [project status](PROJECT_STATUS.md) for historical outcomes.
@@ -190,9 +197,10 @@ See [project status](PROJECT_STATUS.md) for historical outcomes.
 
 Optional arguments: `--experiment` (default `configs/development.toml`),
 `--dataset`, `--manifest`, and `--output` (default `runs/challenges`).
-`prepare-challenge` accepts `--dataset`, `--manifest`, and `--output`; it saves
-under `runs/` by default. The top-level `--config` applies to setup/check commands;
-the live command uses `--experiment`.
+`prepare-challenge` also accepts `--experiment` (the same development default),
+`--dataset`, `--manifest`, and `--output`; it saves under `runs/` by default.
+Use the same `--experiment FILE` for preparation and the subsequent run. The
+top-level `--config` applies to image builds and synthetic checks.
 
 ### Limits and estimated cost
 
@@ -208,9 +216,17 @@ the live command uses `--experiment`.
 | Tool output / file write | 64 KiB combined stdout/stderr; 64 KiB UTF-8 write. |
 | Saved command output | Up to 1 MiB per command; further truncation is explicit. |
 
-Edit `[attempt]` and `[model]` in `configs/development.toml`. Unspecified controls
-inherit `ctf_agent/config.py`; synthetic/preparation checks retain their smaller
-settings unless explicitly overridden. Both model-turn/request limits are 40.
+Edit `[attempt]` and `[model]` in [configs/development.toml](configs/development.toml),
+the single complete file for normal run settings. `config.py` loads and validates
+it; there are no hidden value overrides. Copy the whole TOML file to compare a
+different configuration and pass it with `--experiment FILE`. All fields are
+required. `max_model_turns` supplies both the runner and model-adapter call limit;
+there is no separate `max_requests` setting. Preparation uses the same file.
+Local synthetic controls also use it; the paid `model-check` explicitly applies
+smaller test bounds in `tests/check_model.py`. The old `configs/initial.toml` is
+retired. Both model-turn/request limits are 40. The current API setting selects at most one
+tool per model response, so the live agent normally has at most 40 tool actions;
+the separate tool-call guard remains 80.
 There is no local spending cap or reservation system; token usage and estimated
 cost are still recorded. Provider/account limits remain outside this application.
 Larger allowances permit more work but do not force the agent to use them.
@@ -221,6 +237,9 @@ cleanup is terminal. The whole-attempt deadline still kills the complete solver.
 Use shorter internal connection/read deadlines when useful. The command schema
 advertises the configured ordinary-command maximum/default.
 
+Contestant-file staging checks actual free workspace after Python setup and uses
+the remaining attempt deadline, including archive preparation and transfer.
+
 ### Interactive commands and output
 
 The agent still uses three tools. Ordinary `run_command` calls take `command` and
@@ -229,7 +248,10 @@ the command. A running result supplies `session_id`. Subsequent calls use that I
 with optional `input` (include `\n` to submit a line), `wait_seconds` (default 0.5,
 maximum 5), or `close: true`. The tool returns `running`, output and any exit code.
 Each call counts toward the tool limit. Other commands can run while a session is
-alive. Input, output, closing and timeouts appear in the existing trace.
+alive. Finished supervisors are reaped automatically; their final result stays
+available until retrieved. `input_bytes_sent` reports accepted UTF-8 bytes; an
+`input_error` explains any unsent remainder. Avoid resending the whole input after
+partial delivery. Input, output, closing and timeouts appear in the existing trace.
 
 Outputs up to the configured limit are returned whole. Larger outputs return a
 beginning/end excerpt, `truncated: true`, and `output_file` inside the solver.
@@ -249,7 +271,7 @@ Each invocation prints a fresh record directory:
 | `run.json` | Settings, dataset/source/image provenance, split label, result, trace URL, export audit, total time. |
 | `<run-id>/packages.json`, `<run-id>/outputs/` | Latest observed installed Python versions and bounded command/session output copied before cleanup. |
 | `<run-id>/summary.json` | Stop reason, verified success, counts, available tokens/cost, timing, cleanup errors. |
-| `cli-observations.json` | Native hosted trace export containing model/tool inputs and outputs. |
+| `observations.json` | Complete native hosted trace export containing model/tool inputs and outputs; older records use `cli-observations.json`. |
 | `public-task.json`, `target/` | Public task and trusted target runtime configuration/lifecycle record. |
 
 `verified_success` means trusted verification accepted a candidate.
@@ -257,8 +279,15 @@ Each invocation prints a fresh record directory:
 different outcomes. Historical records may contain `cost_reserved_usd`; new runs
 retain usage/cost estimates without reservations. Cached/reasoning tokens are
 subsets of input/output totals. Unknown usage
-is not reported as free. Records under `runs/` are Git-ignored; preserve the runs
+is not reported as free: if any response lacks usage, `usage_complete` is false
+and aggregate `tokens`/`cost_usd` are null. Native generation observations still
+retain usage from responses that supplied it. Records under `runs/` are Git-ignored; preserve the runs
 you use in your report.
+
+The launcher uses the existing Langfuse Python client to retrieve every cursor
+page, then checks observation counts, completion, parentage, secrets and cleanup.
+No Node/npm installation is needed. Installed-package inventories are scanned at
+startup and after tool calls; `packages.json` is rewritten only when they change.
 
 The `.venv/`, `.env`, Docker images, `datasets/` and `runs/` are local setup or
 outputs, not files supplied by a GitHub clone. Historical evidence under `evidence/`
@@ -402,13 +431,19 @@ uv run --frozen python -m pytest -q
 uv run --frozen python -m ctf_agent self-check
 ```
 
-The fast suite has 63 cases. `self-check` runs 19 synthetic Docker cases and saves
-JUnit/provenance/cleanup records. The current milestone instead ran focused real
-preparation for the ten reserved challenges plus `pwn-baby-boi`: two fresh cycles
-each, file hashes/ownership, permitted TCP connect-and-close, private boundaries,
-independent denied traffic and solver stop, reset and cleanup. No target response
-contents were read. Run Docker checks sequentially because cleanup uses a shared
-project label. Run each preparation as its own CLI process.
+The latest completed verification passed **95 fast tests and 31 synthetic Docker
+cases**, with cleanup verified. Native SDK readback of an existing ten-observation
+synthetic trace matched historical and fresh CLI exports; no new model calls ran.
+[Verification evidence](evidence/config-sdk-cleanup/README.md) records the tested
+source hashes and results. These results cover the current implementation, not
+the proposed simplification.
+
+The earlier Section 1 handoff separately prepared the ten reserved challenges plus
+`pwn-baby-boi`: two fresh cycles each, file hashes/ownership, permitted TCP
+connect-and-close, private boundaries, denied traffic and solver stopping, reset
+and cleanup. Those checks read no target response contents. Run Docker checks
+sequentially because cleanup uses a shared project label. Run each preparation as
+its own CLI process.
 
 Other explicit checks: `langfuse-check` uploads a scripted synthetic trace with no
 model calls; `model-check` makes paid synthetic model calls and requires a budget.

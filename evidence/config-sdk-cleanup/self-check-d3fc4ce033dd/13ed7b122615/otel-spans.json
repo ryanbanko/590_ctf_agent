@@ -1,0 +1,230 @@
+[
+{
+    "name": "guard_diagnostic",
+    "context": {
+        "trace_id": "0x106b4bacf8ab1ec2ee5b1c28635de423",
+        "span_id": "0xcc8002cbccf2e59d",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x15c2d41d8f343e39",
+    "start_time": "2026-11-05T15:18:13.521802Z",
+    "end_time": "2026-11-05T15:18:13.521802Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.message": "\"tcpdump: verbose output suppressed, use -v[v]... for full protocol decode\""
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "guard_ready",
+    "context": {
+        "trace_id": "0x106b4bacf8ab1ec2ee5b1c28635de423",
+        "span_id": "0x4cbb044de1e661a3",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x15c2d41d8f343e39",
+    "start_time": "2026-11-05T15:18:13.523014Z",
+    "end_time": "2026-11-05T15:18:13.523014Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "sandbox_ready",
+    "context": {
+        "trace_id": "0x106b4bacf8ab1ec2ee5b1c28635de423",
+        "span_id": "0xa3d972692550fa88",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x15c2d41d8f343e39",
+    "start_time": "2026-11-05T15:18:16.201429Z",
+    "end_time": "2026-11-05T15:18:16.201429Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.solver": "\"ctf590-13ed7b122615-solver\"",
+        "langfuse.observation.metadata.guard": "\"ctf590-13ed7b122615-guard\"",
+        "langfuse.observation.metadata.endpoints": "[{\"address\":\"172.19.0.1\",\"protocol\":\"tcp\",\"port\":8000}]"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "run_command",
+    "context": {
+        "trace_id": "0x106b4bacf8ab1ec2ee5b1c28635de423",
+        "span_id": "0x0990070bf8531bf4",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x15c2d41d8f343e39",
+    "start_time": "2026-11-05T15:18:16.203260Z",
+    "end_time": "2026-11-05T15:18:17.043771Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.input": "{\"command\": \"echo first\"}",
+        "langfuse.observation.metadata.step": "1",
+        "langfuse.observation.type": "tool",
+        "langfuse.observation.output": "{\"stdout\": \"first\\n\", \"stderr\": \"\", \"exit_code\": 0, \"timed_out\": false, \"closed\": false, \"running\": false, \"cleanup_confirmed\": true, \"truncated\": false, \"output_bytes\": 6, \"total_output_bytes\": 6, \"output_file_truncated\": false, \"input_bytes_sent\": 0, \"output_file\": \"/workspace/.ctf-output/2e6f886c839b43f2bd56a84a8ace25a1.log\", \"duration_seconds\": 0.251717, \"recorded_output\": \"outputs/2e6f886c839b43f2bd56a84a8ace25a1.log\"}"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "attempt_stopping",
+    "context": {
+        "trace_id": "0x106b4bacf8ab1ec2ee5b1c28635de423",
+        "span_id": "0x7ce4635fefa1c8c1",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x15c2d41d8f343e39",
+    "start_time": "2026-11-05T15:18:17.043889Z",
+    "end_time": "2026-11-05T15:18:17.043889Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.reason": "\"tool_limit\""
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "sandbox_cleanup",
+    "context": {
+        "trace_id": "0x106b4bacf8ab1ec2ee5b1c28635de423",
+        "span_id": "0xcc28235807f2800f",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x15c2d41d8f343e39",
+    "start_time": "2026-11-05T15:18:17.456861Z",
+    "end_time": "2026-11-05T15:18:17.456861Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.errors": "[]"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "attempt",
+    "context": {
+        "trace_id": "0x106b4bacf8ab1ec2ee5b1c28635de423",
+        "span_id": "0x15c2d41d8f343e39",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-11-05T15:18:12.950088Z",
+    "end_time": "2026-11-05T15:18:17.458058Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.internal.is_app_root": true,
+        "langfuse.observation.input": "{\"task\": \"Synthetic controls check\"}",
+        "langfuse.observation.metadata.run_id": "\"13ed7b122615\"",
+        "langfuse.observation.metadata.challenge_id": "\"tool_limit\"",
+        "langfuse.observation.metadata.config": "{\"solver_image\":\"ctf590-solver:m1\",\"guard_image\":\"ctf590-guard:m1\",\"target_image\":\"ctf590-fixture:m1\",\"wall_seconds\":600.0,\"command_seconds\":120.0,\"max_model_turns\":40,\"max_tool_calls\":1,\"max_output_bytes\":65536,\"memory_mb\":1024,\"workspace_mb\":512,\"max_command_bytes\":16384,\"max_write_bytes\":65536,\"pids\":64,\"cpus\":1.0}",
+        "langfuse.observation.metadata.mode": "\"synthetic-controls\"",
+        "langfuse.observation.metadata.image_ids": "{\"solver\":\"sha256:c2c272ccdb245ec825d8050f41acbc2339b9c8611f4f1bfa6b0b667f9b34b91e\",\"guard\":\"sha256:e7221cea92af42bf9457dc23cd69345af97d1c2aec0f6c66e88aac3c23018d27\"}",
+        "langfuse.observation.type": "span",
+        "langfuse.observation.level": "DEFAULT",
+        "langfuse.observation.output": "{\"run_id\": \"13ed7b122615\", \"challenge_id\": \"tool_limit\", \"mode\": \"synthetic-controls\", \"termination_reason\": \"tool_limit\", \"tool_calls\": 1, \"model_calls\": 0, \"agent_mode\": null, \"scripted_turns\": 0, \"tokens\": null, \"cost_usd\": 0.0, \"cleanup_errors\": [], \"trace_id\": \"106b4bacf8ab1ec2ee5b1c28635de423\", \"active_seconds\": 4.136457, \"cleanup_seconds\": 0.371478, \"verified_success\": false}"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+}
+]

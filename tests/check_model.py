@@ -13,9 +13,9 @@ from langfuse.openai import OpenAI
 
 from ctf_agent.agent import run_agent
 from ctf_agent.attempt import run_attempt
-from ctf_agent.config import load_settings
+from ctf_agent.config import load_experiment
 from ctf_agent.docker import docker
-from ctf_agent.agent import MODEL_SETTINGS, make_responder, reject_gateway_errors
+from ctf_agent.agent import make_responder, reject_gateway_errors
 from ctf_agent.launch import collect_provenance, read_model_trace
 from .fixtures.target import synthetic_target
 
@@ -25,6 +25,12 @@ def check_model(config_path: Path, output_root: Path):
     missing = [name for name in names if not os.getenv(name)]
     if missing:
         raise ValueError("Set host environment variables: " + ", ".join(missing))
+    settings, model = load_experiment(config_path)
+    # Deliberately small synthetic verification; model/gateway/prices come from
+    # the selected run configuration, not a second set of application defaults.
+    settings |= {"wall_seconds": 60.0, "command_seconds": 10.0, "max_model_turns": 4}
+    model |= {"max_requests": settings["max_model_turns"], "max_output_tokens": 1024,
+              "max_input_bytes": 32768, "request_seconds": 20.0}
     directory = output_root / ("model-check-" + uuid.uuid4().hex[:12])
     directory.mkdir(parents=True, mode=0o700)
     # The SDK includes its public project identifier in instrumentation-scope
@@ -33,20 +39,19 @@ def check_model(config_path: Path, output_root: Path):
     logging.getLogger("langfuse").setLevel(logging.ERROR)
     client = Langfuse(timeout=10)
     report = {"mode": "live-synthetic-check", "passed": False, "phase": "setup",
-              "model_settings": MODEL_SETTINGS, "account_daily_limit_usd": 1.0,
+              "model_settings": model, "account_daily_limit_usd": 1.0,
               "account_limit_source": "user-confirmed", "model_calls": 0}
     started = time.monotonic()
     run = None
     try:
-        settings = load_settings(config_path)
         report["provenance"] = collect_provenance(settings)
         if not client.auth_check():
             raise RuntimeError("Langfuse authentication failed")
         # No provider requests occur until the guarded solver is running.
-        with OpenAI(api_key=os.environ["LITELLM_TOKEN"], base_url=MODEL_SETTINGS["base_url"],
-                    max_retries=0, timeout=MODEL_SETTINGS["request_seconds"],
+        with OpenAI(api_key=os.environ["LITELLM_TOKEN"], base_url=model["base_url"],
+                    max_retries=0, timeout=model["request_seconds"],
                     http_client=httpx2.Client(event_hooks={"response": [reject_gateway_errors]})) as model_client:
-            respond, usage = make_responder(model_client, langfuse_public_key=os.environ["LANGFUSE_PUBLIC_KEY"])
+            respond, usage = make_responder(model_client, model, langfuse_public_key=os.environ["LANGFUSE_PUBLIC_KEY"])
             with synthetic_target(settings) as target:
                 task = (f'Retrieve the synthetic flag from http://{target["address"]}:8000/ and submit it. '
                         'Use Python urllib.request in the isolated solver to fetch the JSON response. '
@@ -61,7 +66,7 @@ def check_model(config_path: Path, output_root: Path):
         result = run["result"]
         report.update(model_calls=result["model_calls"], run_id=result["run_id"], trace_id=result["trace_id"],
                       phase="hosted-readback")
-        rows = read_model_trace(result["trace_id"], result["model_calls"], result["tool_calls"], directory)
+        rows = read_model_trace(client, result["trace_id"], result["model_calls"], result["tool_calls"], directory)
         roots = [row for row in rows if row["name"] == "attempt"]
         generations = [row for row in rows if row["type"] == "GENERATION"]
         tools = [row for row in rows if row["type"] == "TOOL"]

@@ -1,0 +1,19 @@
+{
+  "run_id": "a43e11ca8955",
+  "challenge_id": "zero_wait_polls_preserve_final_output",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 2,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "aa3076711cd6900138759dddde8dc32d",
+  "active_seconds": 4.638974,
+  "cleanup_seconds": 0.396513,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000794,
+  "total_seconds": 5.036497
+}

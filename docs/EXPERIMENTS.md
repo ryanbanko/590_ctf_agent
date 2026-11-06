@@ -304,8 +304,10 @@ the user requested no additional batch-cost management.
 81 fast tests passed. Child outcomes were simulated to test orchestration and
 record handling without paid model calls. No new benchmark results are claimed.
 The record audit found the required IDs and evidence already available; demo work
-is deferred. Current next step: review the wrapper, choose the development IDs,
-then run and inspect the pilot before expanding evaluation.
+was deferred. At that milestone the next step was to review the wrapper, choose
+development IDs, then inspect a pilot before expanding evaluation. The later
+package-policy and usability sections record subsequent work; PROJECT_STATUS
+tracks the current next step.
 
 ## Temporary runtime package-index default
 
@@ -376,3 +378,77 @@ cleanup failures remain in the evidence; the corrected behavior passed. The
 benign package installation/import command took approximately 1.66 seconds in
 the main run. No model calls or challenge-solving attempts ran, so no solve-rate
 or model-behavior improvement is claimed. Stop for review before a live pilot.
+
+
+## Reliability follow-up — worker lifecycle, usage and preparation
+
+Approved November 4, 2026 after a static review of Experiment 3's implementation.
+The immediate scope is worker cleanup, terminal I/O, missing usage metadata,
+consistent preparation settings and documentation. SDK export replacement,
+context management, broader default consolidation and GDB were deferred at that
+milestone; the following cleanup completes configuration and export work.
+
+Hypothesis before another live trial: guaranteed supervisor cleanup, final-output
+draining, explicit partial-input counts and automatic reaping prevent avoidable
+session failures. Missing usage should leave totals unknown rather than discard
+a valid model reply. Preparation should test the selected experiment's actual
+attempt settings, free workspace and remaining staging deadline. These changes
+preserve the model, numeric live profile, three tools and existing isolation.
+
+Verification uses synthetic processes, offline model transports and zero-model
+preparation only; it does not measure solve-rate improvement. Historical evidence
+remains unchanged. Results are recorded in
+[reliability evidence](../evidence/agent-reliability/README.md): **91 fast tests,
+31 Docker cases in one complete run and two zero-model preparation cycles passed**.
+Preparation settings match the selected live experiment and cleanup passed. Stop for review
+before a new live pilot or scored evaluation.
+
+
+## Maintenance cleanup — configuration, trace export and package snapshots
+
+Approved November 5, 2026. Normal model/run values now live in one complete
+`configs/development.toml`, with one model-call setting. The loader validates
+without merging hidden defaults; the previous resolved live settings are unchanged.
+The installed Langfuse SDK replaces the app's CLI subprocess and retrieves all
+cursor pages while preserving completeness/privacy audits. Package inventories
+are still scanned; identical inventories no longer rewrite `packages.json`.
+
+This reduces maintenance and redundant writes; it is not a performance hypothesis
+or a benchmark comparison. Checks and hosted readback use substitutes and an
+existing synthetic trace, with no new model requests. See
+[evidence](../evidence/config-sdk-cleanup/README.md): 95 fast tests, 31 synthetic
+Docker cases with cleanup verified, and matching readback of the existing ten-row
+synthetic trace passed. Context management remains
+a possible later hypothesis. GDB and output-copy optimization remain deferred.
+
+## Proposed infrastructure simplification — not implemented
+
+The November 5 source review led to a
+[consolidated implementation proposal](SIMPLIFICATION_PLAN.md). It retains our
+agent, three tools, prompt strategy, model integration, Langfuse and batch wrapper.
+It proposes a writable disposable solver, standard Docker copy/exec, one-shot
+file writing, bounded head/tail output and narrower target configuration changes.
+Image selection is an independent build/evaluation decision.
+
+Hypotheses to record before implementation or live comparison:
+
+- Removing the restrictive filesystem and its staging/startup workarounds can
+  preserve required boundaries with fewer runtime mechanisms.
+- Restarting the same writable solver on a command timeout can eliminate command
+  supervisors while allowing the agent to continue with its files/installations.
+  Running processes and connections are lost; the attempt ID, limits and target
+  state do not reset. Deadline/scope/guard failures remain terminal.
+- Preserving supplied target behavior, with justified socket exceptions, can
+  reduce compatibility problems introduced by blanket overrides.
+
+These hypotheses are not verified behavior or measured performance improvements.
+The image has not been built and restart recovery has not been prototyped. Existing
+95/31 passing checks apply to the current worker-based implementation. Source and
+read-only Compose configuration inspection found 17 actual socket mounts among
+27 supplied definitions; previous successful runs show socket omission worked
+for `cry-describeme` and `web-poem-collection`, not that every mount is unnecessary.
+
+First verify the replacement with synthetic/offline checks and zero-solving
+preparation. Keep unrelated message handling, stopping-policy, context and GDB
+changes separate. Any later live pilot or comparison needs its own authorization;
+preserve the old configuration, failed attempts and historical evidence.

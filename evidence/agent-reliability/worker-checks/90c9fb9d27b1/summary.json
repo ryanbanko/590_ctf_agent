@@ -1,0 +1,19 @@
+{
+  "run_id": "90c9fb9d27b1",
+  "challenge_id": "command_timeout_detached_child",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 2,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "43a0329cbf89d356cbe0cebb7644180a",
+  "active_seconds": 9.584402,
+  "cleanup_seconds": 0.392173,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000875,
+  "total_seconds": 9.977739
+}

@@ -1,0 +1,19 @@
+{
+  "run_id": "814efa661553",
+  "challenge_id": "fresh_python_environment",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "fc0f0d8db87fc037138e34639a066661",
+  "active_seconds": 4.147399,
+  "cleanup_seconds": 0.413567,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000484,
+  "total_seconds": 4.561678
+}

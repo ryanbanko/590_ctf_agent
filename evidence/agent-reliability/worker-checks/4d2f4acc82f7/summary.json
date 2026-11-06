@@ -1,0 +1,19 @@
+{
+  "run_id": "4d2f4acc82f7",
+  "challenge_id": "finished_session_is_reaped_without_polling",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 2,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "38f90b088c7ce80f0fca31226e74787f",
+  "active_seconds": 4.658745,
+  "cleanup_seconds": 0.387979,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000559,
+  "total_seconds": 5.047503
+}

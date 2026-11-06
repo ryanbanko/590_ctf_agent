@@ -2,8 +2,8 @@
 
 from copy import deepcopy
 import json
-import math
 
+from .config import validate_model_settings
 from .tools import TOOL_DEFINITIONS
 
 
@@ -106,21 +106,6 @@ def run_agent(public_task: str, respond, call_tool) -> str:
         return str(stopped)
 
 
-# Approved synthetic-check settings; these are not a scored configuration.
-MODEL_SETTINGS = {
-    "model": "gpt-6-luna",
-    "base_url": "https://litellm.oit.duke.edu/v1",
-    "reasoning_effort": "low",
-    "max_requests": 4,
-    "max_output_tokens": 1024,
-    "max_input_bytes": 32768,
-    "request_seconds": 20.0,
-    "input_usd_per_million": 0.10,
-    "output_usd_per_million": 0.50,
-    "cached_input_usd_per_million": 0.01,
-}
-
-
 def reject_gateway_errors(response):
     """Retain HTTP status without sending a raw provider error body to tracing."""
     if response.is_error:
@@ -141,33 +126,12 @@ def responses_input(messages: list[dict]) -> list[dict]:
     return items
 
 
-def validate_model_settings(settings: dict):
-    if settings.keys() != MODEL_SETTINGS.keys():
-        raise ValueError("Model settings must contain exactly the documented keys")
-    for name in ("model", "base_url", "reasoning_effort"):
-        if not isinstance(settings[name], str) or not settings[name].strip():
-            raise ValueError(f"{name} must be nonempty text")
-    if not settings["base_url"].startswith("https://"):
-        raise ValueError("Model credentials require an HTTPS gateway")
-    for name in ("max_requests", "max_output_tokens", "max_input_bytes"):
-        if type(settings[name]) is not int or settings[name] < (1 if name == "max_output_tokens" else 0):
-            raise ValueError(f"{name} must be a bounded integer")
-    for name in ("request_seconds", "input_usd_per_million",
-                 "output_usd_per_million", "cached_input_usd_per_million"):
-        value = settings[name]
-        zero_allowed = name == "cached_input_usd_per_million"
-        if (type(value) not in (int, float) or not math.isfinite(value)
-                or value < 0 or (value == 0 and not zero_allowed)):
-            raise ValueError(f"{name} must be finite and within its allowed range")
-    if settings["cached_input_usd_per_million"] > settings["input_usd_per_million"]:
-        raise ValueError("Cached input cannot exceed the configured input price")
-
-
-def make_responder(client, settings: dict = MODEL_SETTINGS, *, langfuse_public_key: str | None = None):
+def make_responder(client, settings: dict, *, langfuse_public_key: str | None = None):
     """Return a bounded source and its non-secret usage record, fresh per attempt.
 
     The supplied client must use Langfuse's OpenAI integration and max_retries=0.
-    Time/request/token limits bound calls; missing usage is never reported as free.
+    Time/request/token limits bound calls. Missing usage leaves totals unknown
+    without rejecting an otherwise valid response.
     """
     settings = dict(settings)
     validate_model_settings(settings)
@@ -193,21 +157,22 @@ def make_responder(client, settings: dict = MODEL_SETTINGS, *, langfuse_public_k
                 langfuse_public_key=langfuse_public_key,
                 timeout=min(timeout_seconds, settings["request_seconds"]))
         except Exception:
-            usage.update(cost_usd=None, usage_complete=False)
+            usage.update(cost_usd=None, tokens=None, usage_complete=False)
             raise
-        if response.usage is None:
-            usage.update(cost_usd=None, usage_complete=False)
-            raise AttemptStopped("model_usage_missing")
         returned = response.usage
-        cached = getattr(returned.input_tokens_details, "cached_tokens", 0) or 0
-        reasoning = getattr(returned.output_tokens_details, "reasoning_tokens", 0) or 0
-        for field, count in {"input": returned.input_tokens, "output": returned.output_tokens,
-                             "cached_input": cached, "reasoning": reasoning}.items():
-            usage["tokens"][field] += count
-        if usage["cost_usd"] is not None:
-            usage["cost_usd"] += ((returned.input_tokens - cached) * settings["input_usd_per_million"]
-                + cached * settings["cached_input_usd_per_million"]
-                + returned.output_tokens * settings["output_usd_per_million"]) / 1_000_000
+        if returned is None:
+            usage.update(cost_usd=None, tokens=None, usage_complete=False)
+        else:
+            cached = getattr(returned.input_tokens_details, "cached_tokens", 0) or 0
+            reasoning = getattr(returned.output_tokens_details, "reasoning_tokens", 0) or 0
+            if usage["tokens"] is not None:
+                for field, count in {"input": returned.input_tokens, "output": returned.output_tokens,
+                                     "cached_input": cached, "reasoning": reasoning}.items():
+                    usage["tokens"][field] += count
+            if usage["cost_usd"] is not None:
+                usage["cost_usd"] += ((returned.input_tokens - cached) * settings["input_usd_per_million"]
+                    + cached * settings["cached_input_usd_per_million"]
+                    + returned.output_tokens * settings["output_usd_per_million"]) / 1_000_000
         if response.status != "completed":
             raise AttemptStopped("model_response_incomplete")
         items = [item.model_dump(mode="json", exclude_none=True) for item in response.output]

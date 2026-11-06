@@ -9,6 +9,7 @@ from pathlib import Path, PurePosixPath
 import shlex
 import subprocess
 import tarfile
+import time
 import uuid
 
 from .docker import bounded_exec, docker
@@ -88,9 +89,17 @@ def stage_files(files: dict[str, Path], solver: str, workspace_bytes: int, timeo
     Run once before model/tool execution. No host directory is mounted, and no
     additional model tool is exposed. Return names/sizes/hashes, never contents.
     """
+    if not files:
+        return []
+    deadline = time.monotonic() + timeout
     total = sum(path.stat().st_size for path in files.values())
     if total > workspace_bytes:
         raise ValueError("Contestant files exceed the solver workspace limit")
+    available = int(docker("exec", "--user", "1000:1000", solver, "/usr/local/bin/python", "-I", "-c",
+                          "import os; s=os.statvfs('/workspace'); print(s.f_bavail*s.f_frsize)",
+                          timeout=deadline - time.monotonic()))
+    if total > available:
+        raise ValueError("Contestant files exceed available solver workspace after environment setup")
     records = []
     directories = set()
     with io.BytesIO() as data:
@@ -114,8 +123,11 @@ def stage_files(files: dict[str, Path], solver: str, workspace_bytes: int, timeo
             # Python's standard data filter also rejects archive traversal/links.
             extract = ("import sys,tarfile; "
                        "tarfile.open(fileobj=sys.stdin.buffer,mode='r|').extractall(path='.',filter='data')")
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError("Contestant-file preparation exceeded the remaining attempt time")
             bounded_exec(["exec", "--interactive", "--user", "1000:1000", "--workdir", "/workspace",
-                          solver, "python", "-I", "-c", extract], data.getvalue(), timeout)
+                          solver, "python", "-I", "-c", extract], data.getvalue(), remaining)
     return records
 
 

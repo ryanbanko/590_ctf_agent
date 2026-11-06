@@ -10,13 +10,13 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 import pytest
 
 from ctf_agent.attempt import run_attempt
-from ctf_agent.config import DEFAULTS, load_settings
+from ctf_agent.config import CONFIG_PATH, load_experiment, load_settings
 from .fixtures.target import synthetic_target
 from .fixtures.tracing import save_spans
 
 
 def pytest_addoption(parser):
-    parser.addoption("--ctf-config", default="configs/initial.toml")
+    parser.addoption("--ctf-config", default=str(CONFIG_PATH))
     parser.addoption("--ctf-output", default="runs/pytest-controls")
 
 
@@ -36,12 +36,17 @@ def settings(pytestconfig):
 
 
 @pytest.fixture(scope="session")
+def model_settings(pytestconfig):
+    return load_experiment(Path(pytestconfig.getoption("--ctf-config")))[1]
+
+
+@pytest.fixture(scope="session")
 def output_root(pytestconfig):
     return Path(pytestconfig.getoption("--ctf-output"))
 
 
 @pytest.fixture
-def local_attempt(request, tmp_path, monkeypatch, telemetry):
+def local_attempt(request, tmp_path, monkeypatch, telemetry, settings):
     # Substitute only Docker operations; keep the real controller, tools, and SDK.
     monkeypatch.setattr("ctf_agent.attempt.docker", lambda *args, **kwargs: "test-image")
     monkeypatch.setattr("ctf_agent.attempt.start_sandbox", lambda *args: None)
@@ -52,7 +57,7 @@ def local_attempt(request, tmp_path, monkeypatch, telemetry):
 
     @contextmanager
     def open_attempt(respond=None, public_task="public", expected_flag="private-expected-answer", model_usage=None):
-        with run_attempt(DEFAULTS | getattr(request, "param", {}), "private-network", "private-gateway", [],
+        with run_attempt(settings | getattr(request, "param", {}), "private-network", "private-gateway", [],
                          expected_flag, tmp_path, langfuse=telemetry["client"],
                          public_task=public_task, respond=respond, model_usage=model_usage) as run:
             yield run

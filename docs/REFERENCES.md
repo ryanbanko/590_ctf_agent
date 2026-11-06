@@ -209,7 +209,8 @@ November 4 launch setup: the existing Responses integration was consolidated int
 `agent.py`; trusted target handling into `challenge.py`; and ordinary provenance
 and native trace export into `launch.py`. Current official Responses/function-call
 and Langfuse CLI documentation was reviewed. The official CLI package name is
-now `@langfuse/cli`; the application pins `@langfuse/cli@1.3.1` for native exports.
+now `@langfuse/cli`; at that milestone the application pinned
+`@langfuse/cli@1.3.1` for native exports. The later SDK cleanup below supersedes that path.
 No SDK migration or agent framework was added. Gateway metadata still reports
 the existing model prices. The user requested setup only and will check the
 system themselves; no new live model calls or challenge solving occurred.
@@ -242,3 +243,52 @@ zero-model preparation commands passed, with two fresh cycles per challenge.
 [Current evidence](../evidence/benchmark-readiness/README.md) records scope, setup
 diagnostics and remaining limits. CTFTiny is the active dataset; additional NYU
 dataset setup was deferred at the user's request.
+
+
+## November 5 configuration and SDK export cleanup
+
+The approved cleanup follows the current [SDK query guide](https://langfuse.com/docs/api-and-data-platform/features/query-via-sdk)
+and [public API guide](https://langfuse.com/docs/api-and-data-platform/features/public-api).
+The installed Langfuse 5.1.0 already provides `client.api.observations.get_many`;
+its typed response supports aliased JSON serialization and cursor pagination.
+Keeping the pinned version avoids an unrelated dependency migration. The
+application now reuses that client and saves every page to `observations.json`,
+removing its Node/npm/CLI requirement while retaining the existing audits.
+
+Offline checks cover pagination beyond 100 rows, empty continuation pages, delayed
+completion and timeout. Readback of the existing synthetic trace matched its
+historical export and a fresh official CLI readback for IDs, parentage, inputs,
+outputs, metadata, model and usage/cost. No new model calls or traces were created.
+The CLI was used only for independent verification. Complete TOML settings and
+package write-on-change checks are recorded with this milestone's
+[evidence](../evidence/config-sdk-cleanup/README.md).
+
+## November 5 NYU infrastructure comparison — proposal only
+
+The follow-up review checked installed `nyuctf==1.1.1` loader/lifecycle source and
+the baseline [release 20250206](https://github.com/NYU-LLM-CTF/nyuctf_agents/releases/tag/20250206),
+commit `112cfa33f5c0a06a20e49af525ac8eb07ec98457`. The reviewed files include its
+[environment](https://github.com/NYU-LLM-CTF/nyuctf_agents/blob/112cfa33f5c0a06a20e49af525ac8eb07ec98457/llm_ctf/environment.py),
+[tools](https://github.com/NYU-LLM-CTF/nyuctf_agents/blob/112cfa33f5c0a06a20e49af525ac8eb07ec98457/llm_ctf/tools/tools.py),
+[conversation](https://github.com/NYU-LLM-CTF/nyuctf_agents/blob/112cfa33f5c0a06a20e49af525ac8eb07ec98457/llm_ctf/conversation.py),
+Dockerfile, entrypoint, setup and requirements. This was the baseline, not D-CIPHER.
+It uses a writable solver, normal Docker copying/execution and thin Compose
+lifecycle methods. Its timeout handler kills the local Docker client; its checker
+prints the expected answer. Neither behavior should be copied unchanged.
+
+Docker's [copy documentation](https://docs.docker.com/reference/cli/docker/container/cp/)
+supports ordinary transfer once our restrictive layout is removed, with ownership
+and mount behavior checked. [Restart](https://docs.docker.com/reference/cli/docker/container/restart/)
+and [storage](https://docs.docker.com/engine/storage/) documentation support the
+proposal to reset solver processes while retaining its writable layer. Our current
+tmpfs workspace would not survive that reset. [Bind-mount documentation](https://docs.docker.com/engine/storage/bind-mounts/)
+explains that socket binds refer to the daemon host: under our current Docker
+Desktop deployment they expose the engine managing trusted resources, not a
+separate challenge daemon.
+
+The source review and read-only Compose configuration inventory did not build the
+NYU image, prototype recovery or solve challenges. The
+[implementation proposal](SIMPLIFICATION_PLAN.md) records what would be reused,
+removed, newly integrated and verified. It supersedes earlier conversational
+suggestions to remove the file writer/batch wrapper or require terminal command
+timeouts. Current runtime behavior remains documented in DESIGN and README.

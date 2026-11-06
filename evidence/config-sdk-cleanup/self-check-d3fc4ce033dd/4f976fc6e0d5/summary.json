@@ -1,0 +1,19 @@
+{
+  "run_id": "4f976fc6e0d5",
+  "challenge_id": "interruption_cleanup",
+  "mode": "synthetic-controls",
+  "termination_reason": "user_cancel",
+  "tool_calls": 0,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "dfef9ba4663bda82fe7020eee723f939",
+  "active_seconds": 3.268022,
+  "cleanup_seconds": 0.437443,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000878,
+  "total_seconds": 3.706607
+}

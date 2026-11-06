@@ -10,7 +10,7 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 import pytest
 
 from ctf_agent.agent import AttemptStopped, run_agent
-from ctf_agent.agent import MODEL_SETTINGS, make_responder, reject_gateway_errors
+from ctf_agent.agent import make_responder, reject_gateway_errors
 from .fixtures.tracing import attribute, read_spans
 
 
@@ -22,7 +22,7 @@ def sdk_response(output, *, status="completed", usage=True):
                       "output_tokens_details": {"reasoning_tokens": 5}} if usage else None}
 
 
-def test_native_reasoning_and_tool_results_reach_next_request_with_one_generation_per_call(local_attempt, telemetry):
+def test_native_reasoning_and_tool_results_reach_next_request_with_one_generation_per_call(local_attempt, telemetry, model_settings):
     requests = []
     purpose = "I will submit this candidate to learn whether the evaluator accepts it."
     outputs = [
@@ -38,16 +38,16 @@ def test_native_reasoning_and_tool_results_reach_next_request_with_one_generatio
     def handle(request):
         assert request.url.path == "/v1/responses"
         data = json.loads(request.content)
-        assert data["store"] is False and data["max_output_tokens"] == 1024
-        assert data["reasoning"] == {"effort": "low", "summary": "auto"} and not data["parallel_tool_calls"]
+        assert data["store"] is False and data["max_output_tokens"] == model_settings["max_output_tokens"]
+        assert data["reasoning"] == {"effort": model_settings["reasoning_effort"], "summary": "auto"} and not data["parallel_tool_calls"]
         assert all(tool["type"] == "function" and tool["strict"] is False for tool in data["tools"])
         assert "private-expected-answer" not in request.content.decode()
         requests.append(data)
         return httpx2.Response(200, json=sdk_response(outputs[len(requests) - 1]))
 
-    with OpenAI(api_key="dummy-gateway-key", base_url=MODEL_SETTINGS["base_url"], max_retries=0,
+    with OpenAI(api_key="dummy-gateway-key", base_url=model_settings["base_url"], max_retries=0,
                 http_client=httpx2.Client(transport=httpx2.MockTransport(handle))) as client:
-        respond, usage = make_responder(client, langfuse_public_key="pk-lf-ctf590-local")
+        respond, usage = make_responder(client, model_settings, langfuse_public_key="pk-lf-ctf590-local")
         with local_attempt(respond, model_usage=usage) as run:
             assert run_agent("public", run["respond"], run["call_tool"]) == "success"
     assert requests[1]["input"][-4:] == [*outputs[0],
@@ -55,7 +55,9 @@ def test_native_reasoning_and_tool_results_reach_next_request_with_one_generatio
     result = run["result"]
     assert result["model_calls"] == result["tool_calls"] == 2 and result["scripted_turns"] == 0
     assert result["tokens"] == {"input": 200, "output": 40, "cached_input": 20, "reasoning": 10}
-    assert result["cost_usd"] == pytest.approx(0.0000382)
+    assert result["cost_usd"] == pytest.approx(2 * (90 * model_settings["input_usd_per_million"]
+        + 10 * model_settings["cached_input_usd_per_million"]
+        + 20 * model_settings["output_usd_per_million"]) / 1_000_000)
     assert "cost_reserved_usd" not in result
     spans = read_spans(telemetry, result["trace_id"])
     root = next(span for span in spans if span.name == "attempt")
@@ -71,19 +73,19 @@ def test_native_reasoning_and_tool_results_reach_next_request_with_one_generatio
     ({"max_requests": 0}, "model_request_limit"),
     ({"max_input_bytes": 1}, "model_input_limit"),
 ])
-def test_caps_prevent_http_requests(override, reason):
+def test_caps_prevent_http_requests(override, reason, model_settings):
     def unexpected(request):
         pytest.fail("Budget rejection sent an HTTP request")
 
     with OpenAI(api_key="dummy", max_retries=0,
                 http_client=httpx2.Client(transport=httpx2.MockTransport(unexpected))) as client:
-        respond, usage = make_responder(client, MODEL_SETTINGS | override)
+        respond, usage = make_responder(client, model_settings | override)
         with pytest.raises(AttemptStopped, match=reason):
             respond(messages=[{"role": "user", "content": "public"}], tools=[], timeout_seconds=1)
         assert usage["model_calls"] == 0
 
 
-def test_timeout_is_not_retried_and_unknown_usage_is_not_free(local_attempt, telemetry):
+def test_timeout_is_not_retried_and_unknown_usage_is_not_free(local_attempt, telemetry, model_settings):
     requests = []
 
     def timeout(request):
@@ -92,7 +94,7 @@ def test_timeout_is_not_retried_and_unknown_usage_is_not_free(local_attempt, tel
 
     with OpenAI(api_key="dummy", max_retries=0,
                 http_client=httpx2.Client(transport=httpx2.MockTransport(timeout))) as client:
-        respond, usage = make_responder(client, langfuse_public_key="pk-lf-ctf590-local")
+        respond, usage = make_responder(client, model_settings, langfuse_public_key="pk-lf-ctf590-local")
         with local_attempt(respond, model_usage=usage) as run:
             assert run_agent("public", run["respond"], run["call_tool"]) == "response_source_error"
     assert len(requests) == 1 and run["result"]["model_calls"] == 1
@@ -100,7 +102,7 @@ def test_timeout_is_not_retried_and_unknown_usage_is_not_free(local_attempt, tel
     assert run["result"]["tool_calls"] == 0
 
 
-def test_late_native_response_keeps_usage_but_cannot_execute_tools(local_attempt):
+def test_late_native_response_keeps_usage_but_cannot_execute_tools(local_attempt, model_settings):
     def late(request):
         run["stop"]("scope_violation")
         return httpx2.Response(200, json=sdk_response([{
@@ -108,14 +110,14 @@ def test_late_native_response_keeps_usage_but_cannot_execute_tools(local_attempt
 
     with OpenAI(api_key="dummy", max_retries=0,
                 http_client=httpx2.Client(transport=httpx2.MockTransport(late))) as client:
-        respond, usage = make_responder(client, langfuse_public_key="pk-lf-ctf590-local")
+        respond, usage = make_responder(client, model_settings, langfuse_public_key="pk-lf-ctf590-local")
         with local_attempt(respond, model_usage=usage) as run:
             assert run_agent("public", run["respond"], run["call_tool"]) == "scope_violation"
     assert run["result"]["model_calls"] == 1 and run["result"]["tokens"]["output"] == 20
     assert run["result"]["cost_usd"] > 0 and run["result"]["tool_calls"] == 0
 
 
-def test_raw_provider_error_does_not_reach_automatic_tracing():
+def test_raw_provider_error_does_not_reach_automatic_tracing(model_settings):
     secret = "dummy-sensitive-gateway-key"
     exporter = InMemorySpanExporter()
     tracing = Langfuse(public_key="pk-lf-model-masking", secret_key="sk-lf-local",
@@ -128,7 +130,7 @@ def test_raw_provider_error_does_not_reach_automatic_tracing():
         with OpenAI(api_key=secret, max_retries=0,
                     http_client=httpx2.Client(transport=httpx2.MockTransport(denied),
                         event_hooks={"response": [reject_gateway_errors]})) as client:
-            respond, usage = make_responder(client, langfuse_public_key="pk-lf-model-masking")
+            respond, usage = make_responder(client, model_settings, langfuse_public_key="pk-lf-model-masking")
             with tracing.start_as_current_observation(name="mask-check"):
                 with pytest.raises(RuntimeError, match="gateway_http_401"):
                     respond(messages=[{"role": "user", "content": "public"}], tools=[], timeout_seconds=1)
@@ -138,3 +140,25 @@ def test_raw_provider_error_does_not_reach_automatic_tracing():
         assert usage["model_calls"] == 1 and usage["cost_usd"] is None
     finally:
         tracing.shutdown()
+
+
+@pytest.mark.parametrize('missing_call', [1, 2])
+def test_valid_responses_continue_with_unknown_usage(local_attempt, missing_call, model_settings):
+    calls = []
+
+    def handle(request):
+        calls.append(request)
+        number = len(calls)
+        output = [{'type': 'function_call', 'call_id': f'call_{number}', 'name': 'submit_flag',
+                   'arguments': json.dumps({'candidate': 'wrong' if number == 1 else 'private-expected-answer'})}]
+        return httpx2.Response(200, json=sdk_response(output, usage=number != missing_call))
+
+    with OpenAI(api_key='dummy', max_retries=0,
+                http_client=httpx2.Client(transport=httpx2.MockTransport(handle))) as client:
+        respond, usage = make_responder(client, model_settings, langfuse_public_key='pk-lf-ctf590-local')
+        with local_attempt(respond, model_usage=usage) as run:
+            assert run_agent('public', run['respond'], run['call_tool']) == 'success'
+    assert run['result']['verified_success'] and run['result']['model_calls'] == 2
+    assert run['result']['tokens'] is None and run['result']['cost_usd'] is None
+    assert run['result']['usage_complete'] is False
+    assert run['result']['tool_calls'] == 2

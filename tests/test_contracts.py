@@ -7,7 +7,9 @@ from unittest.mock import patch
 
 import pytest
 
-from ctf_agent.config import DEFAULTS, load_settings, validate_settings
+from ctf_agent.config import CONFIG_PATH, load_settings, validate_settings
+
+DEFAULTS = load_settings()
 from ctf_agent.attempt import stop_attempt
 from ctf_agent.sandbox import close_sandbox, make_sandbox
 from ctf_agent.tools import validate_arguments
@@ -23,7 +25,9 @@ def test_configuration_rejects_invalid_limits(tmp_path):
         with pytest.raises(ValueError):
             validate_settings(DEFAULTS | overrides)
     path = tmp_path / "config.toml"
-    path.write_text("wall_seconds = 4.0\n")
+    import re
+
+    path.write_text(re.sub(r"(?m)^wall_seconds\s*=.*$", "wall_seconds = 4.0", CONFIG_PATH.read_text()))
     settings = load_settings(path)
     assert settings["wall_seconds"] == 4 and settings["solver_image"] == DEFAULTS["solver_image"]
 
@@ -38,7 +42,7 @@ def test_path_and_size_contracts():
 
 
 def test_command_timeout_and_argument_validation():
-    for value in [True, 0, -1, float("nan"), 11]:
+    for value in [True, 0, -1, float("nan"), DEFAULTS["command_seconds"] + 1]:
         with pytest.raises(ValueError):
             validate_arguments("run_command", {"command": "echo ok", "timeout_seconds": value}, DEFAULTS)
     for arguments in [{"command": "   "}, {"command": "x" * 20_000},
@@ -182,3 +186,82 @@ def test_unconfirmed_command_cleanup_stops_attempt(local_attempt, monkeypatch):
         with pytest.raises(AttemptStopped, match='infrastructure_error'):
             run['call_tool']('run_command', {'command': 'sleep 10'})
     assert run['result']['termination_reason'] == 'infrastructure_error'
+
+
+@pytest.fixture
+def worker_module():
+    import importlib.util
+    from pathlib import Path
+
+    spec = importlib.util.spec_from_file_location('solver_worker', Path('docker/worker.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_supervisor_setup_error_cleans_started_children(worker_module, monkeypatch, tmp_path):
+    from unittest.mock import MagicMock, Mock
+
+    process = MagicMock()
+    process.stdout.fileno.return_value = 10
+    process.stderr.fileno.return_value = 11
+    library = MagicMock()
+    library.prctl.return_value = 0
+    cleanup = Mock(return_value=True)
+    monkeypatch.setattr(worker_module.ctypes, 'CDLL', lambda *args, **kwargs: library)
+    monkeypatch.setattr(worker_module.socket, 'socket', MagicMock())
+    monkeypatch.setattr(worker_module.subprocess, 'Popen', lambda *args, **kwargs: process)
+    monkeypatch.setattr(worker_module, 'clean_children', cleanup)
+    monkeypatch.setattr(worker_module, 'OUTPUT_DIRECTORY', tmp_path / 'missing-output-directory')
+    with pytest.raises(FileNotFoundError):
+        worker_module.command_session(0, {'command': 'synthetic', 'lifetime_seconds': 1,
+                                         'output_id': 'a' * 32, 'output_limit': 32})
+    cleanup.assert_called_once_with(process)
+    process.stdout.close.assert_called_once()
+    process.stderr.close.assert_called_once()
+
+
+@pytest.mark.parametrize('reply', [b'', b'invalid-json\n', b'{}\n'])
+def test_bad_supervisor_reply_is_infrastructure_failure(worker_module, reply):
+    from unittest.mock import MagicMock
+
+    session = {'channel': MagicMock(), 'stream': MagicMock()}
+    session['stream'].readline.return_value = reply
+    with pytest.raises(RuntimeError):
+        worker_module.read_session(session, 1)
+
+
+def test_package_inventory_is_written_only_on_change(tmp_path, monkeypatch):
+    from pathlib import Path
+    from ctf_agent.sandbox import invoke_worker
+
+    inventories = iter([{'example': '1'}, {'example': '1'}, {'example': '2'}])
+    monkeypatch.setattr('ctf_agent.sandbox.bounded_exec', lambda *args, **kwargs:
+                        json.dumps({'_packages': next(inventories), 'stdout': 'ok'}).encode())
+    writes = []
+    original = Path.write_text
+
+    def record(path, content, *args, **kwargs):
+        writes.append(json.loads(content))
+        return original(path, content, *args, **kwargs)
+
+    monkeypatch.setattr(Path, 'write_text', record)
+    sandbox = {'solver': 'substituted-solver', 'directory': tmp_path}
+    for _ in range(3):
+        assert invoke_worker(sandbox, {'tool': 'inspect'}, 1) == {'stdout': 'ok'}
+    assert writes == [{'example': '1'}, {'example': '2'}]
+    assert json.loads((tmp_path / 'packages.json').read_text()) == {'example': '2'}
+
+
+def test_complete_configuration_has_one_model_call_limit(tmp_path):
+    from ctf_agent.config import load_experiment
+
+    attempt, model = load_experiment()
+    assert model['max_requests'] == attempt['max_model_turns']
+    path = tmp_path / 'incomplete.toml'
+    path.write_text('[attempt]\nwall_seconds=60\n[model]\n')
+    with pytest.raises(ValueError, match='Attempt settings'):
+        load_experiment(path)
+    path.write_text(CONFIG_PATH.read_text().replace('[model]', '[model]\nmax_requests=7'))
+    with pytest.raises(ValueError, match='max_requests is derived'):
+        load_experiment(path)

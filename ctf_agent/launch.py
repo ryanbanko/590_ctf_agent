@@ -41,23 +41,28 @@ def collect_provenance(settings: dict, *, target_images: dict | None = None) -> 
             "docker": docker("version", "--format", "{{.Server.Version}}"), "config": settings}
 
 
-def read_model_trace(trace_id: str, model_calls: int, tool_calls: int, directory: Path):
-    """Export a complete trace through the pinned official CLI, including failures."""
-    environment = dict(os.environ, LANGFUSE_HOST=os.environ["LANGFUSE_BASE_URL"])
-    since = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
-    until = (datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat()
-    command = ["npx", "--yes", "@langfuse/cli@1.3.1", "api", "observations", "list",
-               "--trace-id", trace_id, "--from-start-time", since, "--to-start-time", until,
-               "--fields", "core,basic,time,io,metadata,model,usage",
-               "--expand-metadata", "config,image_ids,model_settings", "--all", "--max-items", "100", "--json"]
+def read_model_trace(client, trace_id: str, model_calls: int, tool_calls: int,
+                     directory: Path, *, from_start_time: datetime | None = None):
+    """Export complete native observations through the existing Python client."""
+    since = from_start_time or datetime.now(timezone.utc) - timedelta(days=1)
+    until = datetime.now(timezone.utc) + timedelta(minutes=5)
     deadline = time.monotonic() + 90
     while time.monotonic() < deadline:
-        completed = subprocess.run(command, env=environment, capture_output=True, text=True,
-                                   timeout=min(25, max(1, deadline - time.monotonic())))
-        if completed.returncode:
-            raise RuntimeError("Langfuse CLI readback failed; raw error omitted")
-        payload = json.loads(completed.stdout)
-        rows = payload.get("body", payload)["data"]
+        rows, cursor = [], None
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError("Complete model trace was not readable within 90 seconds")
+            page = client.api.observations.get_many(
+                trace_id=trace_id, cursor=cursor, limit=100,
+                from_start_time=since, to_start_time=until,
+                fields="core,basic,time,io,metadata,model,usage",
+                expand_metadata="config,image_ids,model_settings",
+                request_options={"timeout_in_seconds": min(10, remaining), "max_retries": 0})
+            rows.extend(item.model_dump(mode="json", by_alias=True) for item in page.data)
+            cursor = page.meta.cursor
+            if cursor is None:
+                break
         roots = [row for row in rows if row["name"] == "attempt"]
         generations = [row for row in rows if row["type"] == "GENERATION"]
         tools = [row for row in rows if row["type"] == "TOOL"]
@@ -65,7 +70,7 @@ def read_model_trace(trace_id: str, model_calls: int, tool_calls: int, directory
                 and all(row.get("traceId") == trace_id for row in rows)
                 and any(row["name"] == "sandbox_cleanup" for row in rows)
                 and all(row.get("endTime") for row in rows)):
-            (directory / "cli-observations.json").write_text(completed.stdout)
+            (directory / "observations.json").write_text(json.dumps({"data": rows}, indent=2) + "\n")
             return rows
         time.sleep(min(2, max(0, deadline - time.monotonic())))
     raise TimeoutError("Complete model trace was not readable within 90 seconds")
@@ -102,7 +107,8 @@ def run_challenge(settings: dict, dataset_json: Path, manifest_path: Path, chall
                              challenge.flag, directory, langfuse=langfuse, label=challenge_id,
                              public_task=task, respond=respond, model_usage=model_usage,
                              mode=report["mode"]) as run:
-                report["files"] = stage_files(files, run["solver"], settings["workspace_mb"] * 1024 * 1024, 5)
+                report["files"] = stage_files(files, run["solver"], settings["workspace_mb"] * 1024 * 1024,
+                                             run["remaining_seconds"]())
                 run_agent(task, run["respond"], run["call_tool"])
         report["phase"] = "trace-export"
     except BaseException as error:
@@ -117,7 +123,7 @@ def run_challenge(settings: dict, dataset_json: Path, manifest_path: Path, chall
                 report.update(result=result, model_calls=result["model_calls"])
                 report["trace_url"] = langfuse.get_trace_url(trace_id=result["trace_id"])
                 if export_trace is not None:
-                    rows = export_trace(result["trace_id"], result["model_calls"], result["tool_calls"], directory)
+                    rows = export_trace(langfuse, result["trace_id"], result["model_calls"], result["tool_calls"], directory)
                     roots = [row for row in rows if row["name"] == "attempt"]
                     root = roots[0] if len(roots) == 1 else None
                     secrets = [os.environ[name] for name in ("LITELLM_TOKEN", "LANGFUSE_SECRET_KEY") if os.getenv(name)]

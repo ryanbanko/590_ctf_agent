@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import socket; s=socket.socket(socket.AF_INET6); s.settimeout(1); s.connect(('2001:db8::1',443))
+                                                                      ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 101] Network is unreachable

@@ -1,0 +1,230 @@
+[
+{
+    "name": "guard_diagnostic",
+    "context": {
+        "trace_id": "0x0ed63c20f9022961e6859a030733af95",
+        "span_id": "0x2c51193d46976876",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x1ec4e6852c6e2442",
+    "start_time": "2026-11-05T15:17:35.035026Z",
+    "end_time": "2026-11-05T15:17:35.035026Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.message": "\"tcpdump: verbose output suppressed, use -v[v]... for full protocol decode\""
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "guard_ready",
+    "context": {
+        "trace_id": "0x0ed63c20f9022961e6859a030733af95",
+        "span_id": "0xaba7137130bd565b",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x1ec4e6852c6e2442",
+    "start_time": "2026-11-05T15:17:35.035646Z",
+    "end_time": "2026-11-05T15:17:35.035646Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "sandbox_ready",
+    "context": {
+        "trace_id": "0x0ed63c20f9022961e6859a030733af95",
+        "span_id": "0xb52abcbd506785a6",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x1ec4e6852c6e2442",
+    "start_time": "2026-11-05T15:17:37.685734Z",
+    "end_time": "2026-11-05T15:17:37.685734Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.solver": "\"ctf590-fdaf53ad3123-solver\"",
+        "langfuse.observation.metadata.guard": "\"ctf590-fdaf53ad3123-guard\"",
+        "langfuse.observation.metadata.endpoints": "[{\"address\":\"172.19.0.1\",\"protocol\":\"tcp\",\"port\":8000}]"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "run_command",
+    "context": {
+        "trace_id": "0x0ed63c20f9022961e6859a030733af95",
+        "span_id": "0xe2d1a9eb07284bd1",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x1ec4e6852c6e2442",
+    "start_time": "2026-11-05T15:17:37.687319Z",
+    "end_time": "2026-11-05T15:17:40.104706Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.input": "{\"command\": \"python -I -c '\\nimport importlib.metadata, json, socket, time\\nimport numpy as np\\nimport requests\\nfrom Crypto.Cipher import AES\\nfrom PIL import Image\\nfrom pwn import ELF, context, p32, u32, remote\\nfrom sympy import Symbol, solve\\n\\ncontext.log_level = '\\\"'\\\"'error'\\\"'\\\"'\\nassert ELF('\\\"'\\\"'/bin/true'\\\"'\\\"', checksec=False).arch == '\\\"'\\\"'amd64'\\\"'\\\"'\\nassert u32(p32(12345)) == 12345\\nx = Symbol('\\\"'\\\"'x'\\\"'\\\"')\\nassert solve(x + 2 - 5, x) == [3]\\nassert np.dot([1, 2], [3, 4]) == 11\\ncipher = AES.new(b'\\\"'\\\"'0123456789abcdef'\\\"'\\\"', AES.MODE_ECB)\\nblock = b'\\\"'\\\"'benign-test-data'\\\"'\\\"'\\nassert cipher.decrypt(cipher.encrypt(block)) == block\\nImage.new('\\\"'\\\"'RGB'\\\"'\\\"', (2, 3), '\\\"'\\\"'blue'\\\"'\\\"').save('\\\"'\\\"'benign.png'\\\"'\\\"')\\nwith Image.open('\\\"'\\\"'benign.png'\\\"'\\\"') as image:\\n assert image.size == (2, 3)\\nwith requests.Session() as session:\\n session.trust_env = False\\n reply = session.get('\\\"'\\\"'http://172.19.0.1:8000/'\\\"'\\\"', timeout=(1, 1))\\n assert reply.status_code == 200 and '\\\"'\\\"'flag'\\\"'\\\"' in reply.json()\\nwith remote('\\\"'\\\"'172.19.0.1'\\\"'\\\"', 8000, timeout=1) as connection:\\n connection.send(b'\\\"'\\\"'GET / HTTP/1.0\\\\r\\\\n\\\\r\\\\n'\\\"'\\\"')\\n assert b'\\\"'\\\"'HTTP/1.1 200 OK'\\\"'\\\"' in connection.recvall(timeout=1)\\n# This fixture waits for an HTTP request: reading first deliberately stalls.\\nstarted = time.monotonic()\\nwith socket.create_connection(('\\\"'\\\"'172.19.0.1'\\\"'\\\"', 8000), timeout=.2) as connection:\\n try:\\n  connection.recv(1)\\n  raise AssertionError('\\\"'\\\"'Expected an internal read timeout'\\\"'\\\"')\\n except socket.timeout:\\n  pass\\nassert time.monotonic() - started < 2\\nprint(json.dumps({'\\\"'\\\"'packages'\\\"'\\\"': {name: importlib.metadata.version(name) for name in\\n ['\\\"'\\\"'pwntools'\\\"'\\\"', '\\\"'\\\"'sympy'\\\"'\\\"', '\\\"'\\\"'numpy'\\\"'\\\"', '\\\"'\\\"'pycryptodome'\\\"'\\\"', '\\\"'\\\"'requests'\\\"'\\\"', '\\\"'\\\"'Pillow'\\\"'\\\"']},\\n '\\\"'\\\"'internal_read_timeout'\\\"'\\\"': True, '\\\"'\\\"'elapsed_seconds'\\\"'\\\"': time.monotonic() - started}))\\n'\"}",
+        "langfuse.observation.metadata.step": "1",
+        "langfuse.observation.type": "tool",
+        "langfuse.observation.output": "{\"stdout\": \"{\\\"packages\\\": {\\\"pwntools\\\": \\\"4.15.0\\\", \\\"sympy\\\": \\\"1.14.0\\\", \\\"numpy\\\": \\\"2.5.4\\\", \\\"pycryptodome\\\": \\\"4.3.0\\\", \\\"requests\\\": \\\"2.34.2\\\", \\\"Pillow\\\": \\\"13.0.0\\\"}, \\\"internal_read_timeout\\\": true, \\\"elapsed_seconds\\\": 0.2195120000000088}\\n\", \"stderr\": \"\", \"exit_code\": 0, \"timed_out\": false, \"closed\": false, \"running\": false, \"cleanup_confirmed\": true, \"truncated\": false, \"output_bytes\": 211, \"total_output_bytes\": 211, \"output_file_truncated\": false, \"input_bytes_sent\": 0, \"output_file\": \"/workspace/.ctf-output/871d08bb07da4bd5acf487970bff0ea0.log\", \"duration_seconds\": 1.867268, \"recorded_output\": \"outputs/871d08bb07da4bd5acf487970bff0ea0.log\"}"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "attempt_stopping",
+    "context": {
+        "trace_id": "0x0ed63c20f9022961e6859a030733af95",
+        "span_id": "0xec6186e3f3ecce45",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x1ec4e6852c6e2442",
+    "start_time": "2026-11-05T15:17:40.105417Z",
+    "end_time": "2026-11-05T15:17:40.105417Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.reason": "\"completed_without_success\""
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "sandbox_cleanup",
+    "context": {
+        "trace_id": "0x0ed63c20f9022961e6859a030733af95",
+        "span_id": "0xcf986ecc62d7f9cc",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x1ec4e6852c6e2442",
+    "start_time": "2026-11-05T15:17:40.517815Z",
+    "end_time": "2026-11-05T15:17:40.517815Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.errors": "[]"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "attempt",
+    "context": {
+        "trace_id": "0x0ed63c20f9022961e6859a030733af95",
+        "span_id": "0x1ec4e6852c6e2442",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-11-05T15:17:34.525431Z",
+    "end_time": "2026-11-05T15:17:40.518661Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.internal.is_app_root": true,
+        "langfuse.observation.input": "{\"task\": \"Synthetic controls check\"}",
+        "langfuse.observation.metadata.run_id": "\"fdaf53ad3123\"",
+        "langfuse.observation.metadata.challenge_id": "\"solver_python_libraries_and_network_deadline\"",
+        "langfuse.observation.metadata.config": "{\"solver_image\":\"ctf590-solver:m1\",\"guard_image\":\"ctf590-guard:m1\",\"target_image\":\"ctf590-fixture:m1\",\"wall_seconds\":600.0,\"command_seconds\":30.0,\"max_model_turns\":40,\"max_tool_calls\":80,\"max_output_bytes\":65536,\"memory_mb\":1024,\"workspace_mb\":512,\"max_command_bytes\":16384,\"max_write_bytes\":65536,\"pids\":64,\"cpus\":1.0}",
+        "langfuse.observation.metadata.mode": "\"synthetic-controls\"",
+        "langfuse.observation.metadata.image_ids": "{\"solver\":\"sha256:c2c272ccdb245ec825d8050f41acbc2339b9c8611f4f1bfa6b0b667f9b34b91e\",\"guard\":\"sha256:e7221cea92af42bf9457dc23cd69345af97d1c2aec0f6c66e88aac3c23018d27\"}",
+        "langfuse.observation.type": "span",
+        "langfuse.observation.level": "DEFAULT",
+        "langfuse.observation.output": "{\"run_id\": \"fdaf53ad3123\", \"challenge_id\": \"solver_python_libraries_and_network_deadline\", \"mode\": \"synthetic-controls\", \"termination_reason\": \"completed_without_success\", \"tool_calls\": 1, \"model_calls\": 0, \"agent_mode\": null, \"scripted_turns\": 0, \"tokens\": null, \"cost_usd\": 0.0, \"cleanup_errors\": [], \"trace_id\": \"0ed63c20f9022961e6859a030733af95\", \"active_seconds\": 5.620802, \"cleanup_seconds\": 0.372906, \"verified_success\": false}"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "2bb9d24d-b17a-41aa-83fc-d147749c9ba4",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+}
+]

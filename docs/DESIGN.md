@@ -7,6 +7,12 @@ NYU package and conventions informed this setup. Functions, dictionaries and
 resource-owning context managers keep the implementation understandable without
 an agent framework or application class hierarchy.
 
+This document describes the current implementation. The November 5
+[simplification proposal](SIMPLIFICATION_PLAN.md) is recorded separately and has
+not been implemented. It distinguishes assignment outcomes from optional design
+choices and proposes replacing the worker infrastructure while keeping our agent,
+three tools, tracing and batch wrapper.
+
 ## One challenge path
 
 `run-challenge --challenge ID` loads an indexed challenge through the installed
@@ -22,7 +28,8 @@ experiment settings into the batch directory. Fresh processes avoid reusing
 Langfuse client state between attempts. A small `batch.json` indexes existing
 records and run IDs; it is not another trace backend or an aggregation framework.
 Ordinary failed attempts continue; incomplete records, cleanup/scope/infrastructure
-incidents and response-source/missing-usage failures stop the batch for review.
+incidents and response-source failures stop the batch for review. Missing usage
+on an otherwise valid reply leaves totals unknown and does not stop the agent.
 On interruption it signals the child launcher and waits for its cleanup before
 recording the partial index. No parallelism, automatic retries, resumption or
 extra batch-budget subsystem is introduced.
@@ -57,9 +64,12 @@ host bind mounts remain prohibited. Privileged targets are rejected. Supplied
 build directives are not executed when using prebuilt images. The original dataset
 files stay unchanged.
 
-Package lifecycle helpers would run the original Compose configuration directly.
-A small controlled runtime configuration is required to retain the assignment's
-access boundaries. A per-challenge adapter would add unnecessary code for the
+Package lifecycle helpers run the original Compose configuration directly. Our
+current controlled runtime configuration implements our chosen boundaries, but
+the assignment does not require every override it applies. Socket mounts and
+host-administrative access need explicit handling; blanket target DNS, capability,
+temporary-directory and resource policies are design choices under review in the
+proposal above. A per-challenge adapter would add unnecessary code for the
 selected services, which all use the same conventions. Missing images are pulled;
 resolved local IDs and architecture are recorded and fixed within the attempt.
 Tags may resolve differently after a later pull; freeze recorded images alongside
@@ -131,15 +141,22 @@ The solver starts a standard system-site-packages venv in `/workspace/.venv`.
 profile supplies 1 GiB RAM and 512 MiB workspace, which counts toward RAM. Existing
 baseline libraries avoid repeated common installs. Pip caches/version checks are
 disabled by default; the temporary no-index setting is removed. Installed Python
-versions are captured at startup and after tool calls in `packages.json`.
+versions are scanned at startup and after tool calls. `packages.json` is written
+on the first scan and only when the inventory changes; scans still detect
+additions from any command.
 
 Interactive sessions extend the existing command tool. A solver-local Unix socket
 connects the fixed Docker client to the existing worker running as PID 1. Each
 command has a small independent supervisor using Linux subreaper semantics, so
 orphaned/detached children stay attributable even with concurrent sessions. The
 supervisor drains pipes or a PTY, accepts input, enforces the command/session
-lifetime, and freezes/kills/reaps descendants at exit, close or timeout. Short
-interactive waits return `running` and a session ID; they are not execution
+lifetime, and freezes/kills/reaps descendants at exit, close or timeout. An
+ExitStack guarantees resource/descendant cleanup on exceptional exits too.
+Completed commands drain their final output, send a final reply and release their
+supervisor; the worker retains the bounded result for a later poll. Periodic
+reaping releases finished processes even when the agent does not poll. Partial
+terminal writes report the exact UTF-8 byte count; supervisor protocol failures
+remain infrastructure failures. Short interactive waits return `running` and a session ID; they are not execution
 timeouts. Sessions use the attempt deadline; ordinary commands use the command
 cap. Unconfirmed cleanup remains terminal. No new agent tool, third-party
 runtime dependency or host command execution is introduced.
@@ -201,17 +218,30 @@ transport timeouts. Remote cancellation and billing cancellation are not guarant
 
 The same existing hard limits cover wall time, model turns, tool calls, command
 runtime, output bytes, file writes and container resources. Live settings come from
-`configs/development.toml`, over shared defaults. The current live profile permits 600 seconds per attempt, ordinary commands up to
+the complete `configs/development.toml`. `config.py` only loads and validates
+values; missing/unknown fields fail clearly. Alternative experiments copy that
+file and use `--experiment`. One `max_model_turns` value also supplies the
+model adapter's internal `max_requests` guard. The current live profile permits
+600 seconds per attempt, ordinary commands up to
 120 seconds, 60-second model requests, forty model turns/requests and eighty tool
 calls. Model input is bounded to 512 KiB serialized data and output to 4,096 tokens.
-Synthetic/preparation settings retain smaller defaults. All values are project
-choices; the assignment requires enforced limits, not those particular numbers.
+Synthetic controls and preparation use the same complete file; the optional
+paid model check applies small explicit test bounds inside `tests/check_model.py`.
+The redundant `configs/initial.toml` and application fallback dictionaries are
+removed. All values are project choices; the assignment requires enforced limits,
+not those particular numbers.
+
+Preparation now loads the selected experiment through the same loader as live
+runs. The trusted run record exposes a remaining-time callback for staging; available workspace is checked
+after venv creation, and archive/transfer time shares the remaining deadline.
 
 The user approved removing the local spending cap and all reservation accounting.
 `make_responder()` still returns a function and per-attempt usage dictionary.
 API usage supplies token counts and estimates from configured gateway rates;
-cached/reasoning subsets are not double counted. Missing usage is unknown and
-stops the attempt. Provider/account limits are separate from these controls.
+cached/reasoning subsets are not double counted. Missing usage sets aggregate
+token/cost totals to null and marks
+usage incomplete, while valid replies continue. Per-response usage remains in
+native observations where supplied. Provider/account limits are separate.
 
 ## Tracing and evidence
 
@@ -223,8 +253,11 @@ credentials, locks and controller state must never become trace arguments.
 
 `summary.json`, `run.json`, source hashes and image IDs are ordinary results and
 provenance, not another detailed log backend. SDK flushing happens after solver
-cleanup; the application owner shuts down the client. The official pinned CLI
-exports hosted observations, and the launcher audits counts, completion, parentage,
+cleanup; the application owner shuts down the client. The existing Python SDK
+exports hosted observations to `observations.json` using cursor pagination,
+including empty pages with continuation cursors. Page size is 100, not a total
+record cap. Readback retains its 90-second deadline and completion polling.
+The launcher audits counts, completion, parentage,
 credentials and cleanup. Missing evidence prevents marking the launch complete.
 No fallback tracing backend or custom durable exporter is introduced.
 

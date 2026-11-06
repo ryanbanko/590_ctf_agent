@@ -1,15 +1,49 @@
 # Project status
 
-Last reviewed: November 4, 2026 (America/New_York).
+Last reviewed: November 5, 2026 (America/New_York).
 
 **Section 1 provided the working baseline; Section 2 comparison remains pending.**
-The latest approved usability milestone implements writable per-attempt Python,
-pip download connectivity, interactive terminal sessions, recoverable command
-timeouts, larger output with saved files, expanded limits and removal of local
-spending caps. Verification passed: **82 fast tests, 27 distinct Docker cases, and two fresh
-preparation cycles for `pwn-baby-boi`**, with cleanup verified. The Docker cases
-passed across the main run and focused completion after the recorded cleanup fix.
-No new model calls or challenge-solving attempts have run. GDB changes are explicitly deferred.
+The approved maintenance cleanup now puts all normal model/run values in one
+complete `configs/development.toml`, replaces CLI export with the installed
+Langfuse Python SDK, and writes package inventories only when they change.
+**95 fast tests and all 31 synthetic Docker cases passed**; cleanup was verified.
+SDK readback matched ten observations from the existing synthetic trace against
+both its historical export and a fresh CLI query. No model calls or new hosted
+traces were created. [Cleanup evidence](evidence/config-sdk-cleanup/README.md).
+Context management, output-copy optimization and GDB remain deferred. Review
+before another live pilot.
+
+**Infrastructure simplification is planned, not implemented.** The current
+runtime still uses the worker, interactive sessions, read-only root/tmpfs,
+archive staging and per-command timeout cleanup. The latest
+[proposal](docs/SIMPLIFICATION_PLAN.md) keeps our agent, three tools, model
+integration, Langfuse and batch wrapper, with solver-restart recovery proposed
+for a simpler execution environment. The supplied NYU image has been inspected
+as source but has not been built or selected.
+
+## Changes since the last Git update
+
+On the November 5 documentation audit, local `HEAD` and GitHub `main` both point
+to `a6d3bf0563bd3565a9967a52468757f9d2ac07a3` (`a6d3bf0`). The changes below are
+saved locally but uncommitted; no commit or push was performed by this audit.
+That commit already included writable Python/home, runtime pip access,
+interactive sessions, timeout recovery, larger limits and removal of the local
+spending cap. Those are not new changes since the checkpoint.
+
+| Local change | What changed | Verification or status |
+| --- | --- | --- |
+| Worker reliability | Guaranteed exceptional cleanup, final-output draining, automatic finished-session reaping and partial-input byte reporting. | [Reliability evidence](evidence/agent-reliability/README.md). |
+| Missing usage and preparation | Valid replies without usage continue with unknown aggregate totals. Preparation uses the selected experiment; staging checks available space and shares the remaining deadline. | 91 fast tests, 31 Docker cases and two preparation cycles at that milestone. |
+| Configuration cleanup | Complete normal settings in `configs/development.toml`; no fallback value dictionaries; one configured model-call limit; `configs/initial.toml` removed. | Resolved live values match the pre-cleanup profile exactly. |
+| Trace export and package writes | Existing Langfuse Python SDK replaces CLI export and retrieves all cursor pages. Package scans still run; identical inventories skip rewriting `packages.json`. | [Cleanup evidence](evidence/config-sdk-cleanup/README.md): 95 fast tests, 31 Docker cases and matching readback of an existing synthetic trace. |
+| Documentation and planning | Current commands/settings/evidence documented, stale README verification counts corrected, and the proposed infrastructure simplification recorded separately. | Documentation-only audit; the proposal has no implementation or runtime verification yet. |
+
+The completed milestones add evidence under `evidence/agent-reliability/` and
+`evidence/config-sdk-cleanup/`. Runtime/configuration/test source hashes still
+match the final passing cleanup verification. This audit did not rerun those
+tests or make model calls. Historical evidence remains unchanged.
+Documentation checks passed: 102 local links resolve and `git diff --check`
+reports no whitespace errors.
 
 ## Assignment checklist
 
@@ -78,6 +112,8 @@ calls or API spending.
 - [x] Implement the approved evidence-use/recovery system prompt.
 - [x] Add sequential batch launching with a small index of existing attempt records.
 - [x] Implement and verify the approved package/session/timeout/output usability changes.
+- [x] Complete the focused worker/usage/preparation reliability follow-up.
+- [x] Consolidate normal settings, use native SDK export and skip unchanged package writes.
 - [ ] Complete a repeated comparison under matched settings; one exploratory pair is reviewed.
 - [ ] Run a small development pilot and review readiness and projected resource use.
 - [ ] Freeze code, dependencies, images, dataset and settings for evaluation.
@@ -99,7 +135,57 @@ calls or API spending.
 
 ## Current implementation
 
-### Current usability milestone — complete; stop for review
+### Configuration, SDK export and package snapshots — complete
+
+Approved November 5: `configs/development.toml` contains every normal model/run
+value. `config.py` loads and validates without fallback values; the old
+`configs/initial.toml` is removed. `max_model_turns` also supplies the adapter's
+request guard, so there is one configured model-call limit. The resolved live
+values exactly match the saved pre-cleanup settings. Alternative profiles must
+copy the complete file. Synthetic controls now use this profile too; the optional
+paid model check retains small explicit test bounds under `tests/`.
+
+The existing Langfuse client exports all cursor pages to `observations.json`,
+with the same completion/privacy audits and bounded readback. Node/npm is no
+longer needed for normal runs. Historical `cli-observations.json` files remain.
+Package scanning is unchanged; identical inventories skip the file rewrite.
+Output files still copy as before. No new dependency, tool, image change, model
+setting change or benchmark attempt is included.
+
+Verification: 95 fast tests passed, including complete-config validation and one
+shared call limit, package first/change-only writes, SDK pagination beyond 100
+records, empty continuation pages, delayed completion and readback deadline.
+Hosted readback of the existing benign trace matched historical and current CLI
+content for ten observations. All 31 Docker cases passed under the consolidated
+normal profile, with cleanup verified. Full details are recorded in
+[cleanup evidence](evidence/config-sdk-cleanup/README.md). These are maintenance
+checks, not a measured benchmark improvement. Stop for review before another pilot.
+
+### Reliability follow-up — complete; stop for review
+
+Worker resources now share guaranteed cleanup on exceptional exits. Completed
+sessions drain final output and are reaped automatically, retaining their bounded
+final result for later retrieval. Partial input reports `input_bytes_sent`.
+Broken supervisor protocols remain terminal infrastructure failures; ordinary
+command timeouts still permit continuation after confirmed cleanup.
+
+Valid model replies without usage metadata continue. Aggregate token/cost totals
+become null and remain unknown; native observations retain available per-response
+usage. Preparation accepts the same `--experiment` as live runs, checks free
+workspace after Python setup, and stages files within the remaining attempt time.
+The API still selects at most one tool per response, so forty responses normally
+permit at most forty tool actions despite the separate eighty-tool guard.
+
+Verification passed: **91 fast tests and 31 synthetic Docker cases** in a complete
+suite, including fault handling, automatic reaping, partial-input reporting,
+zero-wait final-output capture, timeout recovery, isolation and cleanup. Two
+zero-model preparation cycles passed for `pwn-baby-boi`; recorded attempt settings
+exactly match `configs/development.toml`. The solver image is rebuilt locally.
+No model/numeric-profile, network-policy, dependency, tool-count or GDB change is
+included. [Final evidence](evidence/agent-reliability/README.md). No live model
+requests or challenge-solving attempts ran. Stop for review before another pilot.
+
+### Previous usability milestone — complete
 
 Approved November 4: live limits are 600 seconds, 120-second ordinary commands,
 60-second model requests, forty model turns/requests, eighty tool calls, 512 KiB
@@ -402,7 +488,10 @@ recorded hypothesis, not an applied change or completed comparison. The local
 `review.md` beside the raw records contains the sequence and size breakdown.
 This review made no model calls, Docker operations or runtime/configuration edits.
 
-## Current settings and limits
+## Historical profile expansion (superseded)
+
+The following records an earlier change; current settings are listed in README
+and `configs/development.toml`.
 
 The user subsequently approved larger limits for development testing in
 `configs/development.toml`: **300 seconds per attempt, 30 seconds per command/file
@@ -496,6 +585,7 @@ downloaded datasets and temporary `runs/` records remain Git-ignored.
 
 | Milestone | Records |
 | --- | --- |
+| Configuration, SDK export and package snapshots | [config-sdk-cleanup](evidence/config-sdk-cleanup/README.md) |
 | Initial isolated tools | [milestone1](evidence/milestone1/README.md) |
 | Organization and pytest | [refactor](evidence/refactor/README.md), [pytest-refactor](evidence/pytest-refactor/README.md) |
 | Conversation loop | [agent-loop](evidence/agent-loop/README.md) |

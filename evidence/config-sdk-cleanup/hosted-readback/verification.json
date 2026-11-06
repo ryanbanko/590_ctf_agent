@@ -1,0 +1,13 @@
+{
+  "trace_id": "daf234b57fa82f90297a7e4b42066bca",
+  "source": "evidence/model-integration/model-check-246c99c9973e/cli-observations.json",
+  "observation_count": 10,
+  "checks": {
+    "same_ids_as_historical_export": true,
+    "same_content_as_current_cli": true,
+    "same_content_as_historical_export": true,
+    "credentials_absent": true
+  },
+  "new_model_calls": 0,
+  "new_traces": 0
+}

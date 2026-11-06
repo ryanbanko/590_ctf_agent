@@ -1,0 +1,19 @@
+{
+  "run_id": "b8ba25a4684f",
+  "challenge_id": "interactive_terminal_and_independent_command",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 7,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "48767a5946cab09c4a549e4a41534ee9",
+  "active_seconds": 8.740218,
+  "cleanup_seconds": 0.381581,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000345,
+  "total_seconds": 9.122327
+}

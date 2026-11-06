@@ -9,9 +9,11 @@ import httpx2
 from langfuse.openai import OpenAI
 import pytest
 
-from ctf_agent.config import DEFAULTS, load_experiment
+from ctf_agent.config import CONFIG_PATH, load_experiment, load_settings
+
+DEFAULTS = load_settings()
 from ctf_agent.launch import run_challenge
-from ctf_agent.agent import MODEL_SETTINGS, make_responder
+from ctf_agent.agent import make_responder
 from ctf_agent.launch import read_model_trace
 from .fixtures.tracing import read_spans
 from .test_model import sdk_response
@@ -21,14 +23,16 @@ from .test_model import sdk_response
 def test_invalid_model_cap_is_rejected_before_launch(tmp_path, invalid):
     path = tmp_path / "experiment.toml"
     text = "nan" if type(invalid) is float else "true" if invalid is True else "-1"
-    path.write_text(f"[attempt]\n[model]\nrequest_seconds = {text}\n")
-    with pytest.raises(ValueError):
+    import re
+
+    path.write_text(re.sub(r"(?m)^request_seconds\s*=.*$", f"request_seconds = {text}", CONFIG_PATH.read_text()))
+    with pytest.raises(ValueError, match="request_seconds"):
         load_experiment(path)
 
 
 @pytest.mark.parametrize("split", ["development", "scored"])
 def test_shared_run_flow_keeps_answer_private_and_verifies_observed_candidate(
-        tmp_path, monkeypatch, local_attempt, telemetry, split):
+        tmp_path, monkeypatch, local_attempt, telemetry, split, model_settings):
     task_dir = tmp_path / "contestant"
     task_dir.mkdir()
     (task_dir / "program").write_bytes(b"public binary fixture")
@@ -73,7 +77,7 @@ def test_shared_run_flow_keeps_answer_private_and_verifies_observed_candidate(
 
     with OpenAI(api_key="dummy", max_retries=0,
                 http_client=httpx2.Client(transport=httpx2.MockTransport(handle))) as client:
-        respond, usage = make_responder(client, langfuse_public_key="pk-lf-ctf590-local")
+        respond, usage = make_responder(client, model_settings, langfuse_public_key="pk-lf-ctf590-local")
         directory = tmp_path / "run"
         report = run_challenge(DEFAULTS, tmp_path / "index.json", manifest, "pwn-baby-boi", directory,
             langfuse=telemetry["client"], respond=respond, model_usage=usage, export_trace=None)
@@ -88,19 +92,52 @@ def test_shared_run_flow_keeps_answer_private_and_verifies_observed_candidate(
     assert len([span for span in spans if span.name == "model-response"]) == 2
 
 
-def test_pinned_cli_exports_complete_failure_trace(tmp_path, monkeypatch):
+def observation(row):
+    return SimpleNamespace(model_dump=lambda **kwargs: dict(row))
+
+
+def test_sdk_exports_every_cursor_page_without_total_item_cap(tmp_path):
     rows = [{"id": "root", "name": "attempt", "type": "SPAN", "traceId": "trace", "endTime": "done"},
             {"id": "error", "name": "model-response", "type": "GENERATION", "traceId": "trace", "endTime": "done"},
             {"id": "cleanup", "name": "sandbox_cleanup", "type": "EVENT", "traceId": "trace", "endTime": "done"}]
-    commands = []
+    rows += [{"id": str(i), "name": "diagnostic", "type": "EVENT", "traceId": "trace", "endTime": "done"}
+             for i in range(101)]
+    calls = []
+    pages = {None: (rows[:2], 'continuation'), 'continuation': ([], 'last'), 'last': (rows[2:], None)}
 
-    def cli(command, **kwargs):
-        commands.append(command)
-        return SimpleNamespace(returncode=0, stdout=json.dumps({"body": {"data": rows}}))
+    def query(**kwargs):
+        calls.append(kwargs)
+        data, cursor = pages[kwargs['cursor']]
+        return SimpleNamespace(data=[observation(row) for row in data], meta=SimpleNamespace(cursor=cursor))
 
-    monkeypatch.setenv("LANGFUSE_BASE_URL", "https://example.invalid")
-    monkeypatch.setattr("ctf_agent.launch.subprocess.run", cli)
-    assert read_model_trace("trace", 1, 0, tmp_path) == rows
-    assert "@langfuse/cli@1.3.1" in commands[0]
-    assert "--from-start-time" in commands[0] and "--to-start-time" in commands[0]
-    assert (tmp_path / "cli-observations.json").is_file()
+    client = SimpleNamespace(api=SimpleNamespace(observations=SimpleNamespace(get_many=query)))
+    assert read_model_trace(client, 'trace', 1, 0, tmp_path) == rows
+    assert [call['cursor'] for call in calls] == [None, 'continuation', 'last']
+    assert all(call['trace_id'] == 'trace' and 'io' in call['fields'] and 'usage' in call['fields'] for call in calls)
+    assert json.loads((tmp_path / 'observations.json').read_text()) == {'data': rows}
+
+
+def test_sdk_export_waits_for_complete_records(tmp_path, monkeypatch):
+    rows = [{"id": "root", "name": "attempt", "type": "SPAN", "traceId": "trace", "endTime": "done"},
+            {"id": "cleanup", "name": "sandbox_cleanup", "type": "EVENT", "traceId": "trace", "endTime": "done"}]
+    calls = []
+
+    def query(**kwargs):
+        calls.append(kwargs)
+        data = rows[:1] if len(calls) == 1 else rows
+        return SimpleNamespace(data=[observation(row) for row in data], meta=SimpleNamespace(cursor=None))
+
+    monkeypatch.setattr('ctf_agent.launch.time.sleep', lambda seconds: None)
+    client = SimpleNamespace(api=SimpleNamespace(observations=SimpleNamespace(get_many=query)))
+    assert read_model_trace(client, 'trace', 0, 0, tmp_path) == rows
+    assert len(calls) == 2
+
+
+def test_sdk_export_keeps_deadline_when_records_are_incomplete(tmp_path, monkeypatch):
+    clock = iter([0, 0, 0, 91, 91])
+    monkeypatch.setattr('ctf_agent.launch.time', SimpleNamespace(monotonic=lambda: next(clock), sleep=lambda seconds: None))
+    client = SimpleNamespace(api=SimpleNamespace(observations=SimpleNamespace(get_many=lambda **kwargs:
+        SimpleNamespace(data=[], meta=SimpleNamespace(cursor=None)))))
+    with pytest.raises(TimeoutError):
+        read_model_trace(client, 'trace', 1, 1, tmp_path)
+    assert not (tmp_path / 'observations.json').exists()

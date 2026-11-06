@@ -32,7 +32,7 @@ def test_only_listed_files_and_public_fields_are_used(tmp_path, monkeypatch):
 
     def copy(args, data, timeout):
         assert args[:10] == ["exec", "--interactive", "--user", "1000:1000", "--workdir", "/workspace",
-                             "solver", "python", "-I", "-c"] and timeout == 3
+                             "solver", "python", "-I", "-c"] and 0 < timeout <= 3
         assert "filter='data'" in args[10]
         with tarfile.open(fileobj=io.BytesIO(data)) as archive:
             assert archive.getnames() == ["files", "files/program"]
@@ -42,6 +42,7 @@ def test_only_listed_files_and_public_fields_are_used(tmp_path, monkeypatch):
         transferred.append(True)
 
     monkeypatch.setattr("ctf_agent.challenge.bounded_exec", copy)
+    monkeypatch.setattr("ctf_agent.challenge.docker", lambda *args, **kwargs: "1024")
     records = stage_files(files, "solver", 1024, 3)
     assert transferred and records == [{"path": "files/program", "bytes": len(binary),
                                        "sha256": hashlib.sha256(binary).hexdigest()}]
@@ -166,3 +167,29 @@ def test_package_loader_accepts_evaluation_id_without_a_separate_runner(tmp_path
     monkeypatch.setattr("ctf_agent.challenge.subprocess.run", lambda *a, **k: SimpleNamespace(stdout=next(outputs)))
     challenge = load_challenge(dataset, "evaluation-0", manifest)
     assert challenge.name == "fixture" and challenge.files == [] and not challenge.container
+
+
+def test_staging_checks_free_space_and_remaining_time(tmp_path, monkeypatch):
+    source = tmp_path / 'public-file'
+    source.write_bytes(b'public-data')
+    monkeypatch.setattr('ctf_agent.challenge.docker', lambda *args, **kwargs: '5')
+    monkeypatch.setattr('ctf_agent.challenge.bounded_exec', lambda *args: pytest.fail('Staged without space/time'))
+    with pytest.raises(ValueError, match='available solver workspace'):
+        stage_files({'public-file': source}, 'solver', 1024, 3)
+    monkeypatch.setattr('ctf_agent.challenge.docker', lambda *args, **kwargs: '1024')
+    clock = iter([0, 0, 4])
+    monkeypatch.setattr('ctf_agent.challenge.time.monotonic', lambda: next(clock))
+    with pytest.raises(TimeoutError, match='remaining attempt time'):
+        stage_files({'public-file': source}, 'solver', 1024, 3)
+
+
+@pytest.mark.parametrize('extra,expected', [([], 'configs/development.toml'),
+                                          (['--experiment', 'custom.toml'], 'custom.toml')])
+def test_prepare_cli_uses_selected_experiment(monkeypatch, extra, expected):
+    from ctf_agent.__main__ import main
+
+    calls = []
+    monkeypatch.setattr('tests.check_readiness.check_readiness', lambda *args: calls.append(args))
+    monkeypatch.setattr('sys.argv', ['ctf_agent', 'prepare-challenge', '--challenge', 'example', *extra])
+    main()
+    assert calls[0][0] == Path(expected) and calls[0][-1] == 'example'

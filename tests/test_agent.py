@@ -8,7 +8,9 @@ from unittest.mock import Mock
 import pytest
 
 from ctf_agent.agent import AttemptStopped, MAX_RESPONSE_BYTES, SYSTEM_PROMPT, run_agent, validate_response
-from ctf_agent.config import DEFAULTS
+from ctf_agent.config import load_settings
+
+DEFAULTS = load_settings()
 from ctf_agent.tools import TOOL_DEFINITIONS
 from .fixtures.responses import tool_response
 from .fixtures.tracing import attribute, read_spans
@@ -136,7 +138,7 @@ def test_terminal_event_during_response_discards_actions(local_attempt, telemetr
 
 def test_expired_deadline_discards_response_before_watchdog_notices(local_attempt, monkeypatch):
     def respond(**request):
-        monkeypatch.setattr("ctf_agent.attempt.time", SimpleNamespace(monotonic=lambda: time.monotonic() + 61))
+        monkeypatch.setattr("ctf_agent.attempt.time", SimpleNamespace(monotonic=lambda: time.monotonic() + DEFAULTS["wall_seconds"] + 1))
         return tool_response("submit_flag", {"candidate": "private-expected-answer"}, "late")
 
     with local_attempt(respond) as run:

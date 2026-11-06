@@ -436,3 +436,82 @@ def test_attempt_deadline_stops_unpolled_session(attempt):
     while docker('inspect', '--format', '{{.State.Running}}', attempt['solver']) != 'false':
         assert time.monotonic() < deadline
         time.sleep(.05)
+
+
+def test_finished_session_is_reaped_without_polling(attempt):
+    result = attempt['call_tool']('run_command', {
+        'command': 'sleep .3; printf finished', 'interactive': True, 'wait_seconds': 0})
+    session = result['session_id']
+    # A fixed in-solver probe observes process lifetime without polling the
+    # command tool, which used to keep the finished supervisor alive.
+    source = '''import pathlib,time
+end=time.monotonic()+4
+while True:
+ children=[p for p in pathlib.Path('/proc').iterdir() if p.name.isdigit()
+           and p.name not in ('1',str(__import__('os').getpid()))]
+ supervisors=[]
+ for p in children:
+  try:
+   fields=(p/'stat').read_text().rsplit(')',1)[1].split()
+   if fields[1]=='1': supervisors.append(p.name)
+  except FileNotFoundError: pass
+ if not supervisors: break
+ assert time.monotonic()<end, supervisors
+ time.sleep(.05)
+'''
+    docker('exec', attempt['solver'], '/usr/local/bin/python', '-I', '-c', source, timeout=5)
+    result = attempt['call_tool']('run_command', {'session_id': session})
+    assert not result['running'] and result['stdout'] == 'finished' and result['cleanup_confirmed'], result
+
+
+def test_terminal_partial_input_reports_progress(attempt):
+    result = attempt['call_tool']('run_command', {
+        'command': 'stty -icanon -echo; printf ready; sleep 30', 'interactive': True})
+    session = result['session_id']
+    for _ in range(4):
+        result = attempt['call_tool']('run_command', {'session_id': session, 'input': 'x' * 16384})
+        sent = result['input_bytes_sent']
+        assert 0 <= sent <= 16384
+        if result.get('input_error'):
+            assert sent < 16384, result
+            break
+    else:
+        pytest.fail('The non-reading terminal did not exercise partial input')
+    result = attempt['call_tool']('run_command', {'session_id': session, 'close': True})
+    assert result['cleanup_confirmed'] and not result['running']
+
+
+def test_zero_wait_polls_preserve_final_output(attempt):
+    result = attempt['call_tool']('run_command', {
+        'command': "python -u -c \"print('begin-'+'x'*300000+'-final-marker',end='')\"",
+        'interactive': True, 'wait_seconds': 0})
+    output_file = result['recorded_output']
+    session = result.get('session_id')
+    for _ in range(8):
+        if not result['running']:
+            break
+        result = attempt['call_tool']('run_command', {'session_id': session, 'wait_seconds': 0})
+    assert not result['running'] and result['cleanup_confirmed'], result
+    captured = (attempt['directory'] / output_file).read_text()
+    assert captured == 'begin-' + 'x' * 300000 + '-final-marker'
+    assert result['total_output_bytes'] == len(captured)
+
+
+def test_supervisor_loss_stops_attempt(attempt):
+    from ctf_agent.agent import AttemptStopped
+
+    result = attempt['call_tool']('run_command', {'command': 'sleep 30', 'interactive': True})
+    identifier = result['session_id']
+    source = '''import json,os,pathlib,signal,sys
+for path in pathlib.Path('/proc').iterdir():
+ if not path.name.isdigit(): continue
+ try: args=(path/'cmdline').read_bytes().split(b'\\0')
+ except FileNotFoundError: continue
+ if b'--session' in args and json.loads(args[-2])['output_id']==sys.argv[1]:
+  os.kill(int(path.name),signal.SIGKILL); break
+else: raise AssertionError('Supervisor missing before injection')
+'''
+    docker('exec', attempt['solver'], '/usr/local/bin/python', '-I', '-c', source, identifier)
+    with pytest.raises(AttemptStopped, match='infrastructure_error'):
+        attempt['call_tool']('run_command', {'session_id': identifier})
+    assert docker('inspect', '--format', '{{.State.Running}}', attempt['solver']) == 'false'

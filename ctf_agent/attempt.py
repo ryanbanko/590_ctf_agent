@@ -189,6 +189,7 @@ def run_attempt(settings: dict, network: str, gateway: str, endpoints: list[dict
             run = {"run_id": run_id, "directory": directory, "result": result,
                    "solver": sandbox["solver"], "guard": sandbox["guard"],
                    "respond": request_response, "call_tool": call_tool,
+                   "remaining_seconds": lambda: remaining_seconds(state),
                    "stop": lambda reason: stop_attempt(state, reason)}
             watchdog = threading.Thread(target=watch_deadline, args=(state,), daemon=True)
             watchdog.start()

@@ -146,7 +146,9 @@ def invoke_worker(sandbox: dict, request: dict, timeout: float):
         raise RuntimeError("Command supervisor failed: " + str(result["_worker_error"]))
     packages = result.pop("_packages", None)
     if packages is not None and "directory" in sandbox:
-        (sandbox["directory"] / "packages.json").write_text(json.dumps(packages, indent=2) + "\n")
+        path = sandbox["directory"] / "packages.json"
+        if not path.exists() or json.loads(path.read_text()) != packages:
+            path.write_text(json.dumps(packages, indent=2) + "\n")
     output_id = result.pop("_output_id", None)
     if output_id is not None and "directory" in sandbox:
         if (not isinstance(output_id, str) or len(output_id) != 32
