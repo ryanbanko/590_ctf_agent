@@ -1,0 +1,20 @@
+{
+  "run_id": "756bd6e84469",
+  "challenge_id": "solver_python_libraries_and_network_deadline",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "d46142303a81952c98c6f4a13a43519d",
+  "active_seconds": 2.682078,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.166592,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000525,
+  "total_seconds": 2.849379
+}

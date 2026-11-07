@@ -7,11 +7,11 @@ COPY docker/solver-requirements.txt /opt/ctf/solver-requirements.txt
 RUN python -m pip install --no-cache-dir -r /opt/ctf/solver-requirements.txt \
     && python -m pip check \
     && python -m pip freeze --all > /opt/python-packages.txt
-RUN groupadd --gid 1000 solver && useradd --uid 1000 --gid 1000 --no-create-home solver \
-    && mkdir /workspace && chown 1000:1000 /workspace
-COPY docker/worker.py /opt/ctf/worker.py
+RUN groupadd --gid 1000 solver && useradd --uid 1000 --gid 1000 --create-home solver \
+    && python -m venv --system-site-packages /opt/venv \
+    && mkdir /workspace && chown -R 1000:1000 /workspace /opt/venv
 USER 1000:1000
 WORKDIR /workspace
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PWNLIB_NOTERM=1 HOME=/workspace
-ENV PATH=/workspace/.venv/bin:$PATH TMPDIR=/workspace PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_NO_CACHE_DIR=1
-CMD ["/usr/local/bin/python", "-I", "/opt/ctf/worker.py", "--serve"]
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PWNLIB_NOTERM=1 HOME=/home/solver
+ENV PATH=/opt/venv/bin:$PATH PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_NO_CACHE_DIR=1
+CMD ["sleep", "infinity"]

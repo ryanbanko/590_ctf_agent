@@ -14,7 +14,7 @@ from langfuse import Langfuse
 from .agent import AttemptStopped, validate_response
 from .config import validate_settings
 from .docker import docker
-from .sandbox import audit_network, close_sandbox, make_sandbox, start_sandbox, stop_solver
+from .sandbox import audit_network, close_sandbox, make_sandbox, start_sandbox, stop_solver, snapshot_packages
 from .tools import execute_tool, validate_arguments
 
 
@@ -45,7 +45,7 @@ def watch_deadline(state: dict):
 
 
 @contextmanager
-def run_attempt(settings: dict, network: str, gateway: str, endpoints: list[dict],
+def run_attempt(settings: dict, network: str, endpoints: list[dict],
                 expected_flag: str, output_root: Path, *, langfuse: Langfuse,
                 label: str = "synthetic", public_task: str = "Synthetic controls check", respond=None,
                 model_usage: dict | None = None, mode: str = "synthetic-controls"):
@@ -113,10 +113,7 @@ def run_attempt(settings: dict, network: str, gateway: str, endpoints: list[dict
                                                      "message": str(error)[:2000]}}, level="ERROR")
                         raise AttemptStopped(result["termination_reason"]) from None
                     tool.update(output=returned)
-                    if returned.get("cleanup_confirmed") is False:
-                        stop_attempt(state, "infrastructure_error")
-                        raise AttemptStopped(result["termination_reason"])
-                    elif name == "submit_flag" and returned.get("correct") is True:
+                    if name == "submit_flag" and returned.get("correct") is True:
                         stop_attempt(state, "success")
                         if result["termination_reason"] != "success":
                             raise AttemptStopped(result["termination_reason"])
@@ -199,7 +196,7 @@ def run_attempt(settings: dict, network: str, gateway: str, endpoints: list[dict
                     image_ids[role] = docker("image", "inspect", "--format", "{{.Id}}", settings[f"{role}_image"],
                                             timeout=min(5, remaining_seconds(state)))
                 observation.update(metadata={"image_ids": image_ids})
-                start_sandbox(sandbox, settings, network, gateway, endpoints, lambda: remaining_seconds(state))
+                start_sandbox(sandbox, settings, network, endpoints, lambda: remaining_seconds(state))
                 yield run
             except BaseException as error:
                 if result["termination_reason"] is None:
@@ -213,6 +210,8 @@ def run_attempt(settings: dict, network: str, gateway: str, endpoints: list[dict
                 watchdog.join(timeout=4)
                 result["active_seconds"] = round(time.monotonic() - started, 6)
                 cleanup_started = time.monotonic()
+                result["solver_restarts"] = sandbox["restarts"]
+                snapshot_packages(sandbox, "final", 2)
                 result["cleanup_errors"] = close_sandbox(sandbox)
                 result["cleanup_seconds"] = round(time.monotonic() - cleanup_started, 6)
                 result["verified_success"] = result["termination_reason"] == "success"

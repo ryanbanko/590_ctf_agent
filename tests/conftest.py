@@ -53,11 +53,12 @@ def local_attempt(request, tmp_path, monkeypatch, telemetry, settings):
     monkeypatch.setattr("ctf_agent.attempt.close_sandbox", lambda sandbox: [])
     monkeypatch.setattr("ctf_agent.attempt.stop_solver", lambda sandbox: True)
     monkeypatch.setattr("ctf_agent.attempt.audit_network", lambda *args: None)
-    monkeypatch.setattr("ctf_agent.tools.invoke_worker", Mock(side_effect=AssertionError("Unexpected worker call")))
+    monkeypatch.setattr("ctf_agent.tools.bounded_exec", Mock(side_effect=AssertionError("Unexpected Docker execution")))
+    monkeypatch.setattr("ctf_agent.attempt.snapshot_packages", lambda *args: None)
 
     @contextmanager
     def open_attempt(respond=None, public_task="public", expected_flag="private-expected-answer", model_usage=None):
-        with run_attempt(settings | getattr(request, "param", {}), "private-network", "private-gateway", [],
+        with run_attempt(settings | getattr(request, "param", {}), "private-network", [],
                          expected_flag, tmp_path, langfuse=telemetry["client"],
                          public_task=public_task, respond=respond, model_usage=model_usage) as run:
             yield run
@@ -78,7 +79,7 @@ def attempt(request, settings, target, output_root, record_property, telemetry):
     record_property("check_name", label)
     run = None
     try:
-        with run_attempt(settings | getattr(request, "param", {}), target["network"], target["gateway"],
+        with run_attempt(settings | getattr(request, "param", {}), target["network"],
                          target["endpoints"], target["expected_flag"], output_root,
                          langfuse=telemetry["client"], label=label) as run:
             record_property("run_id", run["run_id"])

@@ -1,6 +1,5 @@
 """Procedural lifecycle for the solver and its trusted network guard."""
 
-import base64
 import ipaddress
 import json
 import subprocess
@@ -22,9 +21,9 @@ def validate_endpoints(endpoints: list[dict]):
 def make_sandbox(run_id: str, observation, stop):
     return {
         "solver": f"ctf590-{run_id}-solver", "guard": f"ctf590-{run_id}-guard",
-        "egress": f"ctf590-{run_id}-egress",
         "observation": observation, "stop": stop, "ready": threading.Event(),
-        "closing": threading.Event(), "monitor": None, "log_process": None,
+        "closing": threading.Event(), "stopping": threading.Event(),
+        "lifecycle": threading.RLock(), "restarts": 0, "monitor": None, "log_process": None,
     }
 
 
@@ -55,15 +54,13 @@ def monitor_guard(sandbox: dict):
             sandbox["stop"]("guard_failure")
 
 
-def start_sandbox(sandbox: dict, settings: dict, network: str, gateway: str,
+def start_sandbox(sandbox: dict, settings: dict, network: str,
                   endpoints: list[dict], remaining):
     validate_endpoints(endpoints)
-    docker("network", "create", "--ipv6=false", "--label", "ctf590.managed=true", sandbox["egress"])
-    gateway = json.loads(docker("network", "inspect", sandbox["egress"]))[0]["IPAM"]["Config"][0]["Gateway"]
-    policy = json.dumps({"gateway": gateway, "endpoints": endpoints})
+    policy = json.dumps({"endpoints": endpoints})
     docker(
         "run", "--detach", "--pull", "never", "--name", sandbox["guard"],
-        "--label", "ctf590.managed=true", "--network", sandbox["egress"],
+        "--label", "ctf590.managed=true", "--network", network,
         "--cap-drop", "ALL", "--cap-add", "NET_ADMIN",
         "--cap-add", "NET_RAW", "--cap-add", "SETUID", "--cap-add", "SETGID",
         "--security-opt", "no-new-privileges=true",
@@ -87,40 +84,81 @@ def start_sandbox(sandbox: dict, settings: dict, network: str, gateway: str,
         if time.monotonic() >= startup_deadline:
             raise RuntimeError("Network guard did not become ready; solver was not started")
     remaining()
-    docker("network", "connect", network, sandbox["guard"], timeout=min(5, remaining()))
     memory = f'{settings["memory_mb"]}m'
-    docker(
-        "run", "--detach", "--pull", "never", "--platform", "linux/amd64", "--name", sandbox["solver"],
-        "--label", "ctf590.managed=true", "--network", f'container:{sandbox["guard"]}',
-        "--user", "1000:1000", "--cap-drop", "ALL",
-        "--security-opt", "no-new-privileges=true", "--read-only",
-        "--tmpfs", f'/workspace:rw,exec,nosuid,nodev,size={settings["workspace_mb"]}m,uid=1000,gid=1000,mode=700',
-        "--tmpfs", "/tmp:rw,nosuid,nodev,size=16m,uid=1000,gid=1000,mode=700",
-        "--memory", memory, "--memory-swap", memory,
-        "--pids-limit", str(settings["pids"]), "--cpus", str(settings["cpus"]),
-        "--log-opt", "max-size=1m", "--log-opt", "max-file=1", settings["solver_image"],
-        timeout=min(15, remaining()),
-    )
-    docker("exec", "--user", "1000:1000", sandbox["solver"], "/usr/local/bin/python", "-I", "-m", "venv",
-           "--system-site-packages", "/workspace/.venv", timeout=min(20, remaining()))
-    invoke_worker(sandbox, {"tool": "inspect"}, timeout=min(5, remaining()))
+    sandbox["remaining"] = remaining
+    with sandbox["lifecycle"]:
+        remaining()
+        docker(
+            "run", "--detach", "--init", "--pull", "never", "--platform", "linux/amd64", "--name", sandbox["solver"],
+            "--label", "ctf590.managed=true", "--network", f'container:{sandbox["guard"]}',
+            "--user", "1000:1000", "--workdir", "/workspace", "--cap-drop", "ALL", "--cap-add", "CHOWN",
+            "--security-opt", "no-new-privileges=true",
+            "--memory", memory, "--memory-swap", memory,
+            "--pids-limit", str(settings["pids"]), "--cpus", str(settings["cpus"]),
+            "--log-opt", "max-size=1m", "--log-opt", "max-file=1",
+            "--entrypoint", "/bin/sleep", settings["solver_image"], "infinity",
+            timeout=min(15, remaining()),
+        )
+        remaining()
+    snapshot_packages(sandbox, 'initial', min(5, remaining()))
     remaining()
     sandbox["observation"].create_event(name="sandbox_ready", metadata={
         "solver": sandbox["solver"], "guard": sandbox["guard"], "endpoints": endpoints})
 
 
 def stop_solver(sandbox: dict) -> bool:
-    try:
-        docker("kill", sandbox["solver"], timeout=3)
-    except (RuntimeError, subprocess.TimeoutExpired) as error:
-        # Repeated stopping and setup failure can leave no running solver.
-        if isinstance(error, RuntimeError) and ("No such container" in str(error)
-                                               or "is not running" in str(error)):
-            return True
-        sandbox["observation"].create_event(name="solver_stop_failed", level="ERROR",
-            metadata={"exception": type(error).__name__, "message": str(error)[:2000]})
-        return False
+    # Set before waiting: a concurrent recovery cannot hide a terminal stop.
+    sandbox["stopping"].set()
+    with sandbox["lifecycle"]:
+        try:
+            docker("kill", sandbox["solver"], timeout=3)
+        except (RuntimeError, subprocess.TimeoutExpired) as error:
+            if isinstance(error, RuntimeError) and ("No such container" in str(error)
+                                                   or "is not running" in str(error)):
+                return True
+            sandbox["observation"].create_event(name="solver_stop_failed", level="ERROR",
+                metadata={"exception": type(error).__name__, "message": str(error)[:2000]})
+            return False
     return True
+
+
+def restart_solver(sandbox: dict):
+    """Reset all solver processes; terminal stop always takes precedence."""
+    with sandbox["lifecycle"]:
+        remaining = sandbox["remaining"]
+        remaining()
+        if sandbox["stopping"].is_set():
+            raise RuntimeError("Solver is stopping; recovery refused")
+        audit_network(sandbox, remaining())
+        remaining()
+        sandbox["observation"].create_event(name="solver_restarting", metadata={"reason": "command_timeout"})
+        docker("restart", "--signal", "SIGKILL", sandbox["solver"], timeout=min(5, remaining()))
+        remaining()
+        if sandbox["stopping"].is_set():
+            raise RuntimeError("Solver stopped during recovery")
+        if docker("inspect", "--format", "{{.State.Running}}", sandbox["solver"],
+                  timeout=min(3, remaining())) != "true":
+            raise RuntimeError("Solver did not recover")
+        audit_network(sandbox, remaining())
+        remaining()
+        sandbox["restarts"] += 1
+        sandbox["observation"].create_event(name="solver_restarted", metadata={"restart": sandbox["restarts"]})
+
+
+def snapshot_packages(sandbox: dict, phase: str, timeout: float):
+    """Best-effort, bounded image/final inventory; no per-tool scans or RPC."""
+    try:
+        result = bounded_exec(["exec", sandbox["solver"], "python", "-I", "-c",
+            "import importlib.metadata as m,json; print(json.dumps({d.metadata['Name']:d.version for d in m.distributions()}))"],
+            b"", timeout, 65_536)
+        if result["timed_out"] or result["truncated"] or result["exit_code"] != 0:
+            raise RuntimeError("Package inventory unavailable or incomplete")
+        packages = json.loads(result["stdout"])
+        (sandbox["directory"] / f"packages-{phase}.json").write_text(json.dumps(packages, indent=2) + "\n")
+        sandbox["observation"].create_event(name="package_inventory", metadata={"phase": phase, "available": True})
+    except (OSError, ValueError, RuntimeError, subprocess.TimeoutExpired) as error:
+        sandbox["observation"].create_event(name="package_inventory", metadata={
+            "phase": phase, "available": False, "exception": type(error).__name__})
 
 
 def audit_network(sandbox: dict, timeout: float):
@@ -133,40 +171,9 @@ def audit_network(sandbox: dict, timeout: float):
         sandbox["stop"]("scope_violation")
 
 
-def invoke_worker(sandbox: dict, request: dict, timeout: float):
-    raw = bounded_exec(
-        ["exec", "--interactive", "--user", "1000:1000", "--workdir", "/workspace",
-         sandbox["solver"], "/usr/local/bin/python", "-I", "/opt/ctf/worker.py"],
-        json.dumps(request).encode(), timeout, limit=2_097_152 if request["tool"] == "artifact" else 524_288,
-    )
-    result = json.loads(raw)
-    if not isinstance(result, dict):
-        raise RuntimeError("Sandbox worker returned an invalid result")
-    if "_worker_error" in result:
-        raise RuntimeError("Command supervisor failed: " + str(result["_worker_error"]))
-    packages = result.pop("_packages", None)
-    if packages is not None and "directory" in sandbox:
-        path = sandbox["directory"] / "packages.json"
-        if not path.exists() or json.loads(path.read_text()) != packages:
-            path.write_text(json.dumps(packages, indent=2) + "\n")
-    output_id = result.pop("_output_id", None)
-    if output_id is not None and "directory" in sandbox:
-        if (not isinstance(output_id, str) or len(output_id) != 32
-                or any(c not in "0123456789abcdef" for c in output_id)):
-            raise RuntimeError("Invalid command output identifier")
-        artifact = invoke_worker(sandbox, {"tool": "artifact", "output_id": output_id}, timeout=3)
-        data = base64.b64decode(artifact["data"], validate=True)
-        if len(data) > 1_048_576:
-            raise RuntimeError("Command output file exceeds its bound")
-        outputs = sandbox["directory"] / "outputs"
-        outputs.mkdir(exist_ok=True)
-        (outputs / (output_id + ".log")).write_bytes(data)
-        result["recorded_output"] = "outputs/" + output_id + ".log"
-    return result
-
-
 def close_sandbox(sandbox: dict) -> list[str]:
     """Remove only resources belonging to this attempt, preserving guard output."""
+    sandbox["stopping"].set()
     errors = []
     for name in (sandbox["solver"], sandbox["guard"]):
         try:
@@ -177,14 +184,6 @@ def close_sandbox(sandbox: dict) -> list[str]:
         except subprocess.TimeoutExpired:
             errors.append(f"Timed out removing {name}")
     sandbox["closing"].set()
-    try:
-        docker("network", "rm", sandbox["egress"], timeout=5)
-    except RuntimeError as error:
-        if ("No such network" not in str(error)
-                and f"network {sandbox['egress']} not found" not in str(error)):
-            errors.append(f"{sandbox['egress']}: {error}")
-    except subprocess.TimeoutExpired:
-        errors.append("Timed out removing solver egress network")
     process = sandbox["log_process"]
     if process is not None:
         if process.poll() is None:

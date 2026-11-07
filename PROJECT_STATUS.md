@@ -1,31 +1,85 @@
 # Project status
 
-Last reviewed: November 5, 2026 (America/New_York).
+Last reviewed: November 6, 2026 (America/New_York).
 
-**Section 1 provided the working baseline; Section 2 comparison remains pending.**
-The approved maintenance cleanup now puts all normal model/run values in one
-complete `configs/development.toml`, replaces CLI export with the installed
-Langfuse Python SDK, and writes package inventories only when they change.
-**95 fast tests and all 31 synthetic Docker cases passed**; cleanup was verified.
-SDK readback matched ten observations from the existing synthetic trace against
-both its historical export and a fresh CLI query. No model calls or new hosted
-traces were created. [Cleanup evidence](evidence/config-sdk-cleanup/README.md).
-Context management, output-copy optimization and GDB remain deferred. Review
-before another live pilot.
+**Infrastructure checkpoints 1–2 complete and reviewed; bounded solver-image evaluation is next.**
+Supplied Compose services now retain commands, dependencies, aliases, DNS,
+permissions, storage and resource settings. Fresh project-local bridges/volumes
+replace network reconstruction. The guard joins the challenge-facing bridge;
+extra egress networks, manual routing, gateway arguments and hostname rewriting
+are removed. Socket/port/global-name adjustments are explicitly recorded.
 
-**Infrastructure simplification is planned, not implemented.** The current
-runtime still uses the worker, interactive sessions, read-only root/tmpfs,
-archive staging and per-command timeout cleanup. The latest
-[proposal](docs/SIMPLIFICATION_PLAN.md) keeps our agent, three tools, model
-integration, Langfuse and batch wrapper, with solver-restart recovery proposed
-for a simpler execution environment. The supplied NYU image has been inspected
-as source but has not been built or selected.
+**100 offline tests and 29 synthetic Docker cases passed**, with cleanup verified.
+Two fresh zero-model preparation cycles each passed for `pwn-baby-boi`,
+`web-shreeramquest` and `cry-ecxor` (six cycles total). No live model calls, new
+hosted traces, solving or performance comparison ran.
+[Current checkpoint evidence](evidence/target-network-simplification/README.md).
 
-## Changes since the last Git update
+Material changes: targets regain supplied/default capabilities, resource settings
+and normal network connectivity; the previous blanket target hardening is gone.
+Solver limits, evaluator separation, firewall/independent denial evidence and
+restart behavior remain. The infrastructure inventory accepts 26 of 27 Compose
+setups; privileged `msc-showdown` remains unsupported. Seventeen socket omissions
+are recorded, not claimed to preserve every challenge's functionality.
+
+Read-only challenge-directory binds have offline validation only: Docker Desktop
+rejected both temporary-directory and repository binds. Named-volume freshness
+and backend DNS/scope passed real Docker checks. Current CTFTiny definitions have
+no non-socket binds. Writable host binds/external storage require an explicit
+reset strategy. No host-sharing or storage-copy workaround was added.
+
+The [separate plan](docs/SIMPLIFICATION_PLAN.md) records both completed checkpoints
+and independent supplied-image evaluation, which remains **not completed**. Our
+agent/prompt/model, three tools, Langfuse SDK export, TOML and batch workflow remain.
+Baseline commit `64f6385`, checkpoint evidence and previous solver/guard images are
+preserved. The image was source-reviewed only; GDB/context/agent behavior remain
+separate. The direct course clarifications and next steps are recorded below.
+Live pilot remains a separately authorized stage.
+
+## Latest course clarification and current plan
+
+The professor [explicitly accepted](docs/REFERENCES.md#november-6-course-guide-and-professor-confirmations)
+repository Compose files/private controller verification, Langfuse JSON exports,
+and developing on separate CTFTiny IDs while holding ten out. Keep all three;
+no JSONL conversion, NYU development-data migration or separate course-runtime
+adapter is required. This confirms the approach, not every compatibility/control
+claim. Existing evidence and known exceptions remain.
+
+Next: the [bounded image checkpoint](docs/SIMPLIFICATION_PLAN.md#course-clarification-and-next-checkpoint--november-6)
+compares the supplied fixed-version solver with our working image. Image adoption
+is conditional on lower maintenance and passing focused execution/isolation checks;
+no build has started. Then save source/image identities, refresh zero-solving
+readiness for the ten intended evaluation environments and review a separately
+authorized small live pilot. The agent, tools, model, SDK export and batch stay.
+
+The newer guide states one configuration with three fresh attempts per challenge,
+per-challenge success/sample-SD/token/time metrics, and a demo that need not solve.
+These are recorded as **guide statements**, distinct from the three email approvals.
+The working checklist below reflects that guide; original Canvas requirements
+remain unchanged in ASSIGNMENT.md and their differences are preserved in REFERENCES.
+No report/evaluation/model work was performed by this documentation audit.
+
+## Current Git checkpoint
+
+November 6 audit: local `main`, local `origin/main` and read-only GitHub `main`
+all point to `64f6385fb788f2c54e2a4f0ca6a661fd8d1c51d1` (`64f6385`). There are no
+staged changes or committed ahead/behind differences. Execution/target-network
+simplification, updated tests/docs and both new evidence directories are saved
+in the working tree but uncommitted. This audit changes documentation only;
+no commit or push is performed. The original assignment and historical evidence
+are preserved unchanged.
+
+Documentation checks passed: 122 local links and 23 heading links resolve;
+`git diff --check` is clean. Runtime/configuration/test hashes still match the
+last passing 100-offline/29-Docker verification. No tests, containers or model
+requests were rerun for this documentation-only audit.
+
+## Historical November 5 Git audit (subsequently committed as `64f6385`)
 
 On the November 5 documentation audit, local `HEAD` and GitHub `main` both point
-to `a6d3bf0563bd3565a9967a52468757f9d2ac07a3` (`a6d3bf0`). The changes below are
-saved locally but uncommitted; no commit or push was performed by this audit.
+to `a6d3bf0563bd3565a9967a52468757f9d2ac07a3` (`a6d3bf0`). At that audit the changes below were
+saved locally but uncommitted; no commit or push was performed by that audit.
+They are now included in `64f6385`; the execution checkpoint is subsequent work.
 That commit already included writable Python/home, runtime pip access,
 interactive sessions, timeout recovery, larger limits and removal of the local
 spending cap. Those are not new changes since the checkpoint.
@@ -113,29 +167,90 @@ calls or API spending.
 - [x] Add sequential batch launching with a small index of existing attempt records.
 - [x] Implement and verify the approved package/session/timeout/output usability changes.
 - [x] Complete the focused worker/usage/preparation reliability follow-up.
-- [x] Consolidate normal settings, use native SDK export and skip unchanged package writes.
-- [ ] Complete a repeated comparison under matched settings; one exploratory pair is reviewed.
+- [x] Consolidate normal settings and use native SDK export (historical write-on-change inventories).
+- [x] Replace execution machinery and verify solver restart recovery; remove per-tool scans.
+- [x] Review execution, then simplify supplied targets/networking and verify scope/reset.
+- [x] Review the target/network checkpoint and record professor confirmations.
+- [ ] Evaluate the supplied image with bounded checks; adopt only if simpler, then freeze the selected artifact.
+- [ ] Recheck the intended ten environments under the final runtime without solving.
+- [ ] Support the chosen improvement with trace evidence and small follow-up checks.
+  The earlier exploratory pair is preserved; the new guide does not require a second full evaluation.
 - [ ] Run a small development pilot and review readiness and projected resource use.
 - [ ] Freeze code, dependencies, images, dataset and settings for evaluation.
-- [ ] Run the ten reserved challenges with fresh trials, repeating 2–3 times as
-  the approved budget allows; preserve failures and complete records.
+- [ ] Following the new guide, run one fixed configuration for three fresh trials
+  on each of the ten reserved challenges; preserve failures, missing usage and
+  incomplete incidents. Actual counts remain honest if course limits prevent completion.
 
 ### Sections 3–4 and submission: remaining
 
-- [ ] Calculate and plot pass@k, average solve rate/variance, time, calls, tokens
-  and cost, including failed attempts.
-- [ ] Explain the comparison with specific trace steps and disclose prior exposure.
+- [ ] Report per-challenge success rate, sample SD (percentage points), mean input/
+  output/total tokens and launch-to-termination time across all three trials.
+  Calls/cost remain useful recorded extras; older Canvas pass@k/variance wording is preserved separately.
+- [ ] Explain trace-supported findings, changes, follow-up checks and prior exposure.
 - [ ] Select the competition configuration and explain its tradeoffs.
-- [ ] Prepare the approximately three-page report with contributions, reused-code
+- [ ] Prepare the guide's 1–3 page report with contributions, reused-code
   citations and AI disclosure.
-- [ ] Record a fresh successful autonomous-run video or live demo with evaluator
-  confirmation and identifying configuration/commit/challenge/run records.
+- [ ] Record an identified autonomous-run video or live demo showing tools/results;
+  the guide does not require a solve. If a solve is shown, include submission and
+  evaluator confirmation. Preserve identifying configuration/commit/challenge/run records.
 - [ ] Finalize the repository package, aggregation script, frozen commit and
   reproducible launch instructions; submit by November 11 at 11:59 p.m. Eastern.
 
 ## Current implementation
 
-### Configuration, SDK export and package snapshots — complete
+### Target/network simplification — checkpoint complete
+
+[Evidence](evidence/target-network-simplification/README.md) records 100 offline
+tests, 29 Docker cases, the 27-definition infrastructure inventory and six fresh
+development preparation cycles. A two-service synthetic target verifies frontend/
+backend DNS, denied direct backend access, within-trial volume persistence and
+fresh state after `down --volumes`. Host bind execution was blocked by Docker
+Desktop sharing; read-only bind policy is verified offline only.
+
+The supplied Compose definitions and standard project networking/lifecycle replace
+our blanket service normalization, backend reconstruction and egress/router setup.
+Small existing orchestration remains for private loading, image identity, exposure/
+freshness checks, bounded lifecycle and adjustment/results records. New code adds
+narrow mount/storage/host-administration checks and explicit adjustment records;
+no new persistent subsystem or runtime dependency. Runtime Python decreases from
+1,575 to 1,561 lines (14 fewer); the main reduction is mechanisms and assumptions,
+not line count. The agent, resolved settings, solver image and SDK export are unchanged.
+
+Targets now inherit ordinary Docker/supplied capabilities and resource settings.
+Solver controls still enforce scope, CPU/RAM/PIDs/time/calls/output/write/model
+limits. The known privileged target and storage needing bespoke reset fail
+explicitly. Neither preparation nor socket omission proves solving compatibility.
+Stop for review before independent supplied-image selection or a live pilot.
+
+
+### Previous execution simplification — checkpoint complete
+
+The [checkpoint evidence](evidence/execution-simplification/README.md) records
+baseline/new source and image identities, 93 offline tests, 28 complete synthetic
+Docker cases and two fresh development preparation cycles. The complete Docker
+run checked denied-traffic incidents, guard loss, resource/isolation controls,
+trusted submissions, actual ownership/mode-preserving copying, writable home/pip,
+restart persistence, detached/background process reset and clean removal. Offline
+checks cover failed recovery and terminal-stop races, trace output and SDK export,
+and batch interruption/incident records. Fault tests use substitutes, not a daemon
+stress test; no solve-rate or live-reliability improvement is established.
+
+The old 354-line worker service and its host RPC are gone. Standard Docker and
+Python replace the mechanisms; small custom code remains for bounded capture,
+one-shot writing, restart coordination and initial inventory. Existing guard,
+evaluator and tracing code are reused, not relabeled as NYU-supplied functionality.
+The current solver image is adapted independently of the NYU image decision.
+`workspace_mb` and session/artifact contracts/tests are removed rather than kept
+as dormant fallbacks. CPU/RAM/PID/time/call/model/output/write controls remain.
+
+The former package write-on-change and per-command descendant-cleanup milestones
+below are historical. New inventories are initial plus optional final readback;
+terminal stopping often makes final inventory unavailable and records that fact.
+That checkpoint was reviewed; the target/network checkpoint above completes the
+next infrastructure step. Its original counts remain historical evidence.
+
+
+### Previous configuration, SDK export and package snapshots — complete
 
 Approved November 5: `configs/development.toml` contains every normal model/run
 value. `config.py` loads and validates without fallback values; the old
@@ -519,9 +634,12 @@ previously approved discretion below $0.50 and confirmed a $1/day account allowa
 this milestone spent no model budget. Remote billing/cancellation and remaining
 account quota are not independently audited.
 
-## Limits and next steps
+## Earlier environment correction and remaining assignment work
 
-### Approved solver environment and timeout-contract correction
+The environment-correction notes below are historical. Use the current checkpoint
+and README for active execution/storage behavior and verification scope.
+
+### Historical solver environment and timeout-contract correction
 
 The three most recently reviewed attempts ended without success or submissions;
 none exhausted its configured limits. Missing utilities and executable failures
@@ -553,8 +671,9 @@ recorded in [Experiment 1](docs/EXPERIMENTS.md); real model comparisons remain p
 ### Remaining scope
 
 The shared command can select any indexed ID whose files are materialized and
-whose supplied setup fits the reviewed conventions. **Infrastructure is verified
-for the ten reserved IDs and five development IDs, not all fifty entries.** More complex
+whose supplied setup fits the reviewed conventions. **Earlier infrastructure preparation covered
+the ten reserved IDs and five development IDs, not all fifty entries.** The new
+execution checkpoint has separately prepared only `pwn-baby-boi` so far. More complex
 Compose arrangements fail closed. The solver now builds as AMD64 with baseline
 utilities; benign AMD64 and i386 executable handling passed the checks recorded above.
 Arbitrary contestant-binary compatibility, specialized packages and solving remain
@@ -567,9 +686,9 @@ run a small pilot. Keep the ten reserved IDs for the later frozen evaluation.
 The same command will run those IDs when that stage is authorized. Preserve
 configuration, trials and failed attempts; the repository is not frozen for scoring.
 
-The whole Part 1 assignment still needs Section 2 experiments, the held-out runs,
-pass@k/solve-rate/variance/resource metrics, report and successful-run video/live
-demo. Section 1 being ready does not complete the entire assignment. Repository,
+The remaining work is trace-supported agent analysis, the held-out runs, guide
+success/sample-SD/token/time metrics, report and autonomous-run demo. The older
+Canvas pass@k/variance/successful-demo wording is preserved in REFERENCES. Section 1 being ready does not complete the entire assignment. Repository,
 report and demo are due **November 11, 2026, 11:59 p.m. Eastern**; competition is
 November 18. Work so far is attributed to **Ryan Banko**, with OpenAI Codex
 assistance disclosed in README. Original requirements: [ASSIGNMENT.md](ASSIGNMENT.md).
@@ -585,6 +704,8 @@ downloaded datasets and temporary `runs/` records remain Git-ignored.
 
 | Milestone | Records |
 | --- | --- |
+| Target/network simplification | [target-network-simplification](evidence/target-network-simplification/README.md) |
+| Execution simplification | [execution-simplification](evidence/execution-simplification/README.md) |
 | Configuration, SDK export and package snapshots | [config-sdk-cleanup](evidence/config-sdk-cleanup/README.md) |
 | Initial isolated tools | [milestone1](evidence/milestone1/README.md) |
 | Organization and pytest | [refactor](evidence/refactor/README.md), [pytest-refactor](evidence/pytest-refactor/README.md) |

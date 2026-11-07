@@ -9,10 +9,18 @@ The ten scored challenges are reserved; use the forty development IDs in
 [Design](docs/DESIGN.md) · [Section 2 experiments](docs/EXPERIMENTS.md) ·
 [References and attribution](docs/REFERENCES.md)
 
-The instructions below describe the current worker-based implementation. The
-[infrastructure simplification plan](docs/SIMPLIFICATION_PLAN.md) is under review,
-not implemented: writable disposable execution, removal of sessions and proposed
-solver-restart recovery have not replaced the current runtime.
+The [infrastructure simplification plan](docs/SIMPLIFICATION_PLAN.md) tracks
+reviewable checkpoints. Execution now uses ordinary Docker copy/exec and a
+writable disposable solver. Targets now retain supplied Compose behavior on fresh
+project networks/volumes; image selection remains independent. Re-run `build-images`
+after pulling these changes (both solver and guard startup changed).
+
+The professor has [confirmed](docs/REFERENCES.md#november-6-course-guide-and-professor-confirmations)
+that repository Compose files/private controller verification, Langfuse JSON
+exports and our CTFTiny development/ten-held-out split are acceptable. No separate
+course runtime, JSONL conversion or NYU development-data migration is required.
+The next infrastructure task is the bounded upstream solver-image evaluation;
+adoption depends on compatibility and lower maintenance. It has not started.
 
 ## One-time setup
 
@@ -55,12 +63,12 @@ dependencies. [Requested versions](docker/solver-requirements.in) and
 [resolved dependencies](docker/solver-requirements.txt) are committed; the image
 records installed versions in `/opt/python-packages.txt`. Reedsolo is not included.
 
-The solver's home and temporary directory are `/workspace`. Each attempt creates
-`/workspace/.venv`, which sees the preinstalled libraries and accepts new packages:
-`python -m pip install PACKAGE`. Python and pip select that environment automatically.
-The environment, installed additions and workspace are discarded after each attempt.
-The live profile allows 1 GiB RAM and 512 MiB workspace; tmpfs files count toward RAM.
-Re-run `build-images` after pulling these changes.
+The solver has a writable `/workspace`, home at `/home/solver`, normal `/tmp`
+and an image-prepared Python environment at `/opt/venv`. Python/pip select it
+automatically: `python -m pip install PACKAGE`. Files and installed additions
+survive a command-timeout restart, but are discarded after each attempt.
+The live profile allows 1 GiB RAM; writable storage uses Docker's disk space,
+with **no per-attempt disk quota**. Monitor Docker's available storage.
 
 The professor [approved runtime package downloads](docs/REFERENCES.md#authority-and-professor-clarification).
 The agent's rule permits external internet **only for pip dependency installation**,
@@ -208,13 +216,11 @@ top-level `--config` applies to image builds and synthetic checks.
 | --- | --- |
 | Whole attempt | 600 seconds, including solver preparation; cleanup/export add time. |
 | Ordinary command | Up to 120 seconds, clipped to remaining attempt time. |
-| Interactive session | Until closed, exited, or the attempt deadline; each read waits at most 5 seconds. |
 | Model request | Up to 60 seconds; no client retries. |
 | Model / tool calls | 40 / 80 maximum. |
 | Model input / output | 512 KiB serialized input; 4,096 output tokens per request. |
-| Solver resources | 1 CPU, 1 GiB memory, 64 PIDs, 512 MiB workspace. |
+| Solver resources | 1 CPU, 1 GiB memory, 64 PIDs; writable disk has no per-attempt quota. |
 | Tool output / file write | 64 KiB combined stdout/stderr; 64 KiB UTF-8 write. |
-| Saved command output | Up to 1 MiB per command; further truncation is explicit. |
 
 Edit `[attempt]` and `[model]` in [configs/development.toml](configs/development.toml),
 the single complete file for normal run settings. `config.py` loads and validates
@@ -231,36 +237,34 @@ There is no local spending cap or reservation system; token usage and estimated
 cost are still recorded. Provider/account limits remain outside this application.
 Larger allowances permit more work but do not force the agent to use them.
 
-Ordinary command timeouts clean up that command and its descendants and return
-`timed_out: true`; the agent can recover if cleanup is confirmed. Unconfirmed
-cleanup is terminal. The whole-attempt deadline still kills the complete solver.
-Use shorter internal connection/read deadlines when useful. The command schema
-advertises the configured ordinary-command maximum/default.
+A command timeout returns `timed_out: true`, `solver_restarted: true` and
+`process_state_reset: true` after restarting the **same solver container**.
+Files and pip installs survive; **all solver processes and connections end**,
+including unrelated background commands. Target services remain running. The
+run ID, call counts and original deadline remain unchanged; no command is retried
+automatically. Failed recovery, scope/guard failures and the whole-attempt deadline
+are terminal. Use shorter internal network deadlines to avoid unnecessary resets.
 
-Contestant-file staging checks actual free workspace after Python setup and uses
-the remaining attempt deadline, including archive preparation and transfer.
+Contestant files are copied with standard `docker cp` before agent execution;
+trusted setup assigns solver ownership and records hashes/modes. Staging uses the
+remaining attempt deadline. There is no startup venv or custom archive transfer.
 
-### Interactive commands and output
+### Commands and output
 
-The agent still uses three tools. Ordinary `run_command` calls take `command` and
-optional `timeout_seconds`. To keep a terminal alive, use `interactive: true` with
-the command. A running result supplies `session_id`. Subsequent calls use that ID
-with optional `input` (include `\n` to submit a line), `wait_seconds` (default 0.5,
-maximum 5), or `close: true`. The tool returns `running`, output and any exit code.
-Each call counts toward the tool limit. Other commands can run while a session is
-alive. Finished supervisors are reaped automatically; their final result stays
-available until retrieved. `input_bytes_sent` reports accepted UTF-8 bytes; an
-`input_error` explains any unsent remainder. Avoid resending the whole input after
-partial delivery. Input, output, closing and timeouts appear in the existing trace.
+`run_command` accepts `command` and optional `timeout_seconds`, up to the configured
+maximum (120 seconds). Each call starts a new `/bin/sh` in `/workspace` and returns
+bounded stdout/stderr, exit code, timeout status and observed output-byte count.
+Use `bash` explicitly for Bash syntax. There are no PTYs, session IDs, polling or
+cross-call input. A script can perform a complete target interaction within one
+command; the model cannot inspect and respond midway through that same process.
+Background processes may continue until a timeout reset or final cleanup.
 
-Outputs up to the configured limit are returned whole. Larger outputs return a
-beginning/end excerpt, `truncated: true`, and `output_file` inside the solver.
-The agent can inspect that file with `head`, `tail` or other commands. The file
-captures the first 1 MiB; `output_file_truncated` identifies overflow. A copy is
-saved under the attempt's `outputs/`, with the relative path in `recorded_output`.
-Interactive output is incremental per call; its saved file accumulates the session.
-Hard stops can lose output generated since the last read/copy. Read sessions
-periodically when retaining their output matters.
+Output up to the configured raw-byte limit is returned whole. Larger output keeps
+the beginning/end and sets `truncated: true`; invalid UTF-8 bytes render as
+replacement characters. No automatic output files/copies are created. Redirect
+output to a workspace file when later inspection matters. Traces preserve exactly
+the observations returned to the model; they do not claim to retain omitted output.
+A timeout event retains captured partial output even if recovery fails.
 
 ### Read results
 
@@ -269,8 +273,8 @@ Each invocation prints a fresh record directory:
 | Artifact | Meaning |
 | --- | --- |
 | `run.json` | Settings, dataset/source/image provenance, split label, result, trace URL, export audit, total time. |
-| `<run-id>/packages.json`, `<run-id>/outputs/` | Latest observed installed Python versions and bounded command/session output copied before cleanup. |
-| `<run-id>/summary.json` | Stop reason, verified success, counts, available tokens/cost, timing, cleanup errors. |
+| `<run-id>/packages-initial.json` | Initial installed Python versions. An optional final inventory may be unavailable after terminal stop; availability is traced. |
+| `<run-id>/summary.json` | Stop reason, verified success, counts, available tokens/cost, timing, solver restart count, cleanup errors. |
 | `observations.json` | Complete native hosted trace export containing model/tool inputs and outputs; older records use `cli-observations.json`. |
 | `public-task.json`, `target/` | Public task and trusted target runtime configuration/lifecycle record. |
 
@@ -286,8 +290,9 @@ you use in your report.
 
 The launcher uses the existing Langfuse Python client to retrieve every cursor
 page, then checks observation counts, completion, parentage, secrets and cleanup.
-No Node/npm installation is needed. Installed-package inventories are scanned at
-startup and after tool calls; `packages.json` is rewritten only when they change.
+No Node/npm installation is needed. Package inventories are captured at startup
+and attempted at final cleanup; per-tool scans are removed. Installation activity
+remains in tool traces. Historical runs retain their old package/output artifacts.
 
 The `.venv/`, `.env`, Docker images, `datasets/` and `runs/` are local setup or
 outputs, not files supplied by a GitHub clone. Historical evidence under `evidence/`
@@ -379,31 +384,42 @@ verified submission stops immediately; text-only replies end without success.
 | `tools.py` | Three tool definitions, validation, solver dispatch. |
 | `sandbox.py`, `docker.py` | Solver/guard lifecycle, denial monitoring, bounded Docker communication. |
 | `config.py` | Non-secret settings and validation. |
-| `docker/worker.py`, `docker/guard.py` | Operations inside the solver and independent namespace firewall. |
+| `docker/guard.py` | Independent namespace firewall; the solver needs no custom daemon. |
 | `tests/` | Test substitutes, synthetic targets, controls and preparation checks. |
 
 | Tool | Input and validation | Output, timeout, errors |
 | --- | --- | --- |
-| `run_command` | A nonempty `/bin/sh` command up to 16 KiB, or a returned session ID with input/read/close arguments. Session input is at most 16 KiB; waits are 0–5 seconds. Use `bash` explicitly for Bash syntax. | Bounded stdout/stderr, running/session ID, exit/timeout/cleanup and output-file metadata. Ordinary timeouts permit recovery after confirmed cleanup. |
-| `write_file` | Workspace-relative path without traversal/NUL; UTF-8 content at most 64 KiB. Worker independently rejects symlinks/races. | Path/bytes-written or error observation; same bounded worker timeout as commands. |
+| `run_command` | Nonempty `/bin/sh` command up to 16 KiB; optional finite positive timeout within the configured maximum. | Bounded head/tail stdout/stderr, exit code, observed byte count and truncation/timeout status. Timeout restarts all solver processes; files survive. |
+| `write_file` | Workspace-relative path without traversal/NUL; UTF-8 content at most 64 KiB. One-shot solver Python code rejects symlinks/races. | Path/bytes-written or error observation; bounded by command/attempt time; timeout resets solver processes. |
 | `submit_flag` | Nonempty candidate, at most 4,096 UTF-8 bytes. | Candidate/verdict recorded; exact host-side equality. Wrong submissions permit continuation; success stops. No subprocess, bounded by attempt deadline. |
 
 Unknown tools/invalid arguments return validation observations and consume tool
 budget. The model's tool schema includes the actual configured timeout maximum
 and default (currently 120 seconds for ordinary live commands); validation errors repeat that cap.
-Worker/Docker failures are terminal. The evaluator never separately
+Docker/recovery failures are terminal; ordinary program exits remain observations. The evaluator never separately
 reveals the expected answer in prompts, results, or traces.
 
-Commands execute only in the non-root solver with a read-only root and bounded,
-executable workspace tmpfs,
-no capabilities, host mounts, socket, credentials, evaluator files, or private
-challenge/build metadata. The separate trusted guard restricts connections to
+Commands execute only in the non-root writable solver with no effective
+capabilities, host mounts, socket, credentials, evaluator files, or private
+challenge/build metadata. Only CHOWN remains in the capability ceiling for trusted
+file ownership setup; model commands have no effective capabilities and cannot
+gain them (`no-new-privileges`). The separate trusted guard restricts connections to
 assigned endpoints, Docker DNS and public HTTPS for the approved pip policy;
 independent packet-denial evidence triggers solver stopping.
-Targets use fresh isolated internal networks, no published ports or host mounts,
-resource limits, and disposable writable layers. Ordinary target startup permits
-CHOWN/SETUID/SETGID; model tools have no administrative target shell. Supplied
-Compose arrangements outside the reviewed image/network conventions fail closed.
+Targets retain supplied Compose commands, permissions, service relationships and
+resource settings on fresh project-owned ordinary bridges/volumes. We remove host
+port publishing and shared-daemon socket mounts, recording adjustments in
+`target/target.json`. Supplied hostnames work through Docker DNS; descriptions are
+not rewritten to IPs. The guard joins the challenge-facing bridge directly; there
+is no extra egress bridge, manual route or synthetic gateway.
+
+Targets regain normal Docker network/capability defaults; the previous forced
+256 MiB/CPU/PID/tmpfs/permission policy is removed. Solver limits remain unchanged.
+Read-only binds/config files inside the challenge directory are accepted but require
+Docker host file sharing. Writable host binds and external/custom storage need an
+explicit reset strategy and fail clearly. Privileged/shared-daemon administrative
+setups remain unsupported; no model tool provides a target administrative shell.
+The guard still restricts direct solver traffic and retains denial evidence.
 
 Langfuse is the sole detailed tracing system. Native model generations, tools,
 incidents, stopping and cleanup are recorded; ordinary local result/provenance
@@ -431,12 +447,17 @@ uv run --frozen python -m pytest -q
 uv run --frozen python -m ctf_agent self-check
 ```
 
-The latest completed verification passed **95 fast tests and 31 synthetic Docker
-cases**, with cleanup verified. Native SDK readback of an existing ten-observation
-synthetic trace matched historical and fresh CLI exports; no new model calls ran.
-[Verification evidence](evidence/config-sdk-cleanup/README.md) records the tested
-source hashes and results. These results cover the current implementation, not
-the proposed simplification.
+The current target/network checkpoint passed **100 offline tests and 29 synthetic
+Docker cases**, with cleanup verified. Preparation passed two fresh cycles each
+for development `pwn-baby-boi`, `web-shreeramquest` and `cry-ecxor`, including
+supplied hostname resolution, private boundaries and denied traffic.
+[Current evidence](evidence/target-network-simplification/README.md).
+The infrastructure-only inventory accepts 26 of 27 supplied Compose definitions;
+`msc-showdown` remains unsupported. This is not runtime readiness for all 26.
+Read-only target binds have offline validation only; Docker Desktop rejected those
+mounts here. The synthetic named-volume/backend checks passed in Docker.
+No live model calls or hosted traces were created; SDK export remains verified
+offline and its earlier hosted readback is preserved in historical evidence.
 
 The earlier Section 1 handoff separately prepared the ten reserved challenges plus
 `pwn-baby-boi`: two fresh cycles each, file hashes/ownership, permitted TCP
@@ -450,7 +471,7 @@ model calls; `model-check` makes paid synthetic model calls and requires a budge
 Neither is needed before each development attempt. Historical records are under
 [evidence](PROJECT_STATUS.md#evidence).
 
-All ten reserved challenges and five development examples passed preparation
+Before the execution replacement, all ten reserved challenges and five development examples passed preparation
 through the shared command. All 50 file inventories were checked after downloading
 the full pinned dataset. The remaining 35 environments have not passed runtime
 preparation, including the known unsupported privileged target `msc-showdown`.
@@ -460,7 +481,14 @@ contestant binary or specialized tool requirement. Solve rate and longer-run
 reliability are not established by preparation. Section 2
 belongs to your development experiments: inspect traces, write a hypothesis, test
 a change and run a small pilot before freezing the held-out evaluation setup.
-The full assignment also needs metrics, report and a real successful-run demo.
+The newer course guide calls for one fixed configuration, three fresh attempts
+per selected challenge, per-challenge success/sample-SD/token/time metrics, a
+1–3 page report and an autonomous demo that need not solve. These guide statements
+are distinct from the professor's three implementation approvals; the older
+Canvas wording remains preserved in ASSIGNMENT.md. See
+[course guidance](docs/REFERENCES.md#evaluation-guidance-stated-in-the-pdf).
+Existing records need deliberate aggregation/timing alignment before reporting;
+this documentation update does not implement metrics or start evaluation.
 
 Work so far is attributed to **Ryan Banko**. OpenAI Codex assisted with design,
 implementation, review and verification. The [five original resources and citations](docs/REFERENCES.md)

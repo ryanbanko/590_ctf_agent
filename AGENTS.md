@@ -3,8 +3,11 @@
 Read `PROJECT_STATUS.md`, `ASSIGNMENT.md`, `README.md`, `docs/DESIGN.md`, and
 `docs/REFERENCES.md` before planning or changing this project. The references file
 preserves the user's five original resources, professor clarification, and how
-the reviewed material informed the design. The original assignment is authoritative;
-technical reference defaults and examples are not additional course requirements.
+the reviewed material informed the design. Preserve the original assignment and
+read it alongside the later course guide and explicit instructor clarifications
+recorded in `docs/REFERENCES.md`. Technical reference defaults/examples are not
+additional course requirements. Distinguish direct professor confirmations from
+other changes stated only in the guide.
 CTFTiny is the benchmark goal; NYU documentation/package conventions support it.
 
 ## Code and complexity

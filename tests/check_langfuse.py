@@ -105,7 +105,7 @@ def check_langfuse(config_path: Path, output_root: Path) -> Path:
         with synthetic_target(settings) as target:
             url = f'http://{target["address"]}:8000/'
             task = f"Retrieve the synthetic flag from {url} and submit it."
-            with run_attempt(settings, target["network"], target["gateway"], target["endpoints"],
+            with run_attempt(settings, target["network"], target["endpoints"],
                              target["expected_flag"], directory, langfuse=client, label="hosted-synthetic-check",
                              public_task=task, respond=partial(synthetic_response, url)) as run:
                 reason = run_agent(task, run["respond"], run["call_tool"])

@@ -103,11 +103,11 @@ def run_challenge(settings: dict, dataset_json: Path, manifest_path: Path, chall
             task = public_task(challenge, files, target["endpoints"])
             (directory / "public-task.json").write_text(task + "\n")
             report["phase"] = "attempt"
-            with run_attempt(settings, target["network"], target["gateway"], target["endpoints"],
+            with run_attempt(settings, target["network"], target["endpoints"],
                              challenge.flag, directory, langfuse=langfuse, label=challenge_id,
                              public_task=task, respond=respond, model_usage=model_usage,
                              mode=report["mode"]) as run:
-                report["files"] = stage_files(files, run["solver"], settings["workspace_mb"] * 1024 * 1024,
+                report["files"] = stage_files(files, run["solver"],
                                              run["remaining_seconds"]())
                 run_agent(task, run["respond"], run["call_tool"])
         report["phase"] = "trace-export"
@@ -232,7 +232,7 @@ def launch_batch(experiment_path: Path, dataset_json: Path, manifest_path: Path,
                         or not result.get("run_id") or not result.get("termination_reason")
                         or result.get("cleanup_errors")
                         or row["outcome"] in {"scope_violation", "guard_failure", "infrastructure_error",
-                                               "response_source_error", "model_usage_missing"}):
+                                               "response_source_error"}):
                     raise RuntimeError("Batch stopped for review; inspect batch.json and the attempt records")
                 row["status"] = "completed"
         index["status"] = "completed"

@@ -1,9 +1,11 @@
 """Three explicit tools. Definitions and real implementations live together."""
 
+import json
 import math
 from pathlib import PurePosixPath
 
-from .sandbox import invoke_worker
+from .docker import bounded_exec, docker
+from .sandbox import restart_solver
 
 
 TOOL_DEFINITIONS = [
@@ -13,30 +15,21 @@ TOOL_DEFINITIONS = [
             "Run a command with /bin/sh starting in the isolated solver's /workspace. "
             "Use python -m pip install for missing dependencies; external internet is "
             "permitted only for pip installation, never answer/write-up lookup. "
-            "Use interactive=true to start a terminal session; later calls supply "
-            "session_id and optional input (include a newline to submit a line), or "
-            "close=true. wait_seconds controls how long an interactive call waits for "
-            "output, not session lifetime; sessions end at the attempt deadline. "
-            "Ordinary commands finish or reach timeout_seconds; a timeout cleans up "
-            "that command and permits recovery. Use shorter internal network deadlines. "
-            "Files persist; ordinary commands start new shells. Use bash explicitly "
-            "for Bash syntax. Large output returns a beginning/end excerpt and file "
-            "path; inspect additional sections with a command."
+            "Commands finish or reach timeout_seconds; a timeout restarts the solver, "
+            "ending ALL its processes and connections while preserving files and pip installs. "
+            "Use shorter internal network deadlines. Each command starts a new shell; "
+            "cross-call terminal sessions are unavailable. Use bash explicitly for Bash syntax. "
+            "Large output returns a bounded beginning/end excerpt; redirect output to "
+            "a workspace file yourself if you need to inspect omitted sections."
         ),
         "parameters": {
             "type": "object",
             "properties": {
                 "command": {"type": "string"},
-                "interactive": {"type": "boolean"},
-                "session_id": {"type": "string"},
-                "input": {"type": "string"},
-                "close": {"type": "boolean"},
-                "wait_seconds": {"type": "number", "minimum": 0, "maximum": 5,
-                                 "description": "Interactive wait, default 0.5 seconds."},
                 "timeout_seconds": {"type": "number", "exclusiveMinimum": 0,
                                     "description": "Seconds to allow; omission uses the configured maximum."},
             },
-            "required": [],
+            "required": ["command"],
             "additionalProperties": False,
         },
     },
@@ -73,13 +66,7 @@ def validate_arguments(name: str, arguments: dict, settings: dict):
     if not set(schema["required"]) <= arguments.keys() or arguments.keys() - schema["properties"].keys():
         raise ValueError("Missing or unexpected tool argument")
     for key, value in arguments.items():
-        if key in {"interactive", "close"}:
-            if type(value) is not bool:
-                raise ValueError(f"{key} must be a boolean")
-        elif key == "wait_seconds":
-            if type(value) not in (int, float) or not math.isfinite(value) or not 0 <= value <= 5:
-                raise ValueError("wait_seconds must be between 0 and 5")
-        elif key == "timeout_seconds":
+        if key == "timeout_seconds":
             if (type(value) not in (int, float) or not math.isfinite(value)
                     or not 0 < value <= settings["command_seconds"]):
                 raise ValueError(
@@ -88,23 +75,9 @@ def validate_arguments(name: str, arguments: dict, settings: dict):
         elif not isinstance(value, str):
             raise ValueError(f"{key} must be a string")
     if name == "run_command":
-        if "session_id" in arguments:
-            identifier = arguments["session_id"]
-            if (len(identifier) != 32 or any(c not in "0123456789abcdef" for c in identifier)
-                    or arguments.keys() & {"command", "interactive", "timeout_seconds"}):
-                raise ValueError("Use a returned session_id without command, interactive, or timeout_seconds")
-        else:
-            command = arguments.get("command", "")
-            if not command.strip() or "\x00" in command or len(command.encode()) > settings["max_command_bytes"]:
-                raise ValueError("Command is empty, contains NUL, or exceeds the byte limit")
-            if arguments.keys() & {"input", "close"}:
-                raise ValueError("input and close require session_id")
-            if not arguments.get("interactive") and "wait_seconds" in arguments:
-                raise ValueError("wait_seconds requires an interactive command or session_id")
-            if arguments.get("interactive") and "timeout_seconds" in arguments:
-                raise ValueError("Interactive sessions use the attempt deadline; set wait_seconds instead")
-        if len(arguments.get("input", "").encode()) > settings["max_command_bytes"]:
-            raise ValueError("Session input exceeds the command byte limit")
+        command = arguments["command"]
+        if not command.strip() or "\x00" in command or len(command.encode()) > settings["max_command_bytes"]:
+            raise ValueError("Command is empty, contains NUL, or exceeds the byte limit")
     elif name == "write_file":
         path = arguments["path"]
         parsed = PurePosixPath(path)
@@ -117,14 +90,61 @@ def validate_arguments(name: str, arguments: dict, settings: dict):
         raise ValueError("Candidate must contain 1 to 4096 bytes")
 
 
+# Runs once per write inside the solver. Values arrive as stdin data, not code.
+WRITE_FILE = """
+import json, os, stat, sys
+from pathlib import PurePosixPath
+request = json.load(sys.stdin)
+try:
+    path = PurePosixPath(request['path'])
+    content = request['content'].encode()
+    directory = os.open('/workspace', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        for part in path.parts[:-1]:
+            try:
+                os.mkdir(part, mode=0o700, dir_fd=directory)
+            except FileExistsError:
+                pass
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=directory)
+            os.close(directory)
+            directory = child
+        descriptor = os.open(path.parts[-1], os.O_WRONLY | os.O_CREAT | os.O_NOFOLLOW | os.O_NONBLOCK,
+                             0o600, dir_fd=directory)
+        with os.fdopen(descriptor, 'wb') as handle:
+            if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode):
+                raise ValueError('Use a regular file')
+            handle.truncate(0)
+            handle.write(content)
+    finally:
+        os.close(directory)
+    result = {'path': str(path), 'bytes_written': len(content)}
+except (OSError, ValueError) as error:
+    result = {'error': {'kind': 'tool_error', 'message': str(error)}}
+print(json.dumps(result))
+"""
+
+
 def execute_tool(name: str, arguments: dict, settings: dict, sandbox: dict,
                  seconds_left: float) -> dict:
-    """Execute a validated command/file action; verification stays in the runner."""
-    request = {"tool": name, **arguments}
-    request["output_limit"] = settings["max_output_bytes"]
-    request["write_limit"] = settings["max_write_bytes"]
-    request["timeout_seconds"] = min(arguments.get("timeout_seconds", settings["command_seconds"]), seconds_left)
-    interactive = arguments.get("interactive", False) or "session_id" in arguments
-    request["lifetime_seconds"] = seconds_left if interactive else request["timeout_seconds"]
-    request["wait_seconds"] = arguments.get("wait_seconds", 0.5) if interactive else request["timeout_seconds"] + 2
-    return invoke_worker(sandbox, request, timeout=min(seconds_left, request["wait_seconds"] + 4))
+    """Use standard Docker exec; only trusted controller code can restart it."""
+    command = (["/bin/sh", "-c", arguments["command"]] if name == "run_command"
+               else ["python", "-I", "-c", WRITE_FILE])
+    request = b"" if name == "run_command" else json.dumps(arguments).encode()
+    returned = bounded_exec(["exec", "--interactive", "--user", "1000:1000", "--workdir", "/workspace",
+                             sandbox["solver"], *command], request,
+                            min(arguments.get("timeout_seconds", settings["command_seconds"]), seconds_left),
+                            settings["max_output_bytes"])
+    if returned["timed_out"]:
+        sandbox["observation"].create_event(name="command_timeout", metadata={"partial_output": returned})
+        restart_solver(sandbox)
+        returned.update(solver_restarted=True, process_state_reset=True)
+        return returned
+    if returned["exit_code"] != 0:
+        if docker("inspect", "--format", "{{.State.Running}}", sandbox["solver"],
+                  timeout=min(3, sandbox["remaining"]())) != "true":
+            raise RuntimeError("Solver stopped during command execution")
+    if name == "write_file":
+        if returned["exit_code"] != 0 or returned["truncated"]:
+            raise RuntimeError("File writer did not return a complete observation")
+        return json.loads(returned["stdout"])
+    return returned

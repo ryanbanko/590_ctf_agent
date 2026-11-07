@@ -1,0 +1,76 @@
+{
+  "networks": {
+    "backend": {
+      "ipam": {},
+      "labels": {
+        "ctf590.managed": "true"
+      }
+    },
+    "ctfnet": {
+      "ipam": {},
+      "labels": {
+        "ctf590.managed": "true"
+      }
+    }
+  },
+  "services": {
+    "backend": {
+      "command": null,
+      "entrypoint": null,
+      "environment": {
+        "FIXTURE_FLAG": "ctf{synthetic-backend-fixture}"
+      },
+      "image": "sha256:0a6def46e91c04a10e351a055c490fbee3ef5595c4687472a4c1727d708685d0",
+      "networks": {
+        "backend": {}
+      },
+      "labels": {
+        "ctf590.managed": "true"
+      },
+      "platform": "linux/arm64"
+    },
+    "frontend": {
+      "command": [
+        "python",
+        "-I",
+        "-c",
+        "import http.server,json,pathlib,urllib.request\nclass Handler(http.server.BaseHTTPRequestHandler):\n def do_GET(self):\n  with urllib.request.urlopen('http://backend:8000',timeout=1) as response:\n   backend=json.load(response)\n  marker=pathlib.Path('/state/visited')\n  body=json.dumps({'backend':backend['flag'],'fresh':not marker.exists()}).encode()\n  marker.write_text('visited')\n  self.send_response(200); self.end_headers(); self.wfile.write(body)\nhttp.server.HTTPServer(('0.0.0.0',8000),Handler).serve_forever()\n"
+      ],
+      "depends_on": {
+        "backend": {
+          "condition": "service_started",
+          "required": true
+        }
+      },
+      "entrypoint": null,
+      "image": "sha256:0a6def46e91c04a10e351a055c490fbee3ef5595c4687472a4c1727d708685d0",
+      "networks": {
+        "backend": {},
+        "ctfnet": {
+          "aliases": [
+            "challenge.test"
+          ]
+        }
+      },
+      "user": "0:0",
+      "volumes": [
+        {
+          "type": "volume",
+          "source": "state",
+          "target": "/state"
+        }
+      ],
+      "labels": {
+        "ctf590.managed": "true"
+      },
+      "platform": "linux/arm64"
+    }
+  },
+  "volumes": {
+    "state": {
+      "labels": {
+        "ctf590.managed": "true"
+      }
+    }
+  }
+}

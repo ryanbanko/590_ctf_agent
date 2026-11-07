@@ -34,11 +34,6 @@ import json, pathlib, shutil, subprocess
 tools = ['bash', 'file', 'strings', 'readelf', 'objdump', 'xxd', 'curl', 'nc',
          'openssl', 'unzip', 'zip', 'gcc', 'make', 'gdb']
 assert all(shutil.which(name) for name in tools)
-mounts = [line for line in pathlib.Path('/proc/mounts').read_text().splitlines()
-          if line.split()[1] in ['/workspace', '/tmp']]
-workspace_options = next(line.split()[3].split(',') for line in mounts if line.split()[1] == '/workspace')
-assert 'noexec' not in workspace_options
-assert {{'nosuid', 'nodev'}} <= set(workspace_options)
 shutil.copy('/bin/true', 'benign-true')
 subprocess.run(['./benign-true'], check=True)
 pathlib.Path('hello.c').write_text('int main(void) {{ return 0; }}\\n')
@@ -61,7 +56,7 @@ reply = subprocess.check_output(['curl', '--noproxy', '*', '--fail', '--silent',
 assert 'flag' in json.loads(reply)
 subprocess.run(['nc', '-z', '-w', '2', {target['address']!r}, '8000'], check=True)
 subprocess.run(['bash', '-c', 'cat <<< bash-ok'], check=True, capture_output=True)
-print(json.dumps({{'utilities': tools, 'mounts': mounts, 'amd64_execution': True,
+print(json.dumps({{'utilities': tools, 'amd64_execution': True,
                   'compiled_execution': True, 'archive_roundtrip': True, 'permitted_curl_and_nc': True}}))
 '''))
     assert result["exit_code"] == 0, result
@@ -136,14 +131,13 @@ print(json.dumps({{'packages': {{name: importlib.metadata.version(name) for name
     assert attempt["result"]["termination_reason"] is None
 
 
-@pytest.mark.parametrize("attempt", [{"command_seconds": 120, "memory_mb": 1024, "workspace_mb": 512}], indirect=True)
+@pytest.mark.parametrize("attempt", [{"command_seconds": 120, "memory_mb": 1024}], indirect=True)
 def test_runtime_pip_install_and_writable_home(attempt):
     probe = attempt["call_tool"]("run_command", python_command(
         "import os,pathlib,sys,importlib.util; "
-        "assert sys.prefix=='/workspace/.venv'; assert importlib.util.find_spec('humanfriendly') is None; "
-        "home=pathlib.Path.home(); assert str(home)=='/workspace'; "
+        "assert sys.prefix=='/opt/venv'; assert importlib.util.find_spec('humanfriendly') is None; "
+        "home=pathlib.Path.home(); assert str(home)=='/home/solver'; "
         "(home/'home-marker').write_text('writable'); "
-        "assert os.environ['TMPDIR']=='/workspace'; "
         "(home/'space-probe').write_bytes(b'x'*(80*1024*1024)); (home/'space-probe').unlink()"))
     assert probe["exit_code"] == 0, probe
     result = attempt["call_tool"]("run_command", {
@@ -151,8 +145,15 @@ def test_runtime_pip_install_and_writable_home(attempt):
                    "python -c 'import humanfriendly; print(humanfriendly.format_size(1000))'"})
     assert result["exit_code"] == 0 and not result["timed_out"], result
     assert "1 KB" in result["stdout"]
-    packages = json.loads((attempt["directory"] / "packages.json").read_text())
-    assert packages["humanfriendly"] == "10.0"
+    assert 'humanfriendly' not in json.loads((attempt['directory'] / 'packages-initial.json').read_text())
+    before = docker('inspect', '--format', '{{.State.StartedAt}}', attempt['solver'])
+    result = attempt['call_tool']('run_command', {'command': 'sleep 10', 'timeout_seconds': .4})
+    assert result['timed_out'] and result['solver_restarted'], result
+    assert docker('inspect', '--format', '{{.State.StartedAt}}', attempt['solver']) != before
+    assert attempt['call_tool']('run_command', python_command(
+        "import humanfriendly,pathlib; assert (pathlib.Path.home()/'home-marker').exists(); "
+        "print(humanfriendly.format_size(1000))"))['stdout'].strip() == '1 KB'
+
 
 
 @pytest.mark.parametrize("attempt", [{"max_output_bytes": 32_768}], indirect=True)
@@ -169,12 +170,13 @@ def test_larger_output_retains_observed_size_and_remains_bounded(attempt):
 def test_filesystem_credentials_privileges_output(attempt: dict, target: dict, settings):
     container = json.loads(docker("inspect", attempt["solver"]))[0]
     host = container["HostConfig"]
-    assert host["ReadonlyRootfs"] and host["CapDrop"] == ["ALL"]
+    assert not host["ReadonlyRootfs"] and host["CapDrop"] == ["ALL"]
+    assert {cap.removeprefix("CAP_") for cap in host["CapAdd"]} == {"CHOWN"} and host["Init"]
     assert host["Memory"] == settings["memory_mb"] * 1024 * 1024
     assert host["MemorySwap"] == host["Memory"]
     assert host["PidsLimit"] == settings["pids"]
     assert host["NanoCpus"] == int(settings["cpus"] * 1_000_000_000)
-    assert not host["Binds"] and all(mount["Type"] == "tmpfs" for mount in container["Mounts"])
+    assert not host["Binds"] and not container["Mounts"]
     for arguments in [{"path": "../../escape", "content": "x"},
                       {"path": "/tmp/escape", "content": "x"},
                       {"path": "too-big", "content": "x" * (settings["max_write_bytes"] + 1)}]:
@@ -192,13 +194,13 @@ def test_filesystem_credentials_privileges_output(attempt: dict, target: dict, s
     info = json.loads(result["stdout"])
     assert info["uid"] == 1000
     assert "CapEff:\t0000000000000000" in info["status"]
-    assert "CapBnd:\t0000000000000000" in info["status"]
+    assert "CapBnd:\t0000000000000001" in info["status"]
     assert "NoNewPrivs:\t1" in info["status"]
     assert not info["docker_socket"] and not info["target_source"] and not info["challenge_json"]
     assert not {"FIXTURE_FLAG", "LITELLM_TOKEN", "LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY",
                 "LANGFUSE_BASE_URL"} & info["env"].keys()
     assert target["expected_flag"] not in json.dumps(info)
-    result = attempt["call_tool"]("run_command", {"command": "echo forbidden > /opt/ctf/worker.py"})
+    result = attempt["call_tool"]("run_command", {"command": "echo forbidden > /opt/controller-private"})
     assert result["exit_code"] != 0
     marker = attempt["directory"] / "host-only-marker"
     marker.write_text("host-private", encoding="utf-8")
@@ -225,11 +227,11 @@ def test_command_timeout_detached_child(attempt: dict):
         "import subprocess,time,pathlib; child=subprocess.Popen(['sleep','30'], start_new_session=True); "
         "pathlib.Path('detached.pid').write_text(str(child.pid)); time.sleep(30)")
     result = attempt["call_tool"]("run_command", command | {"timeout_seconds": 0.4})
-    assert result["timed_out"] and result["cleanup_confirmed"]
+    assert result["timed_out"] and result["solver_restarted"]
     assert attempt["result"]["termination_reason"] is None
     proof = attempt["call_tool"]("run_command", python_command(
         "from pathlib import Path; pid=int(Path('detached.pid').read_text()); "
-        "assert not Path(f'/proc/{pid}').exists(); print('recovered')"))
+        "p=Path(f'/proc/{pid}/cmdline'); assert not p.exists() or b'sleep' not in p.read_bytes(); print('recovered')"))
     assert proof["exit_code"] == 0 and proof["stdout"].strip() == "recovered", proof
     running = docker("inspect", "--format", "{{.State.Running}}", attempt["solver"])
     assert running == "true"
@@ -246,7 +248,7 @@ def test_tool_limit(attempt: dict):
 def test_command_timeout_closed_output(attempt: dict):
     result = attempt["call_tool"]("run_command", {
         "command": "exec >/dev/null 2>&1; sleep 30", "timeout_seconds": 0.4})
-    assert result["timed_out"] and result["cleanup_confirmed"]
+    assert result["timed_out"] and result["solver_restarted"]
     assert attempt["result"]["termination_reason"] is None
     assert attempt["call_tool"]("run_command", {"command": "echo recovered"})["stdout"].strip() == "recovered"
 
@@ -269,7 +271,7 @@ def test_guard_loss(attempt: dict):
     raise AssertionError("Loss of guard did not stop the solver within three seconds")
 
 
-def test_worker_loss(attempt: dict):
+def test_solver_loss(attempt: dict):
     docker("kill", attempt["solver"])
     with pytest.raises(RuntimeError):
         attempt["call_tool"]("run_command", {"command": "echo should-not-run"})
@@ -315,7 +317,7 @@ def test_network_scope(attempt, target, settings, destination, telemetry):
 def test_interruption_cleanup(settings, target, output_root, record_property, telemetry):
     record_property("check_name", "interruption_cleanup")
     with pytest.raises(KeyboardInterrupt):
-        with run_attempt(settings, target["network"], target["gateway"], target["endpoints"],
+        with run_attempt(settings, target["network"], target["endpoints"],
                          target["expected_flag"], output_root, langfuse=telemetry["client"], label="interruption_cleanup") as attempt:
             record_property("run_id", attempt["run_id"])
             raise KeyboardInterrupt("synthetic interruption")
@@ -329,7 +331,7 @@ def test_setup_failure_cleanup(settings, target, output_root, record_property, t
     before = set(output_root.glob("*/summary.json"))
     invalid = settings | {"solver_image": "ctf590-missing:" + uuid.uuid4().hex}
     with pytest.raises(RuntimeError):
-        with run_attempt(invalid, target["network"], target["gateway"], target["endpoints"],
+        with run_attempt(invalid, target["network"], target["endpoints"],
                          target["expected_flag"], output_root, langfuse=telemetry["client"], label="setup_failure_cleanup"):
             pytest.fail("Started solver with a nonexistent image")
     created = set(output_root.glob("*/summary.json")) - before
@@ -382,136 +384,143 @@ def self_check(config_path: Path, output_root: Path) -> Path:
     return suite_dir
 
 
-def test_interactive_terminal_and_independent_command(attempt):
-    result = attempt['call_tool']('run_command', {
-        'command': "python -u -c \"import os; assert os.isatty(0); print(input('Name? ')); print(input('Again? '))\"",
-        'interactive': True})
-    assert result['running'] and 'Name?' in result['stdout'], result
-    session = result['session_id']
-    result = attempt['call_tool']('run_command', {'session_id': session, 'input': 'first\n'})
-    assert result['running'] and 'Again?' in result['stdout'], result
-    assert attempt['call_tool']('run_command', {'command': 'echo independent'})['stdout'].strip() == 'independent'
-    result = attempt['call_tool']('run_command', {'session_id': session, 'input': 'second\n'})
-    assert not result['running'] and result['exit_code'] == 0 and 'second' in result['stdout'], result
-    assert result['cleanup_confirmed']
-    result = attempt['call_tool']('run_command', {'session_id': session})
-    assert result['error']['kind'] == 'tool_error'
-    result = attempt['call_tool']('run_command', {'command': 'sleep 30', 'interactive': True, 'wait_seconds': 0})
-    result = attempt['call_tool']('run_command', {'session_id': result['session_id'], 'close': True})
-    assert result['closed'] and not result['running'] and result['cleanup_confirmed'], result
-
-
-def test_output_excerpt_file_and_late_diagnostic(attempt):
-    result = attempt['call_tool']('run_command', python_command("print('start-'+'x'*100000+'-end-diagnostic')"))
+def test_output_excerpt_and_late_diagnostic(attempt):
+    result = attempt['call_tool']('run_command', python_command("print('start-'+'x'*1100000+'-end-diagnostic')"))
     assert result['truncated'] and result['stdout'].startswith('start-')
     assert result['stdout'].rstrip().endswith('-end-diagnostic')
-    captured = (attempt['directory'] / result['recorded_output']).read_text()
-    assert captured.startswith('start-') and captured.rstrip().endswith('-end-diagnostic')
-    assert not result['output_file_truncated'] and len(captured) == result['total_output_bytes']
-    readback = attempt['call_tool']('run_command', {'command': 'tail -c 32 ' + result['output_file']})
-    assert readback['exit_code'] == 0 and readback['stdout'].rstrip().endswith('-end-diagnostic')
-    result = attempt['call_tool']('run_command', python_command("print('x'*1100000+'-last-line')"))
-    assert result['output_file_truncated'] and result['stdout'].rstrip().endswith('-last-line')
-    assert (attempt['directory'] / result['recorded_output']).stat().st_size == 1_048_576
+    assert result['output_bytes'] == 1100022
+    assert not {'output_file', 'recorded_output', 'session_id'} & result.keys()
+    assert not (attempt['directory'] / 'outputs').exists()
 
 
 def test_fresh_python_environment(attempt):
     result = attempt['call_tool']('run_command', python_command(
         "import pathlib,importlib.util; assert importlib.util.find_spec('humanfriendly') is None; "
-        "assert not pathlib.Path('/workspace/home-marker').exists(); "
+        "assert not (pathlib.Path.home()/'home-marker').exists(); "
         "assert importlib.util.find_spec('sympy') is not None"))
     assert result['exit_code'] == 0, result
 
 
 @pytest.mark.parametrize('attempt', [{'wall_seconds': 8}], indirect=True)
-def test_attempt_deadline_stops_unpolled_session(attempt):
-    result = attempt['call_tool']('run_command', {'command': 'sleep 30', 'interactive': True})
-    assert result['running']
+def test_attempt_deadline_stops_background_process(attempt):
+    result = attempt['call_tool']('run_command', {
+        'command': 'sleep 30 </dev/null >/dev/null 2>&1 & echo background-started'})
+    assert result['exit_code'] == 0
     deadline = time.monotonic() + 9
     while attempt['result']['termination_reason'] is None:
         assert time.monotonic() < deadline
         time.sleep(.05)
     assert attempt['result']['termination_reason'] == 'wall_limit'
-    # Stop reason is set just before the bounded Docker kill finishes.
     while docker('inspect', '--format', '{{.State.Running}}', attempt['solver']) != 'false':
         assert time.monotonic() < deadline
         time.sleep(.05)
 
 
-def test_finished_session_is_reaped_without_polling(attempt):
-    result = attempt['call_tool']('run_command', {
-        'command': 'sleep .3; printf finished', 'interactive': True, 'wait_seconds': 0})
-    session = result['session_id']
-    # A fixed in-solver probe observes process lifetime without polling the
-    # command tool, which used to keep the finished supervisor alive.
-    source = '''import pathlib,time
-end=time.monotonic()+4
+def test_standard_copy_preserves_handouts_and_ownership(attempt, tmp_path):
+    import hashlib
+    from ctf_agent.challenge import stage_files
+
+    path = tmp_path / 'handout'
+    path.write_bytes(b'#!/bin/sh\nprintf copied-handout')
+    path.chmod(0o755)
+    records = stage_files({'nested/handout': path}, attempt['solver'], attempt['remaining_seconds']())
+    assert records[0]['sha256'] == hashlib.sha256(path.read_bytes()).hexdigest()
+    result = attempt['call_tool']('run_command', python_command(
+        "import pathlib,subprocess; p=pathlib.Path('nested/handout'); "
+        "assert p.stat().st_uid==p.stat().st_gid==1000; "
+        "assert p.stat().st_mode & 0o111; "
+        "assert subprocess.check_output(['./nested/handout'])==b'copied-handout'; "
+        "p.write_text('editable'); print('copied')"))
+    assert result['exit_code'] == 0 and result['stdout'].strip() == 'copied', result
+
+
+def test_restart_resets_all_processes_and_preserves_files(attempt, target, telemetry):
+    from .fixtures.tracing import attribute
+
+    attempt['call_tool']('write_file', {'path': 'kept', 'content': 'persistent'})
+    result = attempt['call_tool']('run_command', python_command(
+        "import subprocess; subprocess.Popen(['sleep','29'],stdin=subprocess.DEVNULL,"
+        "stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,start_new_session=True)"))
+    assert result['exit_code'] == 0
+    target_started = docker('inspect', '--format', '{{.State.StartedAt}}', target['container'])
+    before = attempt['result']['tool_calls']
+    run_id = attempt['run_id']
+    result = attempt['call_tool']('run_command', {'command': 'echo before-timeout; sleep 30', 'timeout_seconds': .4})
+    assert result['timed_out'] and result['solver_restarted'] and result['process_state_reset']
+    assert result['stdout'].strip() == 'before-timeout'
+    assert attempt['run_id'] == run_id and attempt['result']['tool_calls'] == before + 1
+    assert docker('inspect', '--format', '{{.State.StartedAt}}', target['container']) == target_started
+    result = attempt['call_tool']('run_command', python_command(
+        "import pathlib; assert pathlib.Path('kept').read_text()=='persistent'; "
+        "assert not any(b'sleep\\x0029' in p.read_bytes() for p in pathlib.Path('/proc').glob('[0-9]*/cmdline') "
+        "if p.exists()); print('recovered')"))
+    assert result['exit_code'] == 0 and result['stdout'].strip() == 'recovered', result
+    attempt['stop']('synthetic_complete')
+    spans = read_spans(telemetry, attempt['result']['trace_id'])
+    assert any(span.name == 'solver_restarted' for span in spans)
+    tools = [span for span in spans if span.name == 'run_command']
+    assert attribute(tools[-1], 'output') == result
+
+
+def test_compose_dns_backend_scope_and_fresh_volume(settings, output_root, telemetry, record_property):
+    from types import SimpleNamespace
+    from ctf_agent.challenge import challenge_target
+
+    record_property('check_name', 'compose_dns_backend_scope_and_fresh_volume')
+    tmp_path = (output_root / ('compose-source-' + uuid.uuid4().hex[:12])).resolve()
+    tmp_path.mkdir(parents=True)
+    # Synthetic front end exercises the supplied private backend relationship.
+    front = '''import http.server,json,pathlib,urllib.request
+class Handler(http.server.BaseHTTPRequestHandler):
+ def do_GET(self):
+  with urllib.request.urlopen('http://backend:8000',timeout=1) as response:
+   backend=json.load(response)
+  marker=pathlib.Path('/state/visited')
+  body=json.dumps({'backend':backend['flag'],'fresh':not marker.exists()}).encode()
+  marker.write_text('visited')
+  self.send_response(200); self.end_headers(); self.wfile.write(body)
+http.server.HTTPServer(('0.0.0.0',8000),Handler).serve_forever()
+'''
+    expected = 'ctf{synthetic-backend-fixture}'
+    supplied = {'services': {
+        'frontend': {'image': settings['target_image'], 'user':'0:0', 'command':['python','-I','-c',front],
+                     'depends_on':['backend'], 'networks':{'ctfnet':{'aliases':['challenge.test']},'backend':{}},
+                     'volumes':[{'type':'volume','source':'state','target':'/state'}]},
+        'backend': {'image':settings['target_image'],'environment':{'FIXTURE_FLAG':expected},'networks':{'backend':{}}}},
+        'networks':{'ctfnet':{'external':True},'backend':{}}, 'volumes':{'state':{}}}
+    (tmp_path/'docker-compose.yml').write_text(json.dumps(supplied))
+    challenge = SimpleNamespace(container=True,challenge_dir=tmp_path,server_name='challenge.test',port=8000,challenge={})
+    cycles=[]
+    for cycle in (1,2):
+        with challenge_target(challenge, output_root/f'compose-cycle-{uuid.uuid4().hex[:12]}') as target:
+            assert len(target['containers'])==2 and len(target['volumes'])==1
+            assert not target['adjustments']
+            with run_attempt(settings,target['network'],target['endpoints'],expected,output_root,
+                             langfuse=telemetry['client'],label='compose_standard_networks') as run:
+                record_property('run_id',run['run_id'])
+                source = '''import json,time,urllib.request
+end=time.monotonic()+5
 while True:
- children=[p for p in pathlib.Path('/proc').iterdir() if p.name.isdigit()
-           and p.name not in ('1',str(__import__('os').getpid()))]
- supervisors=[]
- for p in children:
-  try:
-   fields=(p/'stat').read_text().rsplit(')',1)[1].split()
-   if fields[1]=='1': supervisors.append(p.name)
-  except FileNotFoundError: pass
- if not supervisors: break
- assert time.monotonic()<end, supervisors
- time.sleep(.05)
+ try:
+  with urllib.request.urlopen('http://challenge.test:8000',timeout=1) as response: print(response.read().decode())
+  break
+ except OSError:
+  if time.monotonic()>end: raise
+  time.sleep(.1)
 '''
-    docker('exec', attempt['solver'], '/usr/local/bin/python', '-I', '-c', source, timeout=5)
-    result = attempt['call_tool']('run_command', {'session_id': session})
-    assert not result['running'] and result['stdout'] == 'finished' and result['cleanup_confirmed'], result
-
-
-def test_terminal_partial_input_reports_progress(attempt):
-    result = attempt['call_tool']('run_command', {
-        'command': 'stty -icanon -echo; printf ready; sleep 30', 'interactive': True})
-    session = result['session_id']
-    for _ in range(4):
-        result = attempt['call_tool']('run_command', {'session_id': session, 'input': 'x' * 16384})
-        sent = result['input_bytes_sent']
-        assert 0 <= sent <= 16384
-        if result.get('input_error'):
-            assert sent < 16384, result
-            break
-    else:
-        pytest.fail('The non-reading terminal did not exercise partial input')
-    result = attempt['call_tool']('run_command', {'session_id': session, 'close': True})
-    assert result['cleanup_confirmed'] and not result['running']
-
-
-def test_zero_wait_polls_preserve_final_output(attempt):
-    result = attempt['call_tool']('run_command', {
-        'command': "python -u -c \"print('begin-'+'x'*300000+'-final-marker',end='')\"",
-        'interactive': True, 'wait_seconds': 0})
-    output_file = result['recorded_output']
-    session = result.get('session_id')
-    for _ in range(8):
-        if not result['running']:
-            break
-        result = attempt['call_tool']('run_command', {'session_id': session, 'wait_seconds': 0})
-    assert not result['running'] and result['cleanup_confirmed'], result
-    captured = (attempt['directory'] / output_file).read_text()
-    assert captured == 'begin-' + 'x' * 300000 + '-final-marker'
-    assert result['total_output_bytes'] == len(captured)
-
-
-def test_supervisor_loss_stops_attempt(attempt):
-    from ctf_agent.agent import AttemptStopped
-
-    result = attempt['call_tool']('run_command', {'command': 'sleep 30', 'interactive': True})
-    identifier = result['session_id']
-    source = '''import json,os,pathlib,signal,sys
-for path in pathlib.Path('/proc').iterdir():
- if not path.name.isdigit(): continue
- try: args=(path/'cmdline').read_bytes().split(b'\\0')
- except FileNotFoundError: continue
- if b'--session' in args and json.loads(args[-2])['output_id']==sys.argv[1]:
-  os.kill(int(path.name),signal.SIGKILL); break
-else: raise AssertionError('Supervisor missing before injection')
-'''
-    docker('exec', attempt['solver'], '/usr/local/bin/python', '-I', '-c', source, identifier)
-    with pytest.raises(AttemptStopped, match='infrastructure_error'):
-        attempt['call_tool']('run_command', {'session_id': identifier})
-    assert docker('inspect', '--format', '{{.State.Running}}', attempt['solver']) == 'false'
+                returned=run['call_tool']('run_command',python_command(source))
+                assert returned['exit_code']==0,returned
+                observed=json.loads(returned['stdout'])
+                assert observed=={'backend':expected,'fresh':True}
+                returned=run['call_tool']('run_command',python_command(source))
+                assert json.loads(returned['stdout'])['fresh'] is False
+                guard=json.loads(docker('inspect',run['guard']))[0]
+                assert list(guard['NetworkSettings']['Networks'])==[target['network']]
+                info=json.loads(docker('inspect',target['containers']['backend']))[0]
+                address=next(iter(info['NetworkSettings']['Networks'].values()))['IPAddress']
+                check_denial(run,python_command(f"import socket; socket.create_connection(({address!r},8000),1)")['command'],telemetry)
+            save_spans(telemetry,run['directory'],run['result']['trace_id'])
+            cycles.append(target)
+        assert not target['cleanup_errors']
+    assert cycles[0]['volumes']!=cycles[1]['volumes']
+    assert cycles[0]['network']!=cycles[1]['network']

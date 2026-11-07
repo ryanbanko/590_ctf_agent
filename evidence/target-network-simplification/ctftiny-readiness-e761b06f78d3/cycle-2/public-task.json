@@ -1,0 +1,1 @@
+{"name": "ECXOR", "category": "crypto", "description": "I hear that elliptic curves make it safe to use smaller key sizes. Can you break this curve25519-encrypted message?", "files": ["ecxor_handout_100.py", "rfc8032.py", "ciphertext"], "endpoints": []}

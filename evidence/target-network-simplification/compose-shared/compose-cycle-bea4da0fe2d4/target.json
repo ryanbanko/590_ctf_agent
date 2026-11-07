@@ -1,0 +1,14 @@
+{
+  "project": "ctf590-target-f71a7a8a952d",
+  "network": null,
+  "container": null,
+  "containers": {},
+  "images": {
+    "backend": "sha256:0a6def46e91c04a10e351a055c490fbee3ef5595c4687472a4c1727d708685d0",
+    "frontend": "sha256:0a6def46e91c04a10e351a055c490fbee3ef5595c4687472a4c1727d708685d0"
+  },
+  "volumes": [],
+  "endpoints": [],
+  "adjustments": [],
+  "cleanup_errors": []
+}

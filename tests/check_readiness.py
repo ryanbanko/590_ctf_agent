@@ -54,16 +54,16 @@ def check_readiness(experiment_path: Path, dataset_json: Path, manifest_path: Pa
                 (cycle_dir / "public-task.json").write_text(task + "\n")
                 cycle = {"number": cycle_number, "target": target, "checks": {}}
                 report["cycles"].append(cycle)
-                with run_attempt(settings, target["network"], target["gateway"], target["endpoints"],
+                with run_attempt(settings, target["network"], target["endpoints"],
                                  challenge.flag, cycle_dir, langfuse=client, label=challenge_id,
                                  public_task=task, mode="ctftiny-readiness") as run:
-                    records = stage_files(files, run["solver"], settings["workspace_mb"] * 1024 * 1024,
+                    records = stage_files(files, run["solver"],
                                           run["remaining_seconds"]())
                     cycle["files"] = records
                     observed = run_python(run,
                         "import hashlib,json,os,pathlib; root=pathlib.Path('/workspace'); "
                         "print(json.dumps({'files':{str(p.relative_to(root)):{'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),"
-                        "'uid':p.stat().st_uid,'gid':p.stat().st_gid} for p in root.rglob('*') if p.is_file() and p.relative_to(root).parts[0] not in {'.venv','.ctf-output'}},"
+                        "'uid':p.stat().st_uid,'gid':p.stat().st_gid} for p in root.rglob('*') if p.is_file()},"
                         "'uid':os.getuid(),'status':pathlib.Path('/proc/self/status').read_text(),"
                         "'credential_names':list(set(os.environ)&{'LITELLM_TOKEN','LANGFUSE_SECRET_KEY','LANGFUSE_PUBLIC_KEY','LANGFUSE_BASE_URL'}),"
                         "'docker_socket':pathlib.Path('/var/run/docker.sock').exists(),"
@@ -80,18 +80,22 @@ def check_readiness(experiment_path: Path, dataset_json: Path, manifest_path: Pa
                         exact_public_files=observed["files"] == expected_files,
                         nonroot_no_capabilities=(observed["uid"] == 1000 and "CapEff:\t0000000000000000" in observed["status"]),
                         private_boundary=not observed["credential_names"] and not observed["docker_socket"] and not observed["host_marker"],
-                        solver_no_host_mounts=not solver["HostConfig"]["Binds"] and all(m["Type"] == "tmpfs" for m in solver["Mounts"]),
-                        target_no_host_bind_mounts_or_published_ports=all(not info["HostConfig"]["Binds"] and not info["HostConfig"]["PortBindings"]
-                            and all(mount["Type"] in {"tmpfs", "volume"} for mount in info["Mounts"]) for info in target_info),
-                        isolated_target_backends=all(info["Internal"] and not info["EnableIPv6"]
-                            and info["Options"].get("com.docker.network.bridge.gateway_mode_ipv4") == "isolated" for info in backends),
-                        isolated_network=network["Internal"] and network["Options"].get("com.docker.network.bridge.gateway_mode_ipv4") == "isolated")
+                        solver_no_host_mounts=not solver["HostConfig"]["Binds"] and not solver["Mounts"] and not solver["HostConfig"]["ReadonlyRootfs"],
+                        target_no_administrative_access_or_published_ports=all(
+                            not info["HostConfig"]["Privileged"] and not info["HostConfig"]["PortBindings"]
+                            and all(m["Destination"] != "/var/run/docker.sock" and
+                                    (m["Type"] != "bind" or (not m["RW"] and
+                                     Path(m["Source"]).resolve().is_relative_to(challenge.challenge_dir.resolve())))
+                                    for m in info["Mounts"]) for info in target_info),
+                        project_scoped_networks=all(info["Driver"] == "bridge" and
+                            (not target_info or info["Labels"].get("com.docker.compose.project") == target["project"])
+                            for info in [network, *backends]))
                     for endpoint in target["endpoints"]:
                         connection = run_python(run,
                             "import json,socket,time; deadline=time.monotonic()+7\n"
                             "while True:\n"
                             " try:\n"
-                            f"  socket.create_connection(({endpoint['address']!r},{endpoint['port']}),1).close()\n"
+                            f"  socket.create_connection(({(challenge.server_name or endpoint['address'])!r},{endpoint['port']}),1).close()\n"
                             "  print(json.dumps({'connected':True})); break\n"
                             " except OSError:\n"
                             "  if time.monotonic()>=deadline: raise\n"

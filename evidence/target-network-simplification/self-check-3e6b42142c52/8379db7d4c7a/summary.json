@@ -1,0 +1,20 @@
+{
+  "run_id": "8379db7d4c7a",
+  "challenge_id": "ipv6_no_external_route",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "5a3499a6e07869a39b668f111fd7f285",
+  "active_seconds": 1.164071,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.141103,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000266,
+  "total_seconds": 1.305544
+}

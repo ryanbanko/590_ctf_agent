@@ -23,7 +23,7 @@ def test_scripted_loop_recovers_and_verifies_through_target(settings, target, ou
 
     respond = partial(synthetic_response, url)
 
-    with run_attempt(settings, target["network"], target["gateway"], target["endpoints"],
+    with run_attempt(settings, target["network"], target["endpoints"],
                      target["expected_flag"], output_root, langfuse=telemetry["client"],
                      label=label, public_task=public_task, respond=respond) as run:
         record_property("run_id", run["run_id"])
@@ -53,7 +53,7 @@ def test_scripted_late_response_cannot_execute_tools(settings, target, output_ro
             time.sleep(0.02)
         return tool_response("run_command", {"command": "echo must-not-run-after-deadline"}, "late")
 
-    with run_attempt(settings | {"wall_seconds": 8}, target["network"], target["gateway"], target["endpoints"],
+    with run_attempt(settings | {"wall_seconds": 8}, target["network"], target["endpoints"],
                      target["expected_flag"], output_root, langfuse=telemetry["client"],
                      label=label, public_task="Synthetic deadline check", respond=respond) as run:
         record_property("run_id", run["run_id"])

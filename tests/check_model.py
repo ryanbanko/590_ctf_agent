@@ -57,7 +57,7 @@ def check_model(config_path: Path, output_root: Path):
                         'Use Python urllib.request in the isolated solver to fetch the JSON response. '
                         'The response has a flag field. This is a synthetic setup check.')
                 report["phase"] = "synthetic-attempt"
-                with run_attempt(settings, target["network"], target["gateway"], target["endpoints"],
+                with run_attempt(settings, target["network"], target["endpoints"],
                                  target["expected_flag"], directory, langfuse=client,
                                  label="live-model-synthetic-check", public_task=task,
                                  respond=respond, model_usage=usage) as run:

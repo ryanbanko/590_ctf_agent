@@ -54,9 +54,6 @@ table inet ctf {
 }
 """.replace("ALLOWED", "\n    ".join(allowed))
     subprocess.run(["nft", "-f", "-"], input=rules, text=True, check=True)
-    # The separate egress bridge supplies NAT; challenge networks stay internal.
-    gateway = str(ipaddress.IPv4Address(policy["gateway"]))
-    subprocess.run(["ip", "route", "replace", "default", "via", gateway, "dev", "eth0"], check=True)
     collector = subprocess.Popen(
         ["tcpdump", "-Z", "tcpdump", "--immediate-mode", "-l", "-nn", "-tt", "-i", "nflog:10"],
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1,

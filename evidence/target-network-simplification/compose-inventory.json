@@ -1,0 +1,470 @@
+[
+  {
+    "challenge_id": "cry-describeme",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "ports"
+      },
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "cry-lupin",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 0,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "web",
+        "removed": "ports"
+      }
+    ]
+  },
+  {
+    "challenge_id": "cry-open-ellipti-ph",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "openelliptiphi-server",
+        "removed": "ports"
+      },
+      {
+        "service": "openelliptiphi-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "cry-polly-crack-this",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "polly-crack-this-server",
+        "removed": "ports"
+      },
+      {
+        "service": "polly-crack-this-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "cry-super-curve",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "ports"
+      },
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "cry-the-lengths-we-extend-ourselves",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "thelengthsweextendourselves-server",
+        "removed": "ports"
+      },
+      {
+        "service": "thelengthsweextendourselves-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "cry-beyond-quantum",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "beyond-quantum-server",
+        "removed": "ports"
+      },
+      {
+        "service": "beyond-quantum-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "msc-algebra",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 0,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "web",
+        "removed": "ports"
+      }
+    ]
+  },
+  {
+    "challenge_id": "msc-android-dropper",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "msc-showdown",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": false,
+    "reason": "Service showdown: host-administrative access needs a separately isolated engine"
+  },
+  {
+    "challenge_id": "pwn-bigboy",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 0,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "web",
+        "removed": "ports"
+      }
+    ]
+  },
+  {
+    "challenge_id": "pwn-get-it",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 0,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "web",
+        "removed": "ports"
+      }
+    ]
+  },
+  {
+    "challenge_id": "pwn-password-checker",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 0,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "Password_Checker",
+        "removed": "ports"
+      }
+    ]
+  },
+  {
+    "challenge_id": "pwn-pilot",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 0,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "pilot",
+        "removed": "ports"
+      }
+    ]
+  },
+  {
+    "challenge_id": "pwn-puffin",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "ports"
+      },
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "pwn-roppity",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 0,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "web",
+        "removed": "ports"
+      }
+    ]
+  },
+  {
+    "challenge_id": "pwn-slithery",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 0,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "web",
+        "removed": "ports"
+      }
+    ]
+  },
+  {
+    "challenge_id": "pwn-target-practice",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "ports"
+      },
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "pwn-unlimited-subway",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "ports"
+      },
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "pwn-baby-boi",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "ports"
+      },
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "pwn-got-milk",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "ports"
+      },
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "rev-gibberish-check",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "ports"
+      },
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "rev-the-big-bang",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "rev-maze",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "web-poem-collection",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 1,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "game-server",
+        "removed": "docker_socket",
+        "reason": "shared trusted daemon"
+      }
+    ]
+  },
+  {
+    "challenge_id": "web-shreeramquest",
+    "services": 3,
+    "network_keys": [
+      "ctfnet",
+      "shreeramquest"
+    ],
+    "socket_mounts": 0,
+    "accepted": true,
+    "adjustments": [
+      {
+        "service": "nginx",
+        "removed": "ports"
+      },
+      {
+        "service": "nginx",
+        "removed": "build"
+      },
+      {
+        "service": "nodeserver",
+        "removed": "build"
+      }
+    ]
+  },
+  {
+    "challenge_id": "web-smug-dino",
+    "services": 1,
+    "network_keys": [
+      "ctfnet"
+    ],
+    "socket_mounts": 0,
+    "accepted": true,
+    "adjustments": []
+  }
+]

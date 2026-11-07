@@ -78,7 +78,7 @@ def test_batch_repeats_every_challenge_and_indexes_normal_failures(batch_files, 
     {"returncode": 1}, {"missing_record": True}, {"evidence_complete": False},
     {"cleanup_errors": ["synthetic cleanup failure"]}, {"outcome": "scope_violation"},
     {"outcome": "guard_failure"}, {"outcome": "infrastructure_error"},
-    {"outcome": "response_source_error"}, {"outcome": "model_usage_missing"},
+    {"outcome": "response_source_error"},
 ])
 def test_batch_stops_and_retains_partial_index(batch_files, fake_children, specification):
     calls = fake_children([specification])

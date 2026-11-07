@@ -1,0 +1,20 @@
+{
+  "run_id": "c56bcfab9332",
+  "challenge_id": "output_excerpt_and_late_diagnostic",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "32918e32b5f7e21c83da89ff772161be",
+  "active_seconds": 1.27562,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.380117,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000903,
+  "total_seconds": 1.656868
+}

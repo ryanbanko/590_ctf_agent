@@ -1,0 +1,1 @@
+{"name": "ShreeRamQuest", "category": "web", "description": "Can you reach Shree Ram and achieve victory in this immersive CTF experience?", "files": [], "endpoints": [{"address": "172.19.0.2", "protocol": "tcp", "port": 80}]}

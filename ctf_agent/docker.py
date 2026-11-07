@@ -1,5 +1,6 @@
-"""Fixed Docker CLI calls. Model data is passed through stdin, never a host shell."""
+"""Fixed Docker CLI calls. Model data never runs in a host shell."""
 
+from collections import deque
 import os
 import selectors
 import subprocess
@@ -16,54 +17,69 @@ def docker(*args: str, timeout: float = 15) -> str:
     return result.stdout.strip()
 
 
-def bounded_exec(args: list[str], request: bytes, timeout: float, limit: int = 524_288) -> bytes:
-    """Bound the untrusted worker's host-side output, including protocol corruption."""
-    process = subprocess.Popen(
-        ["docker", *args], stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-    )
+def bounded_exec(args: list[str], request: bytes, timeout: float, limit: int) -> dict:
+    """Drain Docker output with bounded head/tail memory; timeout needs solver reset.
+
+    Killing the local Docker client does not kill its remote command. The caller
+    must reset or stop the solver before executing another action after timeout.
+    """
+    process = subprocess.Popen(["docker", *args], stdin=subprocess.PIPE,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     deadline = time.monotonic() + timeout
-    output = bytearray()
-    errors = bytearray()
     pending = memoryview(request)
+    head, tail = [], deque()
+    head_size = tail_size = total = 0
+    half = limit // 2
+    timed_out = False
     try:
         with selectors.DefaultSelector() as selector:
-            for stream, events in [(process.stdin, selectors.EVENT_WRITE),
-                                   (process.stdout, selectors.EVENT_READ),
-                                   (process.stderr, selectors.EVENT_READ)]:
+            for stream, event, name in [(process.stdin, selectors.EVENT_WRITE, 'input'),
+                                        (process.stdout, selectors.EVENT_READ, 'stdout'),
+                                        (process.stderr, selectors.EVENT_READ, 'stderr')]:
                 os.set_blocking(stream.fileno(), False)
-                selector.register(stream, events)
-            while selector.get_map():
+                selector.register(stream, event, name)
+            # Also wait for process completion when output closes before exit.
+            while selector.get_map() or process.poll() is None:
                 remaining = deadline - time.monotonic()
                 if remaining <= 0:
-                    raise TimeoutError("Sandbox worker exceeded its host-side deadline")
-                for key, _ in selector.select(min(remaining, 0.1)):
-                    stream = key.fileobj
-                    if stream is process.stdin:
+                    timed_out = True
+                    break
+                for key, _ in selector.select(min(remaining, 0.05)):
+                    if key.data == 'input':
                         try:
-                            count = os.write(stream.fileno(), pending[:4096])
-                            pending = pending[count:]
+                            pending = pending[os.write(key.fd, pending[:4096]):] if pending else pending
                         except BrokenPipeError:
                             pending = pending[:0]
                         if not pending:
-                            selector.unregister(stream)
-                            stream.close()
-                    else:
-                        data = os.read(stream.fileno(), 8192)
-                        if not data:
-                            selector.unregister(stream)
-                            continue
-                        (errors if stream is process.stderr else output).extend(data)
-                        if len(output) + len(errors) > limit:
-                            raise RuntimeError("Sandbox worker exceeded the host output bound")
-            returncode = process.wait(timeout=max(0.05, deadline - time.monotonic()))
-        if returncode:
-            raise RuntimeError(f"Sandbox worker exited {returncode}: " + errors.decode(errors="replace")[:1000])
-        return bytes(output)
+                            selector.unregister(key.fileobj)
+                            key.fileobj.close()
+                        continue
+                    data = os.read(key.fd, 8192)
+                    if not data:
+                        selector.unregister(key.fileobj)
+                        continue
+                    total += len(data)
+                    take = min(len(data), half - head_size)
+                    if take:
+                        head.append((key.data, data[:take]))
+                        head_size += take
+                    if data[take:]:
+                        tail.append((key.data, data[take:]))
+                        tail_size += len(data) - take
+                        while tail_size > limit - half:
+                            name, chunk = tail.popleft()
+                            discard = min(len(chunk), tail_size - (limit - half))
+                            tail_size -= discard
+                            if discard < len(chunk):
+                                tail.appendleft((name, chunk[discard:]))
+        chunks = head + list(tail)
+        return {'stdout': b''.join(c for n, c in chunks if n == 'stdout').decode(errors='replace'),
+                'stderr': b''.join(c for n, c in chunks if n == 'stderr').decode(errors='replace'),
+                'exit_code': None if timed_out else process.returncode,
+                'timed_out': timed_out, 'truncated': total > limit, 'output_bytes': total}
     finally:
         if process.poll() is None:
             process.kill()
         process.wait(timeout=2)
         for stream in (process.stdin, process.stdout, process.stderr):
-            if not stream.closed:
-                stream.close()
+            stream.close()

@@ -5,6 +5,26 @@ comparisons, the exact change, run references and conclusions. Keep raw evidence
 in Langfuse and run records; use `PROJECT_STATUS.md` for the overall checklist.
 This is Section 2 of [Part 1](../ASSIGNMENT.md), not the later competition Part 2.
 
+## Current scope after course clarification — November 6
+
+The [professor confirmed](REFERENCES.md#november-6-course-guide-and-professor-confirmations)
+our repository Compose/private verification, Langfuse JSON exports and CTFTiny
+split. Existing development records and held-out IDs remain valid; no data
+migration or JSONL logging experiment is necessary. Prior observations and failed
+attempts stay unchanged.
+
+The new guide describes one fixed configuration with three trials per selected
+challenge, per-challenge success/sample-SD/token/time summaries, and a demo that
+need not solve. It requires trace-supported improvements/small follow-ups without
+a second full evaluation. These are guide statements, not additional approvals
+in the three-answer email. Earlier paired-comparison plans below are historical
+research options, not a mandatory second benchmark campaign under that guide.
+No new performance measurement, model request or report work has run.
+
+The next infrastructure checkpoint is the bounded independent solver-image
+comparison. Then refresh intended-environment readiness and run a separately
+authorized small live pilot. SDK tracing/export and batch workflow remain.
+
 ## Experiment 1 — evidence use and recovery prompt
 
 Date: November 4, 2026 (America/New_York).
@@ -421,7 +441,7 @@ Docker cases with cleanup verified, and matching readback of the existing ten-ro
 synthetic trace passed. Context management remains
 a possible later hypothesis. GDB and output-copy optimization remain deferred.
 
-## Proposed infrastructure simplification — not implemented
+## Historical November 5 infrastructure proposal — since implemented in checkpoints 1–2
 
 The November 5 source review led to a
 [consolidated implementation proposal](SIMPLIFICATION_PLAN.md). It retains our
@@ -441,9 +461,11 @@ Hypotheses to record before implementation or live comparison:
 - Preserving supplied target behavior, with justified socket exceptions, can
   reduce compatibility problems introduced by blanket overrides.
 
-These hypotheses are not verified behavior or measured performance improvements.
-The image has not been built and restart recovery has not been prototyped. Existing
-95/31 passing checks apply to the current worker-based implementation. Source and
+At the proposal date these hypotheses were not verified behavior or measured
+performance improvements. The supplied image was not built and restart recovery
+was not prototyped. The then-current 95/31 checks covered the worker implementation.
+The checkpoint results below supersede its implementation status; no solve-rate
+improvement is inferred from their synthetic checks. Source and
 read-only Compose configuration inspection found 17 actual socket mounts among
 27 supplied definitions; previous successful runs show socket omission worked
 for `cry-describeme` and `web-poem-collection`, not that every mount is unnecessary.
@@ -452,3 +474,54 @@ First verify the replacement with synthetic/offline checks and zero-solving
 preparation. Keep unrelated message handling, stopping-policy, context and GDB
 changes separate. Any later live pilot or comparison needs its own authorization;
 preserve the old configuration, failed attempts and historical evidence.
+
+
+## Infrastructure checkpoint 1 — ordinary execution and restart recovery
+
+Approved after the consolidated review; completed November 6. Baseline is Git
+`64f6385`; settings/source/image identities are preserved in
+[execution evidence](../evidence/execution-simplification/README.md). The agent,
+prompt, model profile, SDK export and batch workflow are unchanged. Standard Docker
+copy/exec/init/restart and ordinary writable storage replace worker/session/
+supervisor/archive/artifact mechanisms. Small custom wrappers retain bounded
+output, structured writing, restart coordination and initial inventory.
+
+Hypothesis: removing connected runtime mechanisms can retain required isolation,
+trusted verification, scope incidents, limits, fresh trials and useful records
+with less code to maintain. Infrastructure verification passed: 93 offline tests,
+28 synthetic Docker cases and two fresh development preparation cycles. No live
+model, solving attempt, hosted trace or performance comparison ran. This establishes
+the tested control behavior, not an improvement in solve rate.
+
+Losses are explicit: no model-directed cross-call terminal interaction, no portable
+workspace quota, no automatic omitted-output artifact and no preservation of
+unrelated solver processes/connections after timeout. Files/pip installs survive;
+the same run/counters/deadline continue; targets and guard are not reset. A single
+CHOWN capability ceiling supports trusted copying without giving model commands
+effective capabilities. Supplied-target/network changes and independent image
+selection remain later checkpoints; review before another live pilot.
+
+
+## Infrastructure checkpoint 2 — supplied target behavior and ordinary networking
+
+Approved after execution review; completed November 6. Hypothesis: preserving
+supplied service semantics and using standard Compose project networking can
+remove unnecessary overrides/topology management while retaining solver scope,
+private verification, fresh trials and records. The existing nftables/NFLOG guard
+is retained; it joins the challenge-facing bridge directly. Standard Docker DNS
+retains supplied hostnames, and normal bridge NAT supplies package connectivity.
+
+[Evidence](../evidence/target-network-simplification/README.md): 100 offline tests,
+29 synthetic Docker cases and two fresh preparation cycles each for development
+`pwn-baby-boi`, `web-shreeramquest` and `cry-ecxor`. Multi-service DNS, backend scope
+and fresh named-volume state passed. Read-only host binds have offline coverage
+only; Docker Desktop rejected runtime mounts. Inventory accepts 26/27 Compose
+setups; privileged `msc-showdown` remains unsupported. Socket removals are explicit
+exceptions; full challenge functionality is not established by startup checks.
+
+Targets now inherit supplied/default capabilities/resource settings and normal
+network connectivity. Solver limits, guard denial/incident stopping and evaluator
+separation remain. Runtime Python decreases another 14 lines; the substantive
+simplification is removing mechanisms and assumptions. No live model call, solving,
+new hosted trace or solve-rate comparison ran. The independent image decision and
+any later live pilot remain separate stages.

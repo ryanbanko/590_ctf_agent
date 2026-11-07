@@ -51,11 +51,11 @@ def test_shared_run_flow_keeps_answer_private_and_verifies_observed_candidate(
 
     @contextmanager
     def target(*args):
-        yield {"network": "test-network", "gateway": "192.0.2.254", "cleanup_errors": [], "images": {},
+        yield {"network": "test-network", "cleanup_errors": [], "images": {},
                "endpoints": [{"address": "192.0.2.1", "protocol": "tcp", "port": 8000}]}
 
     monkeypatch.setattr("ctf_agent.launch.challenge_target", target)
-    monkeypatch.setattr("ctf_agent.tools.invoke_worker", lambda *args, **kwargs:
+    monkeypatch.setattr("ctf_agent.attempt.execute_tool", lambda *args, **kwargs:
                         {"stdout": expected, "stderr": "", "exit_code": 0})
     manifest = tmp_path / "manifest.json"
     manifest.write_text(json.dumps({"revision": "pinned", "index_sha256": "index-hash",
@@ -67,7 +67,7 @@ def test_shared_run_flow_keeps_answer_private_and_verifies_observed_candidate(
         requests.append(data)
         if len(requests) == 1:
             assert expected not in request.content.decode()
-            assert "original.example" not in request.content.decode()
+            assert "original.example" in request.content.decode()
             assert "192.0.2.1" in request.content.decode()
             output = [{"type": "function_call", "call_id": "read", "name": "run_command", "arguments": '{"command":"read-public-interface"}'}]
         else:

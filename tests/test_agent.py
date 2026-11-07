@@ -19,9 +19,9 @@ from .fixtures.tracing import attribute, read_spans
 @pytest.mark.parametrize("local_attempt", [{"command_seconds": 10.0}, {"command_seconds": 30.0}], indirect=True)
 def test_observations_drive_recovery_and_only_public_history_is_passed(local_attempt, telemetry, monkeypatch, request):
     command_seconds = request.node.callspec.params["local_attempt"]["command_seconds"]
-    worker = Mock(side_effect=[{"exit_code": 7, "stdout": "", "stderr": "failed"},
+    execute = Mock(side_effect=[{"exit_code": 7, "stdout": "", "stderr": "failed"},
                                {"exit_code": 0, "stdout": "new observation", "stderr": ""}])
-    monkeypatch.setattr("ctf_agent.tools.invoke_worker", worker)
+    monkeypatch.setattr("ctf_agent.attempt.execute_tool", execute)
     histories = []
 
     def respond(*, messages, tools, timeout_seconds):
@@ -50,7 +50,7 @@ def test_observations_drive_recovery_and_only_public_history_is_passed(local_att
     with local_attempt(respond, "Only this public task") as run:
         assert run_agent("Only this public task", run["respond"], run["call_tool"]) == "completed_without_success"
     assert run["result"]["scripted_turns"] == 3 and run["result"]["tool_calls"] == 2
-    assert worker.call_count == 2 and TOOL_DEFINITIONS[0]["name"] == "run_command"
+    assert execute.call_count == 2 and TOOL_DEFINITIONS[0]["name"] == "run_command"
     assert "maximum" not in TOOL_DEFINITIONS[0]["parameters"]["properties"]["timeout_seconds"]
     spans = read_spans(telemetry, run["result"]["trace_id"])
     generations = sorted((span for span in spans if span.name == "scripted-response"), key=lambda span: span.start_time)

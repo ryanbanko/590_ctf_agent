@@ -10,7 +10,6 @@ max_model_turns = 40 # Also supplies the model adapter request limit.
 max_tool_calls = 80
 max_output_bytes = 65536
 memory_mb = 1024
-workspace_mb = 512
 max_command_bytes = 16384
 max_write_bytes = 65536
 pids = 64

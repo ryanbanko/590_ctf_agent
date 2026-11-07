@@ -7,14 +7,18 @@ verify current package/API details when implementing them.
 
 Current completion status is tracked in the
 [assignment checklist](../PROJECT_STATUS.md#assignment-checklist). The initial
-review and milestone notes below preserve their historical context; the latest
+review and milestone notes below preserve their historical context; the historical
 [shared-launcher preparation](#shared-ctftiny-launcher-and-selected-ten-preparation)
-verified the ten reserved CTFTiny challenges plus the development example.
+verified the ten reserved CTFTiny challenges plus the development example. Current
+execution/target checkpoints and the November 6 professor confirmations appear
+below and in PROJECT_STATUS.
 
 ## Authority and professor clarification
 
 [ASSIGNMENT.md](../ASSIGNMENT.md) preserves the original assignment and is the
-authoritative source for course requirements. The user's initial approach was
+original source for course requirements. Read it alongside the later course guide
+and specific instructor clarifications recorded here; keep those sources distinct.
+The user's initial approach was
 tentative; examples, defaults, dependencies, prompts, and permissions in external
 resources are not additional requirements or automatically approved choices.
 
@@ -42,6 +46,59 @@ for verification. Preserve this clarification alongside the original assignment;
 
 Use the resources below as that setup/operation guidance while checking them
 against the assignment, especially its solver/evaluator and access boundaries.
+
+## November 6 course guide and professor confirmations
+
+The user supplied the seven-page PDF **Assignment 4 mplementation Guide.pdf**,
+headed *Appendix A Implementation Guide*. The original file remains with the user;
+its external Downloads path is not a teammate setup dependency. The professor's
+announcement said the guide draws on the CTFTiny/CTFBench GitHub repositories.
+The PDF references a separately released `course-compose.yaml`, private verifier
+and helper scripts; those references alone did not establish their availability.
+
+The user asked about three concrete differences. The professor replied, as
+reported by the user on November 6:
+
+> 1. Using the challenge repository’s compose files and checking flags privately in your controller is fine. I had originally intended to provide a subset of the dataset, but that hasn’t been created yet.
+> 2. JSON trace exports from Langfuse are fine.
+> 3. Your approach of developing on separate CTFTiny challenges and holding ten out for evaluation works.
+
+These specific confirmations settle our implementation choices:
+
+- Keep repository target Compose files and trusted controller verification. No
+  separate course configuration/verifier is a prerequisite to continuing.
+- Keep native Langfuse JSON exports; JSONL conversion is not required for compliance.
+- Keep the recorded CTFTiny development/held-out split. No NYU development-dataset
+  migration or replacement selection is required. Existing development exposure
+  stays recorded; the ten held-out IDs remain protected.
+
+Approval of the approach is not proof of every challenge's compatibility or of
+our individual socket/mount exceptions. Scope enforcement, limits, private-data
+boundaries, fresh trials and complete records still need actual verification.
+Pip approval above remains in effect. No helper-kit API or download is assumed;
+available helpers can be evaluated later without blocking infrastructure work.
+
+### Evaluation guidance stated in the PDF
+
+The following are guide statements, **not additional confirmations in that email**:
+
+- Pages 1/5: one fixed configuration and three fresh attempts per selected challenge;
+  no second full evaluation or mandatory five-challenge/paired pilot.
+- Page 6: per-challenge success percentage, sample SD in percentage points using
+  denominator `3 - 1`, mean input/output/total tokens and launch-to-termination time.
+  Include failures and keep unavailable usage null; incomplete/incident results
+  must not be silently replaced or omitted.
+- Page 7: trace-supported improvement with small follow-up checks, a 1–3 page
+  writeup and an identified autonomous demo; a successful solve is not required.
+- Pages 4/5 describe result records/helper scripts. Our accepted JSON trace format
+  does not establish that those helper scripts are present or that our result
+  schema/timing fields already match their interface.
+
+These differ from the older Canvas comparison/pass@k/successful-demo wording.
+Keep the original assignment unchanged. The working evaluation plan follows the
+newer guide's explicit scope, with its provenance noted here; the professor's
+three-part reply should not be cited as separately resolving every discrepancy.
+Actual evaluation/report/demo implementation and authorization remain later work.
 
 ## 1. CTFTiny — required benchmark target
 
@@ -280,7 +337,7 @@ Docker's [copy documentation](https://docs.docker.com/reference/cli/docker/conta
 supports ordinary transfer once our restrictive layout is removed, with ownership
 and mount behavior checked. [Restart](https://docs.docker.com/reference/cli/docker/container/restart/)
 and [storage](https://docs.docker.com/engine/storage/) documentation support the
-proposal to reset solver processes while retaining its writable layer. Our current
+proposal to reset solver processes while retaining its writable layer. The then-current
 tmpfs workspace would not survive that reset. [Bind-mount documentation](https://docs.docker.com/engine/storage/bind-mounts/)
 explains that socket binds refer to the daemon host: under our current Docker
 Desktop deployment they expose the engine managing trusted resources, not a
@@ -292,3 +349,48 @@ NYU image, prototype recovery or solve challenges. The
 removed, newly integrated and verified. It supersedes earlier conversational
 suggestions to remove the file writer/batch wrapper or require terminal command
 timeouts. Current runtime behavior remains documented in DESIGN and README.
+
+
+## Execution simplification checkpoint — November 6
+
+The first approved checkpoint uses Docker's standard
+[exec](https://docs.docker.com/reference/cli/docker/container/exec/),
+[copy](https://docs.docker.com/reference/cli/docker/container/cp/) and
+[restart](https://docs.docker.com/reference/cli/docker/container/restart/) behavior.
+Copying preserves file modes but normally creates root-owned files; trusted
+pre-agent CHOWN assigns solver ownership. Restart with SIGKILL resets all solver
+processes while retaining its writable layer. These details were verified locally,
+not assumed from the baseline. The retained structured writer and bounded reader
+are adaptations of existing project code, not NYU-provided tools. No full NYU
+agent framework or supplied-image build was introduced.
+
+The existing [Langfuse instrumentation](https://langfuse.com/docs/observability/sdk/instrumentation)
+conventions retain root-linked tool results and add timeout/restart/inventory events;
+SDK version/export and native model integration are unchanged. Verification uses
+the actual SDK with local transport plus synthetic Docker targets; no new hosted
+trace or model call ran. The [checkpoint evidence](../evidence/execution-simplification/README.md)
+records results and the capability tradeoffs. Target/network and image decisions
+in the earlier proposal remain pending.
+
+
+## Target/network simplification checkpoint — November 6
+
+Rechecked installed `nyuctf==1.1.1` lifecycle code: it invokes the original Compose
+file without project/exposure/readiness/deadline integration, so the loader remains
+reused while the existing small trusted Compose orchestration is retained.
+Docker's [Compose networks](https://docs.docker.com/reference/compose-file/networks/),
+[service definition](https://docs.docker.com/reference/compose-file/services/) and
+[down/volume cleanup](https://docs.docker.com/reference/cli/docker/compose/down/)
+documentation support ordinary project-local names, DNS/service relationships and
+fresh named/anonymous volume cleanup. Those replace our manual network/route
+arrangement; the custom firewall/denial collector is still required and retained.
+
+The 27-definition read-only infrastructure inventory accepts 26 configurations;
+privileged `msc-showdown` remains unsupported and 17 socket omissions are recorded.
+No flags, solutions or write-ups were consulted. Six zero-solving development
+preparation cycles and synthetic multi-service DNS/volume/scope checks passed.
+Docker Desktop rejected read-only host bind execution; that policy has offline
+coverage only. No host-sharing workaround was added. No model calls or new hosted
+traces ran. [Evidence](../evidence/target-network-simplification/README.md) preserves
+provenance, failures, scope and capability/resource tradeoffs. Supplied image
+selection is still independent and pending.

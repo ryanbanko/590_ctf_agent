@@ -8,7 +8,7 @@ CONFIG_PATH = Path('configs/development.toml')
 ATTEMPT_FIELDS = {
     'solver_image', 'guard_image', 'target_image', 'wall_seconds', 'max_tool_calls',
     'max_model_turns', 'command_seconds', 'max_command_bytes', 'max_output_bytes',
-    'max_write_bytes', 'memory_mb', 'workspace_mb', 'pids', 'cpus',
+    'max_write_bytes', 'memory_mb', 'pids', 'cpus',
 }
 MODEL_FIELDS = {
     'model', 'base_url', 'reasoning_effort', 'max_output_tokens', 'max_input_bytes',
@@ -30,7 +30,7 @@ def validate_settings(settings: dict) -> None:
         elif type(value) is not int or value <= 0:
             raise ValueError(f'{name} must be a positive integer')
     if settings['max_output_bytes'] > 65_536 or settings['max_write_bytes'] > 1_048_576:
-        raise ValueError('Output/write limits exceed the worker protocol bounds')
+        raise ValueError('Output/write limits exceed the supported observation bounds')
 
 
 def validate_model_settings(settings: dict) -> None:

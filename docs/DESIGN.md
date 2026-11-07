@@ -7,11 +7,23 @@ NYU package and conventions informed this setup. Functions, dictionaries and
 resource-owning context managers keep the implementation understandable without
 an agent framework or application class hierarchy.
 
-This document describes the current implementation. The November 5
-[simplification proposal](SIMPLIFICATION_PLAN.md) is recorded separately and has
-not been implemented. It distinguishes assignment outcomes from optional design
-choices and proposes replacing the worker infrastructure while keeping our agent,
-three tools, tracing and batch wrapper.
+This document describes implemented behavior. The approved
+[simplification plan](SIMPLIFICATION_PLAN.md) separates execution replacement
+from the completed target/network checkpoint and the remaining image evaluation. Our agent, three
+tools, model integration, native SDK export, complete TOML and batch wrapper remain.
+
+The [November 6 instructor reply](REFERENCES.md#november-6-course-guide-and-professor-confirmations)
+accepts our target Compose/private controller verification, native Langfuse JSON
+exports and held-out CTFTiny selection. Keep the current boundaries and record
+formats. The course guide's references to separate components do not require a
+course-runtime adapter, JSONL layer or NYU development migration for this project.
+
+Solver-image selection remains independent of execution. A fixed upstream image
+may replace our Dockerfile/toolkit lists and Python environment setup if focused
+checks show it needs less maintenance. Its defaults, sudo, paths and dependencies
+must be checked under our actual non-root/no-new-privileges runtime. The guard,
+private evaluator, bounded tools and experiment records remain regardless of
+image choice. No supplied-image build or adoption has occurred.
 
 ## One challenge path
 
@@ -53,57 +65,62 @@ The workspace has all fifty directories; the live serialized-input cap is now 51
 
 ## Supplied targets and contestant files
 
-File-only entries create no service but retain a fresh isolated solver network.
-Service-backed entries use their supplied Compose image, service name, alias and
-internal port. Ordinary Compose canonicalization supplies dictionaries rather than
-requiring a YAML dependency. The runtime removes published host ports and Docker
-socket mounts, rejects other mounts/unsupported arrangements, and attaches services
-to a fresh isolated internal bridge. Supplied backend networks stay private and
-internal. Docker-managed target volumes are removed and checked during cleanup;
-host bind mounts remain prohibited. Privileged targets are rejected. Supplied
-build directives are not executed when using prebuilt images. The original dataset
-files stay unchanged.
+File-only entries create one fresh ordinary Docker bridge. Service-backed entries
+use the supplied Compose definitions, canonicalized by Docker itself, with fresh
+project-owned networks and volumes. This keeps commands, dependencies, aliases,
+backend membership, DNS, capabilities, temporary storage, users and supplied
+resource settings. A small integration function retains image-ID pinning,
+bounded startup/teardown, recorded adjustments and actual container/volume IDs.
+It does not reimplement the NYU framework. Installed `nyuctf==1.1.1` lifecycle
+helpers invoke the original file without our project/exposure/deadline controls,
+so calling Compose directly remains the smaller explicit integration.
 
-Package lifecycle helpers run the original Compose configuration directly. Our
-current controlled runtime configuration implements our chosen boundaries, but
-the assignment does not require every override it applies. Socket mounts and
-host-administrative access need explicit handling; blanket target DNS, capability,
-temporary-directory and resource policies are design choices under review in the
-proposal above. A per-challenge adapter would add unnecessary code for the
-selected services, which all use the same conventions. Missing images are pulled;
-resolved local IDs and architecture are recorded and fixed within the attempt.
-Tags may resolve differently after a later pull; freeze recorded images alongside
-code/settings before comparison. This is not a bit-for-bit rebuild guarantee.
+Concrete changes to supplied settings: remove host port publishing, build directives
+when using supplied prebuilt images, global container/resource names and shared
+Docker socket binds. Global `ctfnet` becomes project-local; backend definitions
+are preserved rather than reconstructed. `target.json` records service adjustments.
+The 27-file infrastructure inventory accepts 26 configurations; `msc-showdown`
+remains unsupported because of privileged operation. Seventeen socket omissions
+are explicit exceptions, not proof that all challenge behavior is unchanged.
+A demonstrated need for Docker administration would require a separate engine;
+a read-only socket bind still permits Docker API writes and is not a solution.
 
-Targets have bounded CPU/memory/PIDs/tmpfs/logs, no published ports or host mounts,
-no-new-privileges and capabilities limited to CHOWN/SETUID/SETGID. Targets use
-normal disposable writable layers: a read-only target broke Nginx's log/temp-file
-startup, and dropping CHOWN broke ownership setup. Restoring those normal startup
-capabilities is simpler than challenge-specific entrypoint patches. These target
-permissions do not change the solver's read-only, non-root, zero-capability setup.
-The model receives no target administrative shell.
+Standard Compose `down --volumes` resets project/anonymous volumes. Read-only
+server-file binds/configs/secrets must resolve inside the challenge directory;
+Docker Desktop must share those host paths. Writable host binds and external/
+custom volumes fail with a fresh-state error instead of silently persisting state.
+Current CTFTiny definitions have no non-socket host binds, so no storage-copy or
+nested-engine subsystem is added. Host namespace/device/privileged access is
+rejected. Ordinary supplied mounts never enter the solver environment.
 
-The selected alias maps to the service IP. Public task text replaces the literal
-benchmark hostname with that IP; the guard permits only the recorded endpoint.
-Docker DNS and public HTTPS are additionally permitted for runtime pip, as described below. More complex network/service arrangements fail closed rather
-than silently widening access. Preparation verifies four reserved services and the
-development example; the six remaining reserved challenges are file-only.
+The previous forced target capability/DNS/tmpfs/log/resource policies disappear.
+Targets now use normal Docker capabilities and network access unless the supplied
+Compose says otherwise. They no longer receive the imposed 256 MiB resource cap;
+solver CPU/RAM/PID/time/call limits remain. The solver still has zero effective
+capabilities, no credentials/private mounts/socket, and no target admin tool.
+
+The guard joins the exposed service's network directly and shares its namespace
+with the solver. One ordinary bridge supplies both challenge connectivity and NAT
+for approved package downloads; Docker chooses routes and resolves supplied service
+names/aliases. Public descriptions retain hostnames while endpoint IP/port policy
+is constructed from inspected containers. The extra egress bridge, gateway argument,
+manual route replacement, forced internal/isolation settings and hostname rewriting
+are gone. Backend networks retain service membership; a synthetic two-service case
+checks frontend-to-backend DNS and denied direct solver access to the backend.
 
 Only explicitly listed contestant files are transferred. Validation rejects
 traversal, private metadata names, duplicate paths and symlinks. Listed Dockerfiles
-remain outside the solver, with the omission recorded. A tar stream
-goes through fixed Docker exec arguments to Python's standard data-filtered
-extractor, as UID/GID 1000, into the solver's bounded `/workspace` tmpfs. Docker cp
-refused the read-only solver root, including its writable tmpfs; streaming preserves
-that control without another dependency or mount. Records retain names/sizes/hashes.
+remain outside the solver, with the omission recorded. Standard `docker cp`
+transfers each file; trusted pre-agent setup creates parents and assigns UID/GID
+1000. Source executable permissions and file hashes are preserved and verified.
+The read-only-root/tmpfs copying workaround, in-memory tar and extractor are gone.
 
 ## Runner, agent and tools
 
 The original Python-only solver omitted ordinary CTF utilities. A synthetic probe
 also confirmed that Docker mounted `/workspace` with `noexec`, preventing even
-a copied `/bin/true` from running. The solver now explicitly permits workspace
-execution while retaining `nosuid`, `nodev`, a read-only root, non-root execution
-and zero capabilities. Numeric memory/workspace/time settings are project choices,
+a copied `/bin/true` from running. A conventional writable solver now permits workspace execution with non-root
+commands and no effective capabilities. Numeric memory/time settings are project choices,
 not assignment-prescribed values; the assignment requires enforced bounds and scope.
 
 The normal build selects Linux AMD64 for the solver to match CTFTiny's x86
@@ -115,8 +132,8 @@ GCC/make/GDB and 32-bit runtime libraries. This avoids a broad analysis framewor
 or custom emulator integration. Installed OS versions are recorded in
 `/opt/os-packages.txt`; image IDs remain part of attempt provenance. Baseline
 tool availability does not guarantee arbitrary binary or specialized-package support.
-Docker documents the explicit workspace option in its
-[tmpfs mount options](https://docs.docker.com/engine/storage/tmpfs/).
+No workspace tmpfs or portable per-attempt disk quota remains. Docker's writable
+layer persists across restart and disappears when the container is removed.
 
 Six approved solver-only Python libraries are installed at build time: pwntools,
 SymPy, NumPy, PyCryptodome, requests and Pillow. A small requirements input names
@@ -126,51 +143,59 @@ versions. This leaves host dependencies and the agent interfaces unchanged.
 Both requirements files enter source provenance. Regeneration and evidence are
 documented in [the library milestone](../evidence/solver-libraries/README.md).
 
-The professor approved runtime package downloads. The user requested a simple
-implementation: a separate per-attempt Docker bridge supplies ordinary NAT to the
-guard, which also joins the isolated challenge network. The solver shares that
-namespace. Existing nftables rules permit assigned endpoints, Docker's resolver
-and public IPv4 HTTPS; other private/reserved destinations and unapproved ports
-remain denied, recorded and terminal. There is no proxy, mirror or domain filter.
-The prompt permits external internet only for pip dependency installation and
-prohibits answer/write-up lookup. Purpose relies on instructions and trace review;
-this is not enforced pip-only access. [Clarification](REFERENCES.md#authority-and-professor-clarification).
+The professor approved runtime package downloads. Existing nftables/independent
+NFLOG monitoring still permits assigned endpoints, Docker DNS and public IPv4 HTTPS;
+other private/reserved destinations and unapproved ports are denied, recorded and
+terminal. The guard installs enforcement before starting the solver, which lacks
+NET_ADMIN and cannot change it. Normal Docker networking supplies connectivity;
+it does not replace the guard. Internet purpose relies on instructions and trace
+review, not a package-only proxy/domain firewall.
+[Clarification](REFERENCES.md#authority-and-professor-clarification).
 
-The solver starts a standard system-site-packages venv in `/workspace/.venv`.
-`PATH` selects it; `HOME` and `TMPDIR` use the owned, executable workspace. The live
-profile supplies 1 GiB RAM and 512 MiB workspace, which counts toward RAM. Existing
-baseline libraries avoid repeated common installs. Pip caches/version checks are
-disabled by default; the temporary no-index setting is removed. Installed Python
-versions are scanned at startup and after tool calls. `packages.json` is written
-on the first scan and only when the inventory changes; scans still detect
-additions from any command.
+The image prepares a writable system-site-packages venv at `/opt/venv`; PATH
+selects it. Normal home `/home/solver` and `/tmp` are writable. No environment is
+created during attempt startup. The live profile retains 1 GiB RAM and 64 PIDs;
+`workspace_mb` is removed because ordinary Docker writable storage provides no
+portable per-container disk quota. The Docker host's available disk is a practical
+limit. All additions disappear at final container removal, not at command restart.
 
-Interactive sessions extend the existing command tool. A solver-local Unix socket
-connects the fixed Docker client to the existing worker running as PID 1. Each
-command has a small independent supervisor using Linux subreaper semantics, so
-orphaned/detached children stay attributable even with concurrent sessions. The
-supervisor drains pipes or a PTY, accepts input, enforces the command/session
-lifetime, and freezes/kills/reaps descendants at exit, close or timeout. An
-ExitStack guarantees resource/descendant cleanup on exceptional exits too.
-Completed commands drain their final output, send a final reply and release their
-supervisor; the worker retains the bounded result for a later poll. Periodic
-reaping releases finished processes even when the agent does not poll. Partial
-terminal writes report the exact UTF-8 byte count; supervisor protocol failures
-remain infrastructure failures. Short interactive waits return `running` and a session ID; they are not execution
-timeouts. Sessions use the attempt deadline; ordinary commands use the command
-cap. Unconfirmed cleanup remains terminal. No new agent tool, third-party
-runtime dependency or host command execution is introduced.
+`docker exec` starts `/bin/sh` in `/workspace` as UID/GID 1000. A bounded Python
+selector loop drains stdout/stderr, including final output and closed-output
+hangs. It keeps a combined beginning/end byte excerpt without accumulating full
+output. The host never evaluates command text. A one-shot Python writer retains
+existing descriptor-relative no-follow traversal checks; stdin carries path/text.
+There is no worker daemon, Unix socket/RPC, PTY, session registry, supervisor,
+subreaper, automatic output file or artifact-transfer protocol.
 
-Command results retain complete output up to the configured 64 KiB live limit.
-Larger output returns beginning/end excerpts with a solver path; up to 1 MiB is
-saved per command/session and copied into ordinary attempt records. Overflow is
-explicit. Files and package snapshots do not enter model history automatically.
-A hard stop can discard in-flight output since the last read/copy; previously
-returned evidence remains. Historical evidence is preserved unchanged.
+Ordinary nonzero exits return observations. A command timeout kills the local
+Docker client, then restarts the same solver with Docker's SIGKILL restart. Killing
+the client alone is insufficient: Docker owns the command. Restart kills all
+solver processes, including detached children and unrelated background activity.
+Files/pip installs survive; connections and memory do not. Targets and guard stay
+running. The run ID, counters and original attempt deadline remain unchanged.
+No command is automatically retried. The result explicitly reports the reset;
+partial output is traced even if recovery fails.
+
+A small lifecycle lock serializes startup/recovery with terminal stopping. A
+terminal flag is set before waiting for that lock; recovery checks the deadline
+and independent network-denial audit before and after restart. Scope/guard loss,
+interruption, failed recovery and whole-attempt expiry remain terminal. Final
+removal of the solver prevents a late lifecycle operation retaining the attempt.
+Docker's standard init handles reaping; no per-command descendant cleanup is
+claimed on normal exit. Background tasks can survive until reset/final cleanup.
+
+Output up to 64 KiB raw bytes is returned whole; larger output retains head/tail
+and explicit truncation/counts. UTF-8 decoding replaces invalid bytes. To retain
+omitted output, commands can redirect it to files. Automatic artifact retrieval
+is deliberately removed. The recorded tool observation is exactly what the model
+receives. Initial package inventory uses ordinary Python metadata; an optional
+final inventory records availability, commonly unavailable after terminal stop.
+There are no repeated per-tool scans; installation activity remains in the trace.
+Historical records and output files remain unchanged.
 
 GDB permissions and debugging support are unchanged and further work is deferred.
 Static inspection works; live debugging failed in the recorded Apple Silicon
-probe. Interactive terminals do not establish a fix for that separate issue.
+probe. Removing terminal sessions does not change that separate limitation.
 
 The trusted response boundary copies the public tool definitions and inserts the
 active command timeout maximum/default before tracing and invoking the model.
@@ -187,7 +212,7 @@ inputs. The answer is used only by trusted exact-equality verification.
 Candidates and verdicts are recorded; the expected answer is never separately
 exposed. The other tools run commands and write files only inside the solver.
 Their [contracts](../README.md#architecture-and-tool-contracts) cover validation,
-outputs, timeout and error behavior. Host validation and worker filesystem checks
+outputs, timeout and error behavior. Host validation and one-shot filesystem checks
 protect distinct boundaries and remain separate.
 
 The agent retains the system prompt, public task, assistant replies and matching
@@ -200,7 +225,7 @@ the hypothesis and pending comparison. This changes guidance, not loop behavior;
 its effect on live persistence and cost is unmeasured.
 Wrong submissions and ordinary command errors permit continuation. Text-only replies
 end without verified success. Hard attempt/model limits, scope denial, guard loss
-and protocol failures stop the attempt. `AttemptStopped` is a small exception that
+and infrastructure failures stop the attempt. `AttemptStopped` is a small exception that
 carries the enforced reason; unrelated errors propagate.
 
 Context is public history plus workspace files, which are not automatically inserted
@@ -232,8 +257,8 @@ removed. All values are project choices; the assignment requires enforced limits
 not those particular numbers.
 
 Preparation now loads the selected experiment through the same loader as live
-runs. The trusted run record exposes a remaining-time callback for staging; available workspace is checked
-after venv creation, and archive/transfer time shares the remaining deadline.
+runs. The trusted run record exposes a remaining-time callback for ordinary file
+copying; transfer shares the original attempt deadline.
 
 The user approved removing the local spending cap and all reservation accounting.
 `make_responder()` still returns a function and per-attempt usage dictionary.

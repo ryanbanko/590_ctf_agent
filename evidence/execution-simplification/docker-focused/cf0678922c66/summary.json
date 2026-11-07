@@ -1,0 +1,20 @@
+{
+  "run_id": "cf0678922c66",
+  "challenge_id": "standard_copy_preserves_handouts_and_ownership",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "5f286efd1c4efddc77a8087f1d449c42",
+  "active_seconds": 1.405427,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.431125,
+  "verified_success": false,
+  "trace_flush_seconds": 0.00028,
+  "total_seconds": 1.837099
+}

@@ -1,10 +1,8 @@
 """Basic trusted-data and binary-staging checks; no benchmark answers or Docker."""
 
 import hashlib
-import io
 import json
 from pathlib import Path
-import tarfile
 from types import SimpleNamespace
 from copy import deepcopy
 
@@ -28,26 +26,19 @@ def test_only_listed_files_and_public_fields_are_used(tmp_path, monkeypatch):
     assert set(task) == {"name", "category", "description", "files", "endpoints"}
     assert "private-answer" not in json.dumps(task) and task["files"] == ["files/program"]
     assert task["description"] == challenge.description
-    transferred = []
-
-    def copy(args, data, timeout):
-        assert args[:10] == ["exec", "--interactive", "--user", "1000:1000", "--workdir", "/workspace",
-                             "solver", "python", "-I", "-c"] and 0 < timeout <= 3
-        assert "filter='data'" in args[10]
-        with tarfile.open(fileobj=io.BytesIO(data)) as archive:
-            assert archive.getnames() == ["files", "files/program"]
-            assert archive.extractfile("files/program").read() == binary
-            assert all(item.uid == item.gid == 1000 for item in archive.getmembers())
-            assert archive.getmember("files/program").mode == 0o700
-        transferred.append(True)
-
-    monkeypatch.setattr("ctf_agent.challenge.bounded_exec", copy)
-    monkeypatch.setattr("ctf_agent.challenge.docker", lambda *args, **kwargs: "1024")
-    records = stage_files(files, "solver", 1024, 3)
-    assert transferred and records == [{"path": "files/program", "bytes": len(binary),
-                                       "sha256": hashlib.sha256(binary).hexdigest()}]
-    with pytest.raises(ValueError, match="workspace limit"):
-        stage_files(files, "solver", 1, 3)
+    calls = []
+    def command(*args, **kwargs):
+        assert 0 < kwargs['timeout'] <= 3
+        calls.append(args)
+        return ''
+    monkeypatch.setattr('ctf_agent.challenge.docker', command)
+    records = stage_files(files, "solver", 3)
+    assert calls == [
+        ('exec', '--user', '1000:1000', 'solver', 'mkdir', '-p', '--', '/workspace/files'),
+        ('cp', str((tmp_path/'files/program').resolve()), 'solver:/workspace/files/program'),
+        ('exec', '--user', '0:0', 'solver', 'chown', '1000:1000', '--', '/workspace/files/program')]
+    assert records == [{"path": "files/program", "bytes": len(binary),
+                        "sha256": hashlib.sha256(binary).hexdigest()}]
 
 
 def test_private_paths_and_symlinks_are_rejected(tmp_path):
@@ -96,34 +87,46 @@ def test_dirty_dataset_is_rejected_before_challenge_loading(tmp_path, monkeypatc
         load_challenge(dataset, "development", manifest)
 
 
-def test_runtime_compose_removes_socket_and_host_ports_without_changing_supplied_data():
-    supplied = {"services": {"game-server": {"image": "llmctf/task:latest",
-        "volumes": [{"source": "/var/run/docker.sock", "target": "/var/run/docker.sock"}],
-        "ports": [{"published": "8000", "target": 8000}],
-        "networks": {"ctfnet": {"aliases": ["challenge.example"]}}}}}
+def test_runtime_compose_preserves_supplied_behavior_with_narrow_exceptions(tmp_path):
+    source = tmp_path/'server.conf'
+    source.write_text('server configuration')
+    supplied = {'name': 'global', 'services': {'server': {
+        'image': 'fixture', 'command': ['original-command'], 'dns': ['127.0.0.11'],
+        'cap_add': ['CHOWN'], 'tmpfs': ['/scratch'], 'mem_limit': '64m', 'restart': 'on-failure',
+        'networks': {'ctfnet': {'aliases': ['challenge.example']}, 'backend': None},
+        'volumes': [{'type': 'bind', 'source': '/var/run/docker.sock', 'target': '/var/run/docker.sock'},
+                    {'type': 'bind', 'source': str(source), 'target': '/etc/server.conf', 'read_only': True},
+                    {'type': 'volume', 'source': 'data', 'target': '/data'}],
+        'ports': [{'published': '8000', 'target': 8000}], 'build': '.', 'container_name': 'global'}},
+        'networks': {'ctfnet': {'name': 'ctfnet', 'external': True}, 'backend': {'driver': 'bridge'}},
+        'volumes': {'data': {'name': 'global-data'}}}
     original = deepcopy(supplied)
-    runtime = target_compose(supplied, "fresh-internal-network")
-    service = runtime["services"]["game-server"]
+    runtime, changes = target_compose(supplied, tmp_path)
     assert supplied == original
-    assert not {"volumes", "ports"} & service.keys()
-    assert service["image"] == "llmctf/task:latest"
-    assert service["networks"] == original["services"]["game-server"]["networks"]
-    assert runtime["networks"]["ctfnet"] == {"name": "fresh-internal-network", "external": True}
-    assert "read_only" not in service and service["cap_drop"] == ["ALL"]
-    service = original["services"]["game-server"] | {"build": ".", "restart": "always"}
-    service["networks"] = service["networks"] | {"backend": None}
-    runtime = target_compose({"services": {"game-server": service,
-        "database": {"image": "mongo", "networks": {"backend": None}}}}, "network")
-    assert not {"build", "privileged", "restart"} & runtime["services"]["game-server"].keys()
-    assert runtime["networks"]["backend"]["internal"] is True
-    assert runtime["networks"]["backend"]["enable_ipv6"] is False
-    assert "ctfnet" not in runtime["services"]["database"]["networks"]
-    with pytest.raises(ValueError, match="Privileged"):
-        target_compose({"services": {"target": service | {"privileged": True}}}, "network")
-    for change in [{"network_mode": "host"}, {"volumes": [{"target": "/private-host"}]}]:
-        with pytest.raises(ValueError, match="Unsupported"):
-            target_compose({"services": {"game-server": original["services"]["game-server"] | change}},
-                           "network")
+    service = runtime['services']['server']
+    assert service['volumes'] == original['services']['server']['volumes'][1:]
+    assert not {'ports','build','container_name'} & service.keys()
+    for key in ['command','dns','cap_add','tmpfs','mem_limit','restart','networks']:
+        assert service[key] == original['services']['server'][key]
+    assert not {'cap_drop','security_opt','logging'} & service.keys()
+    assert {c['removed'] for c in changes} == {'ports','build','container_name','docker_socket'}
+    assert not {'name','external','internal'} & runtime['networks']['ctfnet'].keys()
+    assert 'name' not in runtime['volumes']['data']
+
+
+@pytest.mark.parametrize('change', [
+    {'privileged': True}, {'network_mode': 'host'}, {'pid': 'host'}, {'use_api_socket': True},
+    {'volumes': [{'type': 'bind', 'source': '/private-host', 'target': '/data', 'read_only': True}]},
+    {'volumes': [{'type': 'bind', 'source': '.', 'target': '/data'}]},
+])
+def test_target_host_administration_and_persistent_host_state_rejected(tmp_path, change):
+    with pytest.raises(ValueError):
+        target_compose({'services': {'server': {'image':'fixture'} | change}}, tmp_path)
+
+
+def test_external_storage_needs_reset_strategy(tmp_path):
+    with pytest.raises(ValueError, match='fresh-state'):
+        target_compose({'services': {}, 'volumes': {'data': {'external': True}}}, tmp_path)
 
 
 def test_target_start_failure_still_removes_compose_resources_and_network(tmp_path, monkeypatch):
@@ -148,7 +151,6 @@ def test_target_start_failure_still_removes_compose_resources_and_network(tmp_pa
         with challenge_target(challenge, tmp_path / "evidence"):
             pytest.fail("Failed target was yielded")
     assert any("down" in args for args in calls)
-    assert any(args[:2] == ("network", "rm") for args in calls)
     assert json.loads((tmp_path / "evidence/target.json").read_text())["cleanup_errors"] == []
 
 
@@ -169,18 +171,14 @@ def test_package_loader_accepts_evaluation_id_without_a_separate_runner(tmp_path
     assert challenge.name == "fixture" and challenge.files == [] and not challenge.container
 
 
-def test_staging_checks_free_space_and_remaining_time(tmp_path, monkeypatch):
+def test_staging_uses_remaining_deadline(tmp_path, monkeypatch):
     source = tmp_path / 'public-file'
     source.write_bytes(b'public-data')
-    monkeypatch.setattr('ctf_agent.challenge.docker', lambda *args, **kwargs: '5')
-    monkeypatch.setattr('ctf_agent.challenge.bounded_exec', lambda *args: pytest.fail('Staged without space/time'))
-    with pytest.raises(ValueError, match='available solver workspace'):
-        stage_files({'public-file': source}, 'solver', 1024, 3)
-    monkeypatch.setattr('ctf_agent.challenge.docker', lambda *args, **kwargs: '1024')
-    clock = iter([0, 0, 4])
+    monkeypatch.setattr('ctf_agent.challenge.docker', lambda *args, **kwargs: pytest.fail('Staged after deadline'))
+    clock = iter([0, 4])
     monkeypatch.setattr('ctf_agent.challenge.time.monotonic', lambda: next(clock))
     with pytest.raises(TimeoutError, match='remaining attempt time'):
-        stage_files({'public-file': source}, 'solver', 1024, 3)
+        stage_files({'public-file': source}, 'solver', 3)
 
 
 @pytest.mark.parametrize('extra,expected', [([], 'configs/development.toml'),
