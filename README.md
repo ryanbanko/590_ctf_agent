@@ -11,7 +11,9 @@ The ten scored challenges are reserved; use the forty development IDs in
 
 The latest [agent improvement milestone](evidence/agent-first-fix/README.md) adds
 verified environment/validation guidance and recoverable oversized command output.
-Synthetic checks pass; a live behavioral comparison remains pending.
+Synthetic checks pass. A [fresh eleven-challenge development batch](evidence/agent-first-fix-batch/README.md)
+completed with 6/11 verified successes; detailed behavioral trace review remains
+pending, and no improvement effect is established by this single rerun.
 
 The [infrastructure simplification plan](docs/SIMPLIFICATION_PLAN.md) tracks
 reviewable checkpoints. Execution now uses ordinary Docker copy/exec and a
@@ -262,10 +264,12 @@ no added batch-cost gate.
 Two different development challenges per category would give **11 IDs**: crypto,
 miscellaneous, pwn, reversing and web can each supply two, but forensics has only
 `for-1black0white`. Keep the other forensics challenge in the reserved scored set.
-The selected eleven-ID pilot passed preparation; an earlier batch stopped after
-three attempts when pip tried to reach PyPI under the previous network policy.
-Package access is now enabled; review the new setup before starting another pilot.
-See [project status](PROJECT_STATUS.md) for historical outcomes.
+The selected eleven-ID set passed preparation and later completed the baseline
+and [first-fix development batches](evidence/agent-first-fix-batch/README.md), each
+with 6/11 verified successes. The first-fix run uses clean commit `e7e366c`;
+detailed behavioral review is pending. An older batch stopped under the previous
+pip/network policy; those records remain historical. See
+[project status](PROJECT_STATUS.md) for the current review checkpoint.
 
 ### Optional command settings
 
@@ -376,12 +380,16 @@ Each invocation prints a fresh record directory:
 | `<run-id>/packages-initial.json` | Initial installed Python versions. An optional final inventory may be unavailable after terminal stop; availability is traced. |
 | `<run-id>/summary.json` | Stop reason, verified success, counts, available tokens/cost, timing, solver restart count, captured-output bytes, cleanup errors. |
 | `<run-id>/outputs/<capture-id>/{stdout,stderr}.bin` | Bounded raw command-output artifacts, created only on overflow; retained after solver cleanup. Capture metadata gives their completeness and solver-readable paths. |
-| `observations.json` | Complete native hosted trace export containing model/tool inputs and outputs; older records use `cli-observations.json`. |
+| `observations.json` | Native hosted trace export; verify payload availability before detailed review. Older records use `cli-observations.json`; supplemental refreshes preserve the original. |
 | `public-task.json`, `target/` | Public task and trusted target runtime configuration/lifecycle record. |
 
 `verified_success` means trusted verification accepted a candidate.
 `evidence_complete` means the launch's hosted trace audit passed. They describe
-different outcomes. Historical records may contain `cost_reserved_usd`; new runs
+different outcomes. The current audit checks structural completeness but can pass
+before every input/output payload is available. The first-fix `rev-tablez` trace
+required a [supplemental export](evidence/agent-first-fix-batch/README.md#supplemental-rev-tablez-export),
+which is the file to use for its detailed review. Original exports are preserved.
+Historical records may contain `cost_reserved_usd`; new runs
 retain usage/cost estimates without reservations. Cached/reasoning tokens are
 subsets of input/output totals. Unknown usage
 is not reported as free: if any response lacks usage, `usage_complete` is false

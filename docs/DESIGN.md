@@ -284,9 +284,11 @@ tool observations. Calls execute sequentially; the next model request sees their
 results. Verified success prevents later actions, including remaining sibling calls.
 The current prompt asks the model to revise contradicted assumptions, diagnose
 recoverable errors, verify corrections, preserve diagnostic/completion output,
-and investigate a blocker before ending. [Experiment 1](EXPERIMENTS.md) records
-the hypothesis and pending comparison. This changes guidance, not loop behavior;
-its effect on live persistence and cost is unmeasured.
+and investigate a blocker before ending. The later combined change adds verified
+environment facts and original-artifact/independent-check guidance. Its
+[hypothesis and development rerun](EXPERIMENTS.md#first-fix-eleven-id-development-rerun--november-8)
+are recorded; detailed behavioral interpretation and causal effects remain pending.
+These changes affect guidance, not loop stopping policy.
 Wrong submissions and ordinary command errors permit continuation. Text-only replies
 end without verified success. Hard attempt/model limits, scope denial, guard loss
 and infrastructure failures stop the attempt. `AttemptStopped` is a small exception that
@@ -349,6 +351,15 @@ record cap. Readback retains its 90-second deadline and completion polling.
 The launcher audits counts, completion, parentage,
 credentials and cleanup. Missing evidence prevents marking the launch complete.
 No fallback tracing backend or custom durable exporter is introduced.
+
+Known audit limit from the November 8 development rerun: count/end-time and
+existing privacy/cleanup checks passed for `rev-tablez` while five observations
+still lacked input/output payloads in the original export. A read-only supplemental
+fetch recovered all payloads, with the original preserved. Thus `evidence_complete`
+currently reports the implemented structural audit, not a guarantee of payload
+availability. [Export evidence and follow-up](../evidence/agent-first-fix-batch/README.md#supplemental-rev-tablez-export).
+Strengthening the payload check is pending; no launcher behavior was changed by
+the documentation audit.
 
 Rejected arguments are not traced as accepted input. Late replies execute no tools;
 automatic live instrumentation may retain their bounded provider output/usage with

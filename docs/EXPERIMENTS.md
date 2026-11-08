@@ -816,3 +816,38 @@ content recovery, caps, partial/error statuses, non-root safe paths, timeout res
 and terminal-stop precedence. Behavioral effectiveness remains unmeasured. No new
 model calls, real challenges or hosted writes occurred. Review before separately
 authorizing a matched development comparison; preserve all historical attempts.
+
+## First-fix eleven-ID development rerun — November 8
+
+After committing the package as `e7e366c`, the user ran
+`batch-48f3b134d5c3`: one fresh attempt on each of the same eleven development IDs
+as `batch-3963930b88c3`. This replaces the proposed six-fresh-attempt comparison
+with a practical full development rerun against a historical baseline. The
+original hypothesis above remains unchanged and predates the attempts.
+
+Recorded outcomes are **6/11 successes**, equal to the historical baseline total.
+`rev-tablez` changed from unsuccessful to successful, and `web-shreeramquest`
+changed from successful to unsuccessful; other success outcomes match. There were
+65 model requests/60 tools, 309.737431s summed active time, 450.202408s batch elapsed
+time and $0.02025106 summed local configured-rate cost estimate. This is a
+descriptive development record, not verified billing or scored aggregation.
+No command timeouts, solver restarts, truncation/capture events, scope/guard
+incidents or cleanup errors were recorded. Output recovery was not exercised.
+
+The summary audit verified clean source provenance, matching model settings and
+existing execution limits, per-challenge images, dataset and handouts; only the
+two new capture limits differ in configuration. Saved export counts/end times and
+existing run audits passed, but `rev-tablez` initially lacked payloads on five
+observations despite its complete flag. A read-only Langfuse CLI fetch recovered
+the 18-observation trace into an additional export, preserving the original.
+All eleven selected exports now have their root/generation/tool payloads.
+[Results, trace links, hashes, configuration and export caveat](../evidence/agent-first-fix-batch/README.md).
+
+Detailed behavioral review is pending. One trial per task, a historical baseline
+and bundled changes cannot establish a reliable or component-specific effect.
+Do not describe the changed outcomes as fixes/regressions before reviewing their
+evidence. The metadata audit made no new model calls, attempts, container operations
+or hosted writes; no expected answers or held-out contents were consulted.
+Review validation, contradiction diagnosis and stopping behavior before deciding
+further experiments. A stronger export payload-completeness check is a separate
+engineering follow-up, requiring no rerun of the completed challenge.

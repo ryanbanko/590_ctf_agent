@@ -5,8 +5,14 @@ Implemented the user-approved combined milestone against documentation checkpoin
 in [EXPERIMENTS](../../docs/EXPERIMENTS.md#combined-prompt-tool-contract-and-output-recovery--hypothesis-recorded-november-8).
 This evidence establishes synthetic behavior and controls, not a solving improvement.
 No real challenge attempts, model calls, held-out contents, benchmark answer keys, hosted
-writes, dependency changes or image rebuilds were involved. Implementation remains
-uncommitted for review; the earlier documentation checkpoint is preserved.
+writes, dependency changes or image rebuilds were involved in this implementation
+verification. At that milestone implementation was uncommitted for review.
+
+**Later November 8 update:** implementation and this evidence were committed in
+`e7e366c`. The user subsequently ran the eleven-ID development batch; its
+[separate record](../agent-first-fix-batch/README.md) reports 6/11 successes and a
+supplemental `rev-tablez` export. The original synthetic reports/hashes below remain
+unchanged; live behavioral trace review is still pending.
 
 ## Implemented behavior
 
@@ -102,9 +108,10 @@ five seconds of bounded execution time within the original attempt allowance.
 Storage failures and delivery timeout handling were fault-injected offline;
 real Docker checks cover ordinary delivery and rejection paths.
 
-Mechanical acceptance checks passed. No performance comparison has been run, and
-none of the earlier eleven traces was runtime-truncated. Review this implementation
-before a separately authorized matched development comparison. Model/effort/token
+At the synthetic-verification handoff, mechanical acceptance checks had passed
+and no performance comparison had run; none of the earlier eleven traces was
+runtime-truncated. The later user-run batch is recorded in the update above,
+with detailed behavioral review still pending. Model/effort/token
 allowances, planning, notes, continuation, compaction and cost-estimate reconciliation
 remain separate work. Any later effect belongs to the bundled package unless its
 components are compared separately.

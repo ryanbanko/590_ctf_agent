@@ -2,13 +2,51 @@
 
 Last reviewed: November 8, 2026 (America/New_York).
 
-**Combined prompt/tool-contract/output-recovery milestone implemented: 132 offline tests and 43 distinct synthetic Docker cases passed, cleanup verified. No new model calls or real challenge attempts. Changes await review; two older committed private snapshots still need publication-history review.**
+**First-fix development rerun complete on `e7e366c`: 6/11 verified successes, matching the earlier batch total. Summary/provenance checks passed; missing rev-tablez payloads were recovered into a supplemental export. Detailed behavioral trace review is next. Two older committed private snapshots still need publication-history review.**
 
 Use the [current plan](#latest-course-clarification-and-current-plan),
 [Git checkpoint](#current-git-checkpoint) and [assignment checklist](#assignment-checklist)
 for remaining work. Dated milestone sections preserve their completion state and
 next-step recommendations at the time; later completed work supersedes those
 historical pending-stage notes.
+
+## First-fix live batch and documentation audit — November 8
+
+The user ran `batch-48f3b134d5c3` after committing the combined improvement as
+`e7e366c`. All eleven development IDs completed one fresh attempt. **6/11 succeeded**,
+equal to the earlier batch's total: `rev-tablez` changed to success and
+`web-shreeramquest` changed to an ordinary unsuccessful ending. The other outcomes
+match. The result is exploratory; no causal improvement/regression is established.
+[Batch evidence, trace links and provenance](evidence/agent-first-fix-batch/README.md).
+
+Saved records contain 65 model requests/60 tools, 309.737431s summed active time,
+450.202408s batch elapsed time and $0.02025106 summed local configured-rate estimate.
+Existing model/settings/limits, images, dataset and handouts match the historical
+baseline; the two capture settings are the only added configuration fields.
+No recorded command timeout, solver restart, truncation/output capture, scope/guard
+incident or cleanup error occurred. This batch did not exercise automatic output
+recovery. All attempts recorded clean source provenance; source hashes match the
+current application/configuration/tests.
+
+All saved run audits and export counts/end times passed, but the original
+`rev-tablez` export lacked input/output payloads on five observations despite
+`evidence_complete: true`. A read-only Langfuse CLI fetch recovered all 18
+observations with payloads into `observations-refreshed.json`, preserving its
+original export and audit flags. All eleven selected exports now contain their
+root/generation/tool payloads. Tightening payload-completeness checks is a separate
+engineering follow-up; the missing original payloads' cause is unconfirmed.
+
+This follow-up updates documentation and filtered evidence only. No runtime or
+configuration change, new model request, challenge attempt, container operation
+or hosted write occurred. No benchmark answer files or held-out contents were
+consulted. Detailed behavioral trace review, later experiments, scored evaluation
+and report work remain separate. Original hypotheses, runs and synthetic evidence
+are preserved. These documentation updates remain uncommitted for review.
+
+Documentation checks passed: 186 local links/heading targets, JSON/TOML parsing,
+eleven record/export/baseline hashes, current source hashes, credential/candidate
+patterns and `git diff --check`. Raw runs, `.env` and datasets remain ignored and
+untracked. No runtime test reruns were needed for this documentation-only audit.
 
 ## Combined first fix — implemented and verified November 8
 
@@ -36,11 +74,12 @@ rather than leaving a Docker exec alive or restarting unrelated processes. Host
 artifacts survive cleanup; arbitrary solver-file storage still has no disk quota.
 No new dependencies, images, tools, sessions, planner, notes or continuation policy.
 
-Implementation is uncommitted for review. No real development/held-out attempts,
-paid requests or hosted writes were run. Review the completed milestone, then
-separately authorize any matched development comparison. This verifies the
-mechanical contract, not a solve-rate gain. The preregistered hypothesis and
-historical records remain intact; cost-pricing reconciliation is still separate.
+At the end of implementation, changes were uncommitted for review and no real
+development/held-out attempts, paid requests or hosted writes had been run by that
+milestone. The package was subsequently committed as `e7e366c` and the user-run
+development batch above followed. Synthetic checks verify the mechanical contract;
+the live rerun does not establish a solve-rate gain. The preregistered hypothesis
+and historical records remain intact; cost-pricing reconciliation is still separate.
 
 ## Earlier first-fix proposal and cost check — November 8
 
@@ -374,11 +413,13 @@ evaluation above; a broader live development pilot remains separately authorized
 
 ## Latest course clarification and current plan
 
-**Current next step:** review the [implemented combined first fix](evidence/agent-first-fix/README.md),
-then separately authorize a matched development comparison if desired. Runtime
-implementation and synthetic verification are complete; its effect on solving is
-unmeasured. The following paragraphs preserve the earlier decisions and milestones
-that led to this point; pending proposal wording is superseded by the latest result.
+**Current next step:** review the completed
+[first-fix development batch's traces](evidence/agent-first-fix-batch/README.md)
+against the recorded validation/diagnosis/stopping hypothesis. Its results and
+export metadata are recorded; detailed behavioral interpretation remains pending.
+Resolve export payload-completeness handling as a separate engineering task.
+The following paragraphs preserve earlier decisions and milestones; pending
+proposal wording is superseded by the latest results above.
 
 The professor [explicitly accepted](docs/REFERENCES.md#november-6-course-guide-and-professor-confirmations)
 repository Compose files/private controller verification, Langfuse JSON exports,
@@ -460,11 +501,13 @@ not scored evaluation or report work.
 
 ## Current Git checkpoint
 
-Latest saved HEAD is `4620032`, the documentation/review/hypothesis checkpoint.
-The combined implementation and its new verification evidence are currently
-uncommitted for review. Nothing was committed or pushed by this implementation
-milestone. Model/configuration controls remain as described above, with only
-the two explicit capture allowances added.
+Latest saved HEAD is `e7e366c9cc2c77a45126d8d451c053bfb97abf5b` (`e7e366c`),
+the combined prompt/validation/command-contract/output-retention implementation.
+Local `main` and `origin/main` matched that commit at the start of this audit;
+the working tree was clean. `4620032` preserves the earlier documentation,
+review and preregistered hypotheses. The live rerun recorded clean `e7e366c` source.
+Only this batch-record/documentation follow-up is now uncommitted. No commit,
+push or history rewrite was performed by this audit.
 
 The runtime baseline is `616b5f2d854f58b2e305697cee21d5f739e81d03` (`616b5f2`),
 “integrated NYU solver image with expanded tooling, ready for testing.” The working
@@ -593,6 +636,12 @@ for those challenges; it does not establish real challenge-solving success.
 
 ### Section 2 — use testing to improve the agent: started, comparison pending
 
+Current checkpoint: the combined first fix and synthetic evidence are committed
+in `e7e366c`; the eleven-ID development rerun completed with 6/11 successes.
+Summary/provenance and supplemental export checks are recorded above. Detailed
+behavioral review remains pending; the historical entries below preserve earlier
+experiments and do not imply a reliable improvement effect.
+
 Earlier development attempts informed the environment correction below. Five
 subsequent trials used the revised prompt and updated solver: **3/5 verified
 successes**, 32 model calls, 31 tool calls and **$0.00944938 estimated cost**.
@@ -647,6 +696,12 @@ calls or API spending.
 - [x] Complete the authorized assistant review of the latest eleven development
   traces, including messages/tools/results and proposed improvements. Findings
   await user assessment; new changes/comparisons remain separately authorized.
+- [x] Record the combined first-fix hypothesis before implementation and verify the
+  package with 132 offline and 43 distinct synthetic Docker cases.
+- [x] Record the user-run eleven-ID development rerun on clean `e7e366c`, preserve
+  original exports, recover missing `rev-tablez` payloads and audit provenance.
+- [ ] Review the new batch's messages/tool results against the hypothesis and assess
+  changed outcomes before choosing the next experiment.
 - [ ] Freeze code, dependencies, images, dataset and settings for evaluation.
 - [ ] Following the new guide, run one fixed configuration for three fresh trials
   on each of the ten reserved challenges; preserve failures, missing usage and

@@ -7,8 +7,12 @@ not implemented changes or authorization for live comparisons.
 
 **November 8 implementation update:** the user-approved combined first fix is now
 implemented and synthetically verified. See [milestone evidence](../evidence/agent-first-fix/README.md).
-The dated proposals below preserve the decisions before implementation; no live
-behavioral comparison has been run.
+The dated proposals below preserve the decisions before implementation. The
+[subsequent eleven-ID development rerun](../evidence/agent-first-fix-batch/README.md)
+completed on `e7e366c` with 6/11 successes, matching the historical baseline total.
+Summary/export checks are complete, including a supplemental export recovering
+missing `rev-tablez` payloads. Detailed behavioral review remains pending; this
+single rerun does not establish a causal improvement.
 
 The [user follow-up](#user-follow-up-explanations-and-current-recommendations)
 below records later preferences, successful read-only Duke model discovery and
