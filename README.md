@@ -288,7 +288,8 @@ top-level `--config` applies to image builds and synthetic checks.
 | Ordinary command | Up to 120 seconds, clipped to remaining attempt time. |
 | Model request | Up to 60 seconds; no client retries. |
 | Model / tool calls | 40 / 80 maximum. |
-| Model input / output | 512 KiB serialized input; 4,096 output tokens per request. |
+| Model reasoning | GPT-6 Luna, medium effort for the current development experiment. |
+| Model input / output | 512 KiB serialized input; 8,192 generated tokens per request, including reasoning. |
 | Solver resources | 1 CPU, 1 GiB memory, 64 PIDs; writable disk has no per-attempt quota. |
 | Tool preview / file write | 64 KiB combined raw stdout/stderr preview, plus omission markers/metadata; 64 KiB UTF-8 write. |
 | Automatic output retention | 10 MiB per overflowing command, 100 MiB per attempt, combined stdout/stderr. |
@@ -627,7 +628,10 @@ Canvas wording remains preserved in ASSIGNMENT.md. See
 Existing records need deliberate aggregation/timing alignment before reporting;
 this documentation update does not implement metrics or start evaluation.
 
-Work so far is attributed to **Ryan Banko**. OpenAI Codex assisted with design,
+**Ryan Banko — contributions to date:** Initial agent design, solver environment
+implementation, and development-testing setup.
+
+OpenAI Codex assisted with design,
 implementation, review and verification. The [five original resources and citations](docs/REFERENCES.md)
 include NYU's package/docs and reference agents, Duke's gateway guide, and later
 Langfuse/OpenAI guidance. The reference agent framework was not vendored.

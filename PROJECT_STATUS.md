@@ -2,13 +2,70 @@
 
 Last reviewed: November 8, 2026 (America/New_York).
 
-**First-fix development rerun complete on `e7e366c`: 6/11 verified successes, matching the earlier batch total. Summary/provenance checks passed; missing rev-tablez payloads were recovered into a supplemental export. Detailed behavioral trace review is next. Two older committed private snapshots still need publication-history review.**
+**User-run medium/8,192 batch reached all eleven attempts: nine verified successes, one ordinary unsuccessful ending and a final web scope stop. Guard blocked a port-4999 probe outside permitted port 80; records and cleanup are intact. Full experiment review and the export-completeness follow-up remain open.**
 
 Use the [current plan](#latest-course-clarification-and-current-plan),
 [Git checkpoint](#current-git-checkpoint) and [assignment checklist](#assignment-checklist)
 for remaining work. Dated milestone sections preserve their completion state and
 next-step recommendations at the time; later completed work supersedes those
 historical pending-stage notes.
+
+## Medium/headroom batch scope-stop diagnosis — November 8
+
+The user ran `batch-f4ccc7f4b335` with medium reasoning and 8,192 generated tokens.
+All eleven scheduled attempts were reached: nine verified successes,
+`pwn-baby-boi` ended without success, and final `web-shreeramquest` stopped for a
+scope violation. Its public endpoint was `172.20.0.2:80`; its third tool command
+included other target ports after a proxy rejection. Independent guard evidence
+records a blocked connection to `172.20.0.2:4999`. The internal listener mentioned
+in served public source did not authorize that connection.
+
+The controller stopped the solver and retained final trace/results. Target and
+solver cleanup passed. The batch wrapper intentionally marks scope incidents
+stopped-for-review and raises the displayed RuntimeError, even on the last attempt.
+No scheduled attempts are missing and earlier successes remain valid records.
+[Incident evidence and hashes](evidence/reasoning-medium-scope-stop/README.md).
+
+Run provenance records `c80b61a` with a dirty working tree and explicit source/
+configuration hashes. This diagnosis read the final saved trace and public scope
+metadata without executing trace commands. No new model request, challenge
+attempt, hosted write, Docker operation or runtime/configuration change occurred.
+Full behavioral comparison remains pending; do not infer a causal reasoning effect
+or rerun/relax the scope incident automatically. Prior private-history publication
+follow-up and export payload-completeness work remain separate.
+
+## Reasoning/headroom experiment activated — November 8
+
+The user requested increased reasoning and then explicitly doubled the token
+allowance before any experimental calls. After preparing a separate profile, the
+user requested applying the change: the active `configs/development.toml` now uses
+Luna effort `medium` and per-response generated-token allowance 8,192, up from
+low/4,096. The named `configs/reasoning-medium.toml` experiment profile has the
+same values, so the existing default batch command selects this condition too.
+All other values and application code remain fixed. The previous low/4,096
+configuration is preserved in the prior batch's evidence snapshot and Git.
+The hypothesis and limitations
+are recorded before calls in [EXPERIMENTS](docs/EXPERIMENTS.md#reasoning-and-token-headroom-experiment--preregistered-november-8).
+
+The normal loader and parsed-value comparison passed; 27 existing model/config/
+contract tests passed with the new profile using offline SDK transports. This
+checks request propagation, not actual gateway acceptance. No new model calls,
+real attempts, Docker operations or hosted writes occurred in preparation.
+[Configuration, verification and batch command](evidence/reasoning-medium-preparation/README.md).
+
+After activation, the same 27 checks passed with the active default. Both profile
+values match, and comparison with the saved low snapshot confirms exactly the
+effort/token changes. Application Python is unchanged; initial preparation
+evidence is preserved with a separate activation addendum. No live batch was
+started and no commit/push was made by this configuration change.
+
+The intended exploratory cohort is the same eleven development IDs, one fresh
+attempt each, compared with low-effort `batch-48f3b134d5c3` (6/11). This measures
+effort plus headroom together; it cannot isolate effort. The 8,192 cap includes
+reasoning/visible output and is not automatically consumed. Keep the 60-second
+request and 600-second attempt limits; record incomplete/capped responses rather
+than discarding them. No reliable improvement claim follows from one trial per
+task against a historical baseline. Save/review this preparation before live use.
 
 ## First-fix live batch and documentation audit — November 8
 
@@ -41,7 +98,7 @@ configuration change, new model request, challenge attempt, container operation
 or hosted write occurred. No benchmark answer files or held-out contents were
 consulted. Detailed behavioral trace review, later experiments, scored evaluation
 and report work remain separate. Original hypotheses, runs and synthetic evidence
-are preserved. These documentation updates remain uncommitted for review.
+are preserved. These documentation updates were subsequently saved in `c80b61a`.
 
 Documentation checks passed: 186 local links/heading targets, JSON/TOML parsing,
 eleven record/export/baseline hashes, current source hashes, credential/candidate
@@ -413,11 +470,13 @@ evaluation above; a broader live development pilot remains separately authorized
 
 ## Latest course clarification and current plan
 
-**Current next step:** review the completed
-[first-fix development batch's traces](evidence/agent-first-fix-batch/README.md)
-against the recorded validation/diagnosis/stopping hypothesis. Its results and
-export metadata are recorded; detailed behavioral interpretation remains pending.
-Resolve export payload-completeness handling as a separate engineering task.
+**Current next step:** review the user-run medium/8,192 batch against the existing
+low-effort reference, including its [final scope incident](evidence/reasoning-medium-scope-stop/README.md).
+All eleven attempts were reached, with nine successes and intact records. Preserve
+the forbidden-port stop and assess the combined reasoning/headroom condition;
+no automatic retry or scope expansion is proposed.
+Detailed first-fix behavioral interpretation and export payload-completeness
+handling remain open; the latter is a separate engineering task.
 The following paragraphs preserve earlier decisions and milestones; pending
 proposal wording is superseded by the latest results above.
 
@@ -501,13 +560,14 @@ not scored evaluation or report work.
 
 ## Current Git checkpoint
 
-Latest saved HEAD is `e7e366c9cc2c77a45126d8d451c053bfb97abf5b` (`e7e366c`),
-the combined prompt/validation/command-contract/output-retention implementation.
-Local `main` and `origin/main` matched that commit at the start of this audit;
-the working tree was clean. `4620032` preserves the earlier documentation,
-review and preregistered hypotheses. The live rerun recorded clean `e7e366c` source.
-Only this batch-record/documentation follow-up is now uncommitted. No commit,
-push or history rewrite was performed by this audit.
+Latest saved HEAD is `c80b61a` ("post testing batch"), the batch documentation and
+evidence update after implementation `e7e366c`. Local `main` and `origin/main`
+matched `c80b61a` with a clean working tree before reasoning-experiment preparation.
+`4620032` preserves the earlier review and hypotheses. The low-effort live rerun
+recorded clean `e7e366c` source. The active/default experimental settings, named
+profile, preregistration, attribution wording and preparation evidence are
+uncommitted now. No commit, push or history rewrite
+was performed by this preparation.
 
 The runtime baseline is `616b5f2d854f58b2e305697cee21d5f739e81d03` (`616b5f2`),
 “integrated NYU solver image with expanded tooling, ready for testing.” The working
@@ -617,7 +677,9 @@ reports no whitespace errors.
   six-turn development attempt.
 - [x] Document the architecture and each tool's inputs, outputs, validation,
   timeout and error behavior in [README](README.md#architecture-and-tool-contracts).
-- [x] Identify Ryan Banko's contribution and disclose AI assistance in README.
+- [x] Identify Ryan Banko's contributions in README as initial agent design, solver
+  environment implementation and development-testing setup; retain AI assistance
+  disclosure and external-source citations.
 - [x] Enforce hard attempt/model/tool limits and solver resource limits in code.
 - [x] Verify candidate submissions in trusted code and record candidates/verdicts
   without separately revealing the expected answer.
