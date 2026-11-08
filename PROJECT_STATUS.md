@@ -2,13 +2,49 @@
 
 Last reviewed: November 8, 2026 (America/New_York).
 
-**User-run medium/8,192 batch reached all eleven attempts: nine verified successes, one ordinary unsuccessful ending and a final web scope stop. Guard blocked a port-4999 probe outside permitted port 80; records and cleanup are intact. Full experiment review and the export-completeness follow-up remain open.**
+**Scope clarification and one blocked-command recovery implemented: 149 offline tests and all 47 synthetic Docker cases passed; final focused checks and cleanup passed. Firewall/image/model settings remain unchanged. No real challenge retry or paid model call was made. Implementation awaits review.**
 
 Use the [current plan](#latest-course-clarification-and-current-plan),
 [Git checkpoint](#current-git-checkpoint) and [assignment checklist](#assignment-checklist)
 for remaining work. Dated milestone sections preserve their completion state and
 next-step recommendations at the time; later completed work supersedes those
 historical pending-stage notes.
+
+## One prevented-connection recovery — implemented November 8
+
+The user approved both explicit target address/protocol/port instructions and one
+corrective response after confirmed firewall prevention. This is the user's
+interpretation of the assignment, not an explicit instructor confirmation. Current
+profiles add `max_scope_recoveries = 1`; 0 preserves strict first-denial stopping.
+Guard rules/images/permissions and all model/existing resource limits are unchanged.
+
+The existing selector cancels a blocked command, and the controller resets the
+same solver before acknowledging the trusted cumulative drop counter. The agent
+receives `scope_denied`, allowed endpoints, recovery count and reset flags within
+the same deadline/call budget. Files persist; old processes/connections end; no
+command is automatically retried. Repeated incidents, strict/idle denials,
+invalid/decreasing counters, lost guard, failed reset and terminal races still stop.
+Delayed NFLOG entries reread the counter and do not re-count old drops. Summaries
+preserve incident/recovery/denied-packet counts after the monitor joins cleanup.
+
+Verification: **149 offline tests and 47 full synthetic Docker cases passed**.
+Final focused offline checks (77) and four Docker recovery cases cover the last
+capture-delivery and counter-snapshot hardening. They overlap the full suites.
+A live forbidden synthetic listener accepted zero connections; feedback reached
+the scripted agent, permitted work continued, and repeated/idle/failed-reset
+incidents stopped. Guard/deadline/strict controls and cleanup passed. One
+intermediate post-recovery proof assertion failed; the broad PID check was
+tightened and diagnostic messages added. The original failure is retained and
+all four final checks passed; PID reuse is the likely cause, not independently
+confirmed from the original generic assertion. No managed containers/networks
+remain. [Evidence and exact scope](evidence/scope-recovery/README.md).
+
+The readiness helper now tests the configured recovery allowance before terminal
+denial; real challenge readiness was not rerun. No real challenge/model call,
+hosted write, new dependency, image rebuild, extra agent tool or service was used.
+The original medium scope-stopped trial and prior evidence remain unchanged.
+Implementation/evidence are uncommitted for review. Next: review, then separately
+authorize one fresh web development check before any broader behavioral claims.
 
 ## Medium/headroom batch scope-stop diagnosis — November 8
 
@@ -470,11 +506,11 @@ evaluation above; a broader live development pilot remains separately authorized
 
 ## Latest course clarification and current plan
 
-**Current next step:** review the user-run medium/8,192 batch against the existing
-low-effort reference, including its [final scope incident](evidence/reasoning-medium-scope-stop/README.md).
-All eleven attempts were reached, with nine successes and intact records. Preserve
-the forbidden-port stop and assess the combined reasoning/headroom condition;
-no automatic retry or scope expansion is proposed.
+**Current next step:** review the completed
+[scope clarification/recovery milestone](evidence/scope-recovery/README.md), then
+separately authorize a fresh web development check. Preserve the original medium
+scope stop; no automatic retry or scope expansion occurred. Full medium versus
+low behavioral review remains pending and is separate from this controller change.
 Detailed first-fix behavioral interpretation and export payload-completeness
 handling remain open; the latter is a separate engineering task.
 The following paragraphs preserve earlier decisions and milestones; pending
@@ -560,14 +596,13 @@ not scored evaluation or report work.
 
 ## Current Git checkpoint
 
-Latest saved HEAD is `c80b61a` ("post testing batch"), the batch documentation and
-evidence update after implementation `e7e366c`. Local `main` and `origin/main`
-matched `c80b61a` with a clean working tree before reasoning-experiment preparation.
-`4620032` preserves the earlier review and hypotheses. The low-effort live rerun
-recorded clean `e7e366c` source. The active/default experimental settings, named
-profile, preregistration, attribution wording and preparation evidence are
-uncommitted now. No commit, push or history rewrite
-was performed by this preparation.
+Latest saved HEAD is `b6ec0e5` ("increased reasoning experiment"). Local `main`
+and `origin/main` matched with a clean working tree before this recovery milestone.
+That checkpoint includes the reasoning settings, attribution and prior batch
+documentation. The low-effort live rerun recorded clean `e7e366c` source;
+`4620032` preserves the earlier review and hypotheses. The scope instructions,
+bounded recovery, tests and accompanying evidence/documentation are uncommitted
+for review. No commit, push or history rewrite was performed in this milestone.
 
 The runtime baseline is `616b5f2d854f58b2e305697cee21d5f739e81d03` (`616b5f2`),
 “integrated NYU solver image with expanded tooling, ready for testing.” The working

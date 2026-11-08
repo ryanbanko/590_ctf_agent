@@ -49,7 +49,9 @@ def output_root(pytestconfig):
 def local_attempt(request, tmp_path, monkeypatch, telemetry, settings):
     # Substitute only Docker operations; keep the real controller, tools, and SDK.
     monkeypatch.setattr("ctf_agent.attempt.docker", lambda *args, **kwargs: "test-image")
-    monkeypatch.setattr("ctf_agent.attempt.start_sandbox", lambda *args: None)
+    def ready(sandbox, settings, network, endpoints, remaining):
+        sandbox['remaining'] = remaining
+    monkeypatch.setattr("ctf_agent.attempt.start_sandbox", ready)
     monkeypatch.setattr("ctf_agent.attempt.close_sandbox", lambda sandbox: [])
     monkeypatch.setattr("ctf_agent.attempt.stop_solver", lambda sandbox: True)
     monkeypatch.setattr("ctf_agent.attempt.audit_network", lambda *args: None)

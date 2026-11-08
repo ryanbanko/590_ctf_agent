@@ -45,7 +45,7 @@ held out from development solving.
 experiment settings into the batch directory. Fresh processes avoid reusing
 Langfuse client state between attempts. A small `batch.json` indexes existing
 records and run IDs; it is not another trace backend or an aggregation framework.
-Ordinary failed attempts continue; incomplete records, cleanup/scope/infrastructure
+Ordinary failed attempts continue; incomplete records, cleanup/terminal-scope/infrastructure
 incidents and response-source failures stop the batch for review. Missing usage
 on an otherwise valid reply leaves totals unknown and does not stop the agent.
 On interruption it signals the child launcher and waits for its cleanup before
@@ -178,8 +178,9 @@ layer persists across restart and disappears when the container is removed.
 
 The professor approved runtime package downloads. Existing nftables/independent
 NFLOG monitoring still permits assigned endpoints, Docker DNS and public IPv4 HTTPS;
-other private/reserved destinations and unapproved ports are denied, recorded and
-terminal. The guard installs enforcement before starting the solver, which lacks
+other private/reserved destinations and unapproved ports are denied and recorded.
+One confirmed blocked command may receive feedback under the policy below.
+The guard installs enforcement before starting the solver, which lacks
 NET_ADMIN and cannot change it. Normal Docker networking supplies connectivity;
 it does not replace the guard. Internet purpose relies on instructions and trace
 review, not a package-only proxy/domain firewall.
@@ -213,11 +214,45 @@ partial output is traced even if recovery fails.
 
 A small lifecycle lock serializes startup/recovery with terminal stopping. A
 terminal flag is set before waiting for that lock; recovery checks the deadline
-and independent network-denial audit before and after restart. Scope/guard loss,
+and independent network-denial audit before and after restart. Terminal scope incidents, guard loss,
 interruption, failed recovery and whole-attempt expiry remain terminal. Final
 removal of the solver prevents a late lifecycle operation retaining the attempt.
 Docker's standard init handles reaping; no per-command descendant cleanup is
 claimed on normal exit. Background tasks can survive until reset/final cleanup.
+
+### One prevented-connection recovery
+
+The user selected a recovery interpretation of the assignment: prevented access
+may return corrective feedback while actual access outside scope or uncertain
+enforcement remains terminal. This is recorded separately from professor emails
+in [REFERENCES](REFERENCES.md#november-8-blocked-connection-recovery--user-direction).
+`max_scope_recoveries` explicitly supports 0 or 1; current profiles use 1. Historical
+configurations/incident records remain unchanged; reproduce them with their recorded
+source, rather than modifying old snapshots to fit the new required setting.
+
+Only an active `run_command` is eligible. The same trusted drop counter is read
+under a small network-state lock before/after tools and on NFLOG notifications.
+A fresh delta sets a pending event; the selector reader cancels the Docker client
+while preserving bounded/retained output. The runner still audits after command
+exit, covering denials whose logs arrive later. The unchanged guard drop rule
+prevents the connection; no command-text parser or expanded endpoint list is added.
+
+Reset the same solver through the existing lifecycle lock, recheck the guard, then
+acknowledge its cumulative counter and consume the allowance. Old processes and
+connections end; writable files persist. All packets for that command/reset are
+one incident. NFLOG notifications reread the counter, so delayed logs with no new
+delta do not create a second incident. Counter disappearance, invalid/decreasing
+values, lost guard, idle/between-command denial, failed reset, repeat incident and
+terminal/deadline races stop the attempt. No unacknowledged counter is cleared or
+firewall rule weakened. Recovery during a timeout race may need another reset;
+every restart is recorded and uses the original remaining time.
+
+The tool response retains command output and adds scope_denied feedback, permitted
+endpoints, recovery count and reset flags. No command is retried. A capture interrupted
+by denial is partial; output copies already delivered survive reset and are not
+retried or given another delivery allowance. The next ordinary model turn receives
+the feedback within existing budgets. Summaries retain scope_incidents,
+scope_recoveries and denied_packets even when the attempt later succeeds.
 
 Output up to 64 KiB raw bytes is returned whole; larger output retains head/tail
 with per-stream omitted-byte markers. `preview_bytes` excludes marker/metadata
@@ -290,7 +325,7 @@ environment facts and original-artifact/independent-check guidance. Its
 are recorded; detailed behavioral interpretation and causal effects remain pending.
 These changes affect guidance, not loop stopping policy.
 Wrong submissions and ordinary command errors permit continuation. Text-only replies
-end without verified success. Hard attempt/model limits, scope denial, guard loss
+end without verified success. Hard attempt/model limits, terminal scope incidents, guard loss
 and infrastructure failures stop the attempt. `AttemptStopped` is a small exception that
 carries the enforced reason; unrelated errors propagate.
 

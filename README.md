@@ -252,7 +252,8 @@ means the scheduled attempts and records finished, not that every task was solve
 Calls, tokens, time, cost and detailed traces remain in the existing attempt records.
 
 Ordinary unsuccessful attempts and command timeouts permit the next trial after
-cleanup. Launch failures, incomplete records, cleanup failures, scope/guard or
+cleanup. A recovered blocked command returns feedback within its attempt.
+Launch failures, incomplete records, cleanup failures, terminal scope/guard or
 infrastructure incidents, and response-source failures stop the batch for review.
 An otherwise valid model reply without usage metadata can continue; its token
 and estimated-cost totals remain unknown. Ctrl-C forwards interruption to the
@@ -288,6 +289,7 @@ top-level `--config` applies to image builds and synthetic checks.
 | Ordinary command | Up to 120 seconds, clipped to remaining attempt time. |
 | Model request | Up to 60 seconds; no client retries. |
 | Model / tool calls | 40 / 80 maximum. |
+| Blocked-command recovery | One per attempt; `max_scope_recoveries = 0` selects strict stopping. |
 | Model reasoning | GPT-6 Luna, medium effort for the current development experiment. |
 | Model input / output | 512 KiB serialized input; 8,192 generated tokens per request, including reasoning. |
 | Solver resources | 1 CPU, 1 GiB memory, 64 PIDs; writable disk has no per-attempt quota. |
@@ -314,8 +316,32 @@ A command timeout returns `timed_out: true`, `solver_restarted: true` and
 Files and pip installs survive; **all solver processes and connections end**,
 including unrelated background commands. Target services remain running. The
 run ID, call counts and original deadline remain unchanged; no command is retried
-automatically. Failed recovery, scope/guard failures and the whole-attempt deadline
-are terminal. Use shorter internal network deadlines to avoid unnecessary resets.
+automatically. Failed recovery, terminal scope/guard failures and the whole-attempt
+deadline are terminal. Use shorter internal network deadlines to avoid unnecessary resets.
+
+For target interactions, the task's endpoint list defines the permitted addresses,
+protocols and ports. Finding another listener in a file/response does not add it
+to that list. The firewall still blocks all unapproved target connections.
+
+The current policy permits **one confirmed blocked-command recovery**. When the
+guard's drop counter increases during `run_command`, the controller interrupts
+the Docker client, resets the solver to end all its processes, verifies the guard
+counter, and returns `error.kind: scope_denied`, `allowed_endpoints`,
+`scope_recoveries_used: 1`, `solver_restarted: true` and `process_state_reset: true`.
+Partial output is retained; an interrupted command can have `exit_code: null`
+and `interrupted: true` without a timeout. The next normal model turn receives
+instructions to stop out-of-scope probes and continue permitted work. Files/packages
+survive; targets, deadlines and model/tool counters stay unchanged. No automatic
+command retry or extra model call is added by recovery.
+
+A command's blocked packets/retransmissions count as one incident. The cumulative
+drop counter stays intact; after reset, acknowledged drops and delayed NFLOG logs
+cannot trigger the same incident again. A new incident after recovery, strict
+mode, a denial detected outside an active command, lost/invalid/decreasing guard
+counters, failed reset or an existing terminal stop ends the attempt. This policy
+follows the user's interpretation that a prevented connection may receive
+feedback; it is not an explicit professor confirmation. See
+[authority clarification](docs/REFERENCES.md#november-8-blocked-connection-recovery--user-direction).
 
 Contestant files are copied with standard `docker cp` before agent execution;
 trusted setup assigns solver ownership and records hashes/modes. Staging uses the
@@ -379,7 +405,7 @@ Each invocation prints a fresh record directory:
 | --- | --- |
 | `run.json` | Settings, dataset/source/image provenance, split label, result, trace URL, export audit, total time. |
 | `<run-id>/packages-initial.json` | Initial installed Python versions. An optional final inventory may be unavailable after terminal stop; availability is traced. |
-| `<run-id>/summary.json` | Stop reason, verified success, counts, available tokens/cost, timing, solver restart count, captured-output bytes, cleanup errors. |
+| `<run-id>/summary.json` | Stop reason, verified success, counts, available tokens/cost, timing, solver restarts, scope incidents/recoveries/denied packets, captured-output bytes and cleanup errors. |
 | `<run-id>/outputs/<capture-id>/{stdout,stderr}.bin` | Bounded raw command-output artifacts, created only on overflow; retained after solver cleanup. Capture metadata gives their completeness and solver-readable paths. |
 | `observations.json` | Native hosted trace export; verify payload availability before detailed review. Older records use `cli-observations.json`; supplemental refreshes preserve the original. |
 | `public-task.json`, `target/` | Public task and trusted target runtime configuration/lifecycle record. |
@@ -499,7 +525,7 @@ verified submission stops immediately; text-only replies end without success.
 
 | Tool | Input and validation | Output, timeout, errors |
 | --- | --- | --- |
-| `run_command` | Nonempty `/bin/sh` command up to 16 KiB; optional finite positive timeout within the configured maximum. | Marked head/tail stdout/stderr, exit code, raw/preview byte counts, truncation/timeout status and overflow capture metadata/file paths. Timeout restarts all solver processes; files survive. Capture/delivery errors are explicit; a timed-out internal delivery stops the attempt. |
+| `run_command` | Nonempty `/bin/sh` command up to 16 KiB; optional finite positive timeout within the configured maximum. | Marked head/tail output, exit/byte/truncation/timeout/interruption metadata and capture paths. Timeout or first recovered scope denial resets solver processes; files survive. Scope denial returns corrective feedback once when configured; terminal incidents stop. Capture/delivery failures are explicit. |
 | `write_file` | Workspace-relative path without traversal/NUL; UTF-8 content at most 64 KiB. One-shot solver Python code rejects symlinks/races. | Path/bytes-written or error observation; bounded by command/attempt time; timeout resets solver processes. |
 | `submit_flag` | Nonempty candidate, at most 4,096 UTF-8 bytes. | Candidate/verdict recorded; exact host-side equality. Wrong submissions permit continuation; success stops. No subprocess, bounded by attempt deadline. |
 
@@ -515,7 +541,8 @@ challenge/build metadata. Only CHOWN remains in the capability ceiling for trust
 file ownership setup; model commands have no effective capabilities and cannot
 gain them (`no-new-privileges`). The separate trusted guard restricts connections to
 assigned endpoints, Docker DNS and public HTTPS for the approved pip policy;
-independent packet-denial evidence triggers solver stopping.
+independent packet-denial evidence interrupts the command for the configured
+single recovery or terminal stopping. Enforcement remains active throughout reset.
 Targets retain supplied Compose commands, permissions, service relationships and
 resource settings on fresh project-owned ordinary bridges/volumes. We remove host
 port publishing and shared-daemon socket mounts, recording adjustments in

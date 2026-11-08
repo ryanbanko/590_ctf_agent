@@ -20,7 +20,7 @@ def reader(monkeypatch, tmp_path):
     popen = subprocess.Popen
     calls = 0
 
-    def run(script, *, limit=16384, retention=2_000_000, timeout=5, request=b""):
+    def run(script, *, limit=16384, retention=2_000_000, timeout=5, request=b"", cancel=None):
         nonlocal calls
         calls += 1
         def launch(args, **kwargs):
@@ -29,7 +29,7 @@ def reader(monkeypatch, tmp_path):
         monkeypatch.setattr("ctf_agent.docker.subprocess.Popen", launch)
         directory = tmp_path / "outputs" / str(calls)
         result = bounded_exec(["synthetic"], request, timeout, limit,
-                              capture={"directory": directory, "limit": retention})
+                              capture={"directory": directory, "limit": retention}, cancel=cancel)
         return result, directory
 
     return run
@@ -141,6 +141,21 @@ def test_trusted_input_file_streams_without_loading_it(reader, tmp_path):
     assert (directory / "stdout.bin").read_bytes() == source.read_bytes()
 
 
+def test_scope_cancellation_keeps_partial_output_without_claiming_timeout(reader):
+    cancelled = threading.Event()
+    timer = threading.Timer(.3, cancelled.set)
+    timer.start()
+    try:
+        result, directory = reader("import os,time; os.write(1,b'x'*90000); time.sleep(30)",
+                                   cancel=cancelled.is_set)
+    finally:
+        timer.cancel()
+        timer.join()
+    assert result['interrupted'] and not result['timed_out'] and result['exit_code'] is None
+    assert not result['capture']['complete']
+    assert (directory/'stdout.bin').read_bytes() == b'x'*90000
+
+
 def test_capture_limits_are_explicit_positive_integer_settings():
     settings = load_settings()
     for field in ("max_capture_bytes", "max_attempt_capture_bytes"):
@@ -151,12 +166,14 @@ def test_capture_limits_are_explicit_positive_integer_settings():
 
 def test_attempt_retention_budget_counts_actual_bytes_across_commands(tmp_path, monkeypatch):
     limits = []
-    def command(*args, capture):
+    def command(*args, capture, **kwargs):
         limits.append(capture["limit"])
         return {"exit_code": 0, "timed_out": False, "capture": {"bytes": min(20, capture["limit"]), "files": {}}}
     monkeypatch.setattr("ctf_agent.tools.bounded_exec", command)
     monkeypatch.setattr("ctf_agent.tools.deliver_output", lambda *args: None)
-    sandbox = {"directory": tmp_path, "captured_output_bytes": 0, "solver": "synthetic", "observation": Mock()}
+    from ctf_agent.sandbox import make_sandbox
+    sandbox = make_sandbox('synthetic', Mock(), Mock())
+    sandbox['directory'] = tmp_path
     settings = load_settings() | {"max_capture_bytes": 20, "max_attempt_capture_bytes": 30}
     for _ in range(3):
         execute_tool("run_command", {"command": "synthetic"}, settings, sandbox, 5)

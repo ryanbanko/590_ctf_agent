@@ -43,6 +43,7 @@ def fake_children(monkeypatch):
                           "cleanup_errors": specification.get("cleanup_errors", []),
                           "cost_usd": specification.get("cost_usd", .001),
                           "usage_complete": specification.get("usage_complete", True)}
+                result['scope_recoveries'] = specification.get('scope_recoveries', 0)
                 report = {"challenge_id": command[command.index("--challenge") + 1], "result": result,
                           "evidence_complete": specification.get("evidence_complete", True),
                           "trace_url": f"https://example.invalid/traces/{number}"}
@@ -72,6 +73,15 @@ def test_batch_repeats_every_challenge_and_indexes_normal_failures(batch_files, 
         assert snapshot == (directory / "experiment.toml").resolve()
         assert snapshot.read_bytes() == batch_files["experiment_path"].read_bytes()
         child.wait.assert_called_once()
+
+
+def test_batch_continues_after_recorded_recovery_with_nonterminal_outcome(batch_files, fake_children):
+    calls = fake_children([{'outcome': 'completed_without_success', 'scope_recoveries': 1}, {}])
+    directory = launch_batch(**batch_files, challenge_ids=['dev-a', 'dev-b'], trials=1)
+    index = json.loads((directory/'batch.json').read_text())
+    first = json.loads((directory/index['attempts'][0]['record']).read_text())
+    assert index['status'] == 'completed' and len(calls) == 2
+    assert first['result']['scope_recoveries'] == 1
 
 
 @pytest.mark.parametrize("specification", [

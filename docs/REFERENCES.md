@@ -47,6 +47,22 @@ for verification. Preserve this clarification alongside the original assignment;
 Use the resources below as that setup/operation guidance while checking them
 against the assignment, especially its solver/evaluator and access boundaries.
 
+## November 8 blocked-connection recovery — user direction
+
+The original assignment says to stop if an action reaches outside the permitted
+environment and to retain/analyze blocked requests. The user explicitly selected
+the interpretation that a connection prevented by enforcement can receive a
+corrective response and continue in scope. This is user direction, not an explicit
+professor confirmation or a change to the original assignment wording.
+
+The approved implementation allows at most one confirmed blocked-command recovery
+per attempt, preserving the firewall, exact target endpoints, incident evidence,
+original deadlines/counters and terminal behavior for repeat incidents, failed
+guard/audits, failed recovery and detections outside active commands. It resets
+solver processes before returning feedback; actual out-of-scope access is not
+authorized. The earlier scope-stopped experiment remains recorded under its
+original policy. No professor email is reinterpreted as granting this behavior.
+
 ## November 6 course guide and professor confirmations
 
 The user supplied the seven-page PDF **Assignment 4 mplementation Guide.pdf**,

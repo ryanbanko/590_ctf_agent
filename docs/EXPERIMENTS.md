@@ -940,3 +940,38 @@ container operations or scope/configuration changes. Nine successes versus six
 previously is descriptive; increased effort plus token headroom and one historical
 comparison do not isolate an effort effect. Review traces before further changes
 or retries; enforcement remains intact.
+
+## One blocked-connection recovery and scope clarification — November 8
+
+Before implementation, the user approved treating a firewall-confirmed prevented
+connection as eligible for one corrective response in the same attempt. This is
+the user's interpretation of the assignment, not a new professor confirmation.
+The earlier scope-stopped attempt remains an incident under its recorded policy.
+
+Hypothesis: explicit target address/protocol/port instructions plus one bounded
+blocked-command recovery lets the agent correct a scope mistake and continue
+permitted work without expanding access. A second incident, guard/counter failure,
+uncertain enforcement, or a denial outside an active run_command stays terminal.
+Restart the solver to end all old processes while retaining files; preserve the
+original deadline and counters, record denied packets/incidents/recoveries and
+return corrective tool feedback. Do not retry the offending command automatically.
+The recovery is controller behavior; the prompt's effect requires live follow-up.
+
+Use explicit max_scope_recoveries=1 (or 0 for strict stopping). Count a command's
+blocked packets as one incident; acknowledge the cumulative counter only after
+reset and a successful guard audit. Re-read the counter for NFLOG notifications
+so delayed logs cannot reclassify an acknowledged packet as a new incident.
+Verify first-denial recovery, actual denial at a live forbidden service, subsequent
+permitted work, repeated/strict/idle denial stopping, counter anomalies, delayed
+events and terminal/deadline precedence with offline/synthetic Docker checks.
+No paid model call or real challenge retry is authorized by this implementation
+milestone. Model/effort/token settings and guard rules remain fixed.
+
+Implementation verification: 149 offline tests and 47 synthetic Docker cases
+passed; final focused checks passed (77 offline and four Docker cases, overlapping
+the full suites). One intermediate post-recovery proof assertion failed and was
+tightened to distinguish the old child process from PID reuse; the precise cause
+of the original generic assertion remains unconfirmed. The original failure is
+retained. These checks support mechanical recovery and unchanged blocking, not a
+model success improvement. No real retry or paid model call occurred.
+[Implementation evidence and limitations](../evidence/scope-recovery/README.md).

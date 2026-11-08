@@ -15,7 +15,7 @@ from .agent import AttemptStopped, validate_response
 from .config import validate_settings
 from .docker import docker
 from .sandbox import audit_network, close_sandbox, make_sandbox, start_sandbox, stop_solver, snapshot_packages
-from .tools import execute_tool, validate_arguments
+from .tools import execute_tool, scope_feedback, validate_arguments
 
 
 def stop_attempt(state: dict, reason: str):
@@ -77,6 +77,7 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
             sandbox = make_sandbox(run_id, observation, lambda reason: stop_attempt(state, reason))
             state["sandbox"] = sandbox
             sandbox["directory"] = directory
+            sandbox.update(scope_limit=settings["max_scope_recoveries"], endpoints=endpoints)
             used_ids = set()
 
             def call_tool(name: str, arguments: dict) -> dict:
@@ -103,8 +104,23 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
                         if name == "submit_flag":
                             returned = {"correct": arguments["candidate"] == expected_flag}
                         else:
-                            returned = execute_tool(name, arguments, settings, sandbox, seconds_left)
-                        audit_network(sandbox, remaining_seconds(state))
+                            if name == "run_command":
+                                with sandbox["network_lock"]:
+                                    sandbox["scope_phase"] = "command"
+                            try:
+                                returned = execute_tool(name, arguments, settings, sandbox, seconds_left)
+                                audit_network(sandbox, remaining_seconds(state))
+                                remaining_seconds(state)
+                                if name == "run_command" and sandbox["scope_pending"].is_set():
+                                    returned = scope_feedback(returned, sandbox)
+                                remaining_seconds(state)
+                            finally:
+                                if name == "run_command":
+                                    with sandbox["network_lock"]:
+                                        sandbox["scope_phase"] = "idle"
+                        if name == "submit_flag":
+                            audit_network(sandbox, remaining_seconds(state))
+                            remaining_seconds(state)
                     except (RuntimeError, TimeoutError, subprocess.TimeoutExpired, json.JSONDecodeError) as error:
                         if result["termination_reason"] is None:
                             stop_attempt(state, "wall_limit" if time.monotonic() >= state["deadline"]
@@ -214,6 +230,10 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
                 result["captured_output_bytes"] = sandbox["captured_output_bytes"]
                 snapshot_packages(sandbox, "final", 2)
                 result["cleanup_errors"] = close_sandbox(sandbox)
+                # Cleanup joins the monitor before snapshotting its incident counters.
+                result.update(scope_incidents=sandbox["scope_incidents"],
+                              scope_recoveries=sandbox["scope_recoveries"],
+                              denied_packets=sandbox["denied_packets"])
                 result["cleanup_seconds"] = round(time.monotonic() - cleanup_started, 6)
                 result["verified_success"] = result["termination_reason"] == "success"
                 observation.update(output=result, level="ERROR" if result["cleanup_errors"] else "DEFAULT")

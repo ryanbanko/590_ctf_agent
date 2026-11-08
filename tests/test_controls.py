@@ -304,6 +304,7 @@ def test_ipv6_no_external_route(attempt: dict):
     "unapproved_live_port", "internet_ip", "host_address",
     "external_dns", "unrelated_container", "curl_internet",
 ])
+@pytest.mark.parametrize("attempt", [{"max_scope_recoveries": 0}], indirect=True)
 def test_network_scope(attempt, target, settings, destination, telemetry):
     if destination == "curl_internet":
         check_denial(attempt, "curl --noproxy '*' --connect-timeout 2 https://198.51.100.1/", telemetry)
@@ -619,7 +620,7 @@ http.server.HTTPServer(('0.0.0.0',8000),Handler).serve_forever()
         with challenge_target(challenge, output_root/f'compose-cycle-{uuid.uuid4().hex[:12]}') as target:
             assert len(target['containers'])==2 and len(target['volumes'])==1
             assert not target['adjustments']
-            with run_attempt(settings,target['network'],target['endpoints'],expected,output_root,
+            with run_attempt(settings | {'max_scope_recoveries': 0},target['network'],target['endpoints'],expected,output_root,
                              langfuse=telemetry['client'],label='compose_standard_networks') as run:
                 record_property('run_id',run['run_id'])
                 source = '''import json,time,urllib.request

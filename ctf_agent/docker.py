@@ -19,11 +19,11 @@ def docker(*args: str, timeout: float = 15) -> str:
 
 
 def bounded_exec(args: list[str], request: bytes | BinaryIO, timeout: float, limit: int,
-                 *, capture: dict | None = None) -> dict:
-    """Drain Docker output with bounded head/tail memory; timeout needs solver reset.
+                 *, capture: dict | None = None, cancel=None) -> dict:
+    """Drain Docker output with bounded head/tail memory; interruption needs reset.
 
     Killing the local Docker client does not kill its remote command. The caller
-    must reset or stop the solver before executing another action after timeout.
+    must reset or stop the solver before another action after timeout/cancellation.
     Optional capture spills raw streams before preview eviction, up to its byte
     limit. A trusted input file can be streamed directly to Docker without loading
     it into memory. Capture/storage errors do not stop draining the command.
@@ -37,6 +37,7 @@ def bounded_exec(args: list[str], request: bytes | BinaryIO, timeout: float, lim
     stream_bytes = {"stdout": 0, "stderr": 0}
     half = limit // 2
     timed_out = False
+    interrupted = False
     recorded = None
     handles = {}
 
@@ -78,6 +79,9 @@ def bounded_exec(args: list[str], request: bytes | BinaryIO, timeout: float, lim
                 selector.register(process.stdin, selectors.EVENT_WRITE, 'input')
             # Also wait for process completion when output closes before exit.
             while selector.get_map() or process.poll() is None:
+                if cancel is not None and cancel():
+                    interrupted = True
+                    break
                 remaining = deadline - time.monotonic()
                 if remaining <= 0:
                     timed_out = True
@@ -128,11 +132,13 @@ def bounded_exec(args: list[str], request: bytes | BinaryIO, timeout: float, lim
                                 + suffix.decode(errors='replace'))
             else:
                 output[name] = (prefix + suffix).decode(errors='replace')
-        output.update(exit_code=None if timed_out else process.returncode, timed_out=timed_out,
+        output.update(exit_code=None if timed_out or interrupted else process.returncode, timed_out=timed_out,
                       truncated=total > limit, output_bytes=total,
                       preview_bytes=head_size + tail_size)
+        if cancel is not None:
+            output["interrupted"] = interrupted
         if recorded is not None:
-            recorded["complete"] = not timed_out and recorded["error"] is None and recorded["bytes"] == total
+            recorded["complete"] = not (timed_out or interrupted) and recorded["error"] is None and recorded["bytes"] == total
             output["capture"] = recorded
         return output
     finally:

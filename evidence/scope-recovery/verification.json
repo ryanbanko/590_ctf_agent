@@ -1,0 +1,1429 @@
+{
+  "date": "2026-11-08",
+  "timezone": "America/New_York",
+  "mode": "synthetic-controls",
+  "baseline_commit": "b6ec0e51ddeeb740fca1ada635fb8a69b374dbda",
+  "provenance": {
+    "images": {
+      "solver": {
+        "id": "sha256:7e2c0a9b3a244f005548a9012ab7efa298a1ae095bfeba6c6e99020cea0664b6",
+        "architecture": "amd64"
+      },
+      "guard": {
+        "id": "sha256:e88b8ce02ef7f9b1b90a7713b2f14869d33aea7bdedc2020fd401e1cbd913fd0",
+        "architecture": "arm64"
+      },
+      "target": {
+        "id": "sha256:4ea766f632df8b62ec7762caf49e1db4367da2ea3e91e5de00b0c28e2c0e8abf",
+        "architecture": "arm64"
+      }
+    },
+    "commit": "b6ec0e51ddeeb740fca1ada635fb8a69b374dbda",
+    "working_tree_dirty": true,
+    "source_sha256": {
+      "ctf_agent/__init__.py": "f888faa1ea0aa9200939d4fa9225c1e029e2ac6a485191541fffa11a3ef075d3",
+      "ctf_agent/__main__.py": "1ae9beb8c9a70f8dd34deb6bf8736c3527906fc01060be352aa43987872eea65",
+      "ctf_agent/agent.py": "217a31dd4894932c8ca22fa58536c97dda8c784aec21391a4feb50834beda2bd",
+      "ctf_agent/attempt.py": "5064ee9141e3087290ce6d2fbbfae44d2b7e53992ba9dc427126c73d4a99af19",
+      "ctf_agent/challenge.py": "b47708ccd803fb242f3b9f2a8df7c6ed2fa206372b7f22f92394a0ae9f2d8745",
+      "ctf_agent/config.py": "754f6064788a00daf56103f62f9345fe5c6dded898688000ae5c4b9a45fb6989",
+      "ctf_agent/docker.py": "e8eb2374ab09981f36b786b0b8d1db2a677e4ff6e2a1f91edb69b7ed2ccaf785",
+      "ctf_agent/launch.py": "a13b10e07ffcfbc6deabdc23836b2cee8986fa678c1b39421ca0cf47686f6f8d",
+      "ctf_agent/sandbox.py": "52b6ec75467b9bca08f32c25846dbe520b0f1f7ccaf24a5b24df414e91b7f031",
+      "ctf_agent/tools.py": "86b56d81d5a967227ffbcbfa7be3444b578309a1ae2df5278a7bf732e922285d",
+      "docker/guard.py": "c42d2a43fef168dedb469c54416288d275d10821cd55a93c51dfbb37bc901f2f",
+      "docker/fixture.Dockerfile": "dd5ddd404a23facac903c375edb53a3462c61d65b0233eb936ba95649bcd0cb1",
+      "docker/guard.Dockerfile": "58142b2216aa36265423495b138b4c6bc30fd132f2b42d6a4744f72a350fe1cd",
+      "docker/solver.Dockerfile": "171cb74317e4872f8fd8548a3d6623778d7b38f234cf37bbc8b933f1c670062e",
+      "docker/NYU-LICENSE": "ffe785deace99260d447a9ed1e682d128da6942977701677528354315e0b506b",
+      "tests/__init__.py": "1d025fffce06e4da8f2265d5ad9dd40abe741a4bf50744398a980df6018b652f",
+      "tests/check_langfuse.py": "66215f6517413ea37a07229ce4fa74d20737b7a499b590bc3f466a62d692f1e6",
+      "tests/check_model.py": "98e2f5398766fb7129ceb9a3f068296f858662cea5e8790be71d9e5392196581",
+      "tests/check_readiness.py": "316e83ef293abfc989e5e84e368745fc3cfdbd140c091eddc04bac2f323921dd",
+      "tests/conftest.py": "5d7dcd89cffe7aa0bc17b7eacf68bdc2fa9b022a72ff7acf51025a381aebcd63",
+      "tests/fixtures/__init__.py": "11b3339d5dfd36bb6b5acac19ca1a4d0a171736a759d44c633c12317bfc83391",
+      "tests/fixtures/responses.py": "98694364ec0ab2f8b5c631f72b55a238b7d9dc29ab22285b979c3dde25867d3a",
+      "tests/fixtures/service.py": "6f6c69a915b13770879b97aeae7f654ddc8d52bac94ffdbc0bdde55d8e9be1c0",
+      "tests/fixtures/target.py": "b881811094b36282383f345e84d6e7b5b069f296507ec287de3a1c43508f8666",
+      "tests/fixtures/tracing.py": "4bec66162eeb11f8d4c35c5295d76e399d15d76b03edcf7eb6b1fe317e1982a1",
+      "tests/test_agent.py": "53946fef0b65f14fa8d2825a0bd291c9565c30ef899be397a45afbbd197c5883",
+      "tests/test_agent_controls.py": "3da43282daa404148b01369580e29128a59b6acb53970129cc8a8a71e34be7b1",
+      "tests/test_batch.py": "b007503936d96c535bec4655887f06a1a5f69d40b765a7c39f908d56944998b2",
+      "tests/test_challenge.py": "949e7b69bc9427f00dcca180aef64319623cf2c7c295c02ecb7d5c4677ed3553",
+      "tests/test_contracts.py": "590419bb30ae257246433e9a988a3baf4f347b800f970bb3a9696edd3c8babf9",
+      "tests/test_controls.py": "e9b53e9b42b977bf8b59e6098faaefb638556ceb37f00e1b30a589d2e156ee1e",
+      "tests/test_development.py": "7adabd8240a8ba1b4ee92e6434ac034f09820827b3ee4870a5c7b9e83b16e415",
+      "tests/test_hosted_tracing.py": "851aec66235229b0c7ce87952e9a4b6b7ca9fe4f24dec4400d6aa8727287b2b7",
+      "tests/test_model.py": "fe17210abf20b21b4b1d744ffae1598c81c9e6f5f4569138e0e326ec82a697fb",
+      "tests/test_output.py": "5e6d49a029f8a20a61a9cd03e99abc895851a793f2f6d202a2b839841e2a817c",
+      "tests/test_scope_controls.py": "718bc28d1e524e1b1511816af852f61f55ba01c8ef05a8683b0d6f36f854edfa",
+      "tests/test_scope_recovery.py": "e7055034b534363235773743a5d93c664f9f2d8c6994ea529ff1d3c4b19c3242",
+      "configs/development.toml": "7821a8921b8fe5e4d402bbf68c238e8d3e3393d6c7010de99892bafcfbd2f3d5",
+      "configs/reasoning-medium.toml": "0a3c6e82561ed360b938dfbc97b4b6f8e9221ea64e0d66646b66e4eb98eb3aec",
+      "configs/ctftiny.json": "3d9b9068823eabc34a5afa8684f09ac5a3217d1fa3712be7c4b57a87b33b1654",
+      "pyproject.toml": "946d18054a3f3e77e56f9dd3c9ca1a264d7ccb777ce227e9b07905f0aaa7ce6e",
+      "uv.lock": "20a6cad09949fb65f02ccf04c834589115907ec8ddf83c37595eab52c9b449fa"
+    },
+    "docker": "28.3.2",
+    "config": {
+      "solver_image": "ctf590-solver:m1",
+      "guard_image": "ctf590-guard:m1",
+      "target_image": "ctf590-fixture:m1",
+      "wall_seconds": 600.0,
+      "command_seconds": 120.0,
+      "max_model_turns": 40,
+      "max_tool_calls": 80,
+      "max_scope_recoveries": 1,
+      "max_output_bytes": 65536,
+      "max_capture_bytes": 10485760,
+      "max_attempt_capture_bytes": 104857600,
+      "memory_mb": 1024,
+      "max_command_bytes": 16384,
+      "max_write_bytes": 65536,
+      "pids": 64,
+      "cpus": 1.0
+    }
+  },
+  "model_settings_unchanged": true,
+  "new_attempt_settings": {
+    "max_scope_recoveries": 1
+  },
+  "guard_rules_and_images_unchanged": true,
+  "dependencies_unchanged": true,
+  "reports": [
+    {
+      "source": "runs/scope-recovery/offline-verified.xml",
+      "retained_report": "offline.xml",
+      "tests": 149,
+      "seconds": 1.836,
+      "failures": 0,
+      "errors": 0,
+      "sha256": "d76d435f9cb91b4ed2ab799d0881837087c2f92e04a15c4d8ce6c2aa566b02bb"
+    },
+    {
+      "source": "runs/scope-recovery/offline-final-counters.xml",
+      "retained_report": "offline-final.xml",
+      "tests": 77,
+      "seconds": 0.419,
+      "failures": 0,
+      "errors": 0,
+      "sha256": "24fc311272f7ded9102fa25f2dd8a0b57892a8f5e8961ecbd4ecc34ae9936875"
+    },
+    {
+      "source": "runs/scope-recovery/docker-full.xml",
+      "retained_report": "docker.xml",
+      "tests": 47,
+      "seconds": 193.268,
+      "failures": 0,
+      "errors": 0,
+      "sha256": "5d8b8418225fe384f5e3920fd536de08a6a1e6512be6dcb35d1de7f2e2a4a823"
+    },
+    {
+      "source": "runs/scope-recovery/docker-proof-final.xml",
+      "retained_report": "docker-final.xml",
+      "tests": 4,
+      "seconds": 16.822,
+      "failures": 0,
+      "errors": 0,
+      "sha256": "6859b2328de09e9da4c7241fd8efd4c21e8a1378fb38b7960077029c2970615b"
+    }
+  ],
+  "verification_order": "Full Docker suite before final capture-delivery-state and async counter-snapshot hardening. Full offline suite includes capture-state checks; final focused offline and four Docker recovery checks cover final counter snapshots. All intermediate raw reports are preserved.",
+  "preserved_failed_report": "runs/scope-recovery/docker-counters-final.xml",
+  "test_failure_note": "One intermediate post-recovery proof assertion failed after blocking/feedback succeeded. Its generic PID/sleep check could match a reused PID; changed to identify the old sleep-29 command and added specific assertion messages. Final four checks passed. Original failure lacked a diagnostic identifying the exact failing assertion, so PID reuse is the likely explanation, not independently confirmed.",
+  "forbidden_live_listener_connections": 0,
+  "forbidden_listener_proof": "Passing live-listener test asserts received()==0 before and after permitted work; controller queries a synthetic counter service.",
+  "cleanup_verified": true,
+  "managed_containers": [],
+  "managed_networks": [],
+  "new_live_model_calls": 0,
+  "real_challenge_attempts": 0,
+  "hosted_writes": 0,
+  "policy_authority": "Explicit user direction interpreting blocked access as recoverable; not professor confirmation.",
+  "records": [
+    {
+      "summary": "runs/scope-recovery/docker-initial/0ebf42a4809a/summary.json",
+      "summary_sha256": "adba5e43790173044308cfd717a89a4ee318703da62161b3f9c35e351a7baa5b",
+      "check": "blocked_connection_is_recoverable_without_reaching_live_listener",
+      "run_id": "0ebf42a4809a",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 1,
+      "scope_recoveries": 1,
+      "denied_packets": 1,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter",
+        "scope_recovered"
+      ],
+      "feedback": [
+        {
+          "error": {
+            "kind": "scope_denied",
+            "message": "A connection was blocked outside the permitted endpoints. Stop probing outside scope. All solver processes/connections were reset; files persist. Continue within the listed endpoints without retrying the denied command. Another incident ends the attempt."
+          },
+          "allowed_endpoints": [
+            {
+              "address": "172.19.0.2",
+              "protocol": "tcp",
+              "port": 8000
+            }
+          ],
+          "scope_recoveries_used": 1,
+          "solver_restarted": true,
+          "process_state_reset": true,
+          "interrupted": true,
+          "timed_out": false,
+          "output_bytes": 90000,
+          "preview_bytes": 65536
+        }
+      ],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-initial/32888a07531d/summary.json",
+      "summary_sha256": "ec7aa247cb8139736717026f0f0d513871631bc945c199c70f1a79faf9de3e76",
+      "check": "failed_scope_restart_is_terminal_and_never_returns_recovery",
+      "run_id": "32888a07531d",
+      "termination_reason": "infrastructure_error",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-initial/ae078168fb8f/summary.json",
+      "summary_sha256": "d91d86586a35597f9c0807b5bf8a30c38c36321faa1fd891fcd07d0f9e1a0ce0",
+      "check": "denial_between_commands_remains_terminal",
+      "run_id": "ae078168fb8f",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-initial/bc39a6cfea91/summary.json",
+      "summary_sha256": "0eeeff0855ae45fcf9206635cf98a1ca3939e500d030e3259c6346939f364d34",
+      "check": "model_history_receives_denial_and_second_incident_is_terminal",
+      "run_id": "bc39a6cfea91",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 2,
+      "scope_recoveries": 1,
+      "denied_packets": 2,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter",
+        "scope_recovered",
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [
+        {
+          "error": {
+            "kind": "scope_denied",
+            "message": "A connection was blocked outside the permitted endpoints. Stop probing outside scope. All solver processes/connections were reset; files persist. Continue within the listed endpoints without retrying the denied command. Another incident ends the attempt."
+          },
+          "allowed_endpoints": [
+            {
+              "address": "172.19.0.2",
+              "protocol": "tcp",
+              "port": 8000
+            }
+          ],
+          "scope_recoveries_used": 1,
+          "solver_restarted": true,
+          "process_state_reset": true,
+          "interrupted": true,
+          "timed_out": false,
+          "output_bytes": 0,
+          "preview_bytes": 0
+        }
+      ],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/02c230ba6961/summary.json",
+      "summary_sha256": "f76e743ab29b9024e3d9aa0cb8a0a980379f54a22c576e2bb1b8149421949ee7",
+      "check": "standard_copy_preserves_handouts_and_ownership",
+      "run_id": "02c230ba6961",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/0c34f8b1ddcd/summary.json",
+      "summary_sha256": "eb9f69baa94ab5313d3aa1ab2357eb68bb678b2747eb2e14f1078c827f738d74",
+      "check": "angr_symbolic_function",
+      "run_id": "0c34f8b1ddcd",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/0d35771af4dd/summary.json",
+      "summary_sha256": "338a31df207b868154317c2c66f992a5691e1d34cf64151acc205565a18312d7",
+      "check": "files_tools_evaluator_success",
+      "run_id": "0d35771af4dd",
+      "termination_reason": "success",
+      "model_calls": 0,
+      "tool_calls": 6,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/1541b34bb726/summary.json",
+      "summary_sha256": "d2573ef22c9664efe5caa824e4f1ee7d49bdba3f154cfbad003fc870ddff90da",
+      "check": "internet_ip",
+      "run_id": "1541b34bb726",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/16456265974b/summary.json",
+      "summary_sha256": "65317f18a181e79314d8ab1739c632a72086c0a4a0dbea583ead19f6a789d456",
+      "check": "attempt_deadline_stops_background_process",
+      "run_id": "16456265974b",
+      "termination_reason": "wall_limit",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/18efb06628d2/summary.json",
+      "summary_sha256": "de6f91b62bf52ae9e7a44bbccd46ec3e4ebf8e237a9d22b110c827a98271928c",
+      "check": "multilib_compilation_and_execution",
+      "run_id": "18efb06628d2",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/1acb12692470/summary.json",
+      "summary_sha256": "fc802512e71a0177d2014d979c1527d4acabb6a6f4f6c3f8e5b5a320592f3bc9",
+      "check": "unrelated_container",
+      "run_id": "1acb12692470",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/1eee3e41a9e8/summary.json",
+      "summary_sha256": "2eab08921183844a18a3d59e5af0b2f4e518916f8e487b83fff805d7101276b2",
+      "check": "capture_caps_keep_command_running_and_attempt_usable",
+      "run_id": "1eee3e41a9e8",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/234c9be923ab/summary.json",
+      "summary_sha256": "8855d767af76a6e1f196d89c927bea110b92338a51cbae77ad447f66e9e4e449",
+      "check": "interruption_cleanup",
+      "run_id": "234c9be923ab",
+      "termination_reason": "user_cancel",
+      "model_calls": 0,
+      "tool_calls": 0,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/2492c2fd4cba/summary.json",
+      "summary_sha256": "1223c53ebee8ad9a2d837cfbc8ba42d484687dad452b6f6ff0eefb5b0b0c6a7f",
+      "check": "capture_cleanup",
+      "run_id": "2492c2fd4cba",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/2f1de68feb51/summary.json",
+      "summary_sha256": "7d685ac85d75a75a32b864c979061e5f8aa31109c9180a46ad668bdf238b6252",
+      "check": "solver_loss",
+      "run_id": "2f1de68feb51",
+      "termination_reason": "infrastructure_error",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/384be6c1d536/summary.json",
+      "summary_sha256": "5c6e645bae7377eb68a703b9212f2167129cddf06f3141620419beb01be1f578",
+      "check": "output_writer_rejects_symlink_collision_and_fifo",
+      "run_id": "384be6c1d536",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/42b6c81bba86/summary.json",
+      "summary_sha256": "9172909fc1d6ba90aaceda56cafe004e54f327cd0761c1d0282e49b2f3be7333",
+      "check": "command_timeout_closed_output",
+      "run_id": "42b6c81bba86",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/49e3860fc786/summary.json",
+      "summary_sha256": "a84bda3764300a3a5f2c4413368c91cefe48f5e761fc7c7db71b6d88924cf0dd",
+      "check": "ipv6_no_external_route",
+      "run_id": "49e3860fc786",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/4c325e49b138/summary.json",
+      "summary_sha256": "806ec4f5190badc31ceb1f1f689462fd24d1f0315f81c09bae708f6207a30191",
+      "check": "supplied_sudo_cannot_elevate",
+      "run_id": "4c325e49b138",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/4c9de5543b73/summary.json",
+      "summary_sha256": "544ab119a37a3f930b9e6200227f10f03d133b2f8c9211933fc8fdf41ec7df9b",
+      "check": "solver_utilities_and_executable_workspace",
+      "run_id": "4c9de5543b73",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/535976fcad85/summary.json",
+      "summary_sha256": "f871707c4d568c6d0e3f7de6044117b59972ffadca9190281249ebdb6ac33581",
+      "check": "host_address",
+      "run_id": "535976fcad85",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/5648704b927b/summary.json",
+      "summary_sha256": "f0c388b78e721f205404972f77478735aebeab234b6c7d79f3ad33e1821a9829",
+      "check": "output_writer_rejects_symlink_collision_and_fifo",
+      "run_id": "5648704b927b",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/564b481e9aa1/summary.json",
+      "summary_sha256": "b8ac08e0bfbd096a3a1f0d35aa7e377ae48c03b41651e1feabe429e8d104c759",
+      "check": "unapproved_live_port",
+      "run_id": "564b481e9aa1",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/5677153d9726/summary.json",
+      "summary_sha256": "b4ddb5ba823c3d16b8be3079a86385798d593dfa4e2b78992fe08a0894194e3c",
+      "check": "setup_failure_cleanup",
+      "run_id": "5677153d9726",
+      "termination_reason": "infrastructure_error",
+      "model_calls": 0,
+      "tool_calls": 0,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/5c8d13712f4a/summary.json",
+      "summary_sha256": "602fec1b3eaa0ec9ba8fe2258aa598f3b360bd9140d8211ab1ef3c83374e34cc",
+      "check": "compose_standard_networks",
+      "run_id": "5c8d13712f4a",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/5fb331f2dc63/summary.json",
+      "summary_sha256": "b655d8e52b4c0ef36c5ff59f52b708f29108b87be0472a61b7e8d299d7521b33",
+      "check": "output_excerpt_and_late_diagnostic",
+      "run_id": "5fb331f2dc63",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/635d2abb405a/summary.json",
+      "summary_sha256": "35e3ffde58e004d6189417b875a9763bc0a9c8f8c5b52ee3f6406b7c27fd76cd",
+      "check": "wall_limit",
+      "run_id": "635d2abb405a",
+      "termination_reason": "wall_limit",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/6579d80f3084/summary.json",
+      "summary_sha256": "8e0dff8429a39084f6d8eb3732156719785ec6d0aedcd7b99b05013d15be90b3",
+      "check": "sage_arithmetic_and_linear_algebra",
+      "run_id": "6579d80f3084",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/676b343292d6/summary.json",
+      "summary_sha256": "396c68f318ed8abac18591907ea54fcfca60f9834b44953c8b2c0acd72072de6",
+      "check": "failed_scope_restart_is_terminal_and_never_returns_recovery",
+      "run_id": "676b343292d6",
+      "termination_reason": "infrastructure_error",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/6b2264059227/summary.json",
+      "summary_sha256": "96d1a355a9550a7bdef2a83d77a47be6f6407144b0a965bb58735f22bb8acd5f",
+      "check": "compose_standard_networks",
+      "run_id": "6b2264059227",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/744b638dd3f6/summary.json",
+      "summary_sha256": "02306a364935e92ca25f51089cffd80625804dfd6ac8a36d2feac5939a2316df",
+      "check": "scripted_late_response_cannot_execute_tools",
+      "run_id": "744b638dd3f6",
+      "termination_reason": "wall_limit",
+      "model_calls": 0,
+      "tool_calls": 0,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/7829c8310360/summary.json",
+      "summary_sha256": "ce1ebaac94897f19aee93b3561b5c984130d7345d21c30b9c6a14d3dd7c734a9",
+      "check": "larger_output_retains_observed_size_and_remains_bounded",
+      "run_id": "7829c8310360",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/7cf01ae232e3/summary.json",
+      "summary_sha256": "0051f97503fe2d0c6f6807b44a6d32c9e73a0d1e88b9031679918231d6ca89e7",
+      "check": "scripted_loop_recovers_and_verifies_through_target",
+      "run_id": "7cf01ae232e3",
+      "termination_reason": "success",
+      "model_calls": 0,
+      "tool_calls": 5,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/84592954bc8a/summary.json",
+      "summary_sha256": "f71bdb7dc62584c35307c81101a0414fbe5771b85844454a5ba3cdb4bf66cad6",
+      "check": "model_history_receives_denial_and_second_incident_is_terminal",
+      "run_id": "84592954bc8a",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 2,
+      "scope_recoveries": 1,
+      "denied_packets": 2,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter",
+        "scope_recovered",
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [
+        {
+          "error": {
+            "kind": "scope_denied",
+            "message": "A connection was blocked outside the permitted endpoints. Stop probing outside scope. All solver processes/connections were reset; files persist. Continue within the listed endpoints without retrying the denied command. Another incident ends the attempt."
+          },
+          "allowed_endpoints": [
+            {
+              "address": "172.19.0.2",
+              "protocol": "tcp",
+              "port": 8000
+            }
+          ],
+          "scope_recoveries_used": 1,
+          "solver_restarted": true,
+          "process_state_reset": true,
+          "interrupted": true,
+          "timed_out": false,
+          "output_bytes": 0,
+          "preview_bytes": 0
+        }
+      ],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/84de97f9d512/summary.json",
+      "summary_sha256": "6539dbddbafa39ecd37cd69e78140736be16d6b582e427fc41d0c1ebd236ac39",
+      "check": "curl_internet",
+      "run_id": "84de97f9d512",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/87816fe99835/summary.json",
+      "summary_sha256": "97b63c9fcb7f3cf557889c669c7c68e2ea70473b68d5a85008d0864f135c2f23",
+      "check": "radare2_binary_analysis",
+      "run_id": "87816fe99835",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/8978db330142/summary.json",
+      "summary_sha256": "d3800b825f5420926ed4454ca169eac32cda5c5c07b5942537eceb1847efb790",
+      "check": "runtime_pip_install_and_writable_home",
+      "run_id": "8978db330142",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 4,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/93f059195f02/summary.json",
+      "summary_sha256": "95c8ef37c16175eb9c07e765c10de160d915f0481bde7ec267af4b3eda17c6f9",
+      "check": "blocked_connection_is_recoverable_without_reaching_live_listener",
+      "run_id": "93f059195f02",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 1,
+      "scope_recoveries": 1,
+      "denied_packets": 1,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter",
+        "scope_recovered"
+      ],
+      "feedback": [
+        {
+          "error": {
+            "kind": "scope_denied",
+            "message": "A connection was blocked outside the permitted endpoints. Stop probing outside scope. All solver processes/connections were reset; files persist. Continue within the listed endpoints without retrying the denied command. Another incident ends the attempt."
+          },
+          "allowed_endpoints": [
+            {
+              "address": "172.19.0.2",
+              "protocol": "tcp",
+              "port": 8000
+            }
+          ],
+          "scope_recoveries_used": 1,
+          "solver_restarted": true,
+          "process_state_reset": true,
+          "interrupted": true,
+          "timed_out": false,
+          "output_bytes": 90000,
+          "preview_bytes": 65536
+        }
+      ],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/bcb7c07518f2/summary.json",
+      "summary_sha256": "c679be83cc0584aba25f6d47b039a70e2d919fef4a59c4bb618a8ccaeda5786a",
+      "check": "command_timeout_detached_child",
+      "run_id": "bcb7c07518f2",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/c06d71de285c/summary.json",
+      "summary_sha256": "7633c6bae32442cd16fce54452b47524e9a9af280ae17886b589d75889e3dc58",
+      "check": "denial_between_commands_remains_terminal",
+      "run_id": "c06d71de285c",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/c32f7c0e9a64/summary.json",
+      "summary_sha256": "a10887e30181906221799c13b9069d1cee4ba0b36ebe2dc9ecdf27804a135b35",
+      "check": "default_capture_limit_delivers_large_prefix",
+      "run_id": "c32f7c0e9a64",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/c7ddd8ab87ed/summary.json",
+      "summary_sha256": "34ecaf03dd6148b31665dbd17f0b7ac10ead53317032383174c0c6f1e23d04db",
+      "check": "filesystem_credentials_privileges_output",
+      "run_id": "c7ddd8ab87ed",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 11,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/cb7c154f4320/summary.json",
+      "summary_sha256": "da442fbcf06e61ed36ab3aa5c82477506ec41600687ca08fe266659727983bb0",
+      "check": "output_writer_rejects_symlink_collision_and_fifo",
+      "run_id": "cb7c154f4320",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/cc66b740e46d/summary.json",
+      "summary_sha256": "ef150cd75d000cd77218a12b1086c4524d54daa5e9b00c5145dc96ded59ab957",
+      "check": "guard_loss",
+      "run_id": "cc66b740e46d",
+      "termination_reason": "guard_failure",
+      "model_calls": 0,
+      "tool_calls": 0,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/d1c09e4773b9/summary.json",
+      "summary_sha256": "4b313ab2f2e052942090d970f4d972262169eb909921fd1732b09862d51a5b98",
+      "check": "solver_python_libraries_and_network_deadline",
+      "run_id": "d1c09e4773b9",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/e4a3c51caaaf/summary.json",
+      "summary_sha256": "88fe218fffcd83af5eb5679e0471c6c5daca2e8c81560111f81219e4437c7ff9",
+      "check": "timeout_output_remains_retrievable_after_restart",
+      "run_id": "e4a3c51caaaf",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/e6a3a6eca3fc/summary.json",
+      "summary_sha256": "d9a9c4e9af6d4870920098b3f9a67d71204b5ed0eb89f738c6a836ce060ffd11",
+      "check": "fresh_python_environment",
+      "run_id": "e6a3a6eca3fc",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/f416b236195f/summary.json",
+      "summary_sha256": "47d685a7253633dd695090ae66c59f60366679bb04921c30c158959d856d2b9c",
+      "check": "restart_resets_all_processes_and_preserves_files",
+      "run_id": "f416b236195f",
+      "termination_reason": "synthetic_complete",
+      "model_calls": 0,
+      "tool_calls": 4,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/f74c6ba5af78/summary.json",
+      "summary_sha256": "b7e4edce226cba9df6f901a43eb23a27e91508a4520f9130554d94c08d70a6ff",
+      "check": "tool_limit",
+      "run_id": "f74c6ba5af78",
+      "termination_reason": "tool_limit",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 0,
+      "scope_recoveries": 0,
+      "denied_packets": 0,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-full/fd421ca8f151/summary.json",
+      "summary_sha256": "34d6061a9446fb20824cd88d7daf2f1043d3e4db8efb1357aae73965f8722c44",
+      "check": "external_dns",
+      "run_id": "fd421ca8f151",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-final/3f145a7ecc00/summary.json",
+      "summary_sha256": "21a41b7f851c4b958d53f9307eac0a0ae30c63976c08b94e2a2d548afef5371e",
+      "check": "failed_scope_restart_is_terminal_and_never_returns_recovery",
+      "run_id": "3f145a7ecc00",
+      "termination_reason": "infrastructure_error",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-final/4836efcc78e5/summary.json",
+      "summary_sha256": "970255df651c8f002330ed87634a47a4a37a6e147474804046d18c368c904b83",
+      "check": "model_history_receives_denial_and_second_incident_is_terminal",
+      "run_id": "4836efcc78e5",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 2,
+      "scope_recoveries": 1,
+      "denied_packets": 2,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter",
+        "scope_recovered",
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [
+        {
+          "error": {
+            "kind": "scope_denied",
+            "message": "A connection was blocked outside the permitted endpoints. Stop probing outside scope. All solver processes/connections were reset; files persist. Continue within the listed endpoints without retrying the denied command. Another incident ends the attempt."
+          },
+          "allowed_endpoints": [
+            {
+              "address": "172.19.0.2",
+              "protocol": "tcp",
+              "port": 8000
+            }
+          ],
+          "scope_recoveries_used": 1,
+          "solver_restarted": true,
+          "process_state_reset": true,
+          "interrupted": true,
+          "timed_out": false,
+          "output_bytes": 0,
+          "preview_bytes": 0
+        }
+      ],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-final/8b7b7ab2b889/summary.json",
+      "summary_sha256": "8bf4db0deb4816c328fb6798b502a7286aab81c7eca9f0f2ed1a07e4c18d56e2",
+      "check": "denial_between_commands_remains_terminal",
+      "run_id": "8b7b7ab2b889",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-final/d8fd68a5a634/summary.json",
+      "summary_sha256": "306c3828845c48f3ade1ef3296ac7ccf28ea6bafe344d83fe650f208130d514a",
+      "check": "blocked_connection_is_recoverable_without_reaching_live_listener",
+      "run_id": "d8fd68a5a634",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 1,
+      "scope_recoveries": 1,
+      "denied_packets": 1,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter",
+        "scope_recovered"
+      ],
+      "feedback": [
+        {
+          "error": {
+            "kind": "scope_denied",
+            "message": "A connection was blocked outside the permitted endpoints. Stop probing outside scope. All solver processes/connections were reset; files persist. Continue within the listed endpoints without retrying the denied command. Another incident ends the attempt."
+          },
+          "allowed_endpoints": [
+            {
+              "address": "172.19.0.2",
+              "protocol": "tcp",
+              "port": 8000
+            }
+          ],
+          "scope_recoveries_used": 1,
+          "solver_restarted": true,
+          "process_state_reset": true,
+          "interrupted": true,
+          "timed_out": false,
+          "output_bytes": 90000,
+          "preview_bytes": 65536
+        }
+      ],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-counters-final/aa63e029f753/summary.json",
+      "summary_sha256": "ce9c18c56a5d67714758e8e7584c56044f4cf20b01164f02573ffa9c7dde67eb",
+      "check": "blocked_connection_is_recoverable_without_reaching_live_listener",
+      "run_id": "aa63e029f753",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 1,
+      "scope_recoveries": 1,
+      "denied_packets": 1,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter",
+        "scope_recovered"
+      ],
+      "feedback": [
+        {
+          "error": {
+            "kind": "scope_denied",
+            "message": "A connection was blocked outside the permitted endpoints. Stop probing outside scope. All solver processes/connections were reset; files persist. Continue within the listed endpoints without retrying the denied command. Another incident ends the attempt."
+          },
+          "allowed_endpoints": [
+            {
+              "address": "172.19.0.2",
+              "protocol": "tcp",
+              "port": 8000
+            }
+          ],
+          "scope_recoveries_used": 1,
+          "solver_restarted": true,
+          "process_state_reset": true,
+          "interrupted": true,
+          "timed_out": false,
+          "output_bytes": 90000,
+          "preview_bytes": 65536
+        }
+      ],
+      "intermediate_test_assertion_failed": true
+    },
+    {
+      "summary": "runs/scope-recovery/docker-proof-final/011e6bc9d4ab/summary.json",
+      "summary_sha256": "48613052c0428edc0ca993bf8e4edfb477266a1296e6326b2f18ffcba512b031",
+      "check": "blocked_connection_is_recoverable_without_reaching_live_listener",
+      "run_id": "011e6bc9d4ab",
+      "termination_reason": "completed_without_success",
+      "model_calls": 0,
+      "tool_calls": 3,
+      "scope_incidents": 1,
+      "scope_recoveries": 1,
+      "denied_packets": 1,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter",
+        "scope_recovered"
+      ],
+      "feedback": [
+        {
+          "error": {
+            "kind": "scope_denied",
+            "message": "A connection was blocked outside the permitted endpoints. Stop probing outside scope. All solver processes/connections were reset; files persist. Continue within the listed endpoints without retrying the denied command. Another incident ends the attempt."
+          },
+          "allowed_endpoints": [
+            {
+              "address": "172.19.0.2",
+              "protocol": "tcp",
+              "port": 8000
+            }
+          ],
+          "scope_recoveries_used": 1,
+          "solver_restarted": true,
+          "process_state_reset": true,
+          "interrupted": true,
+          "timed_out": false,
+          "output_bytes": 90000,
+          "preview_bytes": 65536
+        }
+      ],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-proof-final/234ef7d1e64f/summary.json",
+      "summary_sha256": "fc485db0061397ee27d02a4400057e88a96408d3153b9447a6489ead0ac59500",
+      "check": "model_history_receives_denial_and_second_incident_is_terminal",
+      "run_id": "234ef7d1e64f",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 2,
+      "scope_incidents": 2,
+      "scope_recoveries": 1,
+      "denied_packets": 2,
+      "solver_restarts": 1,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter",
+        "scope_recovered",
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [
+        {
+          "error": {
+            "kind": "scope_denied",
+            "message": "A connection was blocked outside the permitted endpoints. Stop probing outside scope. All solver processes/connections were reset; files persist. Continue within the listed endpoints without retrying the denied command. Another incident ends the attempt."
+          },
+          "allowed_endpoints": [
+            {
+              "address": "172.19.0.2",
+              "protocol": "tcp",
+              "port": 8000
+            }
+          ],
+          "scope_recoveries_used": 1,
+          "solver_restarted": true,
+          "process_state_reset": true,
+          "interrupted": true,
+          "timed_out": false,
+          "output_bytes": 0,
+          "preview_bytes": 0
+        }
+      ],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-proof-final/5c3bd2f6df31/summary.json",
+      "summary_sha256": "d6a696e0fa660d2db93258e8c1ad79cf57391c729d8091510ca589617fba3c65",
+      "check": "denial_between_commands_remains_terminal",
+      "run_id": "5c3bd2f6df31",
+      "termination_reason": "scope_violation",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    },
+    {
+      "summary": "runs/scope-recovery/docker-proof-final/995f928c7b46/summary.json",
+      "summary_sha256": "3ba9b9767b4942707f81257905ee94b7fc44c05c79d80921adc3140a2272be45",
+      "check": "failed_scope_restart_is_terminal_and_never_returns_recovery",
+      "run_id": "995f928c7b46",
+      "termination_reason": "infrastructure_error",
+      "model_calls": 0,
+      "tool_calls": 1,
+      "scope_incidents": 1,
+      "scope_recoveries": 0,
+      "denied_packets": 1,
+      "solver_restarts": 0,
+      "cleanup_errors": [],
+      "events": [
+        "network_denied",
+        "network_denial_counter"
+      ],
+      "feedback": [],
+      "intermediate_test_assertion_failed": false
+    }
+  ]
+}

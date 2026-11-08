@@ -7,7 +7,7 @@ import time
 import uuid
 
 from .docker import bounded_exec, docker
-from .sandbox import restart_solver
+from .sandbox import recover_scope_denial, restart_solver
 
 
 TOOL_DEFINITIONS = [
@@ -19,8 +19,10 @@ TOOL_DEFINITIONS = [
             "interactive terminal or cross-call input. Keep stateful read/compute/respond "
             "interactions in one script using the same connection. A command timeout restarts "
             "the solver, ending all processes/connections while preserving files/packages; "
-            "no automatic retries. Use shorter internal network deadlines. Returns stdout, "
-            "stderr, exit code and timeout/truncation metadata; ordinary nonzero exits are "
+            "no automatic retries. Use shorter internal network deadlines. "
+            "A first confirmed blocked connection can return scope_denied after a solver "
+            "restart; continue only within listed endpoints. Another incident stops the attempt. "
+            "Returns stdout, stderr, exit code and timeout/truncation metadata; ordinary nonzero exits are "
             "diagnostic results. Large output has marked beginning/end excerpts and capture "
             "metadata: solver_path entries locate retained files; complete, limit_reached, "
             "error and delivery_error describe capture/retrieval limits."
@@ -200,7 +202,8 @@ def execute_tool(name: str, arguments: dict, settings: dict, sandbox: dict,
                else ["python", "-I", "-c", WRITE_FILE])
     request = b"" if name == "run_command" else json.dumps(arguments).encode()
     capture_directory = sandbox["directory"] / "outputs" / uuid.uuid4().hex[:12]
-    capture_options = ({"capture": {"directory": capture_directory,
+    capture_options = ({"cancel": sandbox["scope_pending"].is_set,
+        "capture": {"directory": capture_directory,
         "limit": min(settings["max_capture_bytes"],
                      settings["max_attempt_capture_bytes"] - sandbox["captured_output_bytes"])}}
         if name == "run_command" else {})
@@ -215,9 +218,14 @@ def execute_tool(name: str, arguments: dict, settings: dict, sandbox: dict,
         sandbox["observation"].create_event(name="command_output_captured", metadata=returned["capture"])
     if returned["timed_out"]:
         sandbox["observation"].create_event(name="command_timeout", metadata={"partial_output": returned})
+    if name == "run_command" and sandbox["scope_pending"].is_set():
+        return returned  # The trusted runner audits and recovers before another model turn.
+    if returned["timed_out"]:
         restart_solver(sandbox)
         returned.update(solver_restarted=True, process_state_reset=True)
         if name == "write_file":
+            return returned
+        if sandbox["scope_pending"].is_set():
             return returned
     elif returned["exit_code"] != 0:
         if docker("inspect", "--format", "{{.State.Running}}", sandbox["solver"],
@@ -229,4 +237,23 @@ def execute_tool(name: str, arguments: dict, settings: dict, sandbox: dict,
         return json.loads(returned["stdout"])
     if "capture" in returned:
         deliver_output(returned, sandbox, capture_directory)
+    return returned
+
+
+def scope_feedback(returned: dict, sandbox: dict):
+    recover_scope_denial(sandbox)
+    returned.update(error={"kind": "scope_denied", "message":
+        "A connection was blocked outside the permitted endpoints. Stop probing outside scope. "
+        "All solver processes/connections were reset; files persist. Continue within the listed "
+        "endpoints without retrying the denied command. Another incident ends the attempt."},
+        allowed_endpoints=sandbox["endpoints"], scope_recoveries_used=sandbox["scope_recoveries"],
+        solver_restarted=True, process_state_reset=True)
+    capture = returned.get("capture", {})
+    files = capture.get("files", {})
+    # Copies already attempted before a late denial survive restart. Do not
+    # overwrite them or grant another delivery budget after an earlier failure.
+    if files and "delivery_error" not in capture and not any("solver_path" in r for r in files.values()):
+        first = next(iter(files.values()))
+        directory = sandbox["directory"] / PurePosixPath(first["artifact"]).parent
+        deliver_output(returned, sandbox, directory)
     return returned

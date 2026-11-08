@@ -8,6 +8,7 @@ wall_seconds = 600.0
 command_seconds = 120.0
 max_model_turns = 40 # Also supplies the model adapter request limit.
 max_tool_calls = 80
+max_scope_recoveries = 1 # One confirmed blocked command may receive corrective feedback.
 max_output_bytes = 65536
 max_capture_bytes = 10485760 # Retained stdout + stderr per overflowing command.
 max_attempt_capture_bytes = 104857600 # Combined retained bytes across the attempt.

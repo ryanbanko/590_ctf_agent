@@ -104,11 +104,15 @@ def check_readiness(experiment_path: Path, dataset_json: Path, manifest_path: Pa
                     check_target_services(target, "after_probes")
                     cycle["checks"]["target_services_ready"] = True
                     if cycle_number == 2:
-                        try:
-                            run["call_tool"]("run_command", {"command": "python -I -c " + shlex.quote(
-                                "import socket; socket.create_connection(('198.51.100.1',443),2)")})
-                        except AttemptStopped:
-                            pass
+                        for _ in range(settings["max_scope_recoveries"] + 1):
+                            try:
+                                denied = run["call_tool"]("run_command", {"command": "python -I -c " + shlex.quote(
+                                    "import socket; socket.create_connection(('198.51.100.1',443),2)")})
+                                cycle["checks"]["blocked_request_feedback"] = (
+                                    denied.get("error", {}).get("kind") == "scope_denied"
+                                    and run["result"]["termination_reason"] is None)
+                            except AttemptStopped:
+                                break
                         cycle["checks"]["denial_stops_solver"] = (run["result"]["termination_reason"] == "scope_violation"
                             and docker("inspect", "--format", "{{.State.Running}}", run["solver"]) == "false")
                     else:

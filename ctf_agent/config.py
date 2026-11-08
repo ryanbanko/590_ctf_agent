@@ -8,6 +8,7 @@ CONFIG_PATH = Path('configs/development.toml')
 ATTEMPT_FIELDS = {
     'solver_image', 'guard_image', 'target_image', 'wall_seconds', 'max_tool_calls',
     'max_model_turns', 'command_seconds', 'max_command_bytes', 'max_output_bytes',
+    'max_scope_recoveries',
     'max_capture_bytes', 'max_attempt_capture_bytes', 'max_write_bytes', 'memory_mb', 'pids', 'cpus',
 }
 MODEL_FIELDS = {
@@ -27,6 +28,9 @@ def validate_settings(settings: dict) -> None:
         elif name in {'wall_seconds', 'command_seconds', 'cpus'}:
             if type(value) not in (int, float) or not math.isfinite(value) or value <= 0:
                 raise ValueError(f'{name} must be finite and positive')
+        elif name == 'max_scope_recoveries':
+            if type(value) is not int or value not in (0, 1):
+                raise ValueError('max_scope_recoveries must be 0 or 1')
         elif type(value) is not int or value <= 0:
             raise ValueError(f'{name} must be a positive integer')
     if settings['max_output_bytes'] > 65_536 or settings['max_write_bytes'] > 1_048_576:
