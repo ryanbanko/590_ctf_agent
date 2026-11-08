@@ -5,6 +5,18 @@ comparisons, the exact change, run references and conclusions. Keep raw evidence
 in Langfuse and run records; use `PROJECT_STATUS.md` for the overall checklist.
 This is Section 2 of [Part 1](../ASSIGNMENT.md), not the later competition Part 2.
 
+## Shared development records for teammates — November 8
+
+[Ryan's shared runs](../evidence/ryan-shared-runs/README.md) provides sanitized
+offline copies of all 65 existing pilot attempts, including failures and scope
+stops, plus a chronological guide and per-attempt index. Use it to locate evidence
+for the hypotheses below without depending on another teammate's local `runs/`.
+Read its export-gap, redaction and cost notes before drawing trace conclusions.
+The latest medium/8,192 two-trial batch completed with 20/22 successes and no
+scope recoveries; it does not demonstrate live recovery or establish a causal
+gain. This handoff changes no runtime/configuration and makes no new model call.
+Development pilots remain separate from the reserved scored evaluation.
+
 ## Current scope after course clarification — November 6
 
 The [professor confirmed](REFERENCES.md#november-6-course-guide-and-professor-confirmations)

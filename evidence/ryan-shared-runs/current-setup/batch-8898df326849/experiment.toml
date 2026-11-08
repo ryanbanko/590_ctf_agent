@@ -1,0 +1,21 @@
+# Initial development configuration; not frozen for scoring.
+[attempt]
+wall_seconds = 300.0
+command_seconds = 30.0
+max_model_turns = 20
+max_tool_calls = 40
+max_output_bytes = 32768
+
+[model]
+model = "gpt-6-luna"
+base_url = "https://litellm.oit.duke.edu/v1"
+reasoning_effort = "low"
+max_requests = 20
+max_output_tokens = 2048
+max_input_bytes = 262144
+request_seconds = 30.0
+max_cost_usd = 0.10
+# Gateway/official pricing snapshot, rechecked before live use.
+input_usd_per_million = 0.10
+output_usd_per_million = 0.50
+cached_input_usd_per_million = 0.01

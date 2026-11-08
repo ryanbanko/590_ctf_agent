@@ -1,0 +1,13 @@
+{
+  "name": "algebra",
+  "category": "misc",
+  "description": "Are you a real math wiz?",
+  "files": [],
+  "endpoints": [
+    {
+      "address": "172.19.0.2",
+      "protocol": "tcp",
+      "port": 4324
+    }
+  ]
+}

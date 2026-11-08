@@ -2,13 +2,55 @@
 
 Last reviewed: November 8, 2026 (America/New_York).
 
-**Scope clarification and one blocked-command recovery implemented: 149 offline tests and all 47 synthetic Docker cases passed; final focused checks and cleanup passed. Firewall/image/model settings remain unchanged. No real challenge retry or paid model call was made. Implementation awaits review.**
+**Team evidence handoff prepared: 65 development pilot attempts are available as
+sanitized Git-shareable copies in [Ryan's shared runs](evidence/ryan-shared-runs/README.md).
+The user-run latest batch completed 22 attempts with 20 verified successes and
+zero scope recoveries. Runtime changes were saved in `48b068f`; this documentation/
+sharing milestone adds no model calls or runtime changes.**
 
 Use the [current plan](#latest-course-clarification-and-current-plan),
 [Git checkpoint](#current-git-checkpoint) and [assignment checklist](#assignment-checklist)
 for remaining work. Dated milestone sections preserve their completion state and
 next-step recommendations at the time; later completed work supersedes those
 historical pending-stage notes.
+
+## Ryan's shared development evidence — November 8
+
+At the user's request, all 65 existing development attempts under `runs/pilots/`
+are copied into [evidence/ryan-shared-runs](evidence/ryan-shared-runs/README.md),
+including early interrupted/stopped pilots and all four main comparison batches.
+The index explains chronology, hypotheses, metrics, provenance and remaining
+assignment work so teammates and their agents can analyze evidence offline.
+All IDs were checked against the development split; held-out contents were not
+opened. The local originals and older evidence remain unchanged.
+
+Sharing excludes private target/evaluator directories and unrecognized files.
+Copies scrub credentials/candidate text, host paths and opaque reasoning; remove
+HTTP headers and instrumentation identity fields; and retain messages, commands,
+tool results, verdicts and usage. Per-file source/shared hashes, exclusions and
+concrete privacy checks are recorded in `sharing-checks.json`. This is a reviewed
+derivative, not a promise that arbitrary text can be proven secret-free. Existing
+repository-history privacy concerns are outside the new bundle's checks.
+
+The latest `batch-8ba0053bddb1` records clean `48b068f`, medium/8,192 and two
+fresh trials per eleven development IDs: 20 successes and two ordinary failures,
+both `pwn-baby-boi`. It records no scope incidents/recoveries, so does not verify
+live recovery or isolate a causal change. Counts/records are indexed for handoff;
+new behavioral interpretation and final course aggregation remain separate.
+
+The historical structural export audits are preserved. One early cancelled
+attempt has no export; several medium/latest exports have missing message/tool
+payloads despite passing counts. The shared index flags them and selects the
+existing refreshed first-fix `rev-tablez` export. No new hosted fetch was made.
+Verification passed for 333 source/shared hashes, all 65 unchanged result and
+provenance objects, development membership, copied batch paths, JSON/TOML parsing,
+33 added local links, complete-bundle credential/nested-field checks and Git
+visibility of all 336 new files. Data totals 13.4 MiB; the largest file is under
+1 MiB. Whitespace checks passed. Runtime tests were not repeated because no
+application/configuration/test code changed.
+No new live attempt, model request, Docker operation, commit or push was performed.
+Next: review/commit the shared evidence, then use it for the remaining trace
+analysis and later authorized evaluation/report/demo work.
 
 ## One prevented-connection recovery — implemented November 8
 
@@ -43,8 +85,9 @@ The readiness helper now tests the configured recovery allowance before terminal
 denial; real challenge readiness was not rerun. No real challenge/model call,
 hosted write, new dependency, image rebuild, extra agent tool or service was used.
 The original medium scope-stopped trial and prior evidence remain unchanged.
-Implementation/evidence are uncommitted for review. Next: review, then separately
-authorize one fresh web development check before any broader behavioral claims.
+At the end of that implementation milestone, evidence was uncommitted for review.
+The user subsequently saved/pushed `48b068f` and ran the two-trial development
+batch indexed above. Those later runs supersede the earlier proposed web-only check.
 
 ## Medium/headroom batch scope-stop diagnosis — November 8
 
@@ -596,13 +639,13 @@ not scored evaluation or report work.
 
 ## Current Git checkpoint
 
-Latest saved HEAD is `b6ec0e5` ("increased reasoning experiment"). Local `main`
-and `origin/main` matched with a clean working tree before this recovery milestone.
-That checkpoint includes the reasoning settings, attribution and prior batch
-documentation. The low-effort live rerun recorded clean `e7e366c` source;
-`4620032` preserves the earlier review and hypotheses. The scope instructions,
-bounded recovery, tests and accompanying evidence/documentation are uncommitted
-for review. No commit, push or history rewrite was performed in this milestone.
+Latest saved HEAD is `48b068f` ("added recovery for blocked connections, clarified
+scope instructions"). Local `main` and `origin/main` matched with a clean working
+tree before the shared-evidence milestone. The prior checkpoint `b6ec0e5` includes
+reasoning settings, attribution and earlier batch documentation. The low-effort
+live rerun recorded clean `e7e366c`; `4620032` preserves earlier hypotheses.
+Ryan's shared runs and accompanying documentation are now uncommitted for review.
+No commit, push or history rewrite was performed by this sharing milestone.
 
 The runtime baseline is `616b5f2d854f58b2e305697cee21d5f739e81d03` (`616b5f2`),
 “integrated NYU solver image with expanded tooling, ready for testing.” The working

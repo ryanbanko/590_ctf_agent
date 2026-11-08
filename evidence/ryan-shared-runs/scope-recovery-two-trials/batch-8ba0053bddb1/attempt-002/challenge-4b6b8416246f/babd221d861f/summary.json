@@ -1,0 +1,43 @@
+{
+  "run_id": "babd221d861f",
+  "challenge_id": "cry-describeme",
+  "mode": "development",
+  "termination_reason": "success",
+  "tool_calls": 5,
+  "model_calls": 5,
+  "agent_mode": "model",
+  "scripted_turns": 0,
+  "tokens": {
+    "input": 11862,
+    "output": 2024,
+    "cached_input": 7131,
+    "reasoning": 948
+  },
+  "cost_usd": 0.00155641,
+  "cleanup_errors": [],
+  "trace_id": "66eac2943a829444a7539d93ab0196d6",
+  "model_settings": {
+    "model": "gpt-6-luna",
+    "base_url": "https://litellm.oit.duke.edu/v1",
+    "reasoning_effort": "medium",
+    "max_output_tokens": 8192,
+    "max_input_bytes": 524288,
+    "request_seconds": 60.0,
+    "input_usd_per_million": 0.1,
+    "output_usd_per_million": 0.5,
+    "cached_input_usd_per_million": 0.01,
+    "max_requests": 40
+  },
+  "usage_complete": true,
+  "cost_kind": "estimated_from_gateway_rates",
+  "active_seconds": 29.047262,
+  "solver_restarts": 0,
+  "captured_output_bytes": 0,
+  "scope_incidents": 0,
+  "scope_recoveries": 0,
+  "denied_packets": 0,
+  "cleanup_seconds": 0.159567,
+  "verified_success": true,
+  "trace_flush_seconds": 0.125993,
+  "total_seconds": 29.332961
+}

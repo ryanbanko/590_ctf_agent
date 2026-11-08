@@ -350,7 +350,8 @@ file and use `--experiment`. One `max_model_turns` value also supplies the
 model adapter's internal `max_requests` guard. The current live profile permits
 600 seconds per attempt, ordinary commands up to
 120 seconds, 60-second model requests, forty model turns/requests and eighty tool
-calls. Model input is bounded to 512 KiB serialized data and output to 4,096 tokens.
+calls. Model input is bounded to 512 KiB serialized data and output to 8,192 tokens
+under the current medium-reasoning experiment; earlier low-effort batches used 4,096.
 Synthetic controls and preparation use the same complete file; the optional
 paid model check applies small explicit test bounds inside `tests/check_model.py`.
 The redundant `configs/initial.toml` and application fallback dictionaries are
@@ -370,6 +371,11 @@ usage incomplete, while valid replies continue. Per-response usage remains in
 native observations where supplied. Provider/account limits are separate.
 
 ## Tracing and evidence
+
+For offline team analysis, [Ryan's shared runs](../evidence/ryan-shared-runs/README.md)
+contains sanitized development copies and an index. It is a static evidence
+handoff, not a new trace backend or application export mechanism. Original local
+records remain unchanged; the guide documents removed fields and payload gaps.
 
 Langfuse is the sole detailed tracing system. Native OpenAI instrumentation creates
 live generation observations; scripted tests use manual generations. Tool results,

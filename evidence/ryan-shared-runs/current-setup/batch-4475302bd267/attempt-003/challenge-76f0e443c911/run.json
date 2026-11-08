@@ -1,0 +1,155 @@
+{
+  "challenge_id": "for-1black0white",
+  "phase": "attempt",
+  "evidence_complete": false,
+  "model_calls": 1,
+  "model_settings": {
+    "model": "gpt-6-luna",
+    "base_url": "https://litellm.oit.duke.edu/v1",
+    "reasoning_effort": "low",
+    "max_requests": 20,
+    "max_output_tokens": 2048,
+    "max_input_bytes": 262144,
+    "request_seconds": 30.0,
+    "max_cost_usd": 0.1,
+    "input_usd_per_million": 0.1,
+    "output_usd_per_million": 0.5,
+    "cached_input_usd_per_million": 0.01
+  },
+  "mode": "development",
+  "withheld_build_files": [],
+  "dataset": {
+    "revision": "f1c9531672c45b24b7fb5f3aa44a7ac33d3602f8",
+    "index_sha256": "fce7e0a0ed08d8642acf2ef759d1c5acb6ae6d45a14a7209599fd920864870a6"
+  },
+  "target": {
+    "images": {},
+    "endpoints": [],
+    "cleanup_errors": []
+  },
+  "provenance": {
+    "images": {
+      "solver": {
+        "id": "sha256:577ecb2fa53b1105df78c401f03f7d171ac46a3ee1a885658d6a3e5301ebfaa0",
+        "architecture": "amd64"
+      },
+      "guard": {
+        "id": "sha256:9f91643eada0c3fdb1ec2e23392a7c324e0d68efecfd0ecb7c5ec3c501638639",
+        "architecture": "arm64"
+      }
+    },
+    "commit": "6d50c727557385e580bb5dc75d29ab3593efae6b",
+    "working_tree_dirty": true,
+    "source_sha256": {
+      "ctf_agent/__init__.py": "f888faa1ea0aa9200939d4fa9225c1e029e2ac6a485191541fffa11a3ef075d3",
+      "ctf_agent/__main__.py": "6fb5b58f09ac36b08ef4d8d868df26c68fe33b0eccf41a853a3977a3f9fb2af7",
+      "ctf_agent/agent.py": "e0f146c5adf67319f468a28d36757aff5e28a18bab27ee66b9e16aee7ca10f99",
+      "ctf_agent/attempt.py": "5d7aaefe0988dd1c10fe7b7a8a692216b1b8c47c5a953489af8eb37c34ce2700",
+      "ctf_agent/challenge.py": "b5a7ea3239775d2a5c891fe59a9f643cd1a0f91c2863411ce480815abf701810",
+      "ctf_agent/config.py": "a8f5e6cf83f2833827bbaceaa57fda41065972cb892912dddfb052e9c9a94d5d",
+      "ctf_agent/docker.py": "3249797c0977d13e7291a5b354141881ed0da004c59a3ebfe3ec739b7d81b97d",
+      "ctf_agent/launch.py": "e2e2e643851917ad498d6a8c065cb71ae2a40bd3a5ca8ecb975bde9c8a842338",
+      "ctf_agent/sandbox.py": "3845ae6bf6c4a162547d2cc9bcea1666a2184217960acd25b3259ce9b96b200a",
+      "ctf_agent/tools.py": "0e751b672bc50bde5f9c8d61092fccf12d016f422e1bcca124b48f2242a5d760",
+      "docker/guard.py": "15f2e25a9a3027397373d78047a01cd38c4f5e123ce9d233b0b2e1f259e0291e",
+      "docker/worker.py": "9625a10c6a1a6fda0d45306e90badc474f85456a398afd1cc484571087e3338d",
+      "docker/fixture.Dockerfile": "dd5ddd404a23facac903c375edb53a3462c61d65b0233eb936ba95649bcd0cb1",
+      "docker/guard.Dockerfile": "58142b2216aa36265423495b138b4c6bc30fd132f2b42d6a4744f72a350fe1cd",
+      "docker/solver.Dockerfile": "2dc00ae76e4ed3ae94da706a50f433ea3f24a19c3e651b06986858bb2476b7cc",
+      "docker/solver-requirements.in": "939a9895a0bf6d2dcf27a93b372a0dbe26bff0b5b36e2fbf448df9ebf750bccf",
+      "docker/solver-requirements.txt": "5c51a1794f7015a8376ee04482f1fc12ec57792b422f407548e8411f7bd73d5f",
+      "tests/__init__.py": "1d025fffce06e4da8f2265d5ad9dd40abe741a4bf50744398a980df6018b652f",
+      "tests/check_langfuse.py": "22b9758a2f3552187613f3da9b75c17db4a0438722756c214e6b22a37c80d932",
+      "tests/check_model.py": "85304be1eaa1cdf2a3290383fbfe470624d720130acdd42960fee21e37d17269",
+      "tests/check_readiness.py": "c8707b757bf1785f67c19e6ca9a1b68a6bbc13d9961c915bb7bfb95f76ea506c",
+      "tests/conftest.py": "4e24669ff78e89738dae69db5e5813f3fefe1d9743d02e997b1a18a64ac4ad5d",
+      "tests/fixtures/__init__.py": "11b3339d5dfd36bb6b5acac19ca1a4d0a171736a759d44c633c12317bfc83391",
+      "tests/fixtures/responses.py": "98694364ec0ab2f8b5c631f72b55a238b7d9dc29ab22285b979c3dde25867d3a",
+      "tests/fixtures/service.py": "6f6c69a915b13770879b97aeae7f654ddc8d52bac94ffdbc0bdde55d8e9be1c0",
+      "tests/fixtures/target.py": "6901f86e1c47be23642f0837f72f2d70200ff21647e3329ac29ad75ad59d9bf9",
+      "tests/fixtures/tracing.py": "4bec66162eeb11f8d4c35c5295d76e399d15d76b03edcf7eb6b1fe317e1982a1",
+      "tests/test_agent.py": "7482282948b1622bd0a86c659ae3ef2f0eda3702ab59dd5333c4e563a55cdc32",
+      "tests/test_agent_controls.py": "7a657f7942b600602a5d8e2dddf325834e490efea0872ac612159443ab493f1e",
+      "tests/test_batch.py": "5110e37ef0b69b608863a1b1ac74b9ae12355e6a28b8e37c0333f16f15e98fc5",
+      "tests/test_challenge.py": "467c2e1070e0d2cc7d85eec16ad71cec6c39253b13c9a9c8e8aa3e0ccb3d170a",
+      "tests/test_contracts.py": "9b1189cadb8e963f22231287b3a367612131d65e93a39c17eb481fd98bde1300",
+      "tests/test_controls.py": "9d8657f9c46024a104d8bdc97f662d6805badbce23344b10333dd909a7926daa",
+      "tests/test_development.py": "59b5202fbd641885e87401154886ca9d2cf454bc6ebea1669bbb3a1bb65eb0b8",
+      "tests/test_hosted_tracing.py": "851aec66235229b0c7ce87952e9a4b6b7ca9fe4f24dec4400d6aa8727287b2b7",
+      "tests/test_model.py": "18a5fcb5bab161da761ec3d6e0ef71d38eee8e4aeed6f55a451575dfe8d5732a",
+      "configs/development.toml": "e4e6fe0aa24771586aa7a6757b39b21da51a449322ff2a3306fed631569b1915",
+      "configs/initial.toml": "a8b0611e93b21151c431970bf519a003cd9e07140cdd6e16d5e276bbfc62027e",
+      "configs/ctftiny.json": "3d9b9068823eabc34a5afa8684f09ac5a3217d1fa3712be7c4b57a87b33b1654",
+      "pyproject.toml": "946d18054a3f3e77e56f9dd3c9ca1a264d7ccb777ce227e9b07905f0aaa7ce6e",
+      "uv.lock": "20a6cad09949fb65f02ccf04c834589115907ec8ddf83c37595eab52c9b449fa"
+    },
+    "docker": "28.3.2",
+    "config": {
+      "solver_image": "ctf590-solver:m1",
+      "guard_image": "ctf590-guard:m1",
+      "target_image": "ctf590-fixture:m1",
+      "wall_seconds": 300.0,
+      "max_tool_calls": 40,
+      "max_model_turns": 20,
+      "command_seconds": 30.0,
+      "max_command_bytes": 16384,
+      "max_output_bytes": 32768,
+      "max_write_bytes": 65536,
+      "memory_mb": 256,
+      "workspace_mb": 64,
+      "pids": 64,
+      "cpus": 1.0
+    }
+  },
+  "files": [
+    {
+      "path": "qr_code.txt",
+      "bytes": 283,
+      "sha256": "f208f499e2d842ec50911631ce7f7c73640594a2e2ef866e7f842eff0ac3996f"
+    }
+  ],
+  "error_type": "KeyboardInterrupt",
+  "result": {
+    "run_id": "3805855a7454",
+    "challenge_id": "for-1black0white",
+    "mode": "development",
+    "termination_reason": "user_cancel",
+    "tool_calls": 0,
+    "model_calls": 1,
+    "agent_mode": "model",
+    "scripted_turns": 0,
+    "tokens": {
+      "input": 0,
+      "output": 0,
+      "cached_input": 0,
+      "reasoning": 0
+    },
+    "cost_usd": 0.0,
+    "cleanup_errors": [],
+    "trace_id": "abbad32f09ec26446b0634770a3bf9a5",
+    "model_settings": {
+      "model": "gpt-6-luna",
+      "base_url": "https://litellm.oit.duke.edu/v1",
+      "reasoning_effort": "low",
+      "max_requests": 20,
+      "max_output_tokens": 2048,
+      "max_input_bytes": 262144,
+      "request_seconds": 30.0,
+      "max_cost_usd": 0.1,
+      "input_usd_per_million": 0.1,
+      "output_usd_per_million": 0.5,
+      "cached_input_usd_per_million": 0.01
+    },
+    "cost_reserved_usd": 0.001589125,
+    "usage_complete": true,
+    "cost_kind": "estimated_from_gateway_rates",
+    "active_seconds": 2.803818,
+    "cleanup_seconds": 0.137111,
+    "verified_success": false,
+    "trace_flush_seconds": 0.370995,
+    "total_seconds": 3.312172
+  },
+  "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/abbad32f09ec26446b0634770a3bf9a5",
+  "trace_export_error_type": "TimeoutError",
+  "total_seconds": 93.753444
+}

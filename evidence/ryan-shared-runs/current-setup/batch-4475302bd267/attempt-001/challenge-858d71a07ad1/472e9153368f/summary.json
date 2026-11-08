@@ -1,0 +1,40 @@
+{
+  "run_id": "472e9153368f",
+  "challenge_id": "cry-ecxor",
+  "mode": "development",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 9,
+  "model_calls": 10,
+  "agent_mode": "model",
+  "scripted_turns": 0,
+  "tokens": {
+    "input": 96346,
+    "output": 2863,
+    "cached_input": 79745,
+    "reasoning": 1333
+  },
+  "cost_usd": 0.00388905,
+  "cleanup_errors": [],
+  "trace_id": "edb3e2a2b9bcb8984d32bb02deb713d6",
+  "model_settings": {
+    "model": "gpt-6-luna",
+    "base_url": "https://litellm.oit.duke.edu/v1",
+    "reasoning_effort": "low",
+    "max_requests": 20,
+    "max_output_tokens": 2048,
+    "max_input_bytes": 262144,
+    "request_seconds": 30.0,
+    "max_cost_usd": 0.1,
+    "input_usd_per_million": 0.1,
+    "output_usd_per_million": 0.5,
+    "cached_input_usd_per_million": 0.01
+  },
+  "cost_reserved_usd": 0.05600000000000001,
+  "usage_complete": true,
+  "cost_kind": "estimated_from_gateway_rates",
+  "active_seconds": 52.619829,
+  "cleanup_seconds": 0.167388,
+  "verified_success": false,
+  "trace_flush_seconds": 0.128993,
+  "total_seconds": 52.916436
+}

@@ -1,0 +1,39 @@
+{
+  "run_id": "71691e9b360d",
+  "challenge_id": "msc-ezmaze",
+  "mode": "development",
+  "termination_reason": "success",
+  "tool_calls": 7,
+  "model_calls": 7,
+  "agent_mode": "model",
+  "scripted_turns": 0,
+  "tokens": {
+    "input": 71640,
+    "output": 1618,
+    "cached_input": 54986,
+    "reasoning": 488
+  },
+  "cost_usd": 0.0030242599999999995,
+  "cleanup_errors": [],
+  "trace_id": "e2d601ae6560713bdf318d3777d6c0d4",
+  "model_settings": {
+    "model": "gpt-6-luna",
+    "base_url": "https://litellm.oit.duke.edu/v1",
+    "reasoning_effort": "low",
+    "max_output_tokens": 4096,
+    "max_input_bytes": 524288,
+    "request_seconds": 60.0,
+    "input_usd_per_million": 0.1,
+    "output_usd_per_million": 0.5,
+    "cached_input_usd_per_million": 0.01,
+    "max_requests": 40
+  },
+  "usage_complete": true,
+  "cost_kind": "estimated_from_gateway_rates",
+  "active_seconds": 27.870266,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.157506,
+  "verified_success": true,
+  "trace_flush_seconds": 0.202406,
+  "total_seconds": 28.230332
+}

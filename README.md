@@ -9,11 +9,19 @@ The ten scored challenges are reserved; use the forty development IDs in
 [Design](docs/DESIGN.md) · [Section 2 experiments](docs/EXPERIMENTS.md) ·
 [References and attribution](docs/REFERENCES.md)
 
-The latest [agent improvement milestone](evidence/agent-first-fix/README.md) adds
+**Teammates and coding agents:** start with
+[Ryan's shared development runs](evidence/ryan-shared-runs/README.md) for offline
+copies of all 65 pilot attempts, comparison context, trace-reading instructions
+and sharing/export limitations. These reviewed copies travel with Git; `runs/`
+remains local. No model credentials or Docker setup are needed to read them.
+
+The [combined agent improvement milestone](evidence/agent-first-fix/README.md) adds
 verified environment/validation guidance and recoverable oversized command output.
-Synthetic checks pass. A [fresh eleven-challenge development batch](evidence/agent-first-fix-batch/README.md)
-completed with 6/11 verified successes; detailed behavioral trace review remains
-pending, and no improvement effect is established by this single rerun.
+Its [eleven-challenge development batch](evidence/agent-first-fix-batch/README.md)
+completed with 6/11 verified successes. Subsequent medium/8,192 reasoning/headroom
+and scope-instruction/recovery changes are indexed in the shared runs. The latest
+two-trial development batch completed with 20/22 successes and zero scope recoveries;
+detailed trace comparison remains pending and no causal improvement is established.
 
 The [infrastructure simplification plan](docs/SIMPLIFICATION_PLAN.md) tracks
 reviewable checkpoints. Execution now uses ordinary Docker copy/exec and a
@@ -422,7 +430,9 @@ subsets of input/output totals. Unknown usage
 is not reported as free: if any response lacks usage, `usage_complete` is false
 and aggregate `tokens`/`cost_usd` are null. Native generation observations still
 retain usage from responses that supplied it. Records under `runs/` are Git-ignored; preserve the runs
-you use in your report.
+you use in your report. Reviewed development copies are available in
+[Ryan's shared runs](evidence/ryan-shared-runs/README.md); consult its index for
+preferred exports, missing payloads and sanitization changes before analysis.
 
 The launcher uses the existing Langfuse Python client to retrieve every cursor
 page, then checks observation counts, completion, parentage, secrets and cleanup.
