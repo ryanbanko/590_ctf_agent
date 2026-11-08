@@ -509,3 +509,66 @@ older committed copies remain a separate publication/history decision. No source
 behavior change, version migration, commit, push or history rewrite was part of
 that final verification. These results supersede earlier pending-stage notes while
 preserving the historical checkpoints and the original failed pilot.
+
+## NYU baseline prompt comparison — November 7
+
+At the user's request, reviewed the generic default prompt templates and prompt
+loading/conversation code at the same release `20250206`, revision
+`112cfa33f5c0a06a20e49af525ac8eb07ec98457`, used for solver provenance. This is a
+review of pinned defaults, not a claim about every configuration override or the
+current main branch. No challenge demonstrations, hints, solutions or write-ups
+were opened; no upstream code was executed or copied into the application.
+
+The [system template](https://github.com/NYU-LLM-CTF/nyuctf_agents/blob/112cfa33f5c0a06a20e49af525ac8eb07ec98457/llm_ctf/prompts/templates/default/system.md.jinja2)
+sets the CTF role, objective and container context. The
+[initial task template](https://github.com/NYU-LLM-CTF/nyuctf_agents/blob/112cfa33f5c0a06a20e49af525ac8eb07ec98457/llm_ctf/prompts/templates/default/initial_message.md.jinja2)
+separates public task/endpoint/file information and adds small category-specific
+tool notes. The
+[tool-use template](https://github.com/NYU-LLM-CTF/nyuctf_agents/blob/112cfa33f5c0a06a20e49af525ac8eb07ec98457/llm_ctf/prompts/templates/default/tool_use.md.jinja2)
+requests evaluator checking. Our task construction and submission tool already
+cover much of this. A compact description of verified solver capabilities is the
+clearest useful addition; their custom formatting/template infrastructure is
+unnecessary for our native function tools.
+
+Their assumed `~/ctf_files` path, sudo/system-package installation, extra HTTP
+server and live GDB behavior do not describe our verified runtime. Our prompt
+should use `/workspace`, pip-only external access and established capabilities.
+Any flag-format guidance must come from public task information, not be inferred
+from the trusted expected answer merely because the reference exposes a format.
+Reference defaults remain technical examples, not course requirements.
+
+The [conversation loop](https://github.com/NYU-LLM-CTF/nyuctf_agents/blob/112cfa33f5c0a06a20e49af525ac8eb07ec98457/llm_ctf/conversation.py)
+sends a continuation message after a turn with no tool calls, within its own
+limits. Our text-only reply ends an attempt. That difference could affect early
+stopping, but it is a separate controller-policy hypothesis, not evidence of a
+superior prompt or a reason to combine loop and prompt changes. A bounded
+continuation experiment would require explicit stopping behavior and review.
+
+The inspected default templates do not supply the independent-validation
+guidance motivated by our recent traces. Keep that evidence-based proposal and
+consider the reference's environment/task clarity alongside it. No prompt,
+runtime, model/settings or dependencies changed; no model calls or attempts ran.
+
+## Command-tool description comparison — November 7
+
+Reviewed the pinned NYU [CommandExec source](https://github.com/NYU-LLM-CTF/nyuctf_agents/blob/112cfa33f5c0a06a20e49af525ac8eb07ec98457/llm_ctf/tools/tools.py),
+including its callable docstring and separate command/timeout annotations. The
+docstring alone is ten whitespace-separated words; this is not the total rendered
+tool schema or surrounding prompt. Existing local description is about 95 words;
+the conversational draft was about 176; a condensed alternative is about 92.
+Length comparisons are descriptive, not evidence of better model performance.
+
+[OpenAI function-calling guidance](https://developers.openai.com/api/docs/guides/function-calling)
+supports explicit purpose, parameter formats and output meaning, with overall
+usage guidance in the system prompt. Anthropic's
+[tool-writing article](https://www.anthropic.com/research/writing-tools-for-agents)
+emphasizes making implicit operational assumptions explicit. Its
+[Claude tool-definition documentation](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools)
+suggests at least three to four sentences and more for complex tools. This is
+provider guidance, not a universal size target or a course requirement.
+
+Recommendation: shorten through separation of responsibilities, preserving shell,
+connection, restart and output behavior. Keep pip/network policy in the system
+prompt and timeout defaults/remaining-time clipping in the parameter description.
+Do not advertise output archival/retrieval until implemented. No tool/runtime or
+prompt changes were made by this comparison.

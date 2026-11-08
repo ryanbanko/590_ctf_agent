@@ -1,8 +1,73 @@
 # Project status
 
-Last reviewed: November 7, 2026 (America/New_York).
+Last reviewed: November 8, 2026 (America/New_York).
 
-**Pre-Git validation passed: 111 offline tests, all 36 Docker cases, 22 fresh readiness cycles and a verified fresh web success. Detailed trace review is deferred; current private snapshots are redacted, but two older committed versions need publication-history review.**
+**Latest development-batch trace review complete: six verified successes in eleven attempts; independent validation and diagnosis before stopping are the first proposed improvements. Runtime checkpoint remains `616b5f2`; two older committed private snapshots still need publication-history review.**
+
+Use the [current plan](#latest-course-clarification-and-current-plan),
+[Git checkpoint](#current-git-checkpoint) and [assignment checklist](#assignment-checklist)
+for remaining work. Dated milestone sections preserve their completion state and
+next-step recommendations at the time; later completed work supersedes those
+historical pending-stage notes.
+
+## First-fix implementation proposal and cost check — November 8
+
+The discussion is consolidated into an [implementation proposal](docs/IMPROVEMENT_OPTIONS.md#consolidated-first-fix-implementation-proposal--november-8):
+verified solver/environment instructions; concise command/connection/deadline
+semantics; independent validation and diagnosis guidance; and bounded beginning/end
+previews with automatic recoverable output files on overflow. The file proposal
+preserves all received output up to explicit storage limits, supplies actual
+solver-readable paths during the attempt, and retains private copies after cleanup.
+Model/effort/token settings, planning, notes and continuation remain separate
+experiments. No runtime/configuration/test change or new challenge run occurred.
+
+Estimated cost is still recorded locally and in the Langfuse attempt span output;
+native generation costs are also present in the saved export. A read-only check of
+`rev-checker` found $0.00053867 locally versus $0.00058457 summed native generation
+cost. The exact $0.00004590 difference is the native cache-write premium absent
+from our local formula. These are estimates, not independently verified billing.
+[Cost evidence and interpretation](evidence/development-trace-review/README.md#estimated-cost-check--november-8).
+Reconcile the pricing sources before a model-cost comparison; no cost logic or
+Langfuse settings were changed. Verification used existing records, current source,
+the installed SDK and official Langfuse documentation, without model calls or
+hosted writes. Implementation remains the next reviewable milestone.
+
+The user prefers one combined implementation milestone. Before implementation,
+the [combined hypothesis and source review](docs/EXPERIMENTS.md#combined-prompt-tool-contract-and-output-recovery--hypothesis-recorded-november-8)
+record expected behaviors, possible regressions, mechanical acceptance checks and
+later comparison limits. Primary OpenAI, Anthropic, Langfuse and Pi sources support
+the principles; they do not certify our capture/delivery design or demonstrate a
+solve-rate gain. This follow-up changed documentation only, with no model calls
+or runtime tests.
+
+## Latest development-batch trace review — November 7
+
+At the user's request, reviewed messages and tool arguments/results from all eleven
+attempts in `batch-3963930b88c3`, newer than the integrated-runtime pilot and separate
+web retry. All are development IDs; six succeeded, five ended without success.
+All exports/audits completed; no recorded denial/timeout incidents or cleanup
+errors. The failed attempts stopped after 5–9 requests and 26.9–46.4 active seconds,
+well before configured limits. No held-out contents or expected-answer files were
+consulted. [Detailed findings, trace links and proposal](evidence/development-trace-review/README.md).
+
+The clearest gaps were untested mathematical proposals, self-checks sharing copied
+data with the derivation, and blocker explanations stronger than the observations.
+The successes also show effective error recovery, dependency use and immediate
+stopping after trusted verification. These findings support a narrow independent-
+validation/diagnosis prompt experiment, not a claim that higher limits or more
+infrastructure are needed. Proposed wording and a small development comparison
+remain unimplemented and require review/authorization before proceeding.
+
+Verification matched exported generation/tool counts to all eleven result records,
+confirmed development membership and existing audit results, and checked shared
+source/settings/solver/guard provenance. The saved source hashes match current
+application/configuration/test files. The review index retains source record/export
+hashes and observation IDs without copying candidate values or commands. Historical
+attempts remain unchanged. Review artifact checks passed for 91 local links/heading
+targets, all eleven record/export hashes, candidate omission and whitespace. This
+review made no model calls, container operations,
+hosted writes or runtime changes. User assessment of the assistant's findings is
+the next step; scored evaluation, aggregation and report/demo work remain separate.
 
 ## Final pre-Git validation — completed November 7
 
@@ -24,8 +89,9 @@ were backed up byte-for-byte under ignored `runs/`, then redacted in the working
 tree. No current host account-key matches were found in the publication scan.
 Two prior committed file versions still contain private deployment data; history
 was not rewritten. Review the publication/history approach before public sharing.
-No commit or push. Runtime checkpoint is ready for review; agent-focused work and
-later scored evaluation remain separate stages.
+No commit or push was performed during that validation. The runtime and evidence
+were subsequently saved in `616b5f2`; agent-focused work and later scored evaluation
+remain separate stages.
 
 ## MongoDB compatibility and dependency readiness — completed November 7
 
@@ -280,12 +346,67 @@ no JSONL conversion, NYU development-data migration or separate course-runtime
 adapter is required. This confirms the approach, not every compatibility/control
 claim. Existing evidence and known exceptions remain.
 
-The [bounded image checkpoint](docs/SIMPLIFICATION_PLAN.md#checkpoint-3-result--november-6)
-now has passing production integration evidence. Review the completed checkpoint,
-then save a clean source checkpoint and refresh zero-solving readiness
-for the ten intended evaluation environments and review a separately authorized
-small live pilot. These later stages have not started. The agent, tools, model,
-SDK export and batch stay.
+The image evaluation/production integration, same-release MongoDB compatibility
+fix, final-runtime readiness refresh, development pilot and fresh web retry are
+complete and saved in `616b5f2`. The latest [validation evidence](evidence/pre-git-validation/README.md)
+records 111 offline tests, 36 Docker cases, 22 fresh readiness cycles and verified
+web success. These are infrastructure/development results, not scored evaluation
+or a measured agent-improvement effect.
+
+The separately authorized [latest development-trace review](evidence/development-trace-review/README.md)
+is complete. Review its findings and proposed narrow prompt change, then agree on
+a small development comparison before implementation or new live attempts. Record
+the hypothesis before calls and hold other settings/images fixed. The current
+prompt already requests recovery, so another generic persistence paragraph is
+unlikely to add much; independent validation and diagnostic checks are the specific
+proposed focus. No prompt, tool, model, runtime or SDK change was made by the review.
+
+The user also requested a [generic NYU baseline prompt comparison](docs/REFERENCES.md#nyu-baseline-prompt-comparison--november-7).
+Pinned default templates support a concise verified-environment description and
+clear task/file/endpoint information. Existing task/submission handling already
+covers much of their structure. Their no-tool continuation behavior is a separate
+controller-policy experiment; sudo, file paths, extra servers and debugger claims
+must match our own runtime. The reference does not replace the trace-supported
+independent-validation proposal. Source links and limits are recorded in REFERENCES;
+no upstream application code, prompt change or live test was introduced.
+
+The user requested a consolidated [improvement-options evaluation](docs/IMPROVEMENT_OPTIONS.md)
+covering prompt/environment guidance, output, reasoning/models, plans/notes,
+budget feedback and continuation. It ranks potential benefit, evidence, ease,
+maintenance and overhead. Recommended next work is a compact prompt candidate and
+a separately authorized small development follow-up, then a fixed-prompt reasoning
+comparison. No candidate is implemented or tested by this design review; larger
+output/memory/execution mechanisms remain conditional on evidence.
+
+The [follow-up design discussion](docs/IMPROVEMENT_OPTIONS.md#user-follow-up-explanations-and-current-recommendations)
+explains validation, stateful connections/deadlines, planning/notes, truncation,
+full-output retention and per-response versus per-attempt budgets. Read-only Duke
+listing/metadata requests now succeeded for Luna, GPT-6.1 Sol and Astra; filtered
+rates/capabilities and fixed-volume cost illustrations are saved with the review.
+No candidate generation compatibility was tested. Environment/prompt updates are
+supported in principle; full-output retention merits a concrete capture design,
+and an 8,192-token per-response allowance is proposed for consideration with a
+medium-effort model. None is implemented; continuation remains secondary and
+compaction is deferred until evidence warrants it.
+
+The latest [initial-change/experiment split](docs/IMPROVEMENT_OPTIONS.md#initial-baseline-changes-versus-separate-experiments)
+proposes prompt/environment/connection clarity, independent-check habits, explicit
+truncation and optional bounded raw-output archives as the initial baseline package.
+Model/effort, plans, notes and continuation remain separate experiments. Existing
+connection guidance was partial, not absent. Published 25,000-token starting advice
+is now distinguished from our conservative 4,096/8,192 project choices; common
+adequate bounds belong in the reasoning-comparison design. No implementation or
+live-run authorization is inferred from this design discussion.
+
+A [command-description comparison](docs/REFERENCES.md#command-tool-description-comparison--november-7)
+checked NYU's actual callable/parameter documentation and OpenAI/Anthropic guidance.
+The proposed long description can be condensed to roughly the existing length
+while preserving operational caveats; system policy and parameter defaults should
+stay in their respective places. This remains wording review, not implementation.
+
+Evaluation freezing, scored trials, aggregation and report/demo work remain later,
+separately authorized stages. The private-data history/publication decision is also
+still open before public sharing; current-file redaction did not rewrite history.
 
 The newer guide states one configuration with three fresh attempts per challenge,
 per-challenge success/sample-SD/token/time metrics, and a demo that need not solve.
@@ -293,16 +414,18 @@ These are recorded as **guide statements**, distinct from the three email approv
 The working checklist below reflects that guide; original Canvas requirements
 remain unchanged in ASSIGNMENT.md and their differences are preserved in REFERENCES.
 The earlier documentation audit did not run models. The subsequently approved
-live synthetic check above is setup evidence, not scored evaluation or report work.
+synthetic check, development pilot and web retry are setup/development evidence,
+not scored evaluation or report work.
 
 ## Current Git checkpoint
 
-Last commit is `00e6a411811b9d076907f6e512fac5b97f20fc96` (`00e6a41`),
-“simplified solver, filesystem, timeout recovery, networking.” Those execution/
-network changes and the earlier SDK-export/configuration cleanup are already in
-that baseline; they are not new changes listed below.
+The runtime baseline is `616b5f2d854f58b2e305697cee21d5f739e81d03` (`616b5f2`),
+“integrated NYU solver image with expanded tooling, ready for testing.” The working
+tree was clean before this documentation synchronization. The preceding commit,
+`00e6a41`, already contains execution/network simplification and the earlier
+SDK-export/configuration cleanup.
 
-Changes since that commit, saved locally and uncommitted:
+The following changes and evidence are now committed in `616b5f2`:
 
 - Integrated the evaluated NYU installation body into one solver Dockerfile,
   retained MIT attribution and removed the two active solver requirements files
@@ -317,17 +440,43 @@ Changes since that commit, saved locally and uncommitted:
   guard, native SDK export and batch behavior are unchanged.
 - Added image evaluation/build/freeze, smoke/pilot, final validation and privacy
   evidence; updated README, status, design, references, experiment log and plan.
-  Current verification: 111 offline/36 Docker cases, 22 readiness cycles and a
-  fresh verified web success. Detailed trace review remains deferred.
+  Recorded verification: 111 offline/36 Docker cases, 22 readiness cycles and a
+  fresh verified web success. Detailed trace review was deferred at that checkpoint;
+  the later eleven-attempt review is recorded above.
 - Ignored new private Compose snapshots and redacted private fields in two old
   tracked public copies, preserving exact originals under ignored `runs/`.
   Historical committed versions still need a publication/history decision.
 
-No files are committed or pushed by this work; no history rewrite. Image archives,
-`.env`, dataset checkout, live run records and private originals remain Git-ignored.
-The saved Git evidence includes source/image hashes and dirty-working-tree status.
-Earlier checkpoint sections below retain their status at the time; the latest
-completion state is at the top of this file.
+Image archives, `.env`, dataset checkout, live run records and private originals
+remain Git-ignored. Historical run provenance retains the original source/image
+hashes and dirty-working-tree status; committing the checkpoint does not change
+those records. This synchronization makes no commit, push or history rewrite.
+
+### Documentation synchronization — November 7
+
+Updated this status file to match the committed runtime checkpoint, completed
+validation and remaining assignment work. Preserved the original assignment,
+professor/guide distinctions, historical milestone evidence and publication
+follow-up. Verified HEAD and the clean pre-edit working tree; all 63 local links
+(including heading targets) and `git diff --check` passed. Saved evidence confirms
+111 offline/36 Docker cases passed and 22 fresh readiness cycles across 11
+environments. Only this status file changed. No runtime/configuration changes,
+test reruns, container operations, hosted trace review or model calls were made.
+That documentation milestone stopped for review; the subsequently authorized
+development-trace review is recorded above. That review subsequently added evidence
+and an experiment-log entry; runtime source remains unchanged.
+
+### Documentation checkpoint — November 8
+
+At the user's request, checkpoint the completed trace review, generic reference
+comparison, improvement options, combined implementation plan/hypotheses and
+estimated-cost findings before runtime implementation. The local and live remote
+`main` tips both matched the runtime baseline before this checkpoint. Include only
+the documentation and filtered review evidence; preserve ignored original runs.
+This checkpoint changes no runtime/configuration/test files and runs no model or
+challenge attempt. Verification covers documentation links, filtered artifact
+structure, credential/candidate-pattern checks and whitespace. This is a local
+commit; pushing and runtime implementation are subsequent actions.
 
 ### Earlier November 6 pre-commit audit
 
@@ -448,7 +597,9 @@ calls or API spending.
   The earlier exploratory pair is preserved; the new guide does not require a second full evaluation.
 - [x] Integrate and verify the same-release native MongoDB adjustment and dependency-state readiness checks.
 - [x] Complete the separately approved fresh web retry: verified success after the MongoDB fix; original scope incident retained.
-- [ ] Review development traces and assess agent behavior separately; manual trace review deferred at user request.
+- [x] Complete the authorized assistant review of the latest eleven development
+  traces, including messages/tools/results and proposed improvements. Findings
+  await user assessment; new changes/comparisons remain separately authorized.
 - [ ] Freeze code, dependencies, images, dataset and settings for evaluation.
 - [ ] Following the new guide, run one fixed configuration for three fresh trials
   on each of the ten reserved challenges; preserve failures, missing usage and

@@ -1,0 +1,63 @@
+{
+  "checked_date": "2026-11-07",
+  "timezone": "America/New_York",
+  "source": "Duke gateway read-only /v1/models and /v1/model/info",
+  "listed_models_count": 41,
+  "listed_candidates": [
+    "gpt-6-astra",
+    "gpt-6-luna",
+    "gpt-6.1-sol"
+  ],
+  "model_generation_calls": 0,
+  "generation_compatibility_verified": false,
+  "candidate_metadata": [
+    {
+      "model": "gpt-6-astra",
+      "metadata": {
+        "input_cost_per_token": 1e-05,
+        "output_cost_per_token": 5e-05,
+        "cache_read_input_token_cost": 1e-06,
+        "supports_function_calling": true,
+        "supports_reasoning": true,
+        "max_output_tokens": 128000,
+        "mode": "chat"
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "metadata": {
+        "input_cost_per_token": 2e-06,
+        "output_cost_per_token": 1e-05,
+        "cache_read_input_token_cost": 1e-07,
+        "supports_function_calling": true,
+        "supports_reasoning": true,
+        "max_output_tokens": 128000,
+        "mode": "chat"
+      }
+    },
+    {
+      "model": "gpt-6-luna",
+      "metadata": {
+        "input_cost_per_token": 1e-07,
+        "output_cost_per_token": 5e-07,
+        "cache_read_input_token_cost": 1e-08,
+        "supports_function_calling": true,
+        "supports_reasoning": true,
+        "max_output_tokens": 128000,
+        "mode": "chat"
+      }
+    }
+  ],
+  "observed_tokens_in_11_attempts": {
+    "input": 257382,
+    "output": 16364,
+    "cached_input": 174294,
+    "reasoning": 6449
+  },
+  "fixed_token_volume_estimates_usd": {
+    "gpt-6-astra": 1.823374,
+    "gpt-6.1-sol": 0.3472454,
+    "gpt-6-luna": 0.01823374
+  },
+  "estimate_limits": "Reprices the same observed input/output/cache counts; no candidate model was run. Actual usage, caching, latency and bills may differ. Reasoning tokens are already included in output."
+}

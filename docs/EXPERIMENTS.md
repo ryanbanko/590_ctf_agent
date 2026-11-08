@@ -673,3 +673,120 @@ integration after the CPU fix; a single run is not a solve-rate improvement
 measurement. The prior scope-stopped attempt remains recorded. Automatic native
 export and privacy/parentage/cleanup audits passed; detailed trace review is
 explicitly deferred to the user. [Evidence](../evidence/pre-git-validation/README.md).
+
+## Latest eleven-attempt development trace review — November 7
+
+The user authorized assistant analysis of the most recent batch's messages and
+tool calls. `batch-3963930b88c3` contains eleven development IDs, one trial each,
+on clean recorded commit `616b5f2`. Six evaluator-verified successes; five
+`completed_without_success` endings. All eleven exports/audits and cleanup passed.
+No recorded scope-denial, command-timeout or output-truncation event occurred.
+The five unsuccessful attempts ended after 5–9 requests with substantial time
+and call headroom; this does not prove that further actions would solve.
+
+[Review evidence](../evidence/development-trace-review/README.md) records each
+challenge, trace steps, strengths, limits and alternative interventions. Concrete
+gaps include mathematical candidates never checked against a supplied validator,
+an incorrectly copied target reused in a supposedly independent simulation,
+and unverified explanations for remote/library/solver behavior. Successful runs
+also show useful recovery, dependency installation, lightweight alternatives and
+immediate stopping after verification. The assistant's findings await user review.
+
+**Proposed hypothesis, before any new comparison:** a narrow prompt refinement
+requiring independent validation and a focused diagnostic before ending on an
+unexplained contradiction will reduce unsupported blocker conclusions. It may
+increase calls/time/cost without improving success. The existing broad recovery
+instructions are already present; draft wording targets the missing behavior
+rather than repeating them or encoding challenge-specific answers.
+
+The evidence proposes a small matched development comparison, keeping everything
+apart from the prompt fixed. A separate reasoning-effort comparison is an
+alternative, not an implemented change. No prompt/runtime/configuration changes,
+new model calls, challenge attempts or solver execution occurred during review.
+No held-out contents, answer keys or write-ups were consulted. Original records
+remain intact. Stop for review before implementing or running the proposal.
+
+## Combined prompt, tool contract and output recovery — hypothesis recorded November 8
+
+**Status:** the user supports one initial milestone containing both prompt/contract
+and output work. This updates the earlier prompt-only proposal before implementation
+or new model calls. See the [implementation plan](IMPROVEMENT_OPTIONS.md#consolidated-first-fix-implementation-proposal--november-8).
+No behavioral comparison is authorized by this record.
+
+### Evidence and hypotheses
+
+The eleven reviewed development traces show unchecked derivations, validation
+sharing incorrectly copied data, stale connection state and unsupported blocker
+conclusions. The existing prompt already asks for recovery; simply adding more
+general persistence instructions is not the proposed intervention. No runtime
+output truncation occurred in these attempts, so output loss is not established
+as their cause. Poorly advertised solver capabilities are a documentation gap,
+but these traces do not establish that advertising them would change outcomes.
+
+**Behavioral hypothesis:** concise verified environment/connection instructions,
+specific inexpensive validation and contradiction-diagnosis guidance, and
+retrievable oversized output will help the agent use original evidence and resolve
+recoverable errors before ending. Expected signs are fewer unsupported blocker
+conclusions and more relevant independent checks. Increased verified success is
+a possible downstream effect, not a guaranteed result.
+
+**Mechanical hypothesis:** retaining received raw stdout/stderr on overflow and
+providing solver-readable paths permits exact recovery of omitted content within
+explicit storage limits, preserving command results and existing deadlines,
+terminal stops and isolation. Synthetic commands can check this claim without
+establishing better challenge solving.
+
+Possible regressions include unnecessary checks/retrieval calls, higher token use
+or latency, conflicting or stale instructions, misleading partial-file claims,
+and capture/delivery interfering with timeout or cleanup. Proposed 10 MiB/command
+and 100 MiB/attempt limits are local engineering choices, not external standards.
+
+### Verification and later comparison
+
+Synthetic acceptance checks cover exact beginning/middle/end bytes and separate
+streams; bounded previews/memory/retention; truthful partial/failure statuses;
+safe non-root paths; threshold and threshold-plus-one; invalid UTF-8; long lines;
+cap exhaustion; storage/delivery failure; and normal nonzero exits. Spill the
+buffered prefix **before any bytes are discarded** by the existing head/tail
+reader. Check background output, timeout/restart, remaining-deadline exhaustion,
+concurrent terminal stop and private retention after cleanup. A failed boundary
+or lifecycle check prevents handoff. Confirm prompt/tool-schema propagation.
+
+A later separately authorized matched development comparison should keep model,
+reasoning, response allowance, images, inputs and existing execution limits fixed,
+changing the documented package and its new retention limits. Preserve original
+records; use fresh conditions, previously successful development tasks for
+regressions, and tasks with the observed failure classes. Choose trial counts and
+resource allowance before calls. Leave held-out tasks untouched. Single trials
+are exploratory and cannot establish a reliable solve-rate effect.
+
+Record evaluator-confirmed success, relevant independent-check use, focused
+contradiction diagnosis and whether final blocker claims are supported. Distinguish
+unavailable/inapplicable checks from skipped relevant checks. Also record requests,
+tools, tokens, active/total time, cost with its pricing source, capture/retrieval
+events, incidents and cleanup. More calls alone are not improvement. If output
+never overflows, the comparison cannot demonstrate output-recovery benefit;
+synthetic evidence supports that capability. Assess the whole package; separate
+causal claims require separate controlled variants. Preserve source/configuration
+provenance for review and rollback.
+
+### Primary-source design review — November 8
+
+Rechecked these sources against current agent/tool/output behavior. They support
+principles and precedents, not certification of this implementation or proof of
+prompt effectiveness.
+
+| Source | Applicable guidance and project decision |
+| --- | --- |
+| [OpenAI function calling](https://developers.openai.com/api/docs/guides/function-calling#best-practices-for-defining-functions) | Explain purpose, parameters and output; keep functions predictable and the tool surface small. Retain three tools and describe actual shell, timeout, truncation and retrieval behavior. |
+| [OpenAI reasoning best practices](https://developers.openai.com/api/docs/guides/reasoning-best-practices#how-to-prompt-reasoning-models-effectively) | Keep instructions direct with clear constraints and success criteria. Replace overlapping text; avoid prescribing a reasoning transcript or mandatory workflow. General guidance does not establish a Luna-specific measured result. |
+| [Anthropic tool engineering](https://www.anthropic.com/research/writing-tools-for-agents) | Bound returned context, explain truncation/actionable errors, clarify contracts and evaluate changes. Keep explicit omissions and retrieval instructions. Its example token limit is not our required byte limit. |
+| [Pi command-tool source](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/src/core/tools/bash.ts) | Provides a bounded command preview and a retained-output path. This is implementation precedent, not a universal standard. Our head/tail preview, distinct streams, caps and controller-to-solver delivery need project-specific tests. |
+| [Langfuse error analysis](https://langfuse.com/guides/cookbook/error-analysis-llm-applications) | Derive failure classes from traces, fix concrete gaps and reassess after changes. Our small assistant-reviewed sample is not a completed human annotation study or proof of prompt causality. |
+
+Bundling follows the user's preference and trades causal attribution for one
+practical milestone. Smaller isolated edits would identify individual effects
+more cleanly. Model, planning, notes and continuation remain separate experiments.
+No new dependency, framework, SDK upgrade or second trace backend is needed.
+This review changed documentation only; no runtime/configuration/test edits,
+model calls, challenge attempts or hosted writes occurred.
