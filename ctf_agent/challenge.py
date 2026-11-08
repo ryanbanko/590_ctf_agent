@@ -13,6 +13,12 @@ import uuid
 from .docker import docker
 
 
+# MongoDB 7.0.9-jammy siblings in the same official release index. The supplied
+# AMD64 build requires AVX unavailable under this project's ARM Docker emulation.
+MONGO_AMD64_IMAGE = "mongo:latest@sha256:7b88befc893008d7139ce3276c093b3efd435023af8bb76a9d79fa90be1eaeb6"
+MONGO_ARM64_IMAGE = "mongo@sha256:8ff69162926750978451697274dc3c93eac609894b9cff7ed977e76e6bcabcbe"
+
+
 def load_challenge(dataset_json: Path, challenge_id: str, manifest_path: Path):
     """Load an indexed challenge through nyuctf; its package object stays trusted."""
     manifest = json.loads(manifest_path.read_text())
@@ -106,12 +112,17 @@ def stage_files(files: dict[str, Path], solver: str, timeout: float) -> list[dic
     return records
 
 
-def target_compose(supplied: dict, root: Path) -> tuple[dict, list]:
+def target_compose(supplied: dict, root: Path, *, architecture: str = "") -> tuple[dict, list]:
     """Preserve supplied services; scope resources and exclude host administration."""
     runtime = deepcopy(supplied)
     adjustments = []
     runtime.pop("name", None)
     for name, service in runtime["services"].items():
+        if architecture in {"arm64", "aarch64"} and service["image"] == MONGO_AMD64_IMAGE:
+            service.update(image=MONGO_ARM64_IMAGE, platform="linux/arm64")
+            adjustments.append({"service": name, "original_image": MONGO_AMD64_IMAGE,
+                                "replacement_image": MONGO_ARM64_IMAGE, "platform": "linux/arm64",
+                                "version": "7.0.9", "reason": "same-release native MongoDB; AMD64 build needs AVX"})
         if (service.get("privileged") or service.get("network_mode") == "host" or service.get("devices")
                 or service.get("use_api_socket")
                 or any(service.get(key) == "host" for key in ("pid", "ipc", "uts", "userns_mode"))):
@@ -153,6 +164,23 @@ def target_compose(supplied: dict, root: Path) -> tuple[dict, list]:
     return runtime, adjustments
 
 
+def check_target_services(target: dict, phase: str) -> None:
+    """Record safe dependency state and reject failures, not just a closed port."""
+    states = {}
+    target.setdefault("service_checks", {})[phase] = states
+    for name, container in target["containers"].items():
+        info = json.loads(docker("inspect", container))[0]
+        state = info["State"]
+        states[name] = {"status": state["Status"], "running": state["Running"],
+                        "restarting": state["Restarting"], "restart_count": info["RestartCount"],
+                        "exit_code": state["ExitCode"], "oom_killed": state["OOMKilled"],
+                        "health": state.get("Health", {}).get("Status")}
+    failed = [name for name, state in states.items() if not state["running"]
+              or state["restarting"] or state["oom_killed"] or state["health"] not in {None, "healthy"}]
+    if failed:
+        raise RuntimeError(f"Target services not ready ({phase}): {', '.join(failed)}; see target.json service_checks")
+
+
 @contextmanager
 def challenge_target(challenge, directory: Path):
     """Use supplied Compose semantics with fresh project-owned networks/storage."""
@@ -171,7 +199,8 @@ def challenge_target(challenge, directory: Path):
             if supplied_path is None:
                 raise ValueError("Service-backed challenge is missing its Compose file")
             supplied = json.loads(docker("compose", "-f", str(supplied_path), "config", "--format", "json"))
-            runtime, target["adjustments"] = target_compose(supplied, challenge.challenge_dir)
+            runtime, target["adjustments"] = target_compose(
+                supplied, challenge.challenge_dir, architecture=docker("info", "--format", "{{.Architecture}}"))
             for service_name, service in runtime["services"].items():
                 reference = service["image"]
                 try:
@@ -185,14 +214,22 @@ def challenge_target(challenge, directory: Path):
                 service["platform"] = "linux/" + info["Architecture"]
                 target["images"][service_name] = info["Id"]
             compose_path.write_text(json.dumps(runtime, indent=2) + "\n")
-            docker(*compose, "up", "--detach", "--force-recreate", "--no-build", "--pull", "never", timeout=30)
+            try:
+                docker(*compose, "up", "--wait", "--wait-timeout", "20", "--force-recreate",
+                       "--no-build", "--pull", "never", timeout=30)
+            except (RuntimeError, subprocess.TimeoutExpired):
+                # Capture dependency failures before Compose cleanup removes them.
+                for service_name in runtime["services"]:
+                    container = docker(*compose, "ps", "--all", "--quiet", service_name)
+                    if container:
+                        target["containers"][service_name] = container
+                check_target_services(target, "startup_failed")
+                raise
             for service_name, service in runtime["services"].items():
                 container = docker(*compose, "ps", "--all", "--quiet", service_name)
                 target["containers"][service_name] = container
                 info = json.loads(docker("inspect", container))[0]
                 target["volumes"].extend(m["Name"] for m in info["Mounts"] if m["Type"] == "volume")
-                if not info["State"]["Running"]:
-                    raise RuntimeError(f"Target service {service_name} exited during startup")
                 for key, network in service.get("networks", {"default": {}}).items():
                     aliases = (network or {}).get("aliases", [])
                     if challenge.server_name in [service_name, *aliases]:
@@ -204,6 +241,7 @@ def challenge_target(challenge, directory: Path):
                         break
             if not target["endpoints"]:
                 raise ValueError("No Compose service matches the challenge connection metadata")
+            check_target_services(target, "startup")
         else:
             target["network"] = name + "-net"
             docker("network", "create", "--label", "ctf590.managed=true", target["network"])

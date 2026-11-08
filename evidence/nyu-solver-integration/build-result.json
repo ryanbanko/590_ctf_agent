@@ -1,0 +1,22 @@
+{
+  "command": [
+    "uv",
+    "run",
+    "--frozen",
+    "python",
+    "-m",
+    "ctf_agent",
+    "--config",
+    "evidence/nyu-solver-integration/candidate.toml",
+    "build-images"
+  ],
+  "started_utc": "2026-11-08T00:47:09.655184+00:00",
+  "docker_memory_bytes": 8322969600,
+  "host_reserve_bytes": 10737418240,
+  "deadline_seconds": 2700,
+  "baseline_image_id": "sha256:df617be455e786105222a692301342058a30e138ef4771e6e4593b74a63b9012",
+  "elapsed_seconds": 14.031,
+  "exit_code": 0,
+  "stop_reason": null,
+  "minimum_observed_host_available_bytes": 15910215680
+}

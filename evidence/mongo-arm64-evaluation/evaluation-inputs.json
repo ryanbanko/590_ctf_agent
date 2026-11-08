@@ -1,0 +1,16 @@
+{
+  "original_amd64_platform_present_in_same_index": true,
+  "arm64_platform_digest": "sha256:8ff69162926750978451697274dc3c93eac609894b9cff7ed977e76e6bcabcbe",
+  "server_version": "7.0.9",
+  "official_image_source": "https://github.com/docker-library/mongo.git#9370d3f2e36d4134f29e513346b4c4c19e927a6f:7.0",
+  "source_sha256": {
+    "ctf_agent/challenge.py": "d0875fe5e9644d6780378ff2ee1f08e0c10dfecbf1e3d59514e3e28617065d26",
+    "ctf_agent/agent.py": "18606905b105cd15a2231488cb88dcef5accd7704bea6d5effb8f82d711d1970",
+    "configs/development.toml": "03ab48e8e8e50fa94a947952a7dc170d72216f437d0b5a705b5be23cd2346132",
+    "docker/solver.Dockerfile": "171cb74317e4872f8fd8548a3d6623778d7b38f234cf37bbc8b933f1c670062e"
+  },
+  "application_files_modified_for_test": false,
+  "new_model_calls": 0,
+  "dataset_clean": true,
+  "production_sources_unchanged_during_evaluation": true
+}

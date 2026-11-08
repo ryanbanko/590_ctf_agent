@@ -10,6 +10,7 @@ import sys
 import xml.etree.ElementTree as ET
 import time
 import uuid
+import zipfile
 
 import pytest
 
@@ -132,27 +133,41 @@ print(json.dumps({{'packages': {{name: importlib.metadata.version(name) for name
 
 
 @pytest.mark.parametrize("attempt", [{"command_seconds": 120, "memory_mb": 1024}], indirect=True)
-def test_runtime_pip_install_and_writable_home(attempt):
+def test_runtime_pip_install_and_writable_home(attempt, tmp_path):
+    from ctf_agent.challenge import stage_files
+
+    wheel = tmp_path / 'ctf_image_probe-0.0.0-py3-none-any.whl'
+    metadata = 'ctf_image_probe-0.0.0.dist-info/'
+    files = {
+        'ctf_image_probe.py': 'VALUE = 590\n',
+        metadata + 'METADATA': 'Metadata-Version: 2.1\nName: ctf-image-probe\nVersion: 0.0.0\n',
+        metadata + 'WHEEL': 'Wheel-Version: 1.0\nRoot-Is-Purelib: true\nTag: py3-none-any\n',
+    }
+    files[metadata + 'RECORD'] = ''.join(f'{name},,\n' for name in [*files, metadata + 'RECORD'])
+    with zipfile.ZipFile(wheel, 'w') as archive:
+        for name, content in files.items():
+            archive.writestr(name, content)
+    stage_files({wheel.name: wheel}, attempt['solver'], attempt['remaining_seconds']())
     probe = attempt["call_tool"]("run_command", python_command(
         "import os,pathlib,sys,importlib.util; "
-        "assert sys.prefix=='/opt/venv'; assert importlib.util.find_spec('humanfriendly') is None; "
-        "home=pathlib.Path.home(); assert str(home)=='/home/solver'; "
+        "assert sys.prefix!=sys.base_prefix and os.access(sys.prefix,os.W_OK); "
+        "assert importlib.util.find_spec('ctf_image_probe') is None; home=pathlib.Path.home(); "
         "(home/'home-marker').write_text('writable'); "
         "(home/'space-probe').write_bytes(b'x'*(80*1024*1024)); (home/'space-probe').unlink()"))
     assert probe["exit_code"] == 0, probe
     result = attempt["call_tool"]("run_command", {
-        "command": "python -m pip install --quiet --retries 0 --timeout 10 humanfriendly==10.0 && "
-                   "python -c 'import humanfriendly; print(humanfriendly.format_size(1000))'"})
+        "command": f"python -m pip install --quiet --no-index --no-deps {wheel.name} && "
+                   "python -I -c 'import ctf_image_probe; print(ctf_image_probe.VALUE)'"})
     assert result["exit_code"] == 0 and not result["timed_out"], result
-    assert "1 KB" in result["stdout"]
-    assert 'humanfriendly' not in json.loads((attempt['directory'] / 'packages-initial.json').read_text())
+    assert result["stdout"].strip() == '590'
+    assert 'ctf-image-probe' not in json.loads((attempt['directory'] / 'packages-initial.json').read_text())
     before = docker('inspect', '--format', '{{.State.StartedAt}}', attempt['solver'])
     result = attempt['call_tool']('run_command', {'command': 'sleep 10', 'timeout_seconds': .4})
     assert result['timed_out'] and result['solver_restarted'], result
     assert docker('inspect', '--format', '{{.State.StartedAt}}', attempt['solver']) != before
     assert attempt['call_tool']('run_command', python_command(
-        "import humanfriendly,pathlib; assert (pathlib.Path.home()/'home-marker').exists(); "
-        "print(humanfriendly.format_size(1000))"))['stdout'].strip() == '1 KB'
+        "import ctf_image_probe,pathlib; assert (pathlib.Path.home()/'home-marker').exists(); "
+        "print(ctf_image_probe.VALUE)"))['stdout'].strip() == '590'
 
 
 
@@ -395,7 +410,7 @@ def test_output_excerpt_and_late_diagnostic(attempt):
 
 def test_fresh_python_environment(attempt):
     result = attempt['call_tool']('run_command', python_command(
-        "import pathlib,importlib.util; assert importlib.util.find_spec('humanfriendly') is None; "
+        "import pathlib,importlib.util; assert importlib.util.find_spec('ctf_image_probe') is None; "
         "assert not (pathlib.Path.home()/'home-marker').exists(); "
         "assert importlib.util.find_spec('sympy') is not None"))
     assert result['exit_code'] == 0, result
@@ -524,3 +539,94 @@ while True:
         assert not target['cleanup_errors']
     assert cycles[0]['volumes']!=cycles[1]['volumes']
     assert cycles[0]['network']!=cycles[1]['network']
+
+
+@pytest.mark.parametrize('phase', ['startup', 'after_probes'])
+def test_target_state_checks_detect_failed_dependency(settings, output_root, phase):
+    from types import SimpleNamespace
+    from ctf_agent.challenge import challenge_target, check_target_services
+
+    source = output_root / ('dependency-source-' + uuid.uuid4().hex[:12])
+    source.mkdir(parents=True)
+    service = {'image': settings['target_image'], 'command': ['sleep', '300'], 'networks': {'ctfnet': {}}}
+    database = dict(service)
+    if phase == 'startup':
+        database['healthcheck'] = {'test': ['CMD', 'false'], 'interval': '100ms', 'timeout': '1s', 'retries': 1}
+    (source / 'docker-compose.yml').write_text(json.dumps({
+        'services': {'frontend': service, 'database': database}, 'networks': {'ctfnet': {}}}))
+    challenge = SimpleNamespace(container=True, challenge_dir=source, server_name='frontend', port=8000, challenge={})
+    with pytest.raises(RuntimeError, match='database'):
+        with challenge_target(challenge, source / 'runtime') as target:
+            assert phase == 'after_probes'
+            assert all(s['running'] for s in target['service_checks']['startup'].values())
+            docker('kill', target['containers']['database'])
+            check_target_services(target, 'after_probes')
+    target = json.loads((source / 'runtime/target.json').read_text())
+    states = target['service_checks']['startup_failed' if phase == 'startup' else 'after_probes']
+    assert states['frontend']['running']
+    assert states['database']['health'] == 'unhealthy' if phase == 'startup' else not states['database']['running']
+    assert not target['cleanup_errors']
+
+
+# Supplied toolkit capabilities and privilege boundary.
+def test_supplied_sudo_cannot_elevate(attempt):
+    assert attempt['call_tool']('run_command', {'command': 'command -v sudo'})['stdout'].strip()
+    result = attempt['call_tool']('run_command', {'command': 'sudo -n id'})
+    assert result['exit_code'] != 0 and 'uid=0' not in result['stdout'], result
+    assert attempt['call_tool']('run_command', {'command': 'id -u'})['stdout'].strip() == '1000'
+
+
+def test_sage_arithmetic_and_linear_algebra(attempt):
+    result = attempt['call_tool']('run_command', {
+        'command': 'sage -c "assert list(factor(360)) == [(2,3),(3,2),(5,1)]; '
+                   'assert matrix(QQ,[[1,2],[3,4]]).det() == -2; print(\'sage-ok\')"'})
+    assert result['exit_code'] == 0 and 'sage-ok' in result['stdout'], result
+
+
+def test_multilib_compilation_and_execution(attempt):
+    result = attempt['call_tool']('run_command', python_command('''
+import pathlib, subprocess
+pathlib.Path('benign32.c').write_text('int main(void){return 0;}')
+subprocess.run(['gcc','-m32','-o','benign32','benign32.c'],check=True)
+assert pathlib.Path('benign32').read_bytes()[:5]==b'\\x7fELF\\x01'
+subprocess.run(['./benign32'],check=True)
+print('multilib-ok')
+'''))
+    assert result['exit_code'] == 0 and result['stdout'].strip() == 'multilib-ok', result
+
+
+def test_radare2_binary_analysis(attempt):
+    result = attempt['call_tool']('run_command', python_command('''
+import json, pathlib, subprocess
+pathlib.Path('benign.c').write_text('int choose(int x){return x==7?42:0;} int main(void){return 0;}')
+subprocess.run(['gcc','-O0','-o','benign','benign.c'],check=True)
+output=subprocess.check_output(['radare2','-2','-q','-c','aaa;aflj','benign'],text=True)
+functions=json.loads(output)
+assert any(f['name']=='main' or f['name'].endswith('.main') for f in functions)
+print(json.dumps({'function_count':len(functions),'main_found':True}))
+'''))
+    assert result['exit_code'] == 0, result
+    assert json.loads(result['stdout'])['main_found']
+
+
+def test_angr_symbolic_function(attempt):
+    result = attempt['call_tool']('run_command', python_command('''
+import angr, claripy, json, pathlib, subprocess
+pathlib.Path('benign.c').write_text('int choose(int x){return x==7?42:0;} int main(void){return 0;}')
+subprocess.run(['gcc','-O0','-fno-pie','-no-pie','-o','benign','benign.c'],check=True)
+project=angr.Project('benign',auto_load_libs=False)
+value=claripy.BVS('value',32)
+state=project.factory.call_state(project.loader.find_symbol('choose').rebased_addr,value,
+    ret_addr=0xdeadbeef,prototype='int choose(int)',
+    add_options={angr.options.ZERO_FILL_UNCONSTRAINED_REGISTERS,
+                 angr.options.ZERO_FILL_UNCONSTRAINED_MEMORY})
+simulation=project.factory.simgr(state)
+simulation.explore(find=lambda s: s.addr==0xdeadbeef and
+    s.solver.satisfiable(extra_constraints=[s.regs.eax==42]))
+assert simulation.found
+found=simulation.found[0]; found.solver.add(found.regs.eax==42)
+assert found.solver.eval(value)==7
+print(json.dumps({'angr':angr.__version__,'symbolic_result':7}))
+'''))
+    assert result['exit_code'] == 0, result
+    assert json.loads(result['stdout'])['symbolic_result'] == 7

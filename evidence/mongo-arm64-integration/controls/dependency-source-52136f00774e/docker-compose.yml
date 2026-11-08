@@ -1,0 +1,1 @@
+{"services": {"frontend": {"image": "ctf590-fixture:m1", "command": ["sleep", "300"], "networks": {"ctfnet": {}}}, "database": {"image": "ctf590-fixture:m1", "command": ["sleep", "300"], "networks": {"ctfnet": {}}, "healthcheck": {"test": ["CMD", "false"], "interval": "100ms", "timeout": "1s", "retries": 1}}}, "networks": {"ctfnet": {}}}

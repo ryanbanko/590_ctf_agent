@@ -16,8 +16,8 @@ model API spending was **$0**.
 | requests | 2.34.2 |
 | Pillow | 13.0.0 |
 
-The [input](../../docker/solver-requirements.in) and
-[resolved requirements](../../docker/solver-requirements.txt) pin 40 packages
+The [input](solver-requirements.in) and
+[resolved requirements](solver-requirements.txt) pin 40 packages
 including dependencies for Python 3.13.2 on AMD64 Linux. Docker runs `pip check`;
 [installed versions](python-packages.txt) include base-image packaging tools too.
 The host's `pyproject.toml`/`uv.lock` were not changed.

@@ -1,0 +1,184 @@
+{
+  "suite": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "34",
+    "time": "153.781",
+    "timestamp": "2026-11-07T18:04:34.609152-05:00",
+    "hostname": "Ryans-MacBook-10.local"
+  },
+  "checks": [
+    {
+      "name": "test_solver_utilities_and_executable_workspace[attempt0]",
+      "seconds": 5.056,
+      "passed": true
+    },
+    {
+      "name": "test_files_tools_evaluator_success",
+      "seconds": 4.019,
+      "passed": true
+    },
+    {
+      "name": "test_solver_python_libraries_and_network_deadline[attempt0]",
+      "seconds": 4.355,
+      "passed": true
+    },
+    {
+      "name": "test_runtime_pip_install_and_writable_home[attempt0]",
+      "seconds": 5.382,
+      "passed": true
+    },
+    {
+      "name": "test_larger_output_retains_observed_size_and_remains_bounded[attempt0]",
+      "seconds": 3.418,
+      "passed": true
+    },
+    {
+      "name": "test_filesystem_credentials_privileges_output",
+      "seconds": 4.52,
+      "passed": true
+    },
+    {
+      "name": "test_command_timeout_detached_child",
+      "seconds": 3.624,
+      "passed": true
+    },
+    {
+      "name": "test_tool_limit[attempt0]",
+      "seconds": 2.597,
+      "passed": true
+    },
+    {
+      "name": "test_command_timeout_closed_output",
+      "seconds": 3.607,
+      "passed": true
+    },
+    {
+      "name": "test_wall_limit[attempt0]",
+      "seconds": 9.677,
+      "passed": true
+    },
+    {
+      "name": "test_guard_loss",
+      "seconds": 2.778,
+      "passed": true
+    },
+    {
+      "name": "test_solver_loss",
+      "seconds": 2.643,
+      "passed": true
+    },
+    {
+      "name": "test_ipv6_no_external_route",
+      "seconds": 2.823,
+      "passed": true
+    },
+    {
+      "name": "test_network_scope[unapproved_live_port]",
+      "seconds": 2.96,
+      "passed": true
+    },
+    {
+      "name": "test_network_scope[internet_ip]",
+      "seconds": 2.812,
+      "passed": true
+    },
+    {
+      "name": "test_network_scope[host_address]",
+      "seconds": 2.763,
+      "passed": true
+    },
+    {
+      "name": "test_network_scope[external_dns]",
+      "seconds": 2.758,
+      "passed": true
+    },
+    {
+      "name": "test_network_scope[unrelated_container]",
+      "seconds": 4.504,
+      "passed": true
+    },
+    {
+      "name": "test_network_scope[curl_internet]",
+      "seconds": 2.759,
+      "passed": true
+    },
+    {
+      "name": "test_interruption_cleanup",
+      "seconds": 2.705,
+      "passed": true
+    },
+    {
+      "name": "test_setup_failure_cleanup",
+      "seconds": 1.736,
+      "passed": true
+    },
+    {
+      "name": "test_output_excerpt_and_late_diagnostic",
+      "seconds": 3.327,
+      "passed": true
+    },
+    {
+      "name": "test_fresh_python_environment",
+      "seconds": 3.248,
+      "passed": true
+    },
+    {
+      "name": "test_attempt_deadline_stops_background_process[attempt0]",
+      "seconds": 9.82,
+      "passed": true
+    },
+    {
+      "name": "test_standard_copy_preserves_handouts_and_ownership",
+      "seconds": 3.074,
+      "passed": true
+    },
+    {
+      "name": "test_restart_resets_all_processes_and_preserves_files",
+      "seconds": 4.749,
+      "passed": true
+    },
+    {
+      "name": "test_compose_dns_backend_scope_and_fresh_volume",
+      "seconds": 17.455,
+      "passed": true
+    },
+    {
+      "name": "test_scripted_loop_recovers_and_verifies_through_target",
+      "seconds": 3.676,
+      "passed": true
+    },
+    {
+      "name": "test_scripted_late_response_cannot_execute_tools",
+      "seconds": 9.804,
+      "passed": true
+    },
+    {
+      "name": "test_supplied_sudo_cannot_elevate",
+      "seconds": 3.38,
+      "passed": true
+    },
+    {
+      "name": "test_sage_arithmetic_and_linear_algebra",
+      "seconds": 5.625,
+      "passed": true
+    },
+    {
+      "name": "test_multilib_compilation_and_execution",
+      "seconds": 3.137,
+      "passed": true
+    },
+    {
+      "name": "test_radare2_binary_analysis",
+      "seconds": 3.449,
+      "passed": true
+    },
+    {
+      "name": "test_angr_symbolic_function",
+      "seconds": 5.214,
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "command": [
+    "docker",
+    "build",
+    "--platform",
+    "linux/amd64",
+    "--progress",
+    "plain",
+    "--build-arg",
+    "HOST_UID=1000",
+    "--tag",
+    "ctf590-solver:nyu-20250206-8g-evaluation",
+    "evidence/nyu-solver-image-evaluation/upstream"
+  ],
+  "started_utc": "2026-11-07T21:57:47.795564+00:00",
+  "docker_memory_bytes": 8322969600,
+  "build_deadline_seconds": 2700,
+  "source_revision": "112cfa33f5c0a06a20e49af525ac8eb07ec98457",
+  "baseline_image_id": "sha256:df617be455e786105222a692301342058a30e138ef4771e6e4593b74a63b9012",
+  "note": "Resource-bound interruptions require investigation; not a verdict on image suitability.",
+  "elapsed_seconds": 1036.861,
+  "exit_code": 0,
+  "stop_reason": null,
+  "finished_utc": "2026-11-07T22:15:04.624373+00:00",
+  "host_reserve_bytes": 10737418240,
+  "minimum_observed_host_available_bytes": 27022127104
+}

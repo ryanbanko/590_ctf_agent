@@ -1,0 +1,20 @@
+{
+  "run_id": "d6ccf2ed703c",
+  "challenge_id": "pwn-unlimited-subway",
+  "mode": "ctftiny-readiness",
+  "termination_reason": "readiness_complete",
+  "tool_calls": 2,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "580dfa46dffd807fb8880ca9315624fb",
+  "active_seconds": 1.603494,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.163541,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000365,
+  "total_seconds": 1.767505
+}

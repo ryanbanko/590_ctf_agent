@@ -1,0 +1,20 @@
+{
+  "run_id": "803ad4ab6aa3",
+  "challenge_id": "sage_arithmetic_and_linear_algebra",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "0514d7fcae38e0c1ba77eb0713fb67a6",
+  "active_seconds": 3.347554,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.155419,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000236,
+  "total_seconds": 3.503314
+}

@@ -1,0 +1,28 @@
+{
+  "project": "ctf590-target-85d4a9ae55c8",
+  "network": "ctf590-target-85d4a9ae55c8_ctfnet",
+  "container": "8a2337ff9cfbc77bcf782e45dfb07ae9340f1b5b89ee621a171d0860acbbf904",
+  "containers": {
+    "web": "8a2337ff9cfbc77bcf782e45dfb07ae9340f1b5b89ee621a171d0860acbbf904"
+  },
+  "images": {
+    "web": "sha256:4774b250bf127716d29367c70f393fec8b306f0d5949b9c2e253bc3da3cefd36"
+  },
+  "volumes": [],
+  "endpoints": [
+    {
+      "address": "172.19.0.2",
+      "protocol": "tcp",
+      "port": 8000
+    }
+  ],
+  "adjustments": [
+    {
+      "service": "web",
+      "removed": "ports"
+    }
+  ],
+  "cleanup_errors": [],
+  "address": "172.19.0.2",
+  "image_id": "sha256:4774b250bf127716d29367c70f393fec8b306f0d5949b9c2e253bc3da3cefd36"
+}

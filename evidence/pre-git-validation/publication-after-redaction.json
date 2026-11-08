@@ -1,0 +1,20 @@
+{
+  "current_audited_deployment_fields_redacted": true,
+  "remaining_fields": [],
+  "historical_versions_with_private_configuration": [
+    {
+      "commit": "00e6a41",
+      "file": "evidence/target-network-simplification/ctftiny-readiness-7ecca9139403/cycle-1/compose.json",
+      "private_field_count": 4
+    },
+    {
+      "commit": "00e6a41",
+      "file": "evidence/target-network-simplification/ctftiny-readiness-7ecca9139403/cycle-2/compose.json",
+      "private_field_count": 4
+    }
+  ],
+  "history_rewrite_performed": false,
+  "account_secret_matches_from_initial_audit": [],
+  "values_disclosed": false,
+  "publication_history_review_required": true
+}

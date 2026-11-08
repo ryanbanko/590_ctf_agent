@@ -12,7 +12,7 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 
 from ctf_agent.agent import AttemptStopped
 from ctf_agent.attempt import run_attempt
-from ctf_agent.challenge import challenge_target, contestant_files, load_challenge, public_task, stage_files
+from ctf_agent.challenge import check_target_services, challenge_target, contestant_files, load_challenge, public_task, stage_files
 from ctf_agent.config import load_experiment
 from ctf_agent.docker import docker
 from ctf_agent.launch import collect_provenance
@@ -101,6 +101,8 @@ def check_readiness(experiment_path: Path, dataset_json: Path, manifest_path: Pa
                             "  if time.monotonic()>=deadline: raise\n"
                             "  time.sleep(.1)\n")
                         cycle["checks"]["target_responds"] = connection["connected"]
+                    check_target_services(target, "after_probes")
+                    cycle["checks"]["target_services_ready"] = True
                     if cycle_number == 2:
                         try:
                             run["call_tool"]("run_command", {"command": "python -I -c " + shlex.quote(

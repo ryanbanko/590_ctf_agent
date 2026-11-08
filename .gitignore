@@ -8,3 +8,6 @@ __pycache__/
 runs/
 datasets/
 .DS_Store
+
+# Runtime Compose snapshots may contain private target flags/environment.
+evidence/**/compose.json

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "docker",
+    "pull",
+    "--platform",
+    "linux/arm64",
+    "mongo:7.0.9"
+  ],
+  "returncode": 1,
+  "seconds": 1.828
+}

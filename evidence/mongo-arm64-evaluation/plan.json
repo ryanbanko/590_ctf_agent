@@ -1,0 +1,32 @@
+{
+  "mode": "independent-zero-model-target-compatibility-evaluation",
+  "original_image": "mongo:latest@sha256:7b88befc893008d7139ce3276c093b3efd435023af8bb76a9d79fa90be1eaeb6",
+  "original_architecture": "amd64",
+  "server_version": "7.0.9",
+  "candidate_tag": "mongo:7.0.9",
+  "candidate_architecture": "arm64",
+  "status": "passed-awaiting-production-integration-review",
+  "model_calls": 0,
+  "planned_checks": [
+    "Resolve and pull official same-version ARM64 image; pin its descriptor",
+    "Version/startup probe without AVX failure",
+    "Two disposable target cycles differing only in Mongo image/platform",
+    "Database ping and stable service states",
+    "Benign registration/login/own-profile through assigned frontend port 80 from isolated solver",
+    "Fresh DB persistence/reset checks and cleanup",
+    "Guard/private boundary retained; no additional solver endpoint"
+  ],
+  "unchanged": [
+    "dataset checkout",
+    "production image selection/configuration",
+    "solver image",
+    "agent/prompt/tools",
+    "scope rules",
+    "batch/tracing workflow"
+  ],
+  "limitations": [
+    "Matching server version does not imply identical architecture/OS package bytes",
+    "Production override and general readiness changes remain a later reviewed implementation",
+    "No model pilot or solving in this evaluation"
+  ]
+}

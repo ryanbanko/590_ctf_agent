@@ -9,7 +9,8 @@ from copy import deepcopy
 import pytest
 
 from ctf_agent.challenge import contestant_files, load_challenge, public_task, stage_files
-from ctf_agent.challenge import challenge_target, target_compose
+from ctf_agent.challenge import (MONGO_AMD64_IMAGE, MONGO_ARM64_IMAGE, check_target_services,
+                                 challenge_target, target_compose)
 
 
 def test_only_listed_files_and_public_fields_are_used(tmp_path, monkeypatch):
@@ -112,6 +113,58 @@ def test_runtime_compose_preserves_supplied_behavior_with_narrow_exceptions(tmp_
     assert {c['removed'] for c in changes} == {'ports','build','container_name','docker_socket'}
     assert not {'name','external','internal'} & runtime['networks']['ctfnet'].keys()
     assert 'name' not in runtime['volumes']['data']
+
+
+@pytest.mark.parametrize('architecture', ['arm64', 'aarch64', 'amd64', 'x86_64'])
+def test_same_release_mongo_uses_native_arm_only_on_arm_engine(tmp_path, architecture):
+    supplied = {'services': {'mongo': {'image': MONGO_AMD64_IMAGE,
+        'environment': {'MONGO_INITDB_ROOT_USERNAME': 'fixture-user'},
+        'command': ['mongod'], 'networks': {'backend': None}, 'restart': 'always'}}}
+    original = deepcopy(supplied)
+    runtime, changes = target_compose(supplied, tmp_path, architecture=architecture)
+    service = runtime['services']['mongo']
+    assert supplied == original
+    for key in ['environment', 'command', 'networks', 'restart']:
+        assert service[key] == original['services']['mongo'][key]
+    if architecture in {'arm64', 'aarch64'}:
+        assert service['image'] == MONGO_ARM64_IMAGE and service['platform'] == 'linux/arm64'
+        assert changes[0]['original_image'] == MONGO_AMD64_IMAGE
+        assert changes[0]['replacement_image'] == MONGO_ARM64_IMAGE and changes[0]['version'] == '7.0.9'
+    else:
+        assert service['image'] == MONGO_AMD64_IMAGE and 'platform' not in service and not changes
+
+
+def test_other_mongo_releases_are_not_substituted(tmp_path):
+    runtime, changes = target_compose({'services': {'mongo': {'image': 'mongo:7.0.10'}}},
+                                    tmp_path, architecture='arm64')
+    assert runtime['services']['mongo']['image'] == 'mongo:7.0.10' and not changes
+
+
+@pytest.mark.parametrize('change', [
+    {'Restarting': True}, {'Running': False, 'Status': 'exited', 'ExitCode': 1},
+    {'OOMKilled': True}, {'Health': {'Status': 'unhealthy'}}, {'Health': {'Status': 'starting'}},
+])
+def test_target_readiness_rejects_failed_dependency_even_with_running_frontend(monkeypatch, change):
+    good = {'Status': 'running', 'Running': True, 'Restarting': False, 'ExitCode': 0, 'OOMKilled': False}
+    inspections = iter([{'State': good, 'RestartCount': 0},
+                        {'State': good | change, 'RestartCount': 3, 'Config': {'Env': ['PRIVATE=synthetic-private']}}])
+    monkeypatch.setattr('ctf_agent.challenge.docker', lambda *a, **k: json.dumps([next(inspections)]))
+    target = {'containers': {'frontend': 'front-container', 'database': 'db-container'}}
+    with pytest.raises(RuntimeError, match='database'):
+        check_target_services(target, 'after_probes')
+    states = target['service_checks']['after_probes']
+    assert states['frontend']['running'] and states['database']['restart_count'] == 3
+    assert 'synthetic-private' not in json.dumps(states)
+
+
+def test_healthy_dependency_with_previous_restart_is_recorded_not_rejected(monkeypatch):
+    state = {'Status': 'running', 'Running': True, 'Restarting': False, 'ExitCode': 0,
+             'OOMKilled': False, 'Health': {'Status': 'healthy', 'Log': ['synthetic-private']}}
+    monkeypatch.setattr('ctf_agent.challenge.docker', lambda *a, **k: json.dumps([{'State': state, 'RestartCount': 1}]))
+    target = {'containers': {'database': 'container'}}
+    check_target_services(target, 'startup')
+    assert target['service_checks']['startup']['database']['restart_count'] == 1
+    assert 'synthetic-private' not in json.dumps(target)
 
 
 @pytest.mark.parametrize('change', [

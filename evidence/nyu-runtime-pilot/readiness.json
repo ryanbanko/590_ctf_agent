@@ -1,0 +1,26 @@
+{
+  "mode": "zero-model-development-pilot-readiness",
+  "model_calls": 0,
+  "status": "passed",
+  "checks": [
+    {
+      "challenge_id": "msc-algebra",
+      "passed": true,
+      "exit_code": 0,
+      "record": "readiness/ctftiny-readiness-1c67a0843217/check.json"
+    },
+    {
+      "challenge_id": "rev-checker",
+      "passed": true,
+      "exit_code": 0,
+      "record": "readiness/ctftiny-readiness-efe4fbcb53ee/check.json"
+    },
+    {
+      "challenge_id": "web-shreeramquest",
+      "passed": true,
+      "exit_code": 0,
+      "record": "readiness/ctftiny-readiness-6b4ed2f7bdfb/check.json"
+    }
+  ],
+  "total_seconds": 23.638
+}

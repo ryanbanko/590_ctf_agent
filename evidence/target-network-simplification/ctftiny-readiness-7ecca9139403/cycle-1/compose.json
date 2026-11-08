@@ -19,7 +19,7 @@
       "command": null,
       "entrypoint": null,
       "environment": {
-        "MONGO_INITDB_ROOT_PASSWORD": "CytCQljUz9vSvqZP",
+        "MONGO_INITDB_ROOT_PASSWORD": "[REDACTED]",
         "MONGO_INITDB_ROOT_USERNAME": "root"
       },
       "image": "sha256:7b88befc893008d7139ce3276c093b3efd435023af8bb76a9d79fa90be1eaeb6",
@@ -66,9 +66,9 @@
       },
       "entrypoint": null,
       "environment": {
-        "FLAG": "csawctf{J4y_Shr33_Ram_J4y_Shr33_Ram}",
-        "MONGO_URI": "mongodb://root:CytCQljUz9vSvqZP@mongo",
-        "SECRET": "BharatK4B4cch4B4cch4JayShreeRamBolega"
+        "FLAG": "[REDACTED]",
+        "MONGO_URI": "[REDACTED]",
+        "SECRET": "[REDACTED]"
       },
       "image": "sha256:32b306b32a21612036f3d2fec7bdd4c5a5eb7b6a707fbe5878591fc9aaea38ef",
       "networks": {

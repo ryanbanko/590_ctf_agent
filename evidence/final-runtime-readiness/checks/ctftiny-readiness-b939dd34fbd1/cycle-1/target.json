@@ -1,0 +1,23 @@
+{
+  "project": "ctf590-target-dece01730bfd",
+  "network": "ctf590-target-dece01730bfd_ctfnet",
+  "container": "13e4458912b337bf19c548668ecd13692718eb417b0d9b091fb746142d5e3fee",
+  "containers": {
+    "smug-dino": "13e4458912b337bf19c548668ecd13692718eb417b0d9b091fb746142d5e3fee"
+  },
+  "images": {
+    "smug-dino": "sha256:3d6ff9e053698b18be5fb7f608f56b7a1852963a980bc9f8c33d62d4d83d8d42"
+  },
+  "volumes": [],
+  "endpoints": [
+    {
+      "address": "172.19.0.2",
+      "protocol": "tcp",
+      "port": 3009
+    }
+  ],
+  "adjustments": [],
+  "cleanup_errors": [],
+  "address": "172.19.0.2",
+  "image_id": "sha256:3d6ff9e053698b18be5fb7f608f56b7a1852963a980bc9f8c33d62d4d83d8d42"
+}

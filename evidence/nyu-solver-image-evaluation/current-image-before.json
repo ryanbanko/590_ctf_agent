@@ -1,0 +1,74 @@
+[
+  {
+    "Id": "sha256:df617be455e786105222a692301342058a30e138ef4771e6e4593b74a63b9012",
+    "RepoTags": [
+      "ctf590-solver:m1"
+    ],
+    "RepoDigests": [
+      "ctf590-solver@sha256:e98fdc34a26d9b49c15b874f62d1b4c04fdae4d5f05406cb8d61988d9edf8244"
+    ],
+    "Parent": "",
+    "Comment": "buildkit.dockerfile.v0",
+    "Created": "2026-11-06T05:01:23.088346084Z",
+    "DockerVersion": "",
+    "Author": "",
+    "Architecture": "amd64",
+    "Os": "linux",
+    "Size": 266349090,
+    "GraphDriver": {
+      "Data": null,
+      "Name": "overlayfs"
+    },
+    "RootFS": {
+      "Type": "layers",
+      "Layers": [
+        "sha256:ea680fbff095473bb8a6c867938d6d851e11ef0c177fce983ccc83440172bd72",
+        "sha256:be8a5ff96cfce4a6f2cb9e31ffd352a8c60fd09d08c8b66f8b91d0d961f5474b",
+        "sha256:89054d0ffba00ce5332937311c951b3c99754df3e9c1be5855a1a7aaae19d37e",
+        "sha256:58323669a38df1503c2c82d06b7562fbc4e1cbeca510aacfcf1ad5834939b7aa",
+        "sha256:d97041085af2126121b56afb209f5be5e33db876cf62379e4284a93618fde718",
+        "sha256:f7bc2f3fcc7724714855f62117b53accfd936d0a7f9f8419914609bb52d32fc2",
+        "sha256:5abf4c2d352e15f03a383e1e3e07b4930b46bbcb7abe9c06c7e302a3c53a512d",
+        "sha256:b6c3d51d51082d21f6466bbddde3b32bce51e461905320acf48945e933deb4e5",
+        "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+      ]
+    },
+    "Metadata": {
+      "LastTagTime": "2026-11-06T05:01:23.407669668Z"
+    },
+    "Descriptor": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:df617be455e786105222a692301342058a30e138ef4771e6e4593b74a63b9012",
+      "size": 2010,
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux"
+      }
+    },
+    "Config": {
+      "ArgsEscaped": true,
+      "Cmd": [
+        "sleep",
+        "infinity"
+      ],
+      "Entrypoint": null,
+      "Env": [
+        "PATH=/opt/venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305",
+        "PYTHON_VERSION=3.13.2",
+        "PYTHON_SHA256=d984bcc57cd67caab26f7def42e523b1c015bbc5dc07836cf4f0b63fa159eb56",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "PYTHONUNBUFFERED=1",
+        "PWNLIB_NOTERM=1",
+        "HOME=/home/solver",
+        "PIP_DISABLE_PIP_VERSION_CHECK=1",
+        "PIP_NO_CACHE_DIR=1"
+      ],
+      "Labels": null,
+      "OnBuild": null,
+      "User": "1000:1000",
+      "Volumes": null,
+      "WorkingDir": "/workspace"
+    }
+  }
+]

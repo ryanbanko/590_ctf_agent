@@ -1,0 +1,39 @@
+{
+  "run_id": "b2ce1cd44ed6",
+  "challenge_id": "live-model-synthetic-check",
+  "mode": "synthetic-controls",
+  "termination_reason": "success",
+  "tool_calls": 2,
+  "model_calls": 2,
+  "agent_mode": "model",
+  "scripted_turns": 0,
+  "tokens": {
+    "input": 1585,
+    "output": 191,
+    "cached_input": 0,
+    "reasoning": 7
+  },
+  "cost_usd": 0.000254,
+  "cleanup_errors": [],
+  "trace_id": "27062c972a34e6cce9eccb280f16723b",
+  "model_settings": {
+    "model": "gpt-6-luna",
+    "base_url": "https://litellm.oit.duke.edu/v1",
+    "reasoning_effort": "low",
+    "max_output_tokens": 1024,
+    "max_input_bytes": 32768,
+    "request_seconds": 20.0,
+    "input_usd_per_million": 0.1,
+    "output_usd_per_million": 0.5,
+    "cached_input_usd_per_million": 0.01,
+    "max_requests": 4
+  },
+  "usage_complete": true,
+  "cost_kind": "estimated_from_gateway_rates",
+  "active_seconds": 5.723179,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.179759,
+  "verified_success": true,
+  "trace_flush_seconds": 0.117835,
+  "total_seconds": 6.020912
+}

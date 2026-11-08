@@ -1,0 +1,80 @@
+{
+  "review_date_local": "2026-11-07",
+  "measured_utc": "2026-11-07T21:06:14.153376+00:00",
+  "previous_stop": {
+    "mechanism": "Temporary host wrapper: os.statvfs on repository filesystem; cancel if f_bavail*f_frsize < 10 GiB",
+    "threshold_bytes": 10737418240,
+    "stop_reason": "host_storage_limit",
+    "actual_disk_full_error": false,
+    "peak_free_space_or_swap_samples_recorded": false
+  },
+  "host": {
+    "total_apfs_bytes": 494384795648,
+    "available_apfs_bytes": 26158379008,
+    "statvfs_available_bytes": 26158379008,
+    "physical_ram_bytes": 17179869184,
+    "swap_sample": "vm.swapusage: total = 8192.00M  used = 6753.88M  free = 1438.12M  (encrypted)"
+  },
+  "docker": {
+    "raw_logical_bytes": 1099511627776,
+    "raw_allocated_bytes": 43420700672,
+    "configured_vm_memory_mib": 16384,
+    "vm_df_command": [
+      "docker",
+      "run",
+      "--rm",
+      "--pull",
+      "never",
+      "--platform",
+      "linux/amd64",
+      "--network",
+      "none",
+      "--read-only",
+      "--cap-drop",
+      "ALL",
+      "--security-opt",
+      "no-new-privileges=true",
+      "--memory",
+      "64m",
+      "--pids-limit",
+      "16",
+      "--cpus",
+      "0.25",
+      "--user",
+      "1000:1000",
+      "--entrypoint",
+      "/bin/df",
+      "ctf590-solver:before-nyu-evaluation-00e6a41",
+      "-k",
+      "/"
+    ],
+    "vm_df_output": "Filesystem      1K-blocks     Used Available Use% Mounted on\noverlay        1055761844 25609576 976448844   3% /\n",
+    "vm_total_bytes": 1081100128256,
+    "vm_used_bytes": 26224205824,
+    "vm_available_bytes": 999883616256,
+    "current_usage": "TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE\nImages          34        3         24.57GB   24.47GB (99%)\nContainers      7         0         68.48MB   68.48MB (100%)\nLocal Volumes   2         2         182.4MB   0B (0%)\nBuild Cache     172       0         1.52GB    1.52GB\n",
+    "largest_non_ctf_cleanup_candidate": {
+      "reference": "nipreps/fmriprep:latest",
+      "disk_accounting_row": "nipreps/fmriprep                            latest                          9aec0b83b372   2 years ago     10.9GB    0B            10.94GB       0",
+      "dependent_container_ids": [],
+      "deletion_authorized_or_performed": false
+    }
+  },
+  "build_setup": {
+    "context_bytes": 2704,
+    "context_files": [
+      "Dockerfile",
+      "entrypoint.sh"
+    ],
+    "platform": "linux/amd64",
+    "uid": 1000,
+    "builder_driver": "docker",
+    "full_nyu_setup_run": false
+  },
+  "recommendation": "Reopen image comparison. Do not increase virtual disk ceiling. Consider 8 GiB Docker VM memory and targeted cleanup of confirmed-unneeded image, then monitored unchanged build/compatibility checks.",
+  "actions_not_taken": [
+    "No image/container/cache/volume deletions",
+    "No allocation changes or Docker restart",
+    "No NYU rebuild or model call"
+  ]
+}

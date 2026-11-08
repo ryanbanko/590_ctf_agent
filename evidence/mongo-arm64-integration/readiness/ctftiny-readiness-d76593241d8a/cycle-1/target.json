@@ -1,0 +1,111 @@
+{
+  "project": "ctf590-target-1eb6f7148ef5",
+  "network": "ctf590-target-1eb6f7148ef5_ctfnet",
+  "container": "6b62eb90684b75301ed53b79fd91711c01dfed6f1dfc2c13cccf5e6703f85521",
+  "containers": {
+    "mongo": "4c7f855f49b07ec3ed5d0e8b635b8ff2b8d4234ba5ff87244e3729b7c4c193ad",
+    "nginx": "6b62eb90684b75301ed53b79fd91711c01dfed6f1dfc2c13cccf5e6703f85521",
+    "nodeserver": "b6b528742759017814d84fc9095be0510bff9536317ed7b383c8a141185d68eb"
+  },
+  "images": {
+    "mongo": "sha256:8ff69162926750978451697274dc3c93eac609894b9cff7ed977e76e6bcabcbe",
+    "nginx": "sha256:00b574d502790dce42064f06df69ce11c94d87484cdb0c2ccfbe20ff70cbd2c0",
+    "nodeserver": "sha256:32b306b32a21612036f3d2fec7bdd4c5a5eb7b6a707fbe5878591fc9aaea38ef"
+  },
+  "volumes": [
+    "cb3eec715eb1f9787bdcc34c4c505f15ebba10d9bcbc7b8108de49b995922ee4",
+    "179d83e193115e7bdcb2413ce721ed55749ffeac691758aad1cb2b44b0d3e511"
+  ],
+  "endpoints": [
+    {
+      "address": "172.20.0.2",
+      "protocol": "tcp",
+      "port": 80
+    }
+  ],
+  "adjustments": [
+    {
+      "service": "mongo",
+      "original_image": "mongo:latest@sha256:7b88befc893008d7139ce3276c093b3efd435023af8bb76a9d79fa90be1eaeb6",
+      "replacement_image": "mongo@sha256:8ff69162926750978451697274dc3c93eac609894b9cff7ed977e76e6bcabcbe",
+      "platform": "linux/arm64",
+      "version": "7.0.9",
+      "reason": "same-release native MongoDB; AMD64 build needs AVX"
+    },
+    {
+      "service": "nginx",
+      "removed": "ports"
+    },
+    {
+      "service": "nginx",
+      "removed": "build"
+    },
+    {
+      "service": "nodeserver",
+      "removed": "build"
+    }
+  ],
+  "cleanup_errors": [],
+  "address": "172.20.0.2",
+  "image_id": "sha256:00b574d502790dce42064f06df69ce11c94d87484cdb0c2ccfbe20ff70cbd2c0",
+  "service_checks": {
+    "startup": {
+      "mongo": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null
+      },
+      "nginx": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null
+      },
+      "nodeserver": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null
+      }
+    },
+    "after_probes": {
+      "mongo": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null
+      },
+      "nginx": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null
+      },
+      "nodeserver": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null
+      }
+    }
+  }
+}

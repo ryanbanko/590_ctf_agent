@@ -1,0 +1,33 @@
+{
+  "project": "ctf590-target-467a597bebf4",
+  "network": "ctf590-target-467a597bebf4_ctfnet",
+  "container": "d49df76f50d146f5f7f51c50c09e36298ae99e872969a205cc2f66024acdd716",
+  "containers": {
+    "game-server": "d49df76f50d146f5f7f51c50c09e36298ae99e872969a205cc2f66024acdd716"
+  },
+  "images": {
+    "game-server": "sha256:5c49791d4a351cd47822c715757bd59a6ef790b2858d1ff3e108b30a7b8be9ec"
+  },
+  "volumes": [],
+  "endpoints": [
+    {
+      "address": "172.19.0.2",
+      "protocol": "tcp",
+      "port": 7900
+    }
+  ],
+  "adjustments": [
+    {
+      "service": "game-server",
+      "removed": "ports"
+    },
+    {
+      "service": "game-server",
+      "removed": "docker_socket",
+      "reason": "shared trusted daemon"
+    }
+  ],
+  "cleanup_errors": [],
+  "address": "172.19.0.2",
+  "image_id": "sha256:5c49791d4a351cd47822c715757bd59a6ef790b2858d1ff3e108b30a7b8be9ec"
+}

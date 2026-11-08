@@ -1,0 +1,11 @@
+{
+  "exit_code": 1,
+  "command": [
+    "docker",
+    "pull",
+    "--platform",
+    "linux/amd64",
+    "public.ecr.aws/docker/library/ubuntu:22.04"
+  ],
+  "elapsed_seconds": 1.263
+}

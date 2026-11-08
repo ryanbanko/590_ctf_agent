@@ -1,0 +1,20 @@
+{
+  "run_id": "c65d34b2144e",
+  "challenge_id": "web-shreeramquest",
+  "mode": "ctftiny-readiness",
+  "termination_reason": "readiness_complete",
+  "tool_calls": 2,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "6d77663ff5cef5a935d3692826437691",
+  "active_seconds": 1.626608,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.182939,
+  "verified_success": false,
+  "trace_flush_seconds": 0.00081,
+  "total_seconds": 1.810549
+}

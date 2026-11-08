@@ -1,0 +1,24 @@
+{
+  "upstream_revision": "112cfa33f5c0a06a20e49af525ac8eb07ec98457",
+  "sources": {
+    "Dockerfile": {
+      "url": "https://raw.githubusercontent.com/NYU-LLM-CTF/nyuctf_agents/112cfa33f5c0a06a20e49af525ac8eb07ec98457/Dockerfile",
+      "sha256": "1c21228713894c7d827e125ac81d04b0f70cc560e4e6a1b80c91e7bba2f79d89"
+    },
+    "entrypoint.sh": {
+      "url": "https://raw.githubusercontent.com/NYU-LLM-CTF/nyuctf_agents/112cfa33f5c0a06a20e49af525ac8eb07ec98457/entrypoint.sh",
+      "sha256": "96a882ce28775af2e11c299e297aaf6646a127fca4778d19276157815ce45459"
+    },
+    "installer-reviewed.sh": {
+      "url": "https://raw.githubusercontent.com/c3-ctf/ctftools/master/install.sh",
+      "sha256": "4910300a61aa4420ad147bf3a8762d073c55bbdba34a0aee00bf673881fd987b",
+      "note": "Review snapshot only; upstream build fetches mutable master independently."
+    }
+  },
+  "comparison_current": {
+    "revision": "612190f298ae9e604f00370019beed4ba1f372f6",
+    "url": "https://github.com/NYU-LLM-CTF/nyuctf_agents/blob/612190f298ae9e604f00370019beed4ba1f372f6/docker/baseline/Dockerfile",
+    "sha256": "1c21228713894c7d827e125ac81d04b0f70cc560e4e6a1b80c91e7bba2f79d89",
+    "review": "Retrieved during preceding source review; identical to pinned release Dockerfile."
+  }
+}

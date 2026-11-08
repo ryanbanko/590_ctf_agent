@@ -1,0 +1,113 @@
+F..                                                                      [100%]
+=================================== FAILURES ===================================
+_______________ test_compose_dns_backend_scope_and_fresh_volume ________________
+
+challenge = namespace(container=True, challenge_dir=PosixPath('/Users/ryanbanko/590_final/evidence/mongo-arm64-integration/controls/compose-source-921f79fc039f'), server_name='challenge.test', port=8000, challenge={})
+directory = PosixPath('evidence/mongo-arm64-integration/controls/compose-cycle-4c922c6bbe32')
+
+    @contextmanager
+    def challenge_target(challenge, directory: Path):
+        """Use supplied Compose semantics with fresh project-owned networks/storage."""
+        name = "ctf590-target-" + uuid.uuid4().hex[:12]
+        directory.mkdir(parents=True, exist_ok=True)
+        compose_path = directory / "compose.json"
+        compose = ("compose", "--project-name", name, "-f", str(compose_path.resolve()))
+        target = {"project": name, "network": None, "container": None, "containers": {},
+                  "images": {}, "volumes": [], "endpoints": [], "adjustments": [], "cleanup_errors": []}
+        runtime = None
+        try:
+            if challenge.container:
+                supplied_path = next((challenge.challenge_dir / filename for filename in
+                                      ("docker-compose.yml", "docker-compose.yaml")
+                                      if (challenge.challenge_dir / filename).is_file()), None)
+                if supplied_path is None:
+                    raise ValueError("Service-backed challenge is missing its Compose file")
+                supplied = json.loads(docker("compose", "-f", str(supplied_path), "config", "--format", "json"))
+                runtime, target["adjustments"] = target_compose(
+                    supplied, challenge.challenge_dir, architecture=docker("info", "--format", "{{.Architecture}}"))
+                for service_name, service in runtime["services"].items():
+                    reference = service["image"]
+                    try:
+>                       info = json.loads(docker("image", "inspect", reference))[0]
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ctf_agent/challenge.py:207: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+timeout = 15, args = ('image', 'inspect', 'ctf590-fixture:m1')
+
+    def docker(*args: str, timeout: float = 15) -> str:
+        result = subprocess.run(
+            ["docker", *args], capture_output=True,
+            text=True, timeout=max(0.05, timeout), check=False,
+        )
+        if result.returncode:
+>           raise RuntimeError(result.stderr.strip()[:2000] or f"Docker exited {result.returncode}")
+E           RuntimeError: Error response from daemon: {"message":"No such image: ctf590-fixture:m1"}
+
+ctf_agent/docker.py:16: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+settings = {'solver_image': 'ctf590-solver:m1', 'guard_image': 'ctf590-guard:m1', 'target_image': 'ctf590-fixture:m1', 'wall_seconds': 600.0, ...}
+output_root = PosixPath('evidence/mongo-arm64-integration/controls')
+telemetry = {'client': <langfuse._client.client.Langfuse object at 0x107f42cf0>, 'exporter': <opentelemetry.sdk.trace.export.in_memory_span_exporter.InMemorySpanExporter object at 0x107164590>}
+record_property = <function record_property.<locals>.append_property at 0x120582020>
+
+    def test_compose_dns_backend_scope_and_fresh_volume(settings, output_root, telemetry, record_property):
+        from types import SimpleNamespace
+        from ctf_agent.challenge import challenge_target
+    
+        record_property('check_name', 'compose_dns_backend_scope_and_fresh_volume')
+        tmp_path = (output_root / ('compose-source-' + uuid.uuid4().hex[:12])).resolve()
+        tmp_path.mkdir(parents=True)
+        # Synthetic front end exercises the supplied private backend relationship.
+        front = '''import http.server,json,pathlib,urllib.request
+    class Handler(http.server.BaseHTTPRequestHandler):
+     def do_GET(self):
+      with urllib.request.urlopen('http://backend:8000',timeout=1) as response:
+       backend=json.load(response)
+      marker=pathlib.Path('/state/visited')
+      body=json.dumps({'backend':backend['flag'],'fresh':not marker.exists()}).encode()
+      marker.write_text('visited')
+      self.send_response(200); self.end_headers(); self.wfile.write(body)
+    http.server.HTTPServer(('0.0.0.0',8000),Handler).serve_forever()
+    '''
+        expected = 'ctf{synthetic-backend-fixture}'
+        supplied = {'services': {
+            'frontend': {'image': settings['target_image'], 'user':'0:0', 'command':['python','-I','-c',front],
+                         'depends_on':['backend'], 'networks':{'ctfnet':{'aliases':['challenge.test']},'backend':{}},
+                         'volumes':[{'type':'volume','source':'state','target':'/state'}]},
+            'backend': {'image':settings['target_image'],'environment':{'FIXTURE_FLAG':expected},'networks':{'backend':{}}}},
+            'networks':{'ctfnet':{'external':True},'backend':{}}, 'volumes':{'state':{}}}
+        (tmp_path/'docker-compose.yml').write_text(json.dumps(supplied))
+        challenge = SimpleNamespace(container=True,challenge_dir=tmp_path,server_name='challenge.test',port=8000,challenge={})
+        cycles=[]
+        for cycle in (1,2):
+>           with challenge_target(challenge, output_root/f'compose-cycle-{uuid.uuid4().hex[:12]}') as target:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_controls.py:510: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+ctf_agent/challenge.py:211: in challenge_target
+    docker("pull", "--platform", service.get("platform", "linux/amd64"), reference, timeout=300)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+timeout = 300, args = ('pull', '--platform', 'linux/amd64', 'ctf590-fixture:m1')
+
+    def docker(*args: str, timeout: float = 15) -> str:
+        result = subprocess.run(
+            ["docker", *args], capture_output=True,
+            text=True, timeout=max(0.05, timeout), check=False,
+        )
+        if result.returncode:
+>           raise RuntimeError(result.stderr.strip()[:2000] or f"Docker exited {result.returncode}")
+E           RuntimeError: Error response from daemon: pull access denied for ctf590-fixture, repository does not exist or may require 'docker login'
+
+ctf_agent/docker.py:16: RuntimeError
+=========================== short test summary info ============================
+FAILED tests/test_controls.py::test_compose_dns_backend_scope_and_fresh_volume
+1 failed, 2 passed, 31 deselected in 10.86s

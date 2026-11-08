@@ -12,15 +12,20 @@ The ten scored challenges are reserved; use the forty development IDs in
 The [infrastructure simplification plan](docs/SIMPLIFICATION_PLAN.md) tracks
 reviewable checkpoints. Execution now uses ordinary Docker copy/exec and a
 writable disposable solver. Targets now retain supplied Compose behavior on fresh
-project networks/volumes; image selection remains independent. Re-run `build-images`
-after pulling these changes (both solver and guard startup changed).
+project networks/volumes. The solver now uses the supplied NYU installation recipe
+with small workspace/library additions. Re-run `build-images` after pulling this
+change; the previous lean image is preserved as comparison evidence.
 
 The professor has [confirmed](docs/REFERENCES.md#november-6-course-guide-and-professor-confirmations)
 that repository Compose files/private controller verification, Langfuse JSON
 exports and our CTFTiny development/ten-held-out split are acceptable. No separate
 course runtime, JSONL conversion or NYU development-data migration is required.
-The next infrastructure task is the bounded upstream solver-image evaluation;
-adoption depends on compatibility and lower maintenance. It has not started.
+The [integrated solver checkpoint](evidence/nyu-solver-integration/README.md)
+records the normal build, startup and synthetic verification. Agent, tools, model,
+guard/evaluator, Langfuse and batch behavior are unchanged. An approved
+[three-attempt pilot](evidence/nyu-runtime-pilot/README.md) produced two verified
+successes and one scope stop. The web target's reproduced MongoDB CPU issue now
+has a [same-release ARM64 adjustment and stronger readiness checks](evidence/mongo-arm64-integration/README.md).
 
 ## One-time setup
 
@@ -34,7 +39,7 @@ commands from its **repository root**: the folder containing `README.md`,
 `pyproject.toml` and `ctf_agent/`. The checkout's name and location do not matter;
 paths such as `configs/` and `datasets/` are relative to that folder.
 
-Use Python **3.13.2**, uv, Docker Desktop/Engine with Linux containers and
+Use host Python **3.13.2**, uv, Docker Desktop/Engine with Linux containers and
 Compose v2. Trace export uses the installed Langfuse Python SDK. Start Docker before
 running the build command:
 
@@ -48,23 +53,57 @@ Dependencies are locked: Langfuse 5.1.0, OpenAI 3.44.0, nyuctf 1.1.1, and pytest
 9.2.0 for development. Start Docker before building or preparing challenges.
 
 The build command creates a **Linux AMD64 solver**, including on Apple Silicon
-(Docker Desktop uses emulation there). It includes Python, Bash, `file`, binutils
+(Docker Desktop uses emulation there). The Ubuntu 22.04 solver has its own Python
+**3.10** environment, separate from host Python. Docker Desktop with **8 GiB RAM**
+passed the image evaluation. A first source build can take tens of minutes and
+needs substantial free physical disk space; the image is roughly **11.5 GB**.
+The reference build also downloads a broad external toolkit; some optional installs
+are incomplete, as noted below. A cached build is much quicker.
+
+It includes Bash, `file`, binutils
 (`strings`, `readelf`, `objdump`), `xxd`, `curl`, `nc`, OpenSSL, ZIP/unzip, GCC,
 make, GDB and 32-bit x86 C/C++ runtime libraries. `/workspace` permits executing
 contestant files and programs the agent creates. Re-run `build-images` after
 pulling solver-image changes. On ARM Linux hosts, Docker needs AMD64 emulation;
 native AMD64 Linux avoids the emulation overhead and debugger limitations.
-On the verified Apple Silicon Docker setup, 64-bit and 32-bit execution pass;
-GDB static inspection works, but live debugging fails with register/ptrace errors.
+On the verified Apple Silicon Docker setup, 64-bit and 32-bit execution pass,
+including 32-bit compilation. GDB static inspection passes; live debugging failed
+on the prior image and has not been established by this image change.
 
 The solver also includes **pwntools, SymPy, NumPy, PyCryptodome (`Crypto`), requests
 and Pillow**. These are installed in the image, separate from the host runner's
-dependencies. [Requested versions](docker/solver-requirements.in) and
-[resolved dependencies](docker/solver-requirements.txt) are committed; the image
-records installed versions in `/opt/python-packages.txt`. Reedsolo is not included.
+dependencies. The [solver Dockerfile](docker/solver.Dockerfile) reuses NYU's pinned
+release recipe and adds **NumPy 2.2.6 / Pillow 12.3.0**. It records OS/Python
+versions in `/opt/os-packages.txt` and `/opt/python-packages.txt`. Our old package
+lists are [historical evidence](evidence/solver-libraries/README.md), not active
+installation settings. Reedsolo is not preinstalled.
 
-The solver has a writable `/workspace`, home at `/home/solver`, normal `/tmp`
-and an image-prepared Python environment at `/opt/venv`. Python/pip select it
+Additional verified tools include **SageMath, radare2 and angr**. Optional upstream
+gaps remain: hashcat, John, steghide and Cutter were absent, and Sherlock's wrapper
+failed. We do not repair or claim support for every tool advertised by the external
+installer. Source rebuilds include floating upstream downloads; load the frozen
+artifact when reproducing an exact experiment.
+
+**Exact-image setup (optional alternative to rebuilding the solver):** the archive
+is shared separately; Git does not contain the 2.94 GB binary. Obtain
+`ctf590-solver-nyu-integrated-20261107.tar` and compare `shasum -a 256` with the
+[recorded checksum](evidence/nyu-solver-integration/frozen-image.json). Then, from
+the repository root:
+
+```sh
+docker load -i /path/to/ctf590-solver-nyu-integrated-20261107.tar
+docker build -f docker/guard.Dockerfile -t ctf590-guard:m1 .
+docker build -f docker/fixture.Dockerfile -t ctf590-fixture:m1 .
+```
+
+Loading restores `ctf590-solver:m1`. Complete `uv sync`, `.env` and dataset setup
+as usual; challenge commands stay identical. Use this route for matching the exact
+tested solver. Re-running `build-images` rebuilds it from source and may resolve
+different floating upstream dependencies. After source build or load, run the
+zero-model `self-check` below and challenge preparation before live testing.
+
+The solver has a writable `/workspace`, home at `/home/ctfplayer`, normal `/tmp`
+and NYU's image-prepared Python environment at `/home/ctfplayer/.ctfenv`. Python/pip select it
 automatically: `python -m pip install PACKAGE`. Files and installed additions
 survive a command-timeout restart, but are discarded after each attempt.
 The live profile allows 1 GiB RAM; writable storage uses Docker's disk space,
@@ -78,6 +117,22 @@ blocked. HTTPS connectivity is technically usable by other commands: package-onl
 purpose is an instruction and trace-review policy, not an enforced domain filter.
 Native system dependencies still need image updates; pip cannot install every tool.
 
+For `web-shreeramquest`, startup detects the **Docker engine's architecture**.
+On ARM64 it replaces only the exact supplied AMD64 MongoDB digest with its
+matching official **MongoDB 7.0.9-jammy ARM64** sibling:
+
+- Original: `mongo:latest@sha256:7b88befc893008d7139ce3276c093b3efd435023af8bb76a9d79fa90be1eaeb6`
+- ARM64: `mongo@sha256:8ff69162926750978451697274dc3c93eac609894b9cff7ed977e76e6bcabcbe`
+
+AMD64 engines keep the original image. Both artifacts come from the same official
+release index. This preserves the database version and supplied application,
+environment and backend relationships. The reason and both references appear in
+`target.json` adjustments; solver access remains frontend **port 80**. No manual
+dataset edits or new setting are needed. The first preparation may pull the image;
+if Docker Hub gives EOF while on VPN, disconnect for the pull and reconnect for
+Duke model requests. [Verification](evidence/mongo-arm64-integration/README.md).
+
+
 If `.env` does not exist, copy `.env.example` to `.env`. Each teammate uses their
 own Duke key and the team's intended Langfuse project. Fill these host-only variables:
 
@@ -87,6 +142,9 @@ own Duke key and the team's intended Langfuse project. Fill these host-only vari
 | `LANGFUSE_PUBLIC_KEY` | Intended Langfuse project's API key settings. |
 | `LANGFUSE_SECRET_KEY` | Same project's key pair. |
 | `LANGFUSE_BASE_URL` | Project's regional URL, e.g. `https://us.cloud.langfuse.com`. |
+
+Connect to the Duke campus network/VPN before making gateway model requests.
+Local preparation/offline controls do not require gateway access.
 
 Keep `.env` private and Git-ignored. The configured Duke gateway does not require
 a separate `OPENAI_API_KEY`. Preparation and local tests need no keys.
@@ -126,7 +184,7 @@ commands below when you choose another challenge, for example `cry-ecxor`. You d
 not need to look up or download its directory separately after full dataset setup.
 
 **3. Check the challenge environment.** This starts fresh containers, checks files,
-connections, isolation and cleanup using the same experiment settings as the run,
+connections, dependency states, isolation and cleanup using the same experiment settings as the run,
 then exits. It makes no model requests and
 does not try to solve the challenge. You do not need to repeat it before every
 attempt if that environment has already passed and its setup is unchanged.
@@ -153,7 +211,11 @@ use the trace to follow model calls, tool arguments and results. See
 [Read results](#read-results) for the saved files and field meanings.
 
 If preparation reports missing challenge files, finish the full dataset setup above
-before retrying. If preparation fails for a service, file-size or isolation reason,
+before retrying. Startup uses Compose's bounded health/running wait. Preparation
+records safe service states at startup and after connection probes, rejecting
+exited, restarting, OOM-killed or non-healthy healthcheck states; restart counts
+are recorded. Services without healthchecks still need application-specific
+verification when something looks wrong. If preparation fails for a service, file-size or isolation reason,
 inspect its saved evidence before running the model; that challenge's setup may
 need a compatibility fix. All 50 IDs are selectable, but compatibility with every
 target arrangement has not been verified. Keep `scored` IDs for final evaluation.
@@ -447,17 +509,45 @@ uv run --frozen python -m pytest -q
 uv run --frozen python -m ctf_agent self-check
 ```
 
-The current target/network checkpoint passed **100 offline tests and 29 synthetic
-Docker cases**, with cleanup verified. Preparation passed two fresh cycles each
+The current solver integration passed **100 offline tests and 34 synthetic
+Docker cases**, with cleanup verified. The additional cases exercise supplied sudo
+restrictions, SageMath, radare2, angr and multilib compilation.
+[Current evidence](evidence/nyu-solver-integration/README.md). The combined build
+used cached upstream layers (14.03s); its first start took 0.73s on this host, not a
+clean-machine cold benchmark. Earlier target/network preparation passed two fresh cycles each
 for development `pwn-baby-boi`, `web-shreeramquest` and `cry-ecxor`, including
 supplied hostname resolution, private boundaries and denied traffic.
-[Current evidence](evidence/target-network-simplification/README.md).
+[Target/network evidence](evidence/target-network-simplification/README.md).
+A subsequent [readiness refresh](evidence/final-runtime-readiness/README.md)
+passed the existing connectivity/isolation checks twice for each reserved
+challenge. The [three-development-attempt pilot](evidence/nyu-runtime-pilot/README.md)
+recorded two verified successes and one scope stop, with complete records/cleanup.
+A fresh diagnostic found the web target's MongoDB repeatedly crashing without AVX
+support, then Node exiting. **TCP connectivity does not establish backend health**.
+The [matching ARM64 evaluation](evidence/mongo-arm64-evaluation/README.md) preserved
+MongoDB 7.0.9 and passed two fresh functional cycles. The subsequent
+[production integration](evidence/mongo-arm64-integration/README.md) uses that exact
+artifact on ARM64 engines, waits with supplied Compose healthchecks and records/
+checks dependency states at startup and after preparation probes. The original
+pilot and failure evidence are preserved; no live retry is part of that checkpoint.
+Agent, solver and permitted ports remain unchanged.
+A subsequent [full pre-Git validation](evidence/pre-git-validation/README.md) passed
+111 offline tests, all 36 Docker cases, and 22 fresh readiness cycles for the ten
+reserved IDs plus this web target. One fresh live web attempt then achieved
+trusted success in four requests, with complete records and clean cleanup.
+Detailed conversation review is deferred; this is not scored evaluation.
+
+
 The infrastructure-only inventory accepts 26 of 27 supplied Compose definitions;
 `msc-showdown` remains unsupported. This is not runtime readiness for all 26.
 Read-only target binds have offline validation only; Docker Desktop rejected those
 mounts here. The synthetic named-volume/backend checks passed in Docker.
-No live model calls or hosted traces were created; SDK export remains verified
-offline and its earlier hosted readback is preserved in historical evidence.
+Those infrastructure checks created no model calls or hosted traces. A later
+approved [live synthetic smoke test](evidence/live-simplification-smoke/README.md)
+passed on commit `00e6a41`: two requests/two tool calls, verified submission,
+12 complete hosted observations and clean cleanup, estimated cost $0.000254.
+This checks the live gateway/command/evaluator/export path without CTFTiny solving;
+file writing/restart behavior retains its separate synthetic evidence.
 
 The earlier Section 1 handoff separately prepared the ten reserved challenges plus
 `pwn-baby-boi`: two fresh cycles each, file hashes/ownership, permitted TCP
@@ -496,3 +586,11 @@ include NYU's package/docs and reference agents, Duke's gateway guide, and later
 Langfuse/OpenAI guidance. The reference agent framework was not vendored.
 [DESIGN.md](docs/DESIGN.md) records decisions and alternatives. The original
 [assignment](ASSIGNMENT.md) remains authoritative.
+
+
+Generated Compose snapshots may contain private target flags/environment values;
+keep them local. New `evidence/**/compose.json` files are Git-ignored. The two
+identified tracked historical snapshots now have private fields redacted, with
+exact originals retained under ignored `runs/`. Older committed versions still
+require a [publication/history decision](evidence/pre-git-validation/README.md#publication-audit-and-redaction)
+before public sharing. Do not add private runtime configs or preserved originals to Git.

@@ -1,0 +1,20 @@
+{
+  "run_id": "e1ecf102c826",
+  "challenge_id": "tool_limit",
+  "mode": "synthetic-controls",
+  "termination_reason": "tool_limit",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "a2076d656f575af177287b2f250efdd4",
+  "active_seconds": 1.041343,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.171705,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000209,
+  "total_seconds": 1.213348
+}

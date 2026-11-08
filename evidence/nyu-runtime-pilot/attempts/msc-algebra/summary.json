@@ -1,0 +1,39 @@
+{
+  "run_id": "88bc953160d3",
+  "challenge_id": "msc-algebra",
+  "mode": "development",
+  "termination_reason": "success",
+  "tool_calls": 12,
+  "model_calls": 12,
+  "agent_mode": "model",
+  "scripted_turns": 0,
+  "tokens": {
+    "input": 68724,
+    "output": 3689,
+    "cached_input": 44803,
+    "reasoning": 778
+  },
+  "cost_usd": 0.00468463,
+  "cleanup_errors": [],
+  "trace_id": "13bd51b92166dc00d28a0a1b77d5f90d",
+  "model_settings": {
+    "model": "gpt-6-luna",
+    "base_url": "https://litellm.oit.duke.edu/v1",
+    "reasoning_effort": "low",
+    "max_output_tokens": 4096,
+    "max_input_bytes": 524288,
+    "request_seconds": 60.0,
+    "input_usd_per_million": 0.1,
+    "output_usd_per_million": 0.5,
+    "cached_input_usd_per_million": 0.01,
+    "max_requests": 40
+  },
+  "usage_complete": true,
+  "cost_kind": "estimated_from_gateway_rates",
+  "active_seconds": 71.760622,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.168845,
+  "verified_success": true,
+  "trace_flush_seconds": 0.155269,
+  "total_seconds": 72.084972
+}

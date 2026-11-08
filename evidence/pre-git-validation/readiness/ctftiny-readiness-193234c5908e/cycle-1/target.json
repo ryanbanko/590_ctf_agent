@@ -1,0 +1,14 @@
+{
+  "project": "ctf590-target-c0efc5c03d6f",
+  "network": "ctf590-target-c0efc5c03d6f-net",
+  "container": null,
+  "containers": {},
+  "images": {},
+  "volumes": [],
+  "endpoints": [],
+  "adjustments": [],
+  "cleanup_errors": [],
+  "service_checks": {
+    "after_probes": {}
+  }
+}

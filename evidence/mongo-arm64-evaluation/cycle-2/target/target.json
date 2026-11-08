@@ -1,0 +1,51 @@
+{
+  "project": "ctf590-target-67c0250681c0",
+  "network": "ctf590-target-67c0250681c0_ctfnet",
+  "container": "424a46120788f5d69faecf7b6e1d031b1bb05729ed8bf772a25161bdf256aeee",
+  "containers": {
+    "mongo": "751c7039272c39e78eb2f65ff8b50bd6e24a4326d7a022a61084f255582b9542",
+    "nginx": "424a46120788f5d69faecf7b6e1d031b1bb05729ed8bf772a25161bdf256aeee",
+    "nodeserver": "64d89a6d2c50229c1042fab54f0d13ee3392520e40a36e0d0cf4336d26e98b3e"
+  },
+  "images": {
+    "mongo": "sha256:8ff69162926750978451697274dc3c93eac609894b9cff7ed977e76e6bcabcbe",
+    "nginx": "sha256:00b574d502790dce42064f06df69ce11c94d87484cdb0c2ccfbe20ff70cbd2c0",
+    "nodeserver": "sha256:32b306b32a21612036f3d2fec7bdd4c5a5eb7b6a707fbe5878591fc9aaea38ef"
+  },
+  "volumes": [
+    "62e5707a0ecc366ef4fc3037c7e9cbb64ba37dca686fed08144e5017ee67e81c",
+    "06d1e67111a1f2a86a3bc4c8c53ddda2f2c40ab25ed1ac71179df172c68fdef4"
+  ],
+  "endpoints": [
+    {
+      "address": "172.20.0.2",
+      "protocol": "tcp",
+      "port": 80
+    }
+  ],
+  "adjustments": [
+    {
+      "service": "nginx",
+      "removed": "ports"
+    },
+    {
+      "service": "nginx",
+      "removed": "build"
+    },
+    {
+      "service": "nodeserver",
+      "removed": "build"
+    },
+    {
+      "service": "mongo",
+      "evaluation_override": {
+        "image": "mongo@sha256:8ff69162926750978451697274dc3c93eac609894b9cff7ed977e76e6bcabcbe",
+        "platform": "linux/arm64"
+      },
+      "reason": "same-version native CPU compatibility"
+    }
+  ],
+  "cleanup_errors": [],
+  "address": "172.20.0.2",
+  "image_id": "sha256:00b574d502790dce42064f06df69ce11c94d87484cdb0c2ccfbe20ff70cbd2c0"
+}

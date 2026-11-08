@@ -1,0 +1,52 @@
+{
+  "project": "ctf590-target-11052a855732",
+  "network": "ctf590-target-11052a855732_ctfnet",
+  "container": "f636219117e5d40a4b658dd12f077d51fec1d882a0c01dc3f04ced83e926bd47",
+  "containers": {
+    "web": "f636219117e5d40a4b658dd12f077d51fec1d882a0c01dc3f04ced83e926bd47"
+  },
+  "images": {
+    "web": "sha256:4774b250bf127716d29367c70f393fec8b306f0d5949b9c2e253bc3da3cefd36"
+  },
+  "volumes": [],
+  "endpoints": [
+    {
+      "address": "172.19.0.2",
+      "protocol": "tcp",
+      "port": 8000
+    }
+  ],
+  "adjustments": [
+    {
+      "service": "web",
+      "removed": "ports"
+    }
+  ],
+  "cleanup_errors": [],
+  "address": "172.19.0.2",
+  "image_id": "sha256:4774b250bf127716d29367c70f393fec8b306f0d5949b9c2e253bc3da3cefd36",
+  "service_checks": {
+    "startup": {
+      "web": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null
+      }
+    },
+    "after_probes": {
+      "web": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null
+      }
+    }
+  }
+}

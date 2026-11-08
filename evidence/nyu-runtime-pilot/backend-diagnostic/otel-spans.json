@@ -1,0 +1,394 @@
+[
+{
+    "name": "guard_diagnostic",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0x568717e7d5da2391",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:17:57.931474Z",
+    "end_time": "2026-11-08T01:17:57.931474Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.message": "\"tcpdump: verbose output suppressed, use -v[v]... for full protocol decode\""
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "guard_ready",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0xb5356b5c45b463d5",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:17:57.932123Z",
+    "end_time": "2026-11-08T01:17:57.932123Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "package_inventory",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0xfb5c971d934732f2",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:17:58.285761Z",
+    "end_time": "2026-11-08T01:17:58.285761Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.phase": "\"initial\"",
+        "langfuse.observation.metadata.available": "true"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "sandbox_ready",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0xb22f4aa293727ec3",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:17:58.286398Z",
+    "end_time": "2026-11-08T01:17:58.286398Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.solver": "\"ctf590-87941905b578-solver\"",
+        "langfuse.observation.metadata.guard": "\"ctf590-87941905b578-guard\"",
+        "langfuse.observation.metadata.endpoints": "[{\"address\":\"172.19.0.2\",\"protocol\":\"tcp\",\"port\":80}]"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "run_command",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0x013513a10451315a",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:17:58.286833Z",
+    "end_time": "2026-11-08T01:17:58.660844Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.input": "{\"command\": \"python -I -c 'import json,urllib.request,urllib.error; out=[]\\nbase='\\\"'\\\"'http://172.19.0.2:80'\\\"'\\\"'\\nfor path in ['\\\"'\\\"'/'\\\"'\\\"', '\\\"'\\\"'/__ctf590_readiness__'\\\"'\\\"']:\\n try:\\n  r=urllib.request.urlopen(base+path,timeout=3); out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'status'\\\"'\\\"':r.status})\\n except urllib.error.HTTPError as e:out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'status'\\\"'\\\"':e.code})\\n except Exception as e:out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'error'\\\"'\\\"':type(e).__name__})\\nprint(json.dumps(out))'\"}",
+        "langfuse.observation.metadata.step": "1",
+        "langfuse.observation.type": "tool",
+        "langfuse.observation.output": "{\"stdout\": \"[{\\\"path\\\": \\\"/\\\", \\\"status\\\": 200}, {\\\"path\\\": \\\"/__ctf590_readiness__\\\", \\\"status\\\": 404}]\\n\", \"stderr\": \"\", \"exit_code\": 0, \"timed_out\": false, \"truncated\": false, \"output_bytes\": 81}"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "run_command",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0x042b3fb859845b9b",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:18:03.289640Z",
+    "end_time": "2026-11-08T01:18:03.685992Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.input": "{\"command\": \"python -I -c 'import json,urllib.request,urllib.error; out=[]\\nbase='\\\"'\\\"'http://172.19.0.2:80'\\\"'\\\"'\\nfor path in ['\\\"'\\\"'/'\\\"'\\\"', '\\\"'\\\"'/__ctf590_readiness__'\\\"'\\\"']:\\n try:\\n  r=urllib.request.urlopen(base+path,timeout=3); out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'status'\\\"'\\\"':r.status})\\n except urllib.error.HTTPError as e:out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'status'\\\"'\\\"':e.code})\\n except Exception as e:out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'error'\\\"'\\\"':type(e).__name__})\\nprint(json.dumps(out))'\"}",
+        "langfuse.observation.metadata.step": "2",
+        "langfuse.observation.type": "tool",
+        "langfuse.observation.output": "{\"stdout\": \"[{\\\"path\\\": \\\"/\\\", \\\"status\\\": 200}, {\\\"path\\\": \\\"/__ctf590_readiness__\\\", \\\"status\\\": 404}]\\n\", \"stderr\": \"\", \"exit_code\": 0, \"timed_out\": false, \"truncated\": false, \"output_bytes\": 81}"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "run_command",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0xc00f43d090e8af86",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:18:18.292855Z",
+    "end_time": "2026-11-08T01:18:18.695049Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.input": "{\"command\": \"python -I -c 'import json,urllib.request,urllib.error; out=[]\\nbase='\\\"'\\\"'http://172.19.0.2:80'\\\"'\\\"'\\nfor path in ['\\\"'\\\"'/'\\\"'\\\"', '\\\"'\\\"'/__ctf590_readiness__'\\\"'\\\"']:\\n try:\\n  r=urllib.request.urlopen(base+path,timeout=3); out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'status'\\\"'\\\"':r.status})\\n except urllib.error.HTTPError as e:out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'status'\\\"'\\\"':e.code})\\n except Exception as e:out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'error'\\\"'\\\"':type(e).__name__})\\nprint(json.dumps(out))'\"}",
+        "langfuse.observation.metadata.step": "3",
+        "langfuse.observation.type": "tool",
+        "langfuse.observation.output": "{\"stdout\": \"[{\\\"path\\\": \\\"/\\\", \\\"status\\\": 200}, {\\\"path\\\": \\\"/__ctf590_readiness__\\\", \\\"status\\\": 404}]\\n\", \"stderr\": \"\", \"exit_code\": 0, \"timed_out\": false, \"truncated\": false, \"output_bytes\": 81}"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "run_command",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0xa2f14c7f63bb62f5",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:18:33.293208Z",
+    "end_time": "2026-11-08T01:18:39.712618Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.input": "{\"command\": \"python -I -c 'import json,urllib.request,urllib.error; out=[]\\nbase='\\\"'\\\"'http://172.19.0.2:80'\\\"'\\\"'\\nfor path in ['\\\"'\\\"'/'\\\"'\\\"', '\\\"'\\\"'/__ctf590_readiness__'\\\"'\\\"']:\\n try:\\n  r=urllib.request.urlopen(base+path,timeout=3); out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'status'\\\"'\\\"':r.status})\\n except urllib.error.HTTPError as e:out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'status'\\\"'\\\"':e.code})\\n except Exception as e:out.append({'\\\"'\\\"'path'\\\"'\\\"':path,'\\\"'\\\"'error'\\\"'\\\"':type(e).__name__})\\nprint(json.dumps(out))'\"}",
+        "langfuse.observation.metadata.step": "4",
+        "langfuse.observation.type": "tool",
+        "langfuse.observation.output": "{\"stdout\": \"[{\\\"path\\\": \\\"/\\\", \\\"error\\\": \\\"TimeoutError\\\"}, {\\\"path\\\": \\\"/__ctf590_readiness__\\\", \\\"error\\\": \\\"TimeoutError\\\"}]\\n\", \"stderr\": \"\", \"exit_code\": 0, \"timed_out\": false, \"truncated\": false, \"output_bytes\": 101}"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "attempt_stopping",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0x6c315688b6e84c5e",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:18:39.831975Z",
+    "end_time": "2026-11-08T01:18:39.831975Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.reason": "\"readiness_complete\""
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "package_inventory",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0x2bfb9b391c272037",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:18:39.890269Z",
+    "end_time": "2026-11-08T01:18:39.890269Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.phase": "\"final\"",
+        "langfuse.observation.metadata.available": "false",
+        "langfuse.observation.metadata.exception": "\"RuntimeError\""
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "sandbox_cleanup",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0x14bfc3297a0b5255",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x6e2fe1e74dc21924",
+    "start_time": "2026-11-08T01:18:40.028042Z",
+    "end_time": "2026-11-08T01:18:40.028042Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.observation.type": "event",
+        "langfuse.observation.metadata.errors": "[]"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+},
+{
+    "name": "attempt",
+    "context": {
+        "trace_id": "0x2ada30424f06b862e4b8b7e722e64ed2",
+        "span_id": "0x6e2fe1e74dc21924",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-11-08T01:17:57.449478Z",
+    "end_time": "2026-11-08T01:18:40.028526Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "langfuse.internal.is_app_root": true,
+        "langfuse.observation.input": "{\"task\": \"Zero-model readiness diagnostic: HTTP status only on approved port; no submissions.\"}",
+        "langfuse.observation.metadata.run_id": "\"87941905b578\"",
+        "langfuse.observation.metadata.challenge_id": "\"web-backend-diagnostic\"",
+        "langfuse.observation.metadata.config": "{\"solver_image\":\"ctf590-solver:m1\",\"guard_image\":\"ctf590-guard:m1\",\"target_image\":\"ctf590-fixture:m1\",\"wall_seconds\":600.0,\"command_seconds\":120.0,\"max_model_turns\":40,\"max_tool_calls\":80,\"max_output_bytes\":65536,\"memory_mb\":1024,\"max_command_bytes\":16384,\"max_write_bytes\":65536,\"pids\":64,\"cpus\":1.0}",
+        "langfuse.observation.metadata.mode": "\"ctftiny-readiness\"",
+        "langfuse.observation.metadata.image_ids": "{\"solver\":\"sha256:7e2c0a9b3a244f005548a9012ab7efa298a1ae095bfeba6c6e99020cea0664b6\",\"guard\":\"sha256:e88b8ce02ef7f9b1b90a7713b2f14869d33aea7bdedc2020fd401e1cbd913fd0\"}",
+        "langfuse.observation.type": "span",
+        "langfuse.observation.level": "DEFAULT",
+        "langfuse.observation.output": "{\"run_id\": \"87941905b578\", \"challenge_id\": \"web-backend-diagnostic\", \"mode\": \"ctftiny-readiness\", \"termination_reason\": \"readiness_complete\", \"tool_calls\": 4, \"model_calls\": 0, \"agent_mode\": null, \"scripted_turns\": 0, \"tokens\": null, \"cost_usd\": 0.0, \"cleanup_errors\": [], \"trace_id\": \"2ada30424f06b862e4b8b7e722e64ed2\", \"active_seconds\": 42.418922, \"solver_restarts\": 0, \"cleanup_seconds\": 0.159608, \"verified_success\": false}"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "46921a8b-832c-4b08-9a1a-1fdb336e6713",
+            "service.name": "unknown_service:python"
+        },
+        "schema_url": ""
+    }
+}
+]

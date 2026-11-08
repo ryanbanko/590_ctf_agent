@@ -1,0 +1,18 @@
+{
+  "permitted_endpoints": [
+    {
+      "address": "172.19.0.2",
+      "protocol": "tcp",
+      "port": 80
+    }
+  ],
+  "denial_events": [
+    {
+      "name": "network_denied",
+      "metadata": {
+        "packet": "1794100381.757588 IP 172.19.0.3.51464 > 172.19.0.2.4999: Flags [S], seq 3135564037, win 64240, options [mss 1460,sackOK,TS val 4164806723 ecr 0,nop,wscale 7], length 0"
+      }
+    }
+  ],
+  "interpretation": "Assigned frontend port 80 returned application source naming backend port 4999. Subsequent application operations returned 502; model then tried ports 80/4999/3000/8080 on the frontend IP. Guard blocked 4999. Supplied nginx proxies internally to nodeserver:4999; no missing public port established. Fresh zero-model diagnostic found MongoDB AVX failure and later Node exit."
+}

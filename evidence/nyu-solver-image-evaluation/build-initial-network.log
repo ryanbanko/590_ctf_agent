@@ -1,0 +1,136 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.66kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:22.04
+#2 ERROR: failed to do request: Head "https://registry-1.docker.io/v2/library/ubuntu/manifests/22.04": EOF
+------
+ > [internal] load metadata for docker.io/library/ubuntu:22.04:
+------
+Dockerfile:1
+--------------------
+   1 | >>> FROM ubuntu:22.04
+   2 |     # Force platform to x86_64
+   3 |     ARG TARGETPLATFORM
+--------------------
+ERROR: failed to build: failed to solve: ubuntu:22.04: failed to resolve source metadata for docker.io/library/ubuntu:22.04: failed to do request: Head "https://registry-1.docker.io/v2/library/ubuntu/manifests/22.04": EOF
+98324 v0.26.1-desktop.1 /Users/ryanbanko/.docker/cli-plugins/docker-buildx buildx build --platform linux/amd64 --progress plain --build-arg HOST_UID=1000 --tag ctf590-solver:nyu-20250206-evaluation evidence/nyu-solver-image-evaluation/upstream
+github.com/docker/buildx/commands.runBuildWithOptions
+	github.com/docker/buildx/commands/build.go:452
+github.com/docker/buildx/commands.runBuild
+	github.com/docker/buildx/commands/build.go:374
+github.com/docker/buildx/commands.buildCmd.func1
+	github.com/docker/buildx/commands/build.go:488
+github.com/docker/cli/cli-plugins/plugin.RunPlugin.func1.1.2
+	github.com/docker/cli@v28.3.2+incompatible/cli-plugins/plugin/plugin.go:65
+github.com/spf13/cobra.(*Command).execute
+	github.com/spf13/cobra@v1.9.1/command.go:1015
+github.com/spf13/cobra.(*Command).ExecuteC
+	github.com/spf13/cobra@v1.9.1/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	github.com/spf13/cobra@v1.9.1/command.go:1071
+github.com/docker/cli/cli-plugins/plugin.RunPlugin
+	github.com/docker/cli@v28.3.2+incompatible/cli-plugins/plugin/plugin.go:80
+main.runPlugin
+	github.com/docker/buildx/cmd/buildx/main.go:65
+main.run
+	github.com/docker/buildx/cmd/buildx/main.go:79
+main.main
+	github.com/docker/buildx/cmd/buildx/main.go:89
+runtime.main
+	runtime/proc.go:283
+runtime.goexit
+	runtime/asm_arm64.s:1223
+
+98324 v0.26.1-desktop.1 /Users/ryanbanko/.docker/cli-plugins/docker-buildx buildx build --platform linux/amd64 --progress plain --build-arg HOST_UID=1000 --tag ctf590-solver:nyu-20250206-evaluation evidence/nyu-solver-image-evaluation/upstream
+google.golang.org/grpc.(*ClientConn).Invoke
+	google.golang.org/grpc@v1.72.2/call.go:35
+github.com/moby/buildkit/frontend/gateway/pb.(*lLBBridgeClient).Solve
+	github.com/moby/buildkit@v0.23.0-rc1.0.20250618182037-9b91d20367db/frontend/gateway/pb/gateway_grpc.pb.go:98
+github.com/moby/buildkit/client.(*gatewayClientForBuild).Solve
+	github.com/moby/buildkit@v0.23.0-rc1.0.20250618182037-9b91d20367db/client/build.go:98
+github.com/moby/buildkit/frontend/gateway/grpcclient.(*grpcClient).Solve
+	github.com/moby/buildkit@v0.23.0-rc1.0.20250618182037-9b91d20367db/frontend/gateway/grpcclient/client.go:412
+github.com/docker/buildx/build.solve
+	github.com/docker/buildx/build/build.go:1209
+github.com/docker/buildx/build.BuildWithResultHandler.func1.4.2
+	github.com/docker/buildx/build/build.go:511
+github.com/moby/buildkit/frontend/gateway/grpcclient.(*grpcClient).Run
+	github.com/moby/buildkit@v0.23.0-rc1.0.20250618182037-9b91d20367db/frontend/gateway/grpcclient/client.go:215
+github.com/moby/buildkit/client.(*Client).Build.func2
+	github.com/moby/buildkit@v0.23.0-rc1.0.20250618182037-9b91d20367db/client/build.go:59
+github.com/moby/buildkit/client.(*Client).solve.func3
+	github.com/moby/buildkit@v0.23.0-rc1.0.20250618182037-9b91d20367db/client/solve.go:295
+golang.org/x/sync/errgroup.(*Group).add.func1
+	golang.org/x/sync@v0.14.0/errgroup/errgroup.go:130
+runtime.goexit
+	runtime/asm_arm64.s:1223
+
+311  /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json --containerd /run/containerd/containerd.sock --pidfile /run/desktop/docker.pid --swarm-default-advertise-addr=192.168.65.3 --host-gateway-ip 192.168.65.254
+github.com/moby/buildkit/frontend/gateway.(*llbBridgeForwarder).Return
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/frontend/gateway/gateway.go:1035
+github.com/moby/buildkit/control/gateway.(*GatewayForwarder).Return
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/control/gateway/gateway.go:146
+github.com/moby/buildkit/frontend/gateway/pb._LLBBridge_Return_Handler.func1
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/frontend/gateway/pb/gateway_grpc.pb.go:473
+google.golang.org/grpc.getChainUnaryHandler.func1
+	/root/build-deb/engine/vendor/google.golang.org/grpc/server.go:1217
+github.com/docker/docker/api/server/router/grpc.unaryInterceptor
+	/root/build-deb/engine/api/server/router/grpc/grpc.go:71
+google.golang.org/grpc.NewServer.chainUnaryServerInterceptors.chainUnaryInterceptors.func1
+	/root/build-deb/engine/vendor/google.golang.org/grpc/server.go:1208
+github.com/moby/buildkit/frontend/gateway/pb._LLBBridge_Return_Handler
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/frontend/gateway/pb/gateway_grpc.pb.go:475
+google.golang.org/grpc.(*Server).processUnaryRPC
+	/root/build-deb/engine/vendor/google.golang.org/grpc/server.go:1405
+google.golang.org/grpc.(*Server).handleStream
+	/root/build-deb/engine/vendor/google.golang.org/grpc/server.go:1815
+google.golang.org/grpc.(*Server).serveStreams.func2.1
+	/root/build-deb/engine/vendor/google.golang.org/grpc/server.go:1035
+runtime.goexit
+	/usr/local/go/src/runtime/asm_arm64.s:1223
+
+311  /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json --containerd /run/containerd/containerd.sock --pidfile /run/desktop/docker.pid --swarm-default-advertise-addr=192.168.65.3 --host-gateway-ip 192.168.65.254
+github.com/moby/buildkit/client/llb/sourceresolver.(*imageMetaResolver).ResolveImageConfig
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/client/llb/sourceresolver/imageresolver.go:51
+github.com/moby/buildkit/frontend/gateway/forwarder.(*BridgeClient).ResolveImageConfig
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/frontend/gateway/forwarder/forward.go:93
+github.com/moby/buildkit/frontend/dockerfile/builder.(*withResolveCache).ResolveImageConfig.func1
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/frontend/dockerfile/builder/resolvecache.go:37
+github.com/moby/buildkit/util/flightcontrol.(*CachedGroup[...]).Do.func1
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/util/flightcontrol/cached.go:43
+github.com/moby/buildkit/util/flightcontrol.(*call[...]).run
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/util/flightcontrol/flightcontrol.go:122
+sync.(*Once).doSlow
+	/usr/local/go/src/sync/once.go:78
+sync.(*Once).Do
+	/usr/local/go/src/sync/once.go:69
+runtime.goexit
+	/usr/local/go/src/runtime/asm_arm64.s:1223
+
+98324 v0.26.1-desktop.1 /Users/ryanbanko/.docker/cli-plugins/docker-buildx buildx build --platform linux/amd64 --progress plain --build-arg HOST_UID=1000 --tag ctf590-solver:nyu-20250206-evaluation evidence/nyu-solver-image-evaluation/upstream
+google.golang.org/grpc.(*ClientConn).Invoke
+	google.golang.org/grpc@v1.72.2/call.go:35
+github.com/moby/buildkit/api/services/control.(*controlClient).Solve
+	github.com/moby/buildkit@v0.23.0-rc1.0.20250618182037-9b91d20367db/api/services/control/control_grpc.pb.go:88
+github.com/moby/buildkit/client.(*Client).solve.func2
+	github.com/moby/buildkit@v0.23.0-rc1.0.20250618182037-9b91d20367db/client/solve.go:268
+golang.org/x/sync/errgroup.(*Group).add.func1
+	golang.org/x/sync@v0.14.0/errgroup/errgroup.go:130
+
+311  /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json --containerd /run/containerd/containerd.sock --pidfile /run/desktop/docker.pid --swarm-default-advertise-addr=192.168.65.3 --host-gateway-ip 192.168.65.254
+github.com/moby/buildkit/frontend/dockerfile/dockerfile2llb.toDispatchState.toDispatchState.func2.toDispatchState.toDispatchState.func2.func3.func6
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/frontend/dockerfile/dockerfile2llb/convert.go:542
+golang.org/x/sync/errgroup.(*Group).add.func1
+	/root/build-deb/engine/vendor/golang.org/x/sync/errgroup/errgroup.go:130
+runtime.goexit
+	/usr/local/go/src/runtime/asm_arm64.s:1223
+
+98324 v0.26.1-desktop.1 /Users/ryanbanko/.docker/cli-plugins/docker-buildx buildx build --platform linux/amd64 --progress plain --build-arg HOST_UID=1000 --tag ctf590-solver:nyu-20250206-evaluation evidence/nyu-solver-image-evaluation/upstream
+github.com/moby/buildkit/client.(*Client).solve.func2
+	github.com/moby/buildkit@v0.23.0-rc1.0.20250618182037-9b91d20367db/client/solve.go:285
+golang.org/x/sync/errgroup.(*Group).add.func1
+	golang.org/x/sync@v0.14.0/errgroup/errgroup.go:130
+

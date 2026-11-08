@@ -1,0 +1,20 @@
+{
+  "run_id": "49dbbe743593",
+  "challenge_id": "pwn-slithery",
+  "mode": "ctftiny-readiness",
+  "termination_reason": "readiness_complete",
+  "tool_calls": 2,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "fe579bbc81876910ddbeb9f010d473e2",
+  "active_seconds": 1.618713,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.175394,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000697,
+  "total_seconds": 1.794998
+}

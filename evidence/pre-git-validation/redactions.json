@@ -1,0 +1,58 @@
+{
+  "scope": "current tracked historical deployment snapshots only",
+  "files_redacted": 2,
+  "originals_preserved_privately": true,
+  "records": [
+    {
+      "public_file": "evidence/target-network-simplification/ctftiny-readiness-7ecca9139403/cycle-1/compose.json",
+      "private_original": "runs/private-evidence-backup/pre-git-6b3bb0c469e3/evidence/target-network-simplification/ctftiny-readiness-7ecca9139403/cycle-1/compose.json",
+      "original_sha256": "4b55affd84f61b2599fa401e9287ed491b6f7ab3a8adaac3eac4e6f298083603",
+      "redacted_sha256": "4773321a2b6de5b83456be5ec78ea6700a828534fe8bea9941e316c31c20600b",
+      "redacted_field_names": [
+        {
+          "service": "mongo",
+          "field": "MONGO_INITDB_ROOT_PASSWORD"
+        },
+        {
+          "service": "nodeserver",
+          "field": "FLAG"
+        },
+        {
+          "service": "nodeserver",
+          "field": "MONGO_URI"
+        },
+        {
+          "service": "nodeserver",
+          "field": "SECRET"
+        }
+      ]
+    },
+    {
+      "public_file": "evidence/target-network-simplification/ctftiny-readiness-7ecca9139403/cycle-2/compose.json",
+      "private_original": "runs/private-evidence-backup/pre-git-6b3bb0c469e3/evidence/target-network-simplification/ctftiny-readiness-7ecca9139403/cycle-2/compose.json",
+      "original_sha256": "4b55affd84f61b2599fa401e9287ed491b6f7ab3a8adaac3eac4e6f298083603",
+      "redacted_sha256": "4773321a2b6de5b83456be5ec78ea6700a828534fe8bea9941e316c31c20600b",
+      "redacted_field_names": [
+        {
+          "service": "mongo",
+          "field": "MONGO_INITDB_ROOT_PASSWORD"
+        },
+        {
+          "service": "nodeserver",
+          "field": "FLAG"
+        },
+        {
+          "service": "nodeserver",
+          "field": "MONGO_URI"
+        },
+        {
+          "service": "nodeserver",
+          "field": "SECRET"
+        }
+      ]
+    }
+  ],
+  "history_rewritten": false,
+  "historical_committed_copies_still_require_review": true,
+  "no_account_secrets_found_in_read_only_audit": true
+}

@@ -1,0 +1,14 @@
+{
+  "local_links_and_anchors_checked": 196,
+  "links_passed": true,
+  "diff_check_passed": true,
+  "agent_config_solver_recipe_unchanged": true,
+  "dataset_clean": true,
+  "source_hashes_match_verified_code": true,
+  "model_calls": 0,
+  "commit_or_push_performed": false,
+  "containers_cleaned": true,
+  "networks_cleaned": true,
+  "original_mongo_image_preserved": true,
+  "solver_image_preserved": true
+}

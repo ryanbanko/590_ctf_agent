@@ -1,0 +1,50 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 380B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ctf590-solver:nyu-20250206-8g-evaluation
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM docker.io/library/ctf590-solver:nyu-20250206-8g-evaluation@sha256:ee8e0ef0ce3648e2f99308c6bbf4d82767c17546f22ff5931d666b103f80f38b
+#4 resolve docker.io/library/ctf590-solver:nyu-20250206-8g-evaluation@sha256:ee8e0ef0ce3648e2f99308c6bbf4d82767c17546f22ff5931d666b103f80f38b done
+#4 DONE 0.0s
+
+#4 [1/4] FROM docker.io/library/ctf590-solver:nyu-20250206-8g-evaluation@sha256:ee8e0ef0ce3648e2f99308c6bbf4d82767c17546f22ff5931d666b103f80f38b
+#4 DONE 0.0s
+
+#5 [2/4] RUN mkdir -p /workspace && chown 1000:1000 /workspace
+#5 DONE 0.2s
+
+#6 [3/4] WORKDIR /workspace
+#6 DONE 0.0s
+
+#7 [4/4] RUN python -m pip install --no-cache-dir numpy Pillow && python -m pip check
+#7 1.419 Collecting numpy
+#7 1.568   Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (62 kB)
+#7 1.774 Collecting Pillow
+#7 1.797   Downloading pillow-12.3.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+#7 1.825 Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.8 MB)
+#7 2.245    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.8/16.8 MB 43.9 MB/s  0:00:00
+#7 2.266 Downloading pillow-12.3.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+#7 2.417    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 46.9 MB/s  0:00:00
+#7 2.628 Installing collected packages: Pillow, numpy
+#7 4.133 
+#7 4.141 Successfully installed Pillow-12.3.0 numpy-2.2.6
+#7 4.514 No broken requirements found.
+#7 DONE 4.8s
+
+#8 exporting to image
+#8 exporting layers
+#8 exporting layers 2.1s done
+#8 exporting manifest sha256:905c3228264e5249cf3bf44a2a682aff5d09fba6a9b82af864fb37e4d63325b8 done
+#8 exporting config sha256:bdc018b343d9458059d2bbb3206e78ed2840dbb132f031e244993dfcd3b894a2 done
+#8 exporting attestation manifest sha256:de7bdc15e144386c23542cb25f4dddf63343910b95cd436dbd540a8cc8cf4faf done
+#8 exporting manifest list sha256:e4fc6b8f1b5bc1327ea8ecb60367e5461f7bd9ace2847c4b714d463cf69358ad done
+#8 naming to docker.io/library/ctf590-solver:nyu-20250206-8g-adapter done
+#8 DONE 2.2s

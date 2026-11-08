@@ -1,0 +1,20 @@
+{
+  "run_id": "14d03141fc7b",
+  "challenge_id": "rev-rebug-2",
+  "mode": "ctftiny-readiness",
+  "termination_reason": "readiness_complete",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "f6b575dfd1240fc9b1433737b5b0388c",
+  "active_seconds": 1.445936,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.146531,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000772,
+  "total_seconds": 1.593329
+}

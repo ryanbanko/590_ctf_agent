@@ -1,0 +1,20 @@
+{
+  "run_id": "192ed2108b10",
+  "challenge_id": "restart_resets_all_processes_and_preserves_files",
+  "mode": "synthetic-controls",
+  "termination_reason": "synthetic_complete",
+  "tool_calls": 4,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "f467852467f8c716227976298b254c65",
+  "active_seconds": 2.851499,
+  "solver_restarts": 1,
+  "cleanup_seconds": 0.212338,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000313,
+  "total_seconds": 3.064373
+}

@@ -1,8 +1,12 @@
 # Infrastructure simplification plan
 
-Recorded November 5, 2026. **Checkpoints 1–2 complete and reviewed; bounded image evaluation is next, not started.**
+Recorded November 5, 2026. **Production NYU solver integration completed November 7: 100 offline/34 Docker checks passed; default updated and baseline preserved.**
 This is the implementation plan; completion is recorded per checkpoint below. Current
 commands and contracts remain in [README](../README.md) and [DESIGN](DESIGN.md).
+Checkpoint sections preserve decisions and pending work **at the time recorded**.
+The final validation section records the latest completed state; older proposed
+integration/live-retry wording is superseded there, not a current outstanding task.
+
 
 Keep our agent, three tools (`run_command`, `write_file`, `submit_flag`), prompt
 strategy, model integration, Langfuse and sequential batch wrapper. Keep unrelated
@@ -24,7 +28,10 @@ and the CTFTiny development/ten-held-out split. Retain all three. There is no ne
 to add JSONL conversion, migrate development data or wait for a separate course
 configuration/verifier. Those possible guide-related detours are closed.
 
-Next is the previously planned **independent solver-image evaluation**. The goal
+The **independent solver-image evaluation** is recorded in checkpoint 3 below.
+The initial build hit our host reserve; the November 7 retry then built and passed
+34 adapted-candidate checks. The subsequent production integration below replaces
+the default after verification; both historical artifacts remain preserved. The goal
 is to remove custom image/toolkit maintenance where the fixed upstream candidate
 works with a smaller integration. Adoption is conditional, not a course requirement.
 
@@ -40,14 +47,25 @@ Potential removal includes our solver Dockerfile, package selection/lock regener
 and environment preparation only where the supplied image replaces them. The
 already removed worker/session/supervisor infrastructure does not depend on that
 image decision. Agent/tools/controller/guard/evaluator/tracing/batch remain.
-No image build, dependency change, runtime edit or live pilot is included in the
-current documentation audit.
+The November 6 documentation audit included no image/dependency/runtime changes
+or model calls; the subsequent approved synthetic smoke check is recorded below.
 
 After image choice, save a clean Git checkpoint and image identities, repeat
 zero-solving readiness for the intended ten under the final runtime (their older
 preparation predates simplification), then run a separately authorized small live
 pilot to check the revised tool/reset/output behavior before evaluation freezing.
 The current six preparation cycles cover only three development examples.
+
+## Live smoke before image changes — passed November 6
+
+The user approved one bounded synthetic live check after confirming VPN readiness.
+On committed clean runtime `00e6a41`, two model requests exercised `run_command`
+and `submit_flag`, ending in trusted success. Twelve hosted observations and
+usage/cost/privacy/parentage audits passed, with clean cleanup.
+[Evidence](../evidence/live-simplification-smoke/README.md). No image, runtime,
+normal model profile or agent behavior changed, and no CTFTiny challenge ran.
+This supplements existing controls; it is not the later development pilot or a
+live test of every tool/restart path. That review preceded checkpoint 3 below.
 
 ## Reuse and implementation accounting
 
@@ -62,7 +80,7 @@ New wrappers remain custom code even when they use standard libraries.
 | Custom solver image/toolkit coupled to worker startup and Python paths | Evaluate the supplied NYU baseline image from release `20250206`, commit `112cfa33f5c0a06a20e49af525ac8eb07ec98457`, using standard Docker builds | Bounded AMD64 build and utility/Python/pip/control checks. Compare total setup burden; no adoption of its host framework or separate agent/Ghidra setup | Worker-specific image startup disappears whichever image wins. Our toolkit lists disappear only if the supplied image is selected | Runtime needs a shell and Python rather than our worker environment. A failing supplied build must not force a compatibility framework |
 | Locally built images and existing provenance | Selected image frozen by identity and archived/distributed, with source revision and package inventory | Small packaging/documentation task, not an image-management subsystem | Avoid maintaining multiple supported image paths after selection | A Dockerfile with floating downloads is not by itself a reproducible evaluation artifact |
 
-The supplied image was inspected as source, **not built**. Its default entrypoint
+At proposal time the supplied image was inspected as source, **not built**. Its default entrypoint
 starts an HTTP server that this runtime does not need; a standard idle command can
 replace that startup. If its installers require substantial repair, a conventional
 lean image may be less work to maintain. Execution replacement can be developed
@@ -269,3 +287,171 @@ The duplicated implementation sequence was removed: image selection is independe
 not an execution prerequisite. Both existing checkpoint evidence sets remain;
 settings/agent/model/SDK/batch workflow are retained. Review before checkpoint 3;
 no live pilot or solving was included.
+
+## Checkpoint 3 result — November 6
+
+The approved bounded evaluation built pinned release `20250206` (`112cfa3`)
+under a separate tag; the working image was preserved. After the user disconnected
+the VPN, the unchanged AMD64/UID-1000 recipe completed its Ubuntu package,
+radare2/JADX and Python environment/package steps. The mutable external installer
+was still installing additional tools when the **10 GiB host-free-space bound**
+triggered at **567.92 seconds**. The 20-minute build deadline did not trigger.
+These temporary evaluation bounds do not change agent limits.
+
+No candidate was exported, so there are **no NYU runtime compatibility results**.
+This is a storage-limited evaluation, not proof of an upstream source defect.
+No workspace overlay, Python-path adaptation or installer fork was introduced.
+The initial package step selected 1,068 new packages and estimated 5,097 MB added
+filesystem use; final image size/build time remain unknown.
+
+At the November 6 checkpoint, we recommended retaining the current image; this
+was reopened by the November 7 storage review. Eleven focused existing Docker cases
+passed against it, including all three tools, evaluator separation, timeout reset,
+hard limits and denial evidence. Image identity/RootFS are unchanged. The image
+has a preservation tag and checksummed local archive; normal TOML/build commands
+remain unchanged. Only this evaluation's 19 identified cache records were removed,
+reclaiming 6.742 GB, with the working image reverified afterward.
+
+[Evidence](../evidence/nyu-solver-image-evaluation/README.md) preserves sources,
+logs, controls, identity/archive metadata and the untested scope. No runtime/test/
+dependency changes, additional subsystem, model call or challenge attempt was made.
+Upstream adoption remains optional; reopening it needs adequate storage and a
+concrete maintenance/capability benefit, followed by the original compatibility
+gate. Review this result before the ten-environment readiness refresh or a live pilot.
+
+## Checkpoint 3 retry result — November 7
+
+With effective 8 GiB Docker VM RAM and recovered host space, the unchanged NYU
+release built in 1,036.861s. Minimum observed host availability was about 25.2 GiB;
+no resource interruption. The eight-line child adds workspace/ownership/output
+settings and NumPy/Pillow to the existing venv. Its build and pip consistency check
+passed; all 34 candidate compatibility/control/additional-tool cases passed with
+the existing solver limits. Two adapted environment checks also passed on our image.
+
+Recommend the tested frozen NYU-based artifact plus that small adapter, accepting
+the larger roughly 11.5 GB adapted image and documenting unsupported optional installer
+extras. Functional SageMath/radare2/angr/multilib and sudo-boundary results support
+this recommendation; no solve-rate claim or blanket toolkit guarantee is made.
+Current image/RootFS and normal settings remain unchanged. Candidate archive,
+inventories, resource samples and full test results are in
+[evidence](../evidence/nyu-solver-image-evaluation/retry-8g/README.md).
+
+Next reviewed integration: reuse the pinned upstream installation body plus the
+tested adapter additions in **one final solver Dockerfile**, omitting the unused
+HTTP entrypoint. Keep the existing image-build command; no separate parent-build
+wrapper or permanent two-image arrangement. Remove our replaced recipe and two
+requirements files, verify the combined build, and document frozen-image loading
+and a one-time Docker-only preflight. No new framework, daemon or runtime backend.
+The first raw-image probe exceeded 60s and its repeat took 1.405s; exact cause is
+unknown, so do not claim cold first startup always fits 15s. Keep GDB/context and
+agent behavior changes separate. Stop for review before default integration or
+live attempts. The candidate has not been published or distributed to teammates.
+
+
+## Checkpoint 3 production integration — November 7
+
+Completed with [evidence](../evidence/nyu-solver-integration/README.md). One normal
+solver Dockerfile reuses the supplied installation body and appends the verified
+workspace/environment/library changes plus existing inventories. The HTTP
+entrypoint is omitted; no parent-build wrapper, execution backend or compatibility
+subsystem was introduced. The old active dependency input/lock are archived;
+MIT attribution is added. Five image checks are consolidated into normal tests.
+Only the provenance file list changes in application Python.
+
+The normal build passed in 14.03s with cached upstream layers. All 100 offline
+and 34 Docker checks passed, with cleanup verified. First combined-image startup
+was 0.73s and first Python exec 0.17s. Base/host caches remained: this does not
+resolve every clean-machine cold-start case. It fits the current allowance here,
+so the previously proposed preflight addition is unnecessary at this checkpoint.
+No automatic startup workaround or extra setting was added.
+
+The normal default selects the tested image; RootFS/configuration match the
+checked artifact. The lean baseline is preserved and the new default is separately
+archived/checksummed, with inventories. README documents source-build and frozen
+artifact loading; no registry/upload/distribution mechanism was added. Tradeoffs:
+roughly 11.5 GB image, Python 3.10, floating upstream downloads, unsupported optional
+extras and no claim of live GDB or solve-rate improvement. Agent behavior, limits,
+three tools, guard/evaluator, model/SDK and batch workflow remain unchanged.
+
+Review before the final-runtime ten-environment readiness refresh and separately
+authorized small live pilot. No live model call or challenge attempt was included.
+
+
+## Final-runtime readiness refresh — November 7
+
+The separately approved normal preparation command passed two fresh cycles for
+all ten reserved environments (20 cycles), without solving or model calls.
+[Evidence](../evidence/final-runtime-readiness/README.md) includes private boundaries,
+file/connection checks, denied-traffic incidents, reset and cleanup. Three selected
+development environments also passed two cycles each. The one-trial, three-category
+pilot is approved but awaiting the user's VPN confirmation; agent and settings stay
+unchanged. [Pilot plan](../evidence/nyu-runtime-pilot/README.md). No code changes.
+
+
+## Live development pilot and diagnostic — November 7
+
+After VPN confirmation, one existing `run-batch` ran all three selected development
+attempts: algebra/reverse engineering succeeded, web stopped on blocked frontend
+port 4999 (only 80 assigned). All records/hosted audits and cleanup completed.
+18 requests/18 tools; no retries or configuration/agent changes.
+[Results](../evidence/nyu-runtime-pilot/README.md).
+
+Relevant web tools show frontend 502s preceding port probing. Fresh zero-model
+startup checks reproduced MongoDB exit 132 with missing-AVX warnings/restarts and
+subsequent Node database-connectivity failure/exit. The TCP-only readiness pass
+is limited: dependency restarting was not detected. Next review is a narrow
+compatibility/readiness fix, not expanded solver ports or an agent rewrite.
+The original scope incident remains preserved. Generated Compose snapshots are
+private/local and now ignored; already tracked historical snapshots need separate
+publication cleanup. No commit, push or history rewrite.
+
+
+## Same-release Mongo compatibility evaluation — November 7
+
+The independent [ARM64 Mongo evaluation](../evidence/mongo-arm64-evaluation/README.md)
+passed two fresh zero-model deployments using the matching MongoDB 7.0.9 artifact.
+The original AMD64 and candidate ARM64 manifests belong to the same official
+release index. Database ping, normal-account registration/login/profile, stable
+services after 35s, fresh storage, solver boundary, unchanged port denial and
+cleanup passed. No runtime source/default/dataset change or live retry.
+
+Next proposed integration is a narrowly recorded exact-image substitution on
+ARM64 hosts and a focused dependency-state readiness improvement. Retain the
+original image on AMD64, existing port-80 scope, current solver and agent. Do not
+add a general compatibility resolver or custom database build. Stop for review.
+
+
+## MongoDB compatibility/readiness production integration — November 7
+
+Completed in existing `challenge.py`: exact same-release image substitution on
+ARM64 Docker engines, unchanged original on AMD64, explicit adjustment record.
+Compose's standard bounded `--wait` replaces detached-only startup; one shared
+safe state function records/rejects failed dependencies before yielding a target,
+on failed startup, and after readiness probes. No custom health polling subsystem,
+new dependency/configuration file, solver/agent/port change or dataset edit.
+
+111 offline cases passed. Two new Docker dependency-failure cases passed; one
+existing network/reset check needed a focused rerun after Docker transiently
+reported its existing local image missing. Initial failure is preserved. Two
+fresh normal preparation cycles and two normal functional cycles passed, including
+service-field preservation, registration/login/profile, stable dependencies, fresh
+DB, scope denial and cleanup. [Evidence](../evidence/mongo-arm64-integration/README.md).
+No live model retry, commit or push. Review before the separate web pilot retry;
+retain original unsuccessful attempt. Historical private Compose publication
+cleanup and daemon lookup anomaly remain separate follow-ups.
+
+
+## Full validation before Git — November 7
+
+The user authorized final checks and one fresh web development attempt before Git.
+All 111 offline and 36 Docker cases passed on their first full run, with cleanup.
+The ten reserved IDs plus repaired web target passed 22 fresh readiness cycles.
+After VPN confirmation the unchanged agent achieved trusted web success in four
+requests/four tools, with complete automatic records/audits and cleanup. Detailed
+conversation review is deferred at the user's request. No agent/runtime change,
+scored trial or additional retry. [Evidence](../evidence/pre-git-validation/README.md).
+
+Two private historical snapshots were preserved under ignored `runs/` and redacted
+in current tracked copies. Older committed versions remain; no history rewrite,
+commit or push. Resolve the publication/history choice before sharing. The local
+runtime checkpoint is verified; further work can focus on the agent.

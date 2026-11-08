@@ -1,0 +1,34 @@
+{
+  "purpose": "Small development pilot of integrated solver and unchanged agent/workflow",
+  "challenges": [
+    "msc-algebra",
+    "rev-checker",
+    "web-shreeramquest"
+  ],
+  "trials": 1,
+  "attempt_wall_seconds": 600,
+  "model_requests_per_attempt": 40,
+  "tool_calls_per_attempt": 80,
+  "model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "request_seconds": 60,
+  "config_sha256": "03ab48e8e8e50fa94a947952a7dc170d72216f437d0b5a705b5be23cd2346132",
+  "agent_sha256": "18606905b105cd15a2231488cb88dcef5accd7704bea6d5effb8f82d711d1970",
+  "prerequisites": [
+    "Final-runtime held-out environment readiness without solving",
+    "Selected development environment readiness",
+    "User confirms VPN ready"
+  ],
+  "stop_on": [
+    "scope violation",
+    "incomplete records",
+    "cleanup failure",
+    "guard or infrastructure failure",
+    "model response-source failure"
+  ],
+  "authorization": "User approved the proposed ten-environment readiness and three-category development pilot; subsequently asked to be notified when VPN is needed. No live model calls before VPN confirmation.",
+  "status": "stopped-for-scope-review",
+  "output_root": "runs/pilots/nyu-integrated-20261107",
+  "vpn_confirmed": true,
+  "batch_directory": "runs/pilots/nyu-integrated-20261107/batch-1707e5f1f3f5"
+}

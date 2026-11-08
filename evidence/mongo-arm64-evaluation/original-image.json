@@ -1,0 +1,19 @@
+{
+  "image_id": "sha256:7b88befc893008d7139ce3276c093b3efd435023af8bb76a9d79fa90be1eaeb6",
+  "architecture": "amd64",
+  "server_version": "7.0.9",
+  "server_major": "7.0",
+  "rootfs": {
+    "Type": "layers",
+    "Layers": [
+      "sha256:629ca62fb7c791374ce57626d6b8b62c76378be091a0daf1a60d32700b49add7",
+      "sha256:f3dd883cf93fb1c3b0c9e380bf4a5524b5a30904e7fd1d0538106a9b42903fbd",
+      "sha256:2ca162ffe02538d0b118c0ee1599a2076ede4508452c3c17ec5665222037853a",
+      "sha256:b53c29b259e1c531e1fe6d7a9e8646e01cc42dbd6e451f4ae6dceea047f76e7d",
+      "sha256:cc2190b0604531a339a103e58f1cc9f4355294f5f829e263dd98f432172f7c4d",
+      "sha256:b3174466ec9d13d53c68d9b241dbab32d83df5e14984323f72e905c8967c651a",
+      "sha256:c09d1c15fa854cbcdce06067c0c736dd861f1b17800dad719852bba69f08e379",
+      "sha256:89d8f47432c6bb0aa11e988b83c49c41f0bd727dd5897b47ef4b394a5650fa29"
+    ]
+  }
+}

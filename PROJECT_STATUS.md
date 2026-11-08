@@ -1,8 +1,187 @@
 # Project status
 
-Last reviewed: November 6, 2026 (America/New_York).
+Last reviewed: November 7, 2026 (America/New_York).
 
-**Infrastructure checkpoints 1–2 complete and reviewed; bounded solver-image evaluation is next.**
+**Pre-Git validation passed: 111 offline tests, all 36 Docker cases, 22 fresh readiness cycles and a verified fresh web success. Detailed trace review is deferred; current private snapshots are redacted, but two older committed versions need publication-history review.**
+
+## Final pre-Git validation — completed November 7
+
+Ran the full current offline/Docker suites with **111/111 and 36/36 passing**, no
+retries, cleanup verified. Refreshed all ten reserved environments plus the repaired
+web development target: **22 fresh readiness cycles passed**, including final
+code's dependency checks and private/scope/reset boundaries, with no solving or
+model calls on reserved challenges.
+
+After VPN confirmation, one fresh `web-shreeramquest` development attempt ended
+in **trusted evaluator success**: 4 model requests/4 tools, 14.879s active,
+27.184s complete launch/export, estimated $0.00085533. Automatic records/privacy/
+parentage/cleanup audits passed. At user request, detailed trace review is deferred.
+Original unsuccessful pilot is preserved. No agent/prompt/settings/runtime-code
+changes were needed during this validation. [Complete validation evidence](evidence/pre-git-validation/README.md).
+
+Two tracked historical Compose snapshots with private target environment values
+were backed up byte-for-byte under ignored `runs/`, then redacted in the working
+tree. No current host account-key matches were found in the publication scan.
+Two prior committed file versions still contain private deployment data; history
+was not rewritten. Review the publication/history approach before public sharing.
+No commit or push. Runtime checkpoint is ready for review; agent-focused work and
+later scored evaluation remain separate stages.
+
+## MongoDB compatibility and dependency readiness — completed November 7
+
+The normal launcher now substitutes the **exact supplied AMD64 MongoDB 7.0.9
+reference** with its matching pinned ARM64 sibling on ARM64/aarch64 Docker engines.
+AMD64 engines and other image references stay supplied. Both are 7.0.9-jammy from
+the same official release index; `target.json` records original/replacement,
+platform, version and reason. No dataset edit, dependency/configuration file,
+registry resolver, application change, solver or endpoint expansion.
+
+Startup uses bounded native Compose `--wait` for supplied healthchecks. One small
+safe state checker detects restarting, exited/OOM and health failures, including
+when a frontend is running; records exclude environment/health logs. Preparation
+checks dependencies again after its probes. Failure states survive cleanup in
+`target.json`; prior restart counts alone do not reject a healthy service.
+
+**111 offline cases passed.** Two new Docker failure cases passed; an existing
+network/reset case hit an intermittent local fixture-image lookup error, then
+passed its focused rerun after the image was verified present. Both initial
+failure and retry remain recorded. Normal CLI preparation passed two fresh cycles;
+normal-lifecycle registration/login/own-profile checks passed two more, preserving
+supplied service fields, fresh DB state, stable services, boundaries and cleanup.
+No model calls, live retry, changed model/agent/tools/guard/evaluator/batch settings,
+commit or push. [Exact substitution, source and evidence](evidence/mongo-arm64-integration/README.md).
+
+The daemon image-lookup anomaly and older tracked private Compose publication
+cleanup remain separate follow-ups. Services without supplied healthchecks still
+have no universal application-health guarantee. Stop for review; a single fresh
+web pilot can be authorized next, with its original failed attempt retained.
+
+## Earlier independent MongoDB ARM64 check — passed November 7
+
+Historical evaluation; the production integration above supersedes its pending recommendation.
+
+The supplied database is AMD64 **MongoDB 7.0.9**. Its matching official ARM64
+manifest is a sibling of that exact AMD64 artifact in the same release index.
+After the user disconnected VPN, pull/version probes passed. Two fresh temporary
+deployments replaced only Mongo's image/platform: authenticated database ping,
+registration/login/own-profile on port 80, stable services after 35s, fresh reset,
+private boundaries, port-4999 denial and cleanup all passed. **Zero model calls**,
+no solving/submissions, dataset/source/default configuration changes or live retry.
+[Artifact, complete checks and recommendation](evidence/mongo-arm64-evaluation/README.md).
+
+Recommend a narrow recorded substitution of this exact Mongo digest on ARM64
+Docker hosts, keeping the supplied image on AMD64 hosts, plus preparation checks
+for restarting/exited/unhealthy dependencies and restart counts. No general image
+resolver or network expansion. Review before implementing that integration; original
+failed pilot and AMD64 diagnostic remain preserved. No commit or push.
+
+## Final-runtime readiness and pilot — November 7
+
+The ten held-out environments passed the normal zero-model preparation command:
+**20 fresh cycles**, exact contestant files, private boundaries, permitted
+connect-and-close, denied-traffic/independent incident evidence, reset and cleanup.
+No solving, model calls or held-out answer review. [Readiness evidence](evidence/final-runtime-readiness/README.md).
+
+The three development pilot selections also passed the existing preparation
+checks, then ran after VPN confirmation with unchanged settings: `msc-algebra`
+and `rev-checker` succeeded; `web-shreeramquest` stopped on a scope violation.
+All three exports/evidence audits completed and cleanup passed. Total 18 model
+requests/18 tools in 140.75s; estimated model cost $0.00596. No retry or agent/
+prompt/tool/settings/image/scope change. [Pilot results](evidence/nyu-runtime-pilot/README.md).
+
+The web attempt used the correct port 80, received 502 responses, then probed
+4999/3000/8080; 4999 on the frontend IP was blocked. The supplied proxy forwards
+internally to `nodeserver:4999`. A fresh zero-model diagnostic reproduced MongoDB
+restarting with exit 132/AVX-unavailable warnings, followed by Node exit/database
+connection errors. Opening a port does not repair this target CPU incompatibility.
+Existing TCP-only preparation passed its stated connectivity/isolation checks but
+missed dependency health (`Running=true` can coexist with `Restarting=true`).
+Do not interpret the ten passing control checks as full application readiness.
+Review a narrow readiness/compatibility fix before another pilot; keep agent
+behavior changes separate. Detailed conversation review remains primarily with
+the user; only the relevant web tool sequence was inspected when requested.
+
+Generated Compose snapshots can contain private target values. New ones remain
+local and Git-ignored; older tracked snapshots need a separate publication cleanup.
+An unfiltered Compose inspection included private deployment values in local
+assistant tool output; subsequent diagnostic output is filtered and no such values
+were added to new agent/model inputs or reports. No further model calls followed
+that inspection. No commit, push or Git-history rewrite was performed.
+
+## Production solver integration — completed November 7
+
+One [solver Dockerfile](docker/solver.Dockerfile) reuses the supplied release
+installation body, adds the tested workspace/environment settings and pinned
+NumPy/Pillow, and omits the unused HTTP entrypoint. The two former active solver
+requirements files are archived, not used for installation. MIT attribution is
+included. Five evaluation-only toolkit checks now run in the normal Docker suite.
+Only the provenance file list changes in application Python; no agent/tool/model/
+SDK/evaluator/guard/batch behavior or numeric limits changed.
+
+The existing `build-images` command passed in **14.03s using cached upstream
+layers**. First combined-image create/start was **0.73s**, first Python exec
+**0.17s**; this is not a clean-machine cold test. No new preflight subsystem or
+startup allowance was added. **100 offline tests and 34 Docker cases passed**,
+including controls, restart persistence, fresh state and functional toolkit checks;
+cleanup was verified. The default `ctf590-solver:m1` now matches the tested image.
+The lean baseline image/archive remain preserved; a separate verified archive
+freezes the new default. Images/archives have not been published to teammates.
+
+[Integration evidence and artifact identities](evidence/nyu-solver-integration/README.md).
+The roughly 11.5 GB footprint, floating upstream downloads, unsupported optional
+tools and unestablished live GDB support remain explicit limitations. README now
+covers source builds and loading the shared artifact. No model calls, uploads,
+challenge attempts, commit or push. Stop for review; the final-runtime environment
+readiness refresh and small live pilot are later stages.
+
+## Earlier supplied-image retry — passed November 7
+
+Historical evaluation; the production integration above supersedes its pending recommendation.
+
+After applying the user's saved 8 GiB setting with a normal Desktop restart, the
+unchanged AMD64/UID-1000 NYU release built in **17m 17s**. Minimum recorded host
+free space during the build was about **25.2 GiB**; no resource bound triggered.
+VM memory samples showed substantial available RAM and unused swap. Eight GiB
+was sufficient here; Mac swap alone did not establish a Docker memory shortage.
+
+An **eight-line child recipe** adds writable `/workspace`, the existing output
+environment settings and missing NumPy/Pillow. Its build and `pip check` passed.
+All **29 existing Docker compatibility/control cases plus five additional cases
+passed** under existing solver limits. Functional checks cover SageMath arithmetic/
+linear algebra, radare2 binary analysis, angr symbolic execution, ELF32 compilation/
+execution and denial of supplied sudo elevation. Two portable offline pip/home
+tests also passed against the current image. No application/agent/model/guard/SDK
+or normal configuration change; only test adaptations and evaluation inputs.
+
+Recommend this tested NYU-based image with its small adapter for broader CTF
+tooling, accepting roughly **11.5 GB** Docker image footprint versus **1.16 GB**
+for ours. It does not establish every upstream tool works: the external installer
+ignored Kali-package/Sherlock/Cutter errors. Those extras remain unsupported.
+The first raw-image probe exceeded 60 seconds, while its repeat completed in
+1.405s; plan a one-time zero-model image preflight, not a claim about the cause.
+
+The tested adapter has a verified **2.94 GB local archive**, image identity and
+OS/Python inventories. It is not published/distributed yet. Original solver image/
+RootFS and defaults remain unchanged; all test resources cleaned up. No model
+calls or real challenge attempts. [Results, tradeoffs and next integration](evidence/nyu-solver-image-evaluation/retry-8g/README.md).
+Stop for review before changing defaults or running a live pilot.
+
+## Earlier November 7 storage review
+
+November 7 follow-up: the build stopped at our chosen 10 GiB Mac-space reserve,
+not an observed Docker/host filesystem-full error. Docker's sparse disk has a
+1 TiB virtual ceiling and about 931 GiB available internally; the Mac had about
+24 GiB physically available before cleanup. Raising Docker's disk ceiling would
+not help. At that review Docker was configured for 16 GiB RAM on a 16 GiB Mac;
+the subsequent 8 GiB retry is recorded above. Host swap was about 6.6 GiB; historical
+build swap/peak storage were not sampled. The build context was only 2,704 bytes.
+The user approved removal of the unrelated 10.9 GB fMRIPrep image; it was removed
+without changing the solver image. Host free space rose from **24.29 to 34.46 GiB**.
+[Storage measurements](evidence/nyu-solver-image-evaluation/storage-review.json)
+and [authorized removal](evidence/nyu-solver-image-evaluation/fmriprep-removal.json).
+Do not settle the image comparison from the reserve-triggered cancellation.
+The then-pending allocation/retry/checks are now recorded above.
+
 Supplied Compose services now retain commands, dependencies, aliases, DNS,
 permissions, storage and resource settings. Fresh project-local bridges/volumes
 replace network reconstruction. The guard joins the challenge-facing bridge;
@@ -11,8 +190,10 @@ are removed. Socket/port/global-name adjustments are explicitly recorded.
 
 **100 offline tests and 29 synthetic Docker cases passed**, with cleanup verified.
 Two fresh zero-model preparation cycles each passed for `pwn-baby-boi`,
-`web-shreeramquest` and `cry-ecxor` (six cycles total). No live model calls, new
-hosted traces, solving or performance comparison ran.
+`web-shreeramquest` and `cry-ecxor` (six cycles total). Those infrastructure
+checks made no model calls. A subsequent approved live synthetic smoke test
+passed with two requests; details below. No CTFTiny solving or performance
+comparison ran.
 [Current checkpoint evidence](evidence/target-network-simplification/README.md).
 
 Material changes: targets regain supplied/default capabilities, resource settings
@@ -29,12 +210,66 @@ no non-socket binds. Writable host binds/external storage require an explicit
 reset strategy. No host-sharing or storage-copy workaround was added.
 
 The [separate plan](docs/SIMPLIFICATION_PLAN.md) records both completed checkpoints
-and independent supplied-image evaluation, which remains **not completed**. Our
+and supplied-image evaluation. The initial build was canceled at our host reserve;
+the subsequent adapted candidate passed the compatibility/control checks above. Our
 agent/prompt/model, three tools, Langfuse SDK export, TOML and batch workflow remain.
 Baseline commit `64f6385`, checkpoint evidence and previous solver/guard images are
-preserved. The image was source-reviewed only; GDB/context/agent behavior remain
+preserved. The current image is also archived locally; GDB/context/agent behavior remain
 separate. The direct course clarifications and next steps are recorded below.
 Live pilot remains a separately authorized stage.
+
+## Bounded solver-image evaluation — November 6
+
+The user authorized the independent build and synthetic comparison. Pinned NYU
+release `20250206` (`112cfa3`) was built unchanged for AMD64 with UID 1000, under a
+separate candidate tag. Initial Docker Hub EOF errors cleared after the user
+disconnected the VPN. Ubuntu packages, radare2/JADX and the Python venv/pip steps
+completed. The external `ctftools` installer was canceled after **567.92 seconds**
+when host free space fell below **10 GiB**; the 20-minute time limit did not trigger.
+These are evaluation-only bounds, not agent settings or assignment requirements.
+
+No completed candidate image exists. Candidate tools, pip, privilege boundaries,
+restart persistence and fresh-state compatibility were therefore **not tested**.
+The 1,068-package initial apt step estimated 5,097 MB of added filesystem data;
+the completed evaluation cache chain occupied 6.742 GB before scoped cleanup.
+Neither number is a final candidate-image size. Do not describe this as a broken
+upstream Dockerfile or a failed runtime compatibility test.
+
+**November 6 recommendation, reopened by the November 7 storage review:** retain our current lean image. It already supports the current
+workflow; adoption has not demonstrated a net reduction in maintenance. A future
+retry needs adequate build storage and the same synthetic compatibility gate.
+Workspace/environment adaptations remain proposals, not implemented changes.
+
+Eleven existing synthetic Docker cases passed against the current image, including
+all three tools, trusted verification, private filesystem/privilege boundaries,
+timeout recovery, hard limits and six denial cases. Its AMD64 identity and RootFS
+are unchanged. A preservation tag and checksummed 266,362,880-byte local image
+archive were created under Git-ignored `runs/frozen-images/`. Only the canceled
+build's 19 identified cache records were removed (6.742 GB); unrelated cache and
+images remain. Managed-container/network cleanup passed. No runtime, tests,
+dependency/configuration, agent, SDK or batch change; no model calls or challenge
+attempts. [Build, controls and preservation evidence](evidence/nyu-solver-image-evaluation/README.md).
+
+## Live synthetic smoke check — passed November 6
+
+The user approved the existing bounded `model-check` and confirmed VPN readiness
+before model requests. On clean committed runtime `00e6a41`, the model fetched
+JSON from the isolated synthetic target, then submitted its observed candidate;
+trusted verification accepted it. Two real model requests and two tool calls
+produced 12 complete hosted Langfuse observations. All check/privacy/parentage/
+usage audits passed; cleanup was verified with no scope incidents or errors.
+
+Run `b2ce1cd44ed6`: 1,585 input and 191 output tokens (including 7 reasoning),
+$0.000254 estimated model cost matching hosted totals, 5.72 active seconds and
+22.25 seconds for the complete check/readback. The initial model input excluded
+the answer. The observed candidate appeared only after tool output.
+[Evidence and trace](evidence/live-simplification-smoke/README.md).
+
+No runtime, prompt, normal model setting, dependency or image changed. This smoke
+check covered real provider/command/submission/export behavior; live file writing,
+restarts, broader challenge behavior and solve rate were not exercised. Previous
+100/29 control evidence remains valid. That review preceded the bounded image
+evaluation above; a broader live development pilot remains separately authorized.
 
 ## Latest course clarification and current plan
 
@@ -45,21 +280,56 @@ no JSONL conversion, NYU development-data migration or separate course-runtime
 adapter is required. This confirms the approach, not every compatibility/control
 claim. Existing evidence and known exceptions remain.
 
-Next: the [bounded image checkpoint](docs/SIMPLIFICATION_PLAN.md#course-clarification-and-next-checkpoint--november-6)
-compares the supplied fixed-version solver with our working image. Image adoption
-is conditional on lower maintenance and passing focused execution/isolation checks;
-no build has started. Then save source/image identities, refresh zero-solving
-readiness for the ten intended evaluation environments and review a separately
-authorized small live pilot. The agent, tools, model, SDK export and batch stay.
+The [bounded image checkpoint](docs/SIMPLIFICATION_PLAN.md#checkpoint-3-result--november-6)
+now has passing production integration evidence. Review the completed checkpoint,
+then save a clean source checkpoint and refresh zero-solving readiness
+for the ten intended evaluation environments and review a separately authorized
+small live pilot. These later stages have not started. The agent, tools, model,
+SDK export and batch stay.
 
 The newer guide states one configuration with three fresh attempts per challenge,
 per-challenge success/sample-SD/token/time metrics, and a demo that need not solve.
 These are recorded as **guide statements**, distinct from the three email approvals.
 The working checklist below reflects that guide; original Canvas requirements
 remain unchanged in ASSIGNMENT.md and their differences are preserved in REFERENCES.
-No report/evaluation/model work was performed by this documentation audit.
+The earlier documentation audit did not run models. The subsequently approved
+live synthetic check above is setup evidence, not scored evaluation or report work.
 
 ## Current Git checkpoint
+
+Last commit is `00e6a411811b9d076907f6e512fac5b97f20fc96` (`00e6a41`),
+“simplified solver, filesystem, timeout recovery, networking.” Those execution/
+network changes and the earlier SDK-export/configuration cleanup are already in
+that baseline; they are not new changes listed below.
+
+Changes since that commit, saved locally and uncommitted:
+
+- Integrated the evaluated NYU installation body into one solver Dockerfile,
+  retained MIT attribution and removed the two active solver requirements files
+  (archived copies preserved). Original lean image/archive remain available.
+- Added the exact same-release MongoDB 7.0.9 ARM64 substitution and recorded
+  adjustment on ARM64 Docker engines; AMD64 and other references stay supplied.
+- Added native Compose health waiting and safe dependency-state checks at startup,
+  on startup failure and after readiness probes. Added focused tests and
+  consolidated toolkit checks into the normal Docker suite.
+- Updated source provenance to include the NYU license instead of obsolete
+  requirements files. Agent, prompt, three tools, model settings, evaluator,
+  guard, native SDK export and batch behavior are unchanged.
+- Added image evaluation/build/freeze, smoke/pilot, final validation and privacy
+  evidence; updated README, status, design, references, experiment log and plan.
+  Current verification: 111 offline/36 Docker cases, 22 readiness cycles and a
+  fresh verified web success. Detailed trace review remains deferred.
+- Ignored new private Compose snapshots and redacted private fields in two old
+  tracked public copies, preserving exact originals under ignored `runs/`.
+  Historical committed versions still need a publication/history decision.
+
+No files are committed or pushed by this work; no history rewrite. Image archives,
+`.env`, dataset checkout, live run records and private originals remain Git-ignored.
+The saved Git evidence includes source/image hashes and dirty-working-tree status.
+Earlier checkpoint sections below retain their status at the time; the latest
+completion state is at the top of this file.
+
+### Earlier November 6 pre-commit audit
 
 November 6 audit: local `main`, local `origin/main` and read-only GitHub `main`
 all point to `64f6385fb788f2c54e2a4f0ca6a661fd8d1c51d1` (`64f6385`). There are no
@@ -171,11 +441,14 @@ calls or API spending.
 - [x] Replace execution machinery and verify solver restart recovery; remove per-tool scans.
 - [x] Review execution, then simplify supplied targets/networking and verify scope/reset.
 - [x] Review the target/network checkpoint and record professor confirmations.
-- [ ] Evaluate the supplied image with bounded checks; adopt only if simpler, then freeze the selected artifact.
-- [ ] Recheck the intended ten environments under the final runtime without solving.
+- [x] Verify one bounded live synthetic command/submission/hosted-export cycle after simplification.
+- [x] Complete image comparison and production integration: 100 offline/34 Docker checks passed; new default frozen and lean baseline preserved.
+- [x] Recheck the intended ten environments under the final runtime without solving: 20 fresh cycles passed.
 - [ ] Support the chosen improvement with trace evidence and small follow-up checks.
   The earlier exploratory pair is preserved; the new guide does not require a second full evaluation.
-- [ ] Run a small development pilot and review readiness and projected resource use.
+- [x] Integrate and verify the same-release native MongoDB adjustment and dependency-state readiness checks.
+- [x] Complete the separately approved fresh web retry: verified success after the MongoDB fix; original scope incident retained.
+- [ ] Review development traces and assess agent behavior separately; manual trace review deferred at user request.
 - [ ] Freeze code, dependencies, images, dataset and settings for evaluation.
 - [ ] Following the new guide, run one fixed configuration for three fresh trials
   on each of the ten reserved challenges; preserve failures, missing usage and
@@ -197,6 +470,9 @@ calls or API spending.
   reproducible launch instructions; submit by November 11 at 11:59 p.m. Eastern.
 
 ## Current implementation
+
+The production image integration above supersedes earlier image/requirements/home
+settings in the dated implementation history below. Current commands are in README.
 
 ### Target/network simplification — checkpoint complete
 
@@ -220,7 +496,7 @@ Targets now inherit ordinary Docker/supplied capabilities and resource settings.
 Solver controls still enforce scope, CPU/RAM/PIDs/time/calls/output/write/model
 limits. The known privileged target and storage needing bespoke reset fail
 explicitly. Neither preparation nor socket omission proves solving compatibility.
-Stop for review before independent supplied-image selection or a live pilot.
+The then-pending image review is recorded above; a live pilot remains separate.
 
 
 ### Previous execution simplification — checkpoint complete
@@ -704,6 +980,7 @@ downloaded datasets and temporary `runs/` records remain Git-ignored.
 
 | Milestone | Records |
 | --- | --- |
+| Live synthetic smoke after simplification | [live-simplification-smoke](evidence/live-simplification-smoke/README.md) |
 | Target/network simplification | [target-network-simplification](evidence/target-network-simplification/README.md) |
 | Execution simplification | [execution-simplification](evidence/execution-simplification/README.md) |
 | Configuration, SDK export and package snapshots | [config-sdk-cleanup](evidence/config-sdk-cleanup/README.md) |

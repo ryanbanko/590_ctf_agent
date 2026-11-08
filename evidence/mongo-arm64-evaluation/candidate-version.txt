@@ -1,0 +1,13 @@
+db version v7.0.9
+Build Info: {
+    "version": "7.0.9",
+    "gitVersion": "3ff3a3925c36ed277cf5eafca5495f2e3728dd67",
+    "openSSLVersion": "OpenSSL 3.0.2 15 Mar 2022",
+    "modules": [],
+    "allocator": "tcmalloc",
+    "environment": {
+        "distmod": "ubuntu2204",
+        "distarch": "aarch64",
+        "target_arch": "aarch64"
+    }
+}

@@ -9,7 +9,7 @@ an agent framework or application class hierarchy.
 
 This document describes implemented behavior. The approved
 [simplification plan](SIMPLIFICATION_PLAN.md) separates execution replacement
-from the completed target/network checkpoint and the remaining image evaluation. Our agent, three
+from the completed target/network checkpoint and the independent image evaluation. Our agent, three
 tools, model integration, native SDK export, complete TOML and batch wrapper remain.
 
 The [November 6 instructor reply](REFERENCES.md#november-6-course-guide-and-professor-confirmations)
@@ -18,12 +18,16 @@ exports and held-out CTFTiny selection. Keep the current boundaries and record
 formats. The course guide's references to separate components do not require a
 course-runtime adapter, JSONL layer or NYU development migration for this project.
 
-Solver-image selection remains independent of execution. A fixed upstream image
-may replace our Dockerfile/toolkit lists and Python environment setup if focused
-checks show it needs less maintenance. Its defaults, sudo, paths and dependencies
-must be checked under our actual non-root/no-new-privileges runtime. The guard,
-private evaluator, bounded tools and experiment records remain regardless of
-image choice. No supplied-image build or adoption has occurred.
+Solver-image selection remains independent of execution. Following the successful
+[8 GiB evaluation](../evidence/nyu-solver-image-evaluation/retry-8g/README.md), the
+[production integration](../evidence/nyu-solver-integration/README.md) uses one
+Dockerfile with the supplied NYU release installation body and small project
+additions. The unused HTTP entrypoint is omitted. The normal build/default tag
+now selects this image; no NYU agent framework, parent-build wrapper or second
+execution backend was added. All 100 offline tests and 34 normal Docker cases
+passed. The larger toolkit costs roughly 11.5 GB; optional installer failures
+remain documented. The lean image and its archive remain historical baselines.
+Agent, tools, guard, evaluator, model/SDK and batch behavior are unchanged.
 
 ## One challenge path
 
@@ -85,6 +89,29 @@ are explicit exceptions, not proof that all challenge behavior is unchanged.
 A demonstrated need for Docker administration would require a separate engine;
 a read-only socket bind still permits Docker API writes and is not a solution.
 
+One demonstrated CPU exception is explicit: on ARM64/aarch64 **Docker engines**,
+the exact supplied MongoDB 7.0.9 AMD64 reference
+`mongo:latest@sha256:7b88befc893008d7139ce3276c093b3efd435023af8bb76a9d79fa90be1eaeb6`
+is replaced by its same-release native sibling
+`mongo@sha256:8ff69162926750978451697274dc3c93eac609894b9cff7ed977e76e6bcabcbe`,
+with platform `linux/arm64`. AMD64 engines and all other references remain supplied.
+Both are MongoDB **7.0.9-jammy** in the same official manifest index. This is a
+recorded compatibility adjustment, not a generic image resolver. Application,
+environment, commands, backend graph and endpoint scope are preserved.
+[Evaluation](../evidence/mongo-arm64-evaluation/README.md) and
+[normal integration](../evidence/mongo-arm64-integration/README.md) record the checks.
+
+Compose `up --wait --wait-timeout 20` uses its standard running/healthy handling
+within the existing 30-second CLI timeout. A shared small function records only
+status/running/restarting, restart count, exit code, OOM and health status. It
+rejects exited/restarting/OOM-killed or non-healthy declared-healthcheck states;
+old restart counts alone do not reject a currently healthy service. Normal startup
+and preparation's post-probe phase use it, retaining failure states before cleanup.
+Environment values and healthcheck command/log bodies are excluded. There is no
+new daemon, readiness framework, per-challenge application probe or configuration
+field. Services without healthchecks still have no universal application-health
+guarantee, and failures after these snapshots are possible.
+
 Standard Compose `down --volumes` resets project/anonymous volumes. Read-only
 server-file binds/configs/secrets must resolve inside the challenge directory;
 Docker Desktop must share those host paths. Writable host binds and external/
@@ -127,21 +154,25 @@ The normal build selects Linux AMD64 for the solver to match CTFTiny's x86
 executables, while guard/fixture images remain native. Docker Desktop provides
 emulation on Apple Silicon; native AMD64 Linux is preferable for speed and live
 debugging (see [Docker platform guidance](https://docs.docker.com/build/building/multi-platform/)).
-Distro packages supply file/binutils/xxd, curl/netcat/OpenSSL, ZIP tools,
-GCC/make/GDB and 32-bit runtime libraries. This avoids a broad analysis framework
-or custom emulator integration. Installed OS versions are recorded in
-`/opt/os-packages.txt`; image IDs remain part of attempt provenance. Baseline
-tool availability does not guarantee arbitrary binary or specialized-package support.
+NYU's Ubuntu 22.04 recipe supplies its Python 3.10 environment and broad toolkit,
+including SageMath, radare2, angr and multilib compilation. The installation body
+is copied from release `20250206`, revision `112cfa3`; the MIT notice is retained
+in [docker/NYU-LICENSE](../docker/NYU-LICENSE). This reuses their provisioning,
+not their host setup or HTTP server. Our additions are writable `/workspace`,
+non-terminal/unbuffered settings, NumPy 2.2.6, Pillow 12.3.0, installed-package
+inventories and idle startup. All six previously supported Python capabilities
+passed; host dependencies and agent interfaces are unchanged. The old requirements
+input/lock are archived as [historical evidence](../evidence/solver-libraries/README.md),
+with no active lock-regeneration workflow. Dockerfile/license enter source provenance.
+
+The upstream recipe still uses floating downloads, including an external installer
+that ignored some optional failures. Hashcat, John, steghide and Cutter were
+absent; Sherlock failed. We do not maintain repairs for these unverified extras.
+Source rebuilds are not exact artifact reproduction: the checksummed frozen image,
+RootFS and OS/Python inventories identify the tested installation. Installed
+versions are also embedded in `/opt/os-packages.txt` and `/opt/python-packages.txt`.
 No workspace tmpfs or portable per-attempt disk quota remains. Docker's writable
 layer persists across restart and disappears when the container is removed.
-
-Six approved solver-only Python libraries are installed at build time: pwntools,
-SymPy, NumPy, PyCryptodome, requests and Pillow. A small requirements input names
-the direct versions; uv resolves the complete pinned list for Python 3.13.2 on
-AMD64 Linux. Docker installs that list, runs `pip check`, and records installed
-versions. This leaves host dependencies and the agent interfaces unchanged.
-Both requirements files enter source provenance. Regeneration and evidence are
-documented in [the library milestone](../evidence/solver-libraries/README.md).
 
 The professor approved runtime package downloads. Existing nftables/independent
 NFLOG monitoring still permits assigned endpoints, Docker DNS and public IPv4 HTTPS;
@@ -152,8 +183,8 @@ it does not replace the guard. Internet purpose relies on instructions and trace
 review, not a package-only proxy/domain firewall.
 [Clarification](REFERENCES.md#authority-and-professor-clarification).
 
-The image prepares a writable system-site-packages venv at `/opt/venv`; PATH
-selects it. Normal home `/home/solver` and `/tmp` are writable. No environment is
+NYU's image prepares a writable isolated venv at `/home/ctfplayer/.ctfenv`; PATH
+selects it. Normal home `/home/ctfplayer` and `/tmp` are writable. No environment is
 created during attempt startup. The live profile retains 1 GiB RAM and 64 PIDs;
 `workspace_mb` is removed because ordinary Docker writable storage provides no
 portable per-container disk quota. The Docker host's available disk is a practical

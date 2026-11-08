@@ -1,0 +1,20 @@
+{
+  "run_id": "76534237b609",
+  "challenge_id": "host_address",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "05c26bd6ce1d5d28e6cd211a9be9f5db",
+  "active_seconds": 1.118224,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.168011,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000156,
+  "total_seconds": 1.28648
+}

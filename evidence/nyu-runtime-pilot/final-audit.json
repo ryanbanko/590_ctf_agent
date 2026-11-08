@@ -1,0 +1,11 @@
+{
+  "local_links_checked": 147,
+  "links_passed": true,
+  "agent_and_normal_settings_unchanged": true,
+  "new_private_compose_snapshots_ignored": true,
+  "historical_tracked_private_snapshots_need_review": true,
+  "further_live_attempts": 0,
+  "commit_or_push_performed": false,
+  "containers_absent": true,
+  "networks_absent": true
+}

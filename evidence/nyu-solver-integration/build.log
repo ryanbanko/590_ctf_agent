@@ -1,0 +1,332 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from solver.Dockerfile
+#1 transferring dockerfile: 3.46kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:22.04
+#2 DONE 0.5s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 142B done
+#3 DONE 0.0s
+
+#4 [ 1/23] FROM docker.io/library/ubuntu:22.04@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11
+#4 resolve docker.io/library/ubuntu:22.04@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 done
+#4 DONE 0.0s
+
+#5 [17/23] RUN pip install -U pip
+#5 CACHED
+
+#6 [14/23] RUN ln -s -f /usr/lib/x86_64-linux-gnu/pkcs11/p11-kit-trust.so /usr/lib/firefox/libnssckbi.so || true
+#6 CACHED
+
+#7 [13/23] RUN ln -s -f /usr/lib/x86_64-linux-gnu/pkcs11/p11-kit-trust.so /usr/lib/x86_64-linux-gnu/nss/libnssckbi.so
+#7 CACHED
+
+#8 [ 3/23] RUN apt-get update && apt-get install -y     sudo curl netcat     build-essential pkg-config gdb gdbserver     python3-dev python3-pip python3-venv     libssl-dev libffi-dev     libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev     bsdmainutils file     sagemath sqlmap nikto apktool     libc6-i386 libc6-dev:i386 gcc-multilib     g++-multilib     && rm -rf /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [10/23] RUN apt-get install -y p11-kit p11-kit-modules
+#9 CACHED
+
+#10 [ 2/23] RUN dpkg --add-architecture i386
+#10 CACHED
+
+#11 [ 9/23] RUN apt update
+#11 CACHED
+
+#12 [ 4/23] RUN groupadd --gid 1000 ctfplayer     && useradd --uid 1000 --gid 1000 -m ctfplayer     && echo ctfplayer ALL=(root) NOPASSWD:ALL > /etc/sudoers.d/ctfplayer     && chmod 0440 /etc/sudoers.d/ctfplayer
+#12 CACHED
+
+#13 [11/23] RUN apt install rustc -y && apt install cargo -y
+#13 CACHED
+
+#14 [ 7/23] RUN curl -LO https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip &&     unzip -d /usr/local jadx-1.4.7.zip &&     rm -f jadx-1.4.7.zip
+#14 CACHED
+
+#15 [19/23] RUN mkdir ctf_files
+#15 CACHED
+
+#16 [15/23] WORKDIR /home/ctfplayer
+#16 CACHED
+
+#17 [18/23] RUN pip install pwntools gmpy2 angr chepy
+#17 CACHED
+
+#18 [ 5/23] WORKDIR /tmp
+#18 CACHED
+
+#19 [12/23] RUN apt install sleuthkit  -y
+#19 CACHED
+
+#20 [ 6/23] RUN curl -LO https://github.com/radareorg/radare2/releases/download/5.8.8/radare2_5.8.8_amd64.deb &&     curl -LO https://github.com/radareorg/radare2/releases/download/5.8.8/radare2-dev_5.8.8_amd64.deb &&     apt-get install -y ./radare2_5.8.8_amd64.deb ./radare2-dev_5.8.8_amd64.deb &&     rm -f ./radare2-dev_5.8.8_amd64.deb ./radare2_5.8.8_amd64.deb
+#20 CACHED
+
+#21 [16/23] RUN python3 -m venv /home/ctfplayer/.ctfenv
+#21 CACHED
+
+#22 [ 8/23] RUN apt-get update -y && apt-get install -y wget jq vim
+#22 CACHED
+
+#23 [20/23] RUN curl https://raw.githubusercontent.com/c3-ctf/ctftools/master/install.sh | sh
+#23 CACHED
+
+#24 [21/23] RUN python -m pip install --no-cache-dir numpy==2.2.6 Pillow==12.3.0     && python -m pip check
+#24 1.408 Collecting numpy==2.2.6
+#24 1.568   Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (62 kB)
+#24 1.769 Collecting Pillow==12.3.0
+#24 1.795   Downloading pillow-12.3.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+#24 1.821 Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.8 MB)
+#24 2.275    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.8/16.8 MB 40.4 MB/s  0:00:00
+#24 2.305 Downloading pillow-12.3.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+#24 2.471    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 41.9 MB/s  0:00:00
+#24 2.687 Installing collected packages: Pillow, numpy
+#24 4.073 
+#24 4.080 Successfully installed Pillow-12.3.0 numpy-2.2.6
+#24 4.451 No broken requirements found.
+#24 DONE 4.7s
+
+#25 [22/23] RUN mkdir -p /workspace && chown 1000:1000 /workspace     && dpkg-query -W > /opt/os-packages.txt     && python -m pip freeze --all > /opt/python-packages.txt
+#25 DONE 0.5s
+
+#26 [23/23] WORKDIR /workspace
+#26 DONE 0.0s
+
+#27 exporting to image
+#27 exporting layers
+#27 exporting layers 2.1s done
+#27 exporting manifest sha256:e89863b15497749a6bbf53bc664ed3945d49e0101085b44be6c2baee1184ddb7
+#27 exporting manifest sha256:e89863b15497749a6bbf53bc664ed3945d49e0101085b44be6c2baee1184ddb7 0.0s done
+#27 exporting config sha256:90e27f8573aab2e94936980917c48c44f7fa7634a0585f004c10f55e1ec55ccb done
+#27 exporting attestation manifest sha256:2c9fdc12f1b2c10a313009f16c64deff8854a6992ab682d5db2baceed70be613 done
+#27 exporting manifest list sha256:7e2c0a9b3a244f005548a9012ab7efa298a1ae095bfeba6c6e99020cea0664b6 done
+#27 naming to docker.io/library/ctf590-solver:nyu-integrated-20261107 done
+#27 DONE 2.1s
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from guard.Dockerfile
+#1 transferring dockerfile: 493B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.13.2-slim-bookworm@sha256:6b3223eb4d93718828223966ad316909c39813dee3ee9395204940500792b740
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 142B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 63B done
+#4 DONE 0.0s
+
+#5 [1/3] FROM docker.io/library/python:3.13.2-slim-bookworm@sha256:6b3223eb4d93718828223966ad316909c39813dee3ee9395204940500792b740
+#5 resolve docker.io/library/python:3.13.2-slim-bookworm@sha256:6b3223eb4d93718828223966ad316909c39813dee3ee9395204940500792b740 done
+#5 DONE 0.0s
+
+#6 [2/3] RUN apt-get update && apt-get install -y --no-install-recommends     nftables=1.0.6-2+deb12u2 iproute2=6.1.0-3 tcpdump=4.99.3-1     && dpkg-query -W > /opt/os-packages.txt     && rm -rf /var/lib/apt/lists/*
+#6 0.231 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+#6 0.299 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+#6 0.328 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [34.8 kB]
+#6 0.347 Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages [8689 kB]
+#6 0.569 Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages [6936 B]
+#6 0.592 Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [360 kB]
+#6 1.211 Fetched 9297 kB in 1s (8602 kB/s)
+#6 1.211 Reading package lists...
+#6 1.473 Reading package lists...
+#6 1.724 Building dependency tree...
+#6 1.784 Reading state information...
+#6 1.856 The following additional packages will be installed:
+#6 1.856   libbpf1 libbsd0 libcap2 libcap2-bin libdbus-1-3 libedit2 libelf1
+#6 1.856   libgssapi-krb5-2 libjansson4 libk5crypto3 libkeyutils1 libkrb5-3
+#6 1.856   libkrb5support0 libmnl0 libnftables1 libnftnl11 libpcap0.8 libtirpc-common
+#6 1.856   libtirpc3 libxtables12
+#6 1.857 Suggested packages:
+#6 1.857   iproute2-doc python3:any krb5-doc krb5-user firewalld apparmor
+#6 1.857 Recommended packages:
+#6 1.857   libatm1 libpam-cap dbus krb5-locales
+#6 1.935 The following NEW packages will be installed:
+#6 1.935   iproute2 libbpf1 libbsd0 libcap2-bin libdbus-1-3 libedit2 libelf1
+#6 1.935   libgssapi-krb5-2 libjansson4 libk5crypto3 libkeyutils1 libkrb5-3
+#6 1.936   libkrb5support0 libmnl0 libnftables1 libnftnl11 libpcap0.8 libtirpc-common
+#6 1.936   libtirpc3 libxtables12 nftables tcpdump
+#6 1.936 The following packages will be upgraded:
+#6 1.936   libcap2
+#6 1.993 1 upgraded, 22 newly installed, 0 to remove and 37 not upgraded.
+#6 1.993 Need to get 3498 kB of archives.
+#6 1.993 After this operation, 13.1 MB of additional disk space will be used.
+#6 1.993 Get:1 http://deb.debian.org/debian bookworm/main arm64 libcap2 arm64 1:2.66-4+deb12u3+b1 [27.1 kB]
+#6 2.021 Get:2 http://deb.debian.org/debian bookworm/main arm64 libelf1 arm64 0.188-2.1 [173 kB]
+#6 2.066 Get:3 http://deb.debian.org/debian bookworm/main arm64 libbpf1 arm64 1:1.1.2-0+deb12u1 [136 kB]
+#6 2.071 Get:4 http://deb.debian.org/debian bookworm/main arm64 libbsd0 arm64 0.11.7-2 [115 kB]
+#6 2.085 Get:5 http://deb.debian.org/debian bookworm/main arm64 libmnl0 arm64 1.0.4-3 [12.1 kB]
+#6 2.085 Get:6 http://deb.debian.org/debian bookworm/main arm64 libkrb5support0 arm64 1.20.1-2+deb12u5 [32.6 kB]
+#6 2.086 Get:7 http://deb.debian.org/debian bookworm/main arm64 libk5crypto3 arm64 1.20.1-2+deb12u5 [79.9 kB]
+#6 2.090 Get:8 http://deb.debian.org/debian bookworm/main arm64 libkeyutils1 arm64 1.6.3-2 [8844 B]
+#6 2.090 Get:9 http://deb.debian.org/debian bookworm/main arm64 libkrb5-3 arm64 1.20.1-2+deb12u5 [316 kB]
+#6 2.104 Get:10 http://deb.debian.org/debian bookworm/main arm64 libgssapi-krb5-2 arm64 1.20.1-2+deb12u5 [124 kB]
+#6 2.108 Get:11 http://deb.debian.org/debian bookworm/main arm64 libtirpc-common all 1.3.3+ds-1 [14.0 kB]
+#6 2.108 Get:12 http://deb.debian.org/debian bookworm/main arm64 libtirpc3 arm64 1.3.3+ds-1 [80.9 kB]
+#6 2.109 Get:13 http://deb.debian.org/debian bookworm/main arm64 libxtables12 arm64 1.8.9-2 [29.6 kB]
+#6 2.110 Get:14 http://deb.debian.org/debian bookworm/main arm64 libcap2-bin arm64 1:2.66-4+deb12u3+b1 [34.5 kB]
+#6 2.129 Get:15 http://deb.debian.org/debian bookworm/main arm64 iproute2 arm64 6.1.0-3 [1008 kB]
+#6 2.259 Get:16 http://deb.debian.org/debian bookworm/main arm64 libjansson4 arm64 2.14-2 [40.2 kB]
+#6 2.260 Get:17 http://deb.debian.org/debian bookworm/main arm64 libnftnl11 arm64 1.2.4-2 [57.6 kB]
+#6 2.261 Get:18 http://deb.debian.org/debian bookworm/main arm64 libnftables1 arm64 1.0.6-2+deb12u2 [276 kB]
+#6 2.268 Get:19 http://deb.debian.org/debian bookworm/main arm64 libedit2 arm64 3.1-20221030-2 [88.1 kB]
+#6 2.269 Get:20 http://deb.debian.org/debian bookworm/main arm64 nftables arm64 1.0.6-2+deb12u2 [70.0 kB]
+#6 2.270 Get:21 http://deb.debian.org/debian bookworm/main arm64 libdbus-1-3 arm64 1.14.10-1~deb12u1 [193 kB]
+#6 2.275 Get:22 http://deb.debian.org/debian bookworm/main arm64 libpcap0.8 arm64 1.10.3-1 [148 kB]
+#6 2.278 Get:23 http://deb.debian.org/debian bookworm/main arm64 tcpdump arm64 4.99.3-1 [434 kB]
+#6 2.386 debconf: delaying package configuration, since apt-utils is not installed
+#6 2.395 Fetched 3498 kB in 0s (10.0 MB/s)
+#6 2.411 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6626 files and directories currently installed.)
+#6 2.423 Preparing to unpack .../libcap2_1%3a2.66-4+deb12u3+b1_arm64.deb ...
+#6 2.426 Unpacking libcap2:arm64 (1:2.66-4+deb12u3+b1) over (1:2.66-4) ...
+#6 2.448 Setting up libcap2:arm64 (1:2.66-4+deb12u3+b1) ...
+#6 2.460 Selecting previously unselected package libelf1:arm64.
+#6 2.460 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6627 files and directories currently installed.)
+#6 2.462 Preparing to unpack .../00-libelf1_0.188-2.1_arm64.deb ...
+#6 2.463 Unpacking libelf1:arm64 (0.188-2.1) ...
+#6 2.482 Selecting previously unselected package libbpf1:arm64.
+#6 2.482 Preparing to unpack .../01-libbpf1_1%3a1.1.2-0+deb12u1_arm64.deb ...
+#6 2.483 Unpacking libbpf1:arm64 (1:1.1.2-0+deb12u1) ...
+#6 2.497 Selecting previously unselected package libbsd0:arm64.
+#6 2.498 Preparing to unpack .../02-libbsd0_0.11.7-2_arm64.deb ...
+#6 2.499 Unpacking libbsd0:arm64 (0.11.7-2) ...
+#6 2.514 Selecting previously unselected package libmnl0:arm64.
+#6 2.514 Preparing to unpack .../03-libmnl0_1.0.4-3_arm64.deb ...
+#6 2.515 Unpacking libmnl0:arm64 (1.0.4-3) ...
+#6 2.525 Selecting previously unselected package libkrb5support0:arm64.
+#6 2.526 Preparing to unpack .../04-libkrb5support0_1.20.1-2+deb12u5_arm64.deb ...
+#6 2.527 Unpacking libkrb5support0:arm64 (1.20.1-2+deb12u5) ...
+#6 2.539 Selecting previously unselected package libk5crypto3:arm64.
+#6 2.539 Preparing to unpack .../05-libk5crypto3_1.20.1-2+deb12u5_arm64.deb ...
+#6 2.540 Unpacking libk5crypto3:arm64 (1.20.1-2+deb12u5) ...
+#6 2.553 Selecting previously unselected package libkeyutils1:arm64.
+#6 2.553 Preparing to unpack .../06-libkeyutils1_1.6.3-2_arm64.deb ...
+#6 2.554 Unpacking libkeyutils1:arm64 (1.6.3-2) ...
+#6 2.564 Selecting previously unselected package libkrb5-3:arm64.
+#6 2.564 Preparing to unpack .../07-libkrb5-3_1.20.1-2+deb12u5_arm64.deb ...
+#6 2.565 Unpacking libkrb5-3:arm64 (1.20.1-2+deb12u5) ...
+#6 2.592 Selecting previously unselected package libgssapi-krb5-2:arm64.
+#6 2.592 Preparing to unpack .../08-libgssapi-krb5-2_1.20.1-2+deb12u5_arm64.deb ...
+#6 2.593 Unpacking libgssapi-krb5-2:arm64 (1.20.1-2+deb12u5) ...
+#6 2.608 Selecting previously unselected package libtirpc-common.
+#6 2.608 Preparing to unpack .../09-libtirpc-common_1.3.3+ds-1_all.deb ...
+#6 2.609 Unpacking libtirpc-common (1.3.3+ds-1) ...
+#6 2.618 Selecting previously unselected package libtirpc3:arm64.
+#6 2.619 Preparing to unpack .../10-libtirpc3_1.3.3+ds-1_arm64.deb ...
+#6 2.620 Unpacking libtirpc3:arm64 (1.3.3+ds-1) ...
+#6 2.635 Selecting previously unselected package libxtables12:arm64.
+#6 2.635 Preparing to unpack .../11-libxtables12_1.8.9-2_arm64.deb ...
+#6 2.636 Unpacking libxtables12:arm64 (1.8.9-2) ...
+#6 2.646 Selecting previously unselected package libcap2-bin.
+#6 2.646 Preparing to unpack .../12-libcap2-bin_1%3a2.66-4+deb12u3+b1_arm64.deb ...
+#6 2.647 Unpacking libcap2-bin (1:2.66-4+deb12u3+b1) ...
+#6 2.661 Selecting previously unselected package iproute2.
+#6 2.661 Preparing to unpack .../13-iproute2_6.1.0-3_arm64.deb ...
+#6 2.662 Unpacking iproute2 (6.1.0-3) ...
+#6 2.724 Selecting previously unselected package libjansson4:arm64.
+#6 2.725 Preparing to unpack .../14-libjansson4_2.14-2_arm64.deb ...
+#6 2.725 Unpacking libjansson4:arm64 (2.14-2) ...
+#6 2.738 Selecting previously unselected package libnftnl11:arm64.
+#6 2.739 Preparing to unpack .../15-libnftnl11_1.2.4-2_arm64.deb ...
+#6 2.739 Unpacking libnftnl11:arm64 (1.2.4-2) ...
+#6 2.752 Selecting previously unselected package libnftables1:arm64.
+#6 2.753 Preparing to unpack .../16-libnftables1_1.0.6-2+deb12u2_arm64.deb ...
+#6 2.754 Unpacking libnftables1:arm64 (1.0.6-2+deb12u2) ...
+#6 2.777 Selecting previously unselected package libedit2:arm64.
+#6 2.778 Preparing to unpack .../17-libedit2_3.1-20221030-2_arm64.deb ...
+#6 2.779 Unpacking libedit2:arm64 (3.1-20221030-2) ...
+#6 2.794 Selecting previously unselected package nftables.
+#6 2.794 Preparing to unpack .../18-nftables_1.0.6-2+deb12u2_arm64.deb ...
+#6 2.795 Unpacking nftables (1.0.6-2+deb12u2) ...
+#6 2.809 Selecting previously unselected package libdbus-1-3:arm64.
+#6 2.809 Preparing to unpack .../19-libdbus-1-3_1.14.10-1~deb12u1_arm64.deb ...
+#6 2.810 Unpacking libdbus-1-3:arm64 (1.14.10-1~deb12u1) ...
+#6 2.832 Selecting previously unselected package libpcap0.8:arm64.
+#6 2.832 Preparing to unpack .../20-libpcap0.8_1.10.3-1_arm64.deb ...
+#6 2.833 Unpacking libpcap0.8:arm64 (1.10.3-1) ...
+#6 2.851 Selecting previously unselected package tcpdump.
+#6 2.852 Preparing to unpack .../21-tcpdump_4.99.3-1_arm64.deb ...
+#6 2.855 Unpacking tcpdump (4.99.3-1) ...
+#6 2.887 Setting up libkeyutils1:arm64 (1.6.3-2) ...
+#6 2.890 Setting up libtirpc-common (1.3.3+ds-1) ...
+#6 2.894 Setting up libjansson4:arm64 (2.14-2) ...
+#6 2.897 Setting up libkrb5support0:arm64 (1.20.1-2+deb12u5) ...
+#6 2.901 Setting up libcap2-bin (1:2.66-4+deb12u3+b1) ...
+#6 2.903 Setting up libdbus-1-3:arm64 (1.14.10-1~deb12u1) ...
+#6 2.908 Setting up libmnl0:arm64 (1.0.4-3) ...
+#6 2.910 Setting up libk5crypto3:arm64 (1.20.1-2+deb12u5) ...
+#6 2.912 Setting up libxtables12:arm64 (1.8.9-2) ...
+#6 2.916 Setting up libkrb5-3:arm64 (1.20.1-2+deb12u5) ...
+#6 2.918 Setting up libbsd0:arm64 (0.11.7-2) ...
+#6 2.922 Setting up libelf1:arm64 (0.188-2.1) ...
+#6 2.924 Setting up libbpf1:arm64 (1:1.1.2-0+deb12u1) ...
+#6 2.927 Setting up libedit2:arm64 (3.1-20221030-2) ...
+#6 2.930 Setting up libnftnl11:arm64 (1.2.4-2) ...
+#6 2.935 Setting up libpcap0.8:arm64 (1.10.3-1) ...
+#6 2.937 Setting up libgssapi-krb5-2:arm64 (1.20.1-2+deb12u5) ...
+#6 2.940 Setting up libtirpc3:arm64 (1.3.3+ds-1) ...
+#6 2.945 Setting up tcpdump (4.99.3-1) ...
+#6 2.997 Setting up libnftables1:arm64 (1.0.6-2+deb12u2) ...
+#6 2.999 Setting up nftables (1.0.6-2+deb12u2) ...
+#6 3.036 Setting up iproute2 (6.1.0-3) ...
+#6 3.076 debconf: unable to initialize frontend: Dialog
+#6 3.076 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#6 3.076 debconf: falling back to frontend: Readline
+#6 3.076 debconf: unable to initialize frontend: Readline
+#6 3.076 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/aarch64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/aarch64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/aarch64-linux-gnu/perl-base /usr/lib/aarch64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+#6 3.076 debconf: falling back to frontend: Teletype
+#6 3.087 Processing triggers for libc-bin (2.36-9+deb12u10) ...
+#6 DONE 3.2s
+
+#7 [3/3] COPY docker/guard.py /opt/ctf/guard.py
+#7 DONE 0.0s
+
+#8 exporting to image
+#8 exporting layers
+#8 exporting layers 0.3s done
+#8 exporting manifest sha256:23eeaf1d1926fbfc61b19d558c0bb1618aa54e64f4b980ebd8161672458c547e
+#8 exporting manifest sha256:23eeaf1d1926fbfc61b19d558c0bb1618aa54e64f4b980ebd8161672458c547e done
+#8 exporting config sha256:5852544cc31360c4c527351b6e5be23e64624303d2e107937937226e3142a932 done
+#8 exporting attestation manifest sha256:91aa58ac766b53d4ee376592c121efa5ff573d9ff80710336c22303a0022bcda done
+#8 exporting manifest list sha256:e88b8ce02ef7f9b1b90a7713b2f14869d33aea7bdedc2020fd401e1cbd913fd0 done
+#8 naming to docker.io/library/ctf590-guard:m1 done
+#8 unpacking to docker.io/library/ctf590-guard:m1 0.1s done
+#8 DONE 0.4s
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from fixture.Dockerfile
+#1 transferring dockerfile: 319B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.13.2-slim-bookworm@sha256:6b3223eb4d93718828223966ad316909c39813dee3ee9395204940500792b740
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 142B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 1.09kB done
+#4 DONE 0.0s
+
+#5 [1/2] FROM docker.io/library/python:3.13.2-slim-bookworm@sha256:6b3223eb4d93718828223966ad316909c39813dee3ee9395204940500792b740
+#5 resolve docker.io/library/python:3.13.2-slim-bookworm@sha256:6b3223eb4d93718828223966ad316909c39813dee3ee9395204940500792b740 done
+#5 CACHED
+
+#6 [2/2] COPY tests/fixtures/service.py /opt/fixture/service.py
+#6 DONE 0.0s
+
+#7 exporting to image
+#7 exporting layers 0.0s done
+#7 exporting manifest sha256:01428ae85ad8c2e0987b1db42b6e6fe84cf0baff7eab0ee0f7839d744d597ae3 done
+#7 exporting config sha256:274c475635ced3dcbb3d529c7663d2df4bd488615c8ce9c5c28ff8dff72efdd8 done
+#7 exporting attestation manifest sha256:f5aa5b8f39d4fe17152e56d1e7299aea1ff6b1e16a9ce4b0061dc83e7afe7864 done
+#7 exporting manifest list sha256:4ea766f632df8b62ec7762caf49e1db4367da2ea3e91e5de00b0c28e2c0e8abf done
+#7 naming to docker.io/library/ctf590-fixture:m1
+#7 naming to docker.io/library/ctf590-fixture:m1 done
+#7 unpacking to docker.io/library/ctf590-fixture:m1 0.0s done
+#7 DONE 0.1s

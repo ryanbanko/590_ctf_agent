@@ -1,0 +1,20 @@
+{
+  "run_id": "87941905b578",
+  "challenge_id": "web-backend-diagnostic",
+  "mode": "ctftiny-readiness",
+  "termination_reason": "readiness_complete",
+  "tool_calls": 4,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "2ada30424f06b862e4b8b7e722e64ed2",
+  "active_seconds": 42.418922,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.159608,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000241,
+  "total_seconds": 42.578861
+}

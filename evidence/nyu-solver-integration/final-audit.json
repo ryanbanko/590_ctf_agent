@@ -1,0 +1,15 @@
+{
+  "offline_tests_passed": 100,
+  "docker_tests_passed": 34,
+  "local_markdown_links_and_anchors_checked": 203,
+  "markdown_links_passed": true,
+  "diff_check_passed": true,
+  "previous_archive_sha256_unchanged": "763a28bc901966f9ea314decc70b8217c6f60095f77d3588d26feef9b567aa1d",
+  "new_archive_git_ignored": true,
+  "only_application_python_change": "ctf_agent/launch.py: source provenance patterns",
+  "removed_active_requirements_archived_exactly": true,
+  "test_module_consolidated": true,
+  "model_calls": 0,
+  "challenge_attempts": 0,
+  "commit_or_push_performed": false
+}

@@ -525,3 +525,151 @@ separation remain. Runtime Python decreases another 14 lines; the substantive
 simplification is removing mechanisms and assumptions. No live model call, solving,
 new hosted trace or solve-rate comparison ran. The independent image decision and
 any later live pilot remain separate stages.
+
+
+## Live synthetic smoke check after simplification — November 6
+
+Approved to check the remaining real-provider/native-tool/solver/evaluator/hosted-
+export path before changing the solver image. The user connected the VPN first.
+Existing `model-check` ran on clean commit `00e6a41` with its established synthetic
+bounds (four requests maximum, retries disabled); no normal profile changed.
+
+Passed: two model calls/two tools, JSON retrieval through `run_command`, observed
+candidate submission through `submit_flag`, trusted success, 12 complete hosted
+observations and clean cleanup. Usage was 1,585 input/191 output tokens including
+7 reasoning; estimated cost $0.000254 matched hosted totals. Active time was
+5.72 seconds; complete check/readback 22.25 seconds. Initial model input and root
+excluded the answer; credential audit passed.
+[Evidence](../evidence/live-simplification-smoke/README.md).
+
+This is live synthetic setup evidence, not a CTFTiny solve, scored trial,
+performance comparison, or live verification of file writing/restarts. Existing
+control evidence remains. No source/image/prompt/dependency changes were needed;
+image evaluation and broader pilots remain separate checkpoints.
+
+## Infrastructure checkpoint 3 — bounded supplied-image evaluation
+
+November 7 follow-up: the host-reserve cancellation did not establish image
+unsuitability; the comparison is reopened. Docker had ample virtual capacity.
+Authorized removal of the unrelated fMRIPrep image increased actual Mac free
+space from 24.29 to 34.46 GiB. An 8 GiB Docker RAM allocation is recommended,
+not applied. No new build/model call or candidate compatibility result.
+
+November 6, 2026. Evaluate whether the supplied NYU baseline reduces remaining
+toolkit/environment maintenance; no change to the agent hypothesis or prompt.
+Pinned release `20250206` was built unchanged under a separate AMD64/UID-1000
+tag. After disconnecting the VPN resolved the observed registry EOF errors,
+Ubuntu/tool/Python installation steps completed. The external installer was
+canceled at the evaluation's 10 GiB host-free-space boundary after 567.92 seconds.
+No completed candidate exists, so its runtime compatibility remains untested.
+
+Retain our working image: no lower-maintenance replacement has been established.
+Its identity and RootFS are unchanged; a preservation tag and checksummed local
+archive freeze the current artifact. Eleven focused existing Docker controls
+passed on that image. Scoped cleanup reclaimed only the evaluation's 19 cache
+records (6.742 GB). No runtime/test/dependency/configuration change or new subsystem;
+no model call, real challenge attempt, agent-effect comparison or candidate
+performance claim. A local storage cancellation does not establish an upstream
+source defect. [Evidence and unresolved checks](../evidence/nyu-solver-image-evaluation/README.md).
+
+## Infrastructure image retry — successful November 7
+
+The unchanged pinned NYU release built with effective 8 GiB Docker memory in
+17m 17s, without hitting the host reserve; minimum continuously recorded host
+space was about 25.2 GiB. VM memory samples showed ample availability and unused
+VM swap. RAM was a starting allocation, not a suitability criterion; cleanup,
+network/download differences and the different build outcome prevent attributing
+success to RAM alone.
+
+The eight-line child supplies `/workspace`, output environment settings and
+missing NumPy/Pillow. Its build/pip check passed. All 29 existing compatibility/
+control cases plus five additional sudo/SageMath/radare2/angr/multilib cases
+passed under unchanged solver limits. The two portable offline wheel/home tests
+also passed on the current image. No new runtime subsystem or application/model/
+prompt/guard/SDK change; two existing tests adapted and five explicit image tests
+added. No models, challenges, hosted traces or solve-rate comparison.
+
+Recommend the tested frozen NYU-based artifact plus the small adapter, accepting
+larger disk/build cost. The external installer ignored optional Kali/Sherlock/
+Cutter errors; the positive result is limited to verified functionality. A first
+60-second raw-image probe timed out and a repeat took 1.405s, so recommend a
+one-time Docker image preflight before normal attempts. Exact first-probe cause
+was not established. Current image/defaults are untouched and test cleanup passed.
+[Build, resources, functional results, archive and proposed integration](../evidence/nyu-solver-image-evaluation/retry-8g/README.md).
+
+
+## Infrastructure image integration — completed November 7
+
+The evaluated NYU installation body is now the single production solver recipe,
+with the tested workspace/environment additions, pinned NumPy/Pillow and existing
+inventories. The unused HTTP entrypoint and our former active requirements files
+are removed; historical inputs, lean image and archive remain available. Five
+additional toolkit/control tests now run in the normal suite. No agent/prompt/
+model/tool/SDK behavior, limit or new experimental hypothesis changes.
+
+The normal source-build command passed in 14.03s using cache; 100 offline tests
+and 34 Docker cases passed. First startup (0.73s) and Python execution (0.17s) fit
+existing allowances on this cached host; no clean-machine cold claim is made.
+The new default matches the tested image and has its own verified local archive.
+Larger storage and optional upstream gaps remain. No model calls, challenge runs,
+solve-rate comparison or hosted uploads. The development pilot is still separate.
+[Integration evidence](../evidence/nyu-solver-integration/README.md).
+
+
+## Integrated-runtime development pilot — November 7
+
+One trial each on `msc-algebra`, `rev-checker`, `web-shreeramquest` under unchanged
+agent/prompt and normal settings. First two ended in trusted success; the third
+stopped on a blocked request to frontend port 4999 (only 80 permitted). Batch
+stopped for review. All three have complete native exports/audits and cleanup;
+18 requests/18 tools, 140.75s total, estimated $0.00596. These are pilot observations,
+not a controlled solve-rate comparison. No silent replacement or retry.
+
+The relevant web tool sequence shows port-80 application 502s before port probing.
+A separate fresh zero-model diagnostic reproduced MongoDB's missing-AVX restart
+loop and later Node exit/database errors. This establishes target compatibility
+work and a limitation of TCP-only readiness, independently of the agent's scope
+mistake. Review dependency health/compatible runtime before another pilot. No
+prompt, image, guard, tool or numeric-limit change was made. Detailed trace review
+remains with the user. [Evidence](../evidence/nyu-runtime-pilot/README.md).
+
+
+## Target compatibility follow-up — November 7
+
+Official MongoDB 7.0.9 ARM64, from the same release index as the original AMD64
+image, passed two fresh zero-model deployments. Only Mongo's image/platform were
+substituted temporarily. Normal-account registration/login/profile through port
+80, database ping, stable services after 35s, fresh reset, unchanged guard/private
+boundaries and cleanup passed. No solving, submissions or model/agent comparison.
+This supports a target compatibility fix, not an agent-performance claim. Production
+integration/readiness changes await review. [Evidence](../evidence/mongo-arm64-evaluation/README.md).
+
+
+## MongoDB compatibility/readiness integration — November 7
+
+The approved production change selects the exact tested native MongoDB 7.0.9
+sibling only on ARM64 Docker engines. Native Compose wait and safe dependency-state
+snapshots improve startup/preparation error detection. Two fresh normal preparation
+and two normal functional cycles passed, preserving supplied service semantics,
+registration/login/profile behavior, DB reset, stable services, guard/private
+boundaries and cleanup. 111 offline and three targeted Docker cases passed; the
+existing network/reset case required one explicitly recorded daemon-lookup retry.
+[Evidence](../evidence/mongo-arm64-integration/README.md).
+
+No agent/prompt/model/solver/endpoint change or live retry. This is infrastructure
+reliability evidence, not a solve-rate or agent-improvement comparison. The original
+pilot's web scope violation is retained. A live retry/recovery hypothesis remains
+separate work after checkpoint review.
+
+
+## Final runtime validation and fresh web retry — November 7
+
+111 offline tests, the full 36-case Docker suite and 22 fresh readiness cycles
+passed under the final code. After user VPN confirmation, a new normal-settings
+`web-shreeramquest` development attempt achieved evaluator-verified success in
+4 requests/4 tools (14.879s active, 27.184s total; estimated $0.00085533).
+Agent/prompt and model settings were unchanged. This supports working target/live
+integration after the CPU fix; a single run is not a solve-rate improvement
+measurement. The prior scope-stopped attempt remains recorded. Automatic native
+export and privacy/parentage/cleanup audits passed; detailed trace review is
+explicitly deferred to the user. [Evidence](../evidence/pre-git-validation/README.md).

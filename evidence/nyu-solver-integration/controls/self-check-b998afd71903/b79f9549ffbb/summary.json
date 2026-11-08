@@ -1,0 +1,20 @@
+{
+  "run_id": "b79f9549ffbb",
+  "challenge_id": "radare2_binary_analysis",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "9f1af2f0e9c4a70396cfa0e3e3d6b9ac",
+  "active_seconds": 1.693811,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.151966,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000251,
+  "total_seconds": 1.846126
+}

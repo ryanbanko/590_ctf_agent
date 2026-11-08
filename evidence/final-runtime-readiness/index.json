@@ -1,0 +1,84 @@
+{
+  "mode": "zero-model-final-runtime-readiness",
+  "challenges": [
+    "cry-babycrypto",
+    "cry-collision-course",
+    "for-whyos",
+    "msc-quantum-leap",
+    "msc-weak-password",
+    "pwn-puffin",
+    "pwn-slithery",
+    "pwn-unlimited-subway",
+    "rev-rebug-2",
+    "web-smug-dino"
+  ],
+  "model_calls": 0,
+  "solving": false,
+  "status": "passed",
+  "checks": [
+    {
+      "challenge_id": "cry-babycrypto",
+      "exit_code": 0,
+      "passed": true,
+      "record": "checks/ctftiny-readiness-70ee8637bc5f/check.json"
+    },
+    {
+      "challenge_id": "cry-collision-course",
+      "exit_code": 0,
+      "passed": true,
+      "record": "checks/ctftiny-readiness-3fc78739af8e/check.json"
+    },
+    {
+      "challenge_id": "for-whyos",
+      "exit_code": 0,
+      "passed": true,
+      "record": "checks/ctftiny-readiness-e26393eda8b7/check.json"
+    },
+    {
+      "challenge_id": "msc-quantum-leap",
+      "exit_code": 0,
+      "passed": true,
+      "record": "checks/ctftiny-readiness-88bcaf4b6929/check.json"
+    },
+    {
+      "challenge_id": "msc-weak-password",
+      "exit_code": 0,
+      "passed": true,
+      "record": "checks/ctftiny-readiness-b008728086e0/check.json"
+    },
+    {
+      "challenge_id": "pwn-puffin",
+      "exit_code": 0,
+      "passed": true,
+      "record": "checks/ctftiny-readiness-efb59435230e/check.json"
+    },
+    {
+      "challenge_id": "pwn-slithery",
+      "exit_code": 0,
+      "passed": true,
+      "record": "checks/ctftiny-readiness-efd366818989/check.json"
+    },
+    {
+      "challenge_id": "pwn-unlimited-subway",
+      "exit_code": 0,
+      "passed": true,
+      "record": "checks/ctftiny-readiness-c3ae8ca2df39/check.json"
+    },
+    {
+      "challenge_id": "rev-rebug-2",
+      "exit_code": 0,
+      "passed": true,
+      "record": "checks/ctftiny-readiness-eb1ee18c2829/check.json"
+    },
+    {
+      "challenge_id": "web-smug-dino",
+      "exit_code": 0,
+      "passed": true,
+      "record": "checks/ctftiny-readiness-b939dd34fbd1/check.json"
+    }
+  ],
+  "config_sha256": "03ab48e8e8e50fa94a947952a7dc170d72216f437d0b5a705b5be23cd2346132",
+  "host_available_bytes_before": 14969229312,
+  "total_seconds": 63.506,
+  "host_available_bytes_after": 14960750592
+}

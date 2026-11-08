@@ -1,0 +1,15 @@
+{
+  "command": [
+    "docker",
+    "build",
+    "--platform",
+    "linux/amd64",
+    "--progress",
+    "plain",
+    "-t",
+    "ctf590-solver:nyu-20250206-8g-adapter",
+    "evidence/nyu-solver-image-evaluation/retry-8g/adapter"
+  ],
+  "elapsed_seconds": 7.96,
+  "exit_code": 0
+}

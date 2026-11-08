@@ -1,0 +1,20 @@
+{
+  "run_id": "c81ef8ce4bec",
+  "challenge_id": "attempt_deadline_stops_background_process",
+  "mode": "synthetic-controls",
+  "termination_reason": "wall_limit",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "f154f6aca323150412e6c8294a250688",
+  "active_seconds": 8.09419,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.155272,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000578,
+  "total_seconds": 8.250133
+}

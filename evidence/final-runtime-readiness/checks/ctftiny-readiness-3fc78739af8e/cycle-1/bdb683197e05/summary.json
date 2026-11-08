@@ -1,0 +1,20 @@
+{
+  "run_id": "bdb683197e05",
+  "challenge_id": "cry-collision-course",
+  "mode": "ctftiny-readiness",
+  "termination_reason": "readiness_complete",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "3ed361c38c361e8ca26fb370b8b830a7",
+  "active_seconds": 1.390077,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.152175,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000728,
+  "total_seconds": 1.543073
+}

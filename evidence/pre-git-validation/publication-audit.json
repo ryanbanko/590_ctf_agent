@@ -1,0 +1,49 @@
+{
+  "mode": "read-only-publication-audit",
+  "candidate_files_scanned": 2264,
+  "actual_host_account_secret_matches": [],
+  "private_deployment_snapshots_in_git_candidates": [
+    {
+      "file": "evidence/target-network-simplification/ctftiny-readiness-7ecca9139403/cycle-1/compose.json",
+      "findings": [
+        {
+          "service": "mongo",
+          "private_field_names": [
+            "MONGO_INITDB_ROOT_PASSWORD"
+          ]
+        },
+        {
+          "service": "nodeserver",
+          "private_field_names": [
+            "FLAG",
+            "MONGO_URI",
+            "SECRET"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "evidence/target-network-simplification/ctftiny-readiness-7ecca9139403/cycle-2/compose.json",
+      "findings": [
+        {
+          "service": "mongo",
+          "private_field_names": [
+            "MONGO_INITDB_ROOT_PASSWORD"
+          ]
+        },
+        {
+          "service": "nodeserver",
+          "private_field_names": [
+            "FLAG",
+            "MONGO_URI",
+            "SECRET"
+          ]
+        }
+      ]
+    }
+  ],
+  "private_values_printed_or_recorded": false,
+  "changes_made": false,
+  "history_rewritten": false,
+  "publication_clear": false
+}

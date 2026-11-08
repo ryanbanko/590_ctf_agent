@@ -1,0 +1,20 @@
+{
+  "run_id": "97afeb963754",
+  "challenge_id": "external_dns",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "dfb7482fc1a1c1d35cba459e8bb5d91c",
+  "active_seconds": 1.154722,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.162283,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000168,
+  "total_seconds": 1.317261
+}

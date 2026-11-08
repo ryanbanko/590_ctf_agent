@@ -1,0 +1,20 @@
+{
+  "run_id": "523c78e4ff0c",
+  "challenge_id": "runtime_pip_install_and_writable_home",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 4,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "15bfb3d162e82e56d646a203767e728b",
+  "active_seconds": 3.466335,
+  "solver_restarts": 1,
+  "cleanup_seconds": 0.19703,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000227,
+  "total_seconds": 3.663699
+}

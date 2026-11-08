@@ -1,0 +1,87 @@
+{
+  "Id": "sha256:e89863b15497749a6bbf53bc664ed3945d49e0101085b44be6c2baee1184ddb7",
+  "RepoTags": [
+    "ctf590-solver:m1",
+    "ctf590-solver:nyu-integrated-20261107"
+  ],
+  "RepoDigests": [
+    "ctf590-solver@sha256:7e2c0a9b3a244f005548a9012ab7efa298a1ae095bfeba6c6e99020cea0664b6"
+  ],
+  "Parent": "",
+  "Comment": "buildkit.dockerfile.v0",
+  "Created": "2026-11-08T00:47:16.139800881Z",
+  "DockerVersion": "",
+  "Author": "",
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 2938140867,
+  "GraphDriver": {
+    "Data": null,
+    "Name": "overlayfs"
+  },
+  "RootFS": {
+    "Type": "layers",
+    "Layers": [
+      "sha256:297a592b66593a3dddc39e7970a718cc1cbb04c8a9b904009b33eb623dafc588",
+      "sha256:746cd2a1dc698d74218737e97266ce8350394915aa13afcd4533c500d25cd580",
+      "sha256:0cc186ecb97fce8e8638f8ee3396c68feddf961d6ca9588b8abd2dd1c3a1520d",
+      "sha256:26aad2331a91a3220a3ca4090a1b5d51c7b4445e99a7e017b6c326a28225a3b2",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:4d3a8fca5b8d74a5272e8f849f5c680db3072029976614ee7c4fbbfdd93bfb5c",
+      "sha256:3f826c3a8b678979def04d5c6dc00669ed72f3019aff785337c9eb34d9cf24f5",
+      "sha256:b4aaa614e8694ed09fab80c4441f4ab0e72d8d15376ac7f4c4b4f7330b22061d",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:858d261247e1766e0e2006d2798cb75fc7cf3046cd3aee0815360904cd57e38e",
+      "sha256:4fd4fc2fab2b0bac3fe4e6d8137dfa21114950fb64a2fd11d1044b4a6aa9a4af",
+      "sha256:02fb2c40317dc1cfdaee06ea76691611e2aca064945b3421e08985b6a7ff2315",
+      "sha256:6fdcffe67a47ba712a0ebafde93ccc4e5ce76d22dbf5fbbe1b5c26dde3c20c9c",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:c6ffa0977d5f86d503254df3817ebd5e3793be8e2fae1dd7753c4700321a962d",
+      "sha256:9f1759d065966d47c52a3b523793e6253c8009f934578cf56b2d9f364821452c",
+      "sha256:957680c2aab3af95db62841b72dab6dd5f99c8b2a4d5c4e221dd2841b298937b",
+      "sha256:0d523d267b7047b146091e4e6af377c8a6d696f43abf70607c8dec6cb004f8cf",
+      "sha256:f09dc2cd4eeb11eb16ce2b1322d470aa7dbb0b79621acb7ca86f34960ddab45d",
+      "sha256:a4ac73ddf821d7e37bbcb77dea68464d5790960f9689778221b75bc4c9952a02",
+      "sha256:e78bd64d5799425074620b0e972172884c7259a35d7b8bdd36d0c553f3f30802",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+    ]
+  },
+  "Metadata": {
+    "LastTagTime": "2026-11-08T00:54:23.048568509Z"
+  },
+  "Descriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:e89863b15497749a6bbf53bc664ed3945d49e0101085b44be6c2baee1184ddb7",
+    "size": 4678,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  },
+  "Config": {
+    "ArgsEscaped": true,
+    "Cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "Entrypoint": null,
+    "Env": [
+      "PATH=/home/ctfplayer/.ctfenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "DEBIAN_FRONTEND=noninteractive",
+      "VIRTUAL_ENV=/home/ctfplayer/.ctfenv",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "PYTHONUNBUFFERED=1",
+      "PWNLIB_NOTERM=1",
+      "PIP_DISABLE_PIP_VERSION_CHECK=1",
+      "PIP_NO_CACHE_DIR=1"
+    ],
+    "Labels": {
+      "org.opencontainers.image.version": "22.04"
+    },
+    "OnBuild": null,
+    "User": "1000:1000",
+    "Volumes": null,
+    "WorkingDir": "/workspace"
+  }
+}

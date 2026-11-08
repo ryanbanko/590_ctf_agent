@@ -1,0 +1,14 @@
+{
+  "upstream_revision": "112cfa33f5c0a06a20e49af525ac8eb07ec98457",
+  "upstream_dockerfile_sha256": "1c21228713894c7d827e125ac81d04b0f70cc560e4e6a1b80c91e7bba2f79d89",
+  "supplied_installation_body_preserved": true,
+  "omitted": "upstream HTTP entrypoint COPY/CMD",
+  "project_changes": [
+    "workspace/ownership",
+    "non-terminal/unbuffered settings",
+    "pinned NumPy/Pillow",
+    "OS/Python inventories",
+    "idle CMD"
+  ],
+  "before_default_switch": true
+}

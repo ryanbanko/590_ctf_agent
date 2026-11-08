@@ -1,0 +1,20 @@
+{
+  "run_id": "6866058a80c3",
+  "challenge_id": "solver_utilities_and_executable_workspace",
+  "mode": "synthetic-controls",
+  "termination_reason": "completed_without_success",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "79d7a918486cd0781eb3791bd877cd8e",
+  "active_seconds": 2.066574,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.16479,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000247,
+  "total_seconds": 2.231706
+}

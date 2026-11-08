@@ -394,3 +394,118 @@ coverage only. No host-sharing workaround was added. No model calls or new hoste
 traces ran. [Evidence](../evidence/target-network-simplification/README.md) preserves
 provenance, failures, scope and capability/resource tradeoffs. Supplied image
 selection is still independent and pending.
+
+
+## Live synthetic smoke check — November 6
+
+The existing bounded check was exercised on clean runtime commit `00e6a41` after
+user approval and VPN readiness. Current
+[OpenAI function-calling guidance](https://developers.openai.com/api/docs/guides/function-calling)
+and [Langfuse trace guidance](https://langfuse.com/docs/observability/best-practices)
+were consulted; the unchanged implementation used native response replay, linked
+tool observations and installed SDK hosted readback. Two model calls and two tools
+ended in trusted synthetic success, with usage/cost/privacy/parentage/cleanup
+audits passing. [Evidence](../evidence/live-simplification-smoke/README.md) records
+limits, source/images, the trace and the untested scope. No CTFTiny challenge,
+source/image change, dependency migration or broader live pilot was included.
+
+## Bounded supplied-image evaluation — November 6
+
+The approved evaluation used the exact [release Dockerfile](https://github.com/NYU-LLM-CTF/nyuctf_agents/blob/112cfa33f5c0a06a20e49af525ac8eb07ec98457/Dockerfile)
+and entrypoint from `20250206`. The baseline Dockerfile at current revision
+`612190f298ae9e604f00370019beed4ba1f372f6` had the same hash. The external
+[ctftools installer](https://raw.githubusercontent.com/c3-ctf/ctftools/master/install.sh)
+is mutable and adds repositories/tooling; a review snapshot does not freeze what
+the unmodified build fetched. No full NYU host setup or agent framework was used.
+
+The unchanged AMD64 build progressed after the user disconnected the VPN, then
+was canceled for host storage during the external installer. No completed image
+or NYU runtime compatibility result exists. The current image is retained,
+reverified and archived; its eleven focused control checks are baseline evidence,
+not candidate results. [Evidence](../evidence/nyu-solver-image-evaluation/README.md)
+records source hashes, build logs, storage bounds, scoped cache cleanup and limits
+on the conclusion. Neither the guide nor professor confirmations require adopting
+that toolkit. No source defect or incompatibility is inferred from cancellation.
+
+November 7 storage follow-up uses measured APFS/raw-file/Linux filesystem figures
+and Docker's [Mac disk-accounting guidance](https://docs.docker.com/desktop/troubleshoot-and-support/faqs/macfaqs/)
+and [resource defaults](https://docs.docker.com/desktop/settings-and-maintenance/settings/).
+The chosen reserve triggered cancellation; Docker's virtual ceiling was not the
+constraint. The image decision is reopened. Only the explicitly approved unrelated
+fMRIPrep image was removed; actual host free space increased by about 10.2 GiB.
+Memory changes and a fresh candidate build remain proposed, not performed.
+
+## Completed supplied-image retry — November 7
+
+After the user saved 8 GiB and a normal Desktop restart applied it, the unchanged
+release recipe built successfully. Actual resource samples and 34 synthetic
+candidate checks support the recommendation to use the supplied base with a small
+workspace/NumPy/Pillow adapter. Generic additional tests exercise SageMath,
+radare2, multilib and angr function analysis; angr's
+[state/call-state API](https://docs.angr.io/en/latest/core-concepts/states.html)
+informed the benign symbolic-function test. No benchmark solution code or answer
+content was reviewed. Installed SDKs and existing local spans verify controls;
+no new hosted/model call was part of this checkpoint.
+
+[Evidence](../evidence/nyu-solver-image-evaluation/retry-8g/README.md) records the
+successful build, earlier diagnostic timeout, ignored optional installer errors,
+all checks, inventories and checksummed local artifact. The existing image/defaults
+remain unchanged. Exact frozen artifact loading is distinguished from rebuilding
+the upstream recipe with its mutable external downloads. No NYU agent framework,
+host setup script, extra Docker administration or new runtime backend was adopted.
+
+
+## Production supplied-recipe integration — November 7
+
+The approved checkpoint reuses the verified release installation body in the
+single production [Dockerfile](../docker/solver.Dockerfile). The
+[MIT notice](../docker/NYU-LICENSE) accompanies the copied source. The project
+adds workspace/environment settings, pinned NumPy/Pillow, inventories and idle
+startup; the unused upstream HTTP entrypoint is omitted. Source/license provenance,
+100 offline tests, 34 normal Docker cases, first-start measurements and a separate
+frozen default artifact are recorded in [integration evidence](../evidence/nyu-solver-integration/README.md).
+The existing lean artifact remains historical comparison evidence. No agent
+framework, startup subsystem or live pilot was added. The source revision does
+not freeze external downloads; exact reproduction uses the verified archive.
+
+
+## Same-release MongoDB ARM64 compatibility — November 7
+
+A zero-model [local evaluation](../evidence/mongo-arm64-evaluation/README.md)
+verified official MongoDB 7.0.9 ARM64 as a working sibling of the supplied AMD64
+manifest. Docker's release manifest records the Docker Official Images source
+revision and Ubuntu Jammy build. MongoDB's
+[production platform requirements](https://www.mongodb.com/docs/manual/administration/production-notes/)
+state the x86 AVX and ARM architecture requirements. This motivated testing native
+ARM, not downgrading the server or modifying the challenge application. Two fresh
+functional/control cycles passed; production adoption remains a reviewed next step.
+No challenge solution/write-up, live model call or expected-answer disclosure was
+needed in this evaluation. Private runtime configs remain local/Git-ignored.
+
+
+## MongoDB compatibility/readiness integration — November 7
+
+The approved integration uses the exact ARM64 MongoDB 7.0.9 sibling on ARM64
+Docker engines and preserves the supplied AMD64 reference elsewhere. Both are
+pinned by digest in the existing target integration; no dataset edits or dynamic
+registry resolution. `target.json` records the exact original/replacement and
+reason. Compose's installed `up --help` confirmed native `--wait`/`--wait-timeout`;
+that standard behavior handles supplied healthchecks. A safe state snapshot
+adds detection/reporting of restarting/exited/health failures before paid work and
+after preparation probes. [Exact source/verification](../evidence/mongo-arm64-integration/README.md).
+No solver/agent/model/endpoint change or new dependency; no live model retry.
+
+
+## Final pre-Git verification — November 7
+
+The completed local setup passed 111 offline tests, all 36 synthetic Docker cases
+and 22 fresh final-code preparation cycles covering the ten reserved IDs plus the
+web development target. A separately authorized fresh live web attempt achieved
+trusted success in four requests/four tools; automatic record/privacy/cleanup
+audits passed. Detailed conversation review is deferred at the user's request.
+[Validation and source evidence](../evidence/pre-git-validation/README.md).
+Current private deployment copies were redacted with originals preserved locally;
+older committed copies remain a separate publication/history decision. No source
+behavior change, version migration, commit, push or history rewrite was part of
+that final verification. These results supersede earlier pending-stage notes while
+preserving the historical checkpoints and the original failed pilot.

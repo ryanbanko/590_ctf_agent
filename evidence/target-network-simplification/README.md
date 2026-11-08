@@ -94,3 +94,11 @@ failures remain unchanged. This checkpoint was not committed or pushed.
 Supplied-image evaluation remains independent and has not been performed. Stop
 for review before that checkpoint or a separately authorized live pilot. No solve-
 rate improvement or compatibility with every challenge is claimed.
+
+
+November 7 publication follow-up: private environment fields in the two
+`ctftiny-readiness-7ecca9139403/cycle-*/compose.json` public copies are now redacted.
+Exact originals remain local/Git-ignored; the [redaction manifest](../pre-git-validation/redactions.json)
+records original and public-copy hashes. This does not change the historical
+checks or remove prior Git versions. See the [publication audit](../pre-git-validation/README.md#publication-audit-and-redaction)
+for the remaining history decision.

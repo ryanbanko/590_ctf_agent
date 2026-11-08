@@ -1,0 +1,20 @@
+{
+  "run_id": "15c26bfd8b22",
+  "challenge_id": "unrelated_container",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "tool_calls": 1,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "782be1afbe2d0355e327f39b8ce9ec85",
+  "active_seconds": 2.514052,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.206188,
+  "verified_success": false,
+  "trace_flush_seconds": 0.000291,
+  "total_seconds": 2.72073
+}

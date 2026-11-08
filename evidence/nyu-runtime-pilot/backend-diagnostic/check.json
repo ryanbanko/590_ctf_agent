@@ -1,0 +1,215 @@
+{
+  "model_calls": 0,
+  "solving": false,
+  "samples": [
+    {
+      "at_seconds": 0.374,
+      "http": [
+        {
+          "path": "/",
+          "status": 200
+        },
+        {
+          "path": "/__ctf590_readiness__",
+          "status": 404
+        }
+      ],
+      "services": {
+        "mongo": {
+          "status": "restarting",
+          "running": true,
+          "exit_code": 132,
+          "oom_killed": false,
+          "restarts": 3,
+          "diagnostics": [
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!"
+          ]
+        },
+        "nginx": {
+          "status": "running",
+          "running": true,
+          "exit_code": 0,
+          "oom_killed": false,
+          "restarts": 0,
+          "diagnostics": []
+        },
+        "nodeserver": {
+          "status": "running",
+          "running": true,
+          "exit_code": 0,
+          "oom_killed": false,
+          "restarts": 0,
+          "diagnostics": [
+            "Server is running on port 4999"
+          ]
+        }
+      }
+    },
+    {
+      "at_seconds": 5.399,
+      "http": [
+        {
+          "path": "/",
+          "status": 200
+        },
+        {
+          "path": "/__ctf590_readiness__",
+          "status": 404
+        }
+      ],
+      "services": {
+        "mongo": {
+          "status": "restarting",
+          "running": true,
+          "exit_code": 132,
+          "oom_killed": false,
+          "restarts": 6,
+          "diagnostics": [
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!"
+          ]
+        },
+        "nginx": {
+          "status": "running",
+          "running": true,
+          "exit_code": 0,
+          "oom_killed": false,
+          "restarts": 0,
+          "diagnostics": []
+        },
+        "nodeserver": {
+          "status": "running",
+          "running": true,
+          "exit_code": 0,
+          "oom_killed": false,
+          "restarts": 0,
+          "diagnostics": [
+            "Server is running on port 4999"
+          ]
+        }
+      }
+    },
+    {
+      "at_seconds": 20.408,
+      "http": [
+        {
+          "path": "/",
+          "status": 200
+        },
+        {
+          "path": "/__ctf590_readiness__",
+          "status": 404
+        }
+      ],
+      "services": {
+        "mongo": {
+          "status": "restarting",
+          "running": true,
+          "exit_code": 132,
+          "oom_killed": false,
+          "restarts": 8,
+          "diagnostics": [
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!"
+          ]
+        },
+        "nginx": {
+          "status": "running",
+          "running": true,
+          "exit_code": 0,
+          "oom_killed": false,
+          "restarts": 0,
+          "diagnostics": []
+        },
+        "nodeserver": {
+          "status": "running",
+          "running": true,
+          "exit_code": 0,
+          "oom_killed": false,
+          "restarts": 0,
+          "diagnostics": [
+            "Server is running on port 4999"
+          ]
+        }
+      }
+    },
+    {
+      "at_seconds": 41.425,
+      "http": [
+        {
+          "path": "/",
+          "error": "TimeoutError"
+        },
+        {
+          "path": "/__ctf590_readiness__",
+          "error": "TimeoutError"
+        }
+      ],
+      "services": {
+        "mongo": {
+          "status": "restarting",
+          "running": true,
+          "exit_code": 132,
+          "oom_killed": false,
+          "restarts": 9,
+          "diagnostics": [
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!",
+            "WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!"
+          ]
+        },
+        "nginx": {
+          "status": "running",
+          "running": true,
+          "exit_code": 0,
+          "oom_killed": false,
+          "restarts": 0,
+          "diagnostics": []
+        },
+        "nodeserver": {
+          "status": "exited",
+          "running": false,
+          "exit_code": 1,
+          "oom_killed": false,
+          "restarts": 0,
+          "diagnostics": [
+            "            at emitErrorCloseNT (node:internal/streams/destroy:116:3)",
+            "          cause: Error: getaddrinfo ENOTFOUND mongo",
+            "          [Symbol(errorLabels)]: Set(1) { 'ResetPool' }"
+          ]
+        }
+      }
+    }
+  ],
+  "run_result": {
+    "run_id": "87941905b578",
+    "challenge_id": "web-backend-diagnostic",
+    "mode": "ctftiny-readiness",
+    "termination_reason": "readiness_complete",
+    "tool_calls": 4,
+    "model_calls": 0,
+    "agent_mode": null,
+    "scripted_turns": 0,
+    "tokens": null,
+    "cost_usd": 0.0,
+    "cleanup_errors": [],
+    "trace_id": "2ada30424f06b862e4b8b7e722e64ed2",
+    "active_seconds": 42.418922,
+    "solver_restarts": 0,
+    "cleanup_seconds": 0.159608,
+    "verified_success": false,
+    "trace_flush_seconds": 0.000241,
+    "total_seconds": 42.578861
+  },
+  "target_cleanup_errors": []
+}

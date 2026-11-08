@@ -1,0 +1,43 @@
+{
+  "project": "ctf590-target-5eb1bd868320",
+  "network": "ctf590-target-5eb1bd868320_ctfnet",
+  "container": "ef4a3965a2c9dfd95bdffcab332b8a4db62d225c9a1d42cad54a099c5824ecab",
+  "containers": {
+    "mongo": "824ba36d15b8625633d438f2ef8827471af3ec221613b4caa5c833d524277515",
+    "nginx": "ef4a3965a2c9dfd95bdffcab332b8a4db62d225c9a1d42cad54a099c5824ecab",
+    "nodeserver": "d1d420416aa3ba22984d6afb53e7e7a17b4afe3a4ec2cba4c3fc011772971715"
+  },
+  "images": {
+    "mongo": "sha256:7b88befc893008d7139ce3276c093b3efd435023af8bb76a9d79fa90be1eaeb6",
+    "nginx": "sha256:00b574d502790dce42064f06df69ce11c94d87484cdb0c2ccfbe20ff70cbd2c0",
+    "nodeserver": "sha256:32b306b32a21612036f3d2fec7bdd4c5a5eb7b6a707fbe5878591fc9aaea38ef"
+  },
+  "volumes": [
+    "81cebf87077e5467f2e5b91d281b5bf6c340bde38f1f82b045256d7a61ccbaa7",
+    "9897135a3ac7a3e92ba771466798ecf5e5e7845ea997acdc8c4fdac6882f56f2"
+  ],
+  "endpoints": [
+    {
+      "address": "172.20.0.2",
+      "protocol": "tcp",
+      "port": 80
+    }
+  ],
+  "adjustments": [
+    {
+      "service": "nginx",
+      "removed": "ports"
+    },
+    {
+      "service": "nginx",
+      "removed": "build"
+    },
+    {
+      "service": "nodeserver",
+      "removed": "build"
+    }
+  ],
+  "cleanup_errors": [],
+  "address": "172.20.0.2",
+  "image_id": "sha256:00b574d502790dce42064f06df69ce11c94d87484cdb0c2ccfbe20ff70cbd2c0"
+}

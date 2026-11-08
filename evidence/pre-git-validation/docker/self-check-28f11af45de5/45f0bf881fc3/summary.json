@@ -1,0 +1,20 @@
+{
+  "run_id": "45f0bf881fc3",
+  "challenge_id": "compose_standard_networks",
+  "mode": "synthetic-controls",
+  "termination_reason": "scope_violation",
+  "tool_calls": 3,
+  "model_calls": 0,
+  "agent_mode": null,
+  "scripted_turns": 0,
+  "tokens": null,
+  "cost_usd": 0.0,
+  "cleanup_errors": [],
+  "trace_id": "6aa63b8919dcef9233ad1f9e1017f6f7",
+  "active_seconds": 1.823912,
+  "solver_restarts": 0,
+  "cleanup_seconds": 0.155369,
+  "verified_success": false,
+  "trace_flush_seconds": 0.00015,
+  "total_seconds": 1.979517
+}

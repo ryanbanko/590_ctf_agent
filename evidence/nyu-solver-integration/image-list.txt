@@ -1,0 +1,6 @@
+ctf590-solver:m1 7e2c0a9b3a24 11.5GB
+ctf590-solver:nyu-integrated-20261107 7e2c0a9b3a24 11.5GB
+ctf590-solver:nyu-20250206-8g-adapter e4fc6b8f1b5b 11.5GB
+ctf590-solver:nyu-20250206-8g-evaluation ee8e0ef0ce36 11.4GB
+ctf590-solver:before-nyu-evaluation-00e6a41 e98fdc34a26d 1.16GB
+ctf590-solver:baseline-64f6385 c2c272ccdb24 1.14GB

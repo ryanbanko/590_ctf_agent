@@ -1,0 +1,19 @@
+{
+  "time_utc": "2026-11-07T21:25:27.118450+00:00",
+  "authorization": "User explicitly approved removal of nipreps/fmriprep image",
+  "command": [
+    "docker",
+    "image",
+    "rm",
+    "nipreps/fmriprep:latest"
+  ],
+  "exit_code": 0,
+  "output": "Untagged: nipreps/fmriprep:latest\nDeleted: sha256:9aec0b83b3728795fa5a593d373c9bc5d4a7034e943a793173408e3b70e702c6\n",
+  "host_available_bytes_before": 26085982208,
+  "host_available_bytes_immediately_after": 26078351360,
+  "working_solver_unchanged": true,
+  "docker_usage_after": "TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE\nImages          33        3         13.63GB   13.53GB (99%)\nContainers      7         0         68.48MB   68.48MB (100%)\nLocal Volumes   2         2         182.4MB   0B (0%)\nBuild Cache     172       0         1.52GB    1.52GB\n",
+  "host_available_bytes_followup": 37003976704,
+  "docker_raw_allocated_bytes_followup": 32483639296,
+  "docker_usage_followup": "TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE\nImages          33        3         13.63GB   13.53GB (99%)\nContainers      7         0         68.48MB   68.48MB (100%)\nLocal Volumes   2         2         182.4MB   0B (0%)\nBuild Cache     172       0         1.52GB    1.52GB\n"
+}
