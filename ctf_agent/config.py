@@ -8,7 +8,7 @@ CONFIG_PATH = Path('configs/development.toml')
 ATTEMPT_FIELDS = {
     'solver_image', 'guard_image', 'target_image', 'wall_seconds', 'max_tool_calls',
     'max_model_turns', 'command_seconds', 'max_command_bytes', 'max_output_bytes',
-    'max_write_bytes', 'memory_mb', 'pids', 'cpus',
+    'max_capture_bytes', 'max_attempt_capture_bytes', 'max_write_bytes', 'memory_mb', 'pids', 'cpus',
 }
 MODEL_FIELDS = {
     'model', 'base_url', 'reasoning_effort', 'max_output_tokens', 'max_input_bytes',

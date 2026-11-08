@@ -9,6 +9,10 @@ The ten scored challenges are reserved; use the forty development IDs in
 [Design](docs/DESIGN.md) · [Section 2 experiments](docs/EXPERIMENTS.md) ·
 [References and attribution](docs/REFERENCES.md)
 
+The latest [agent improvement milestone](evidence/agent-first-fix/README.md) adds
+verified environment/validation guidance and recoverable oversized command output.
+Synthetic checks pass; a live behavioral comparison remains pending.
+
 The [infrastructure simplification plan](docs/SIMPLIFICATION_PLAN.md) tracks
 reviewable checkpoints. Execution now uses ordinary Docker copy/exec and a
 writable disposable solver. Targets now retain supplied Compose behavior on fresh
@@ -21,8 +25,8 @@ that repository Compose files/private controller verification, Langfuse JSON
 exports and our CTFTiny development/ten-held-out split are acceptable. No separate
 course runtime, JSONL conversion or NYU development-data migration is required.
 The [integrated solver checkpoint](evidence/nyu-solver-integration/README.md)
-records the normal build, startup and synthetic verification. Agent, tools, model,
-guard/evaluator, Langfuse and batch behavior are unchanged. An approved
+records the normal build, startup and synthetic verification. That image milestone
+left agent/tool/model/guard/evaluator, Langfuse and batch behavior unchanged. An approved
 [three-attempt pilot](evidence/nyu-runtime-pilot/README.md) produced two verified
 successes and one scope stop. The web target's reproduced MongoDB CPU issue now
 has a [same-release ARM64 adjustment and stronger readiness checks](evidence/mongo-arm64-integration/README.md).
@@ -282,7 +286,8 @@ top-level `--config` applies to image builds and synthetic checks.
 | Model / tool calls | 40 / 80 maximum. |
 | Model input / output | 512 KiB serialized input; 4,096 output tokens per request. |
 | Solver resources | 1 CPU, 1 GiB memory, 64 PIDs; writable disk has no per-attempt quota. |
-| Tool output / file write | 64 KiB combined stdout/stderr; 64 KiB UTF-8 write. |
+| Tool preview / file write | 64 KiB combined raw stdout/stderr preview, plus omission markers/metadata; 64 KiB UTF-8 write. |
+| Automatic output retention | 10 MiB per overflowing command, 100 MiB per attempt, combined stdout/stderr. |
 
 Edit `[attempt]` and `[model]` in [configs/development.toml](configs/development.toml),
 the single complete file for normal run settings. `config.py` loads and validates
@@ -322,11 +327,44 @@ command; the model cannot inspect and respond midway through that same process.
 Background processes may continue until a timeout reset or final cleanup.
 
 Output up to the configured raw-byte limit is returned whole. Larger output keeps
-the beginning/end and sets `truncated: true`; invalid UTF-8 bytes render as
-replacement characters. No automatic output files/copies are created. Redirect
-output to a workspace file when later inspection matters. Traces preserve exactly
-the observations returned to the model; they do not claim to retain omitted output.
-A timeout event retains captured partial output even if recovery fails.
+the beginning/end with explicit omitted-byte markers and `truncated: true`.
+`output_bytes` counts received raw bytes; `preview_bytes` counts retained preview
+bytes before decoding/markers. Invalid UTF-8 renders as replacement characters.
+
+On overflow, the reader preserves the buffered beginning and streams subsequent
+raw bytes into separate stdout/stderr files under the attempt's private `outputs/`
+directory. Short outputs create no output files. `capture.files` lists the relative
+`artifact` paths and retained byte counts. Successfully delivered files also have
+a `solver_path`, for example `/workspace/.command-output/<capture-id>/stdout.bin`;
+use ordinary commands to inspect selected ranges, search or summarize them.
+Private copies survive solver removal; solver copies survive command restarts.
+This retains command output, not a second conversation log.
+
+`capture.complete` is true only for complete capture of a command that did not
+time out. `limit_reached` identifies storage-cap exhaustion, `error` identifies
+controller storage failure, and an optional `delivery_error` identifies failure
+to make retained files available in the solver. Files may be partial; check the
+metadata before treating them as full output. The reader continues draining after
+the retention cap or a storage failure, preserving exit/timeout semantics and the
+late preview. Separate streams do not establish their exact interleaving. Capture
+cannot recover unprinted/unflushed output or bytes not received before timeout.
+
+Delivery runs as UID/GID 1000 with no-follow paths and exclusive new files. Both
+copies share a five-second delivery allowance clipped to the remaining attempt
+deadline; it does not extend that deadline or add model/tool calls. Ordinary
+delivery failures leave the command result usable with explicit metadata. A
+timed-out delivery is terminal infrastructure failure because a Docker exec may
+outlive its client; it is recorded without restarting the solver. Output capture
+events preserve artifact metadata before recovery, and command-timeout events
+preserve partial observations even if recovery fails. No solver path is advertised
+without a successful writer acknowledgement. These retention caps bound automatic
+copies, not arbitrary files the agent creates in the writable solver.
+Retaining both host and solver copies can use twice the logical capture allowance
+in disk space across those locations.
+
+Continue to redirect important/large intermediate results into workspace files
+when practical. Traces preserve the observations returned to the model, including
+capture metadata; raw files are retained alongside existing run records.
 
 ### Read results
 
@@ -336,7 +374,8 @@ Each invocation prints a fresh record directory:
 | --- | --- |
 | `run.json` | Settings, dataset/source/image provenance, split label, result, trace URL, export audit, total time. |
 | `<run-id>/packages-initial.json` | Initial installed Python versions. An optional final inventory may be unavailable after terminal stop; availability is traced. |
-| `<run-id>/summary.json` | Stop reason, verified success, counts, available tokens/cost, timing, solver restart count, cleanup errors. |
+| `<run-id>/summary.json` | Stop reason, verified success, counts, available tokens/cost, timing, solver restart count, captured-output bytes, cleanup errors. |
+| `<run-id>/outputs/<capture-id>/{stdout,stderr}.bin` | Bounded raw command-output artifacts, created only on overflow; retained after solver cleanup. Capture metadata gives their completeness and solver-readable paths. |
 | `observations.json` | Complete native hosted trace export containing model/tool inputs and outputs; older records use `cli-observations.json`. |
 | `public-task.json`, `target/` | Public task and trusted target runtime configuration/lifecycle record. |
 
@@ -451,7 +490,7 @@ verified submission stops immediately; text-only replies end without success.
 
 | Tool | Input and validation | Output, timeout, errors |
 | --- | --- | --- |
-| `run_command` | Nonempty `/bin/sh` command up to 16 KiB; optional finite positive timeout within the configured maximum. | Bounded head/tail stdout/stderr, exit code, observed byte count and truncation/timeout status. Timeout restarts all solver processes; files survive. |
+| `run_command` | Nonempty `/bin/sh` command up to 16 KiB; optional finite positive timeout within the configured maximum. | Marked head/tail stdout/stderr, exit code, raw/preview byte counts, truncation/timeout status and overflow capture metadata/file paths. Timeout restarts all solver processes; files survive. Capture/delivery errors are explicit; a timed-out internal delivery stops the attempt. |
 | `write_file` | Workspace-relative path without traversal/NUL; UTF-8 content at most 64 KiB. One-shot solver Python code rejects symlinks/races. | Path/bytes-written or error observation; bounded by command/attempt time; timeout resets solver processes. |
 | `submit_flag` | Nonempty candidate, at most 4,096 UTF-8 bytes. | Candidate/verdict recorded; exact host-side equality. Wrong submissions permit continuation; success stops. No subprocess, bounded by attempt deadline. |
 

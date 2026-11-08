@@ -790,3 +790,29 @@ more cleanly. Model, planning, notes and continuation remain separate experiment
 No new dependency, framework, SDK upgrade or second trace backend is needed.
 This review changed documentation only; no runtime/configuration/test edits,
 model calls, challenge attempts or hosted writes occurred.
+
+## Combined first-fix implementation — November 8
+
+Implemented the authorized package after the hypothesis above and documentation
+checkpoint `4620032`: verified solver instructions; independent validation and
+focused diagnosis; explicit command/connection/deadline contract; marked head/tail
+previews; and bounded raw output with safe solver retrieval and private retention.
+Added only 10 MiB/command and 100 MiB/attempt capture settings; model, reasoning,
+response bounds, existing execution limits, images and dependencies are unchanged.
+Delivery has a five-second total allowance within remaining attempt time; an
+internal delivery timeout stops the attempt because its remote writer may survive
+the client. Ordinary capture/delivery failures retain explicit status. This is
+part of maintaining the existing timeout/process boundary, not a new retry policy.
+
+132 offline cases passed. The full 42-case Docker suite passed, followed by ten
+focused output cases after close-error hardening and one additional 10 MiB default-
+capacity case: 43 distinct Docker cases covered. One new fault-injection test had
+a mock read-handle error, corrected before the passing final offline suite; the
+original failure remains recorded. Artifact/summary audit and final managed-resource
+cleanup passed. [Evidence, report files, provenance and limits](../evidence/agent-first-fix/README.md).
+
+The mechanical hypothesis is supported by synthetic checks, including exact omitted
+content recovery, caps, partial/error statuses, non-root safe paths, timeout resets
+and terminal-stop precedence. Behavioral effectiveness remains unmeasured. No new
+model calls, real challenges or hosted writes occurred. Review before separately
+authorizing a matched development comparison; preserve all historical attempts.

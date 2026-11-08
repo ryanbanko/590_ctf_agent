@@ -27,7 +27,9 @@ now selects this image; no NYU agent framework, parent-build wrapper or second
 execution backend was added. All 100 offline tests and 34 normal Docker cases
 passed. The larger toolkit costs roughly 11.5 GB; optional installer failures
 remain documented. The lean image and its archive remain historical baselines.
-Agent, tools, guard, evaluator, model/SDK and batch behavior are unchanged.
+That image milestone left agent/tool/guard/evaluator, model/SDK and batch behavior
+unchanged. The later prompt/output milestone is described below and in its
+[verification evidence](../evidence/agent-first-fix/README.md).
 
 ## One challenge path
 
@@ -192,11 +194,13 @@ limit. All additions disappear at final container removal, not at command restar
 
 `docker exec` starts `/bin/sh` in `/workspace` as UID/GID 1000. A bounded Python
 selector loop drains stdout/stderr, including final output and closed-output
-hangs. It keeps a combined beginning/end byte excerpt without accumulating full
-output. The host never evaluates command text. A one-shot Python writer retains
+hangs. It keeps a combined beginning/end byte excerpt and spills raw output on
+overflow before any preview bytes are discarded. The host never evaluates command
+text. A one-shot Python writer retains
 existing descriptor-relative no-follow traversal checks; stdin carries path/text.
 There is no worker daemon, Unix socket/RPC, PTY, session registry, supervisor,
-subreaper, automatic output file or artifact-transfer protocol.
+subreaper or general artifact service. A second fixed one-shot writer copies only
+the controller's generated output files into solver workspace paths.
 
 Ordinary nonzero exits return observations. A command timeout kills the local
 Docker client, then restarts the same solver with Docker's SIGKILL restart. Killing
@@ -216,10 +220,39 @@ Docker's standard init handles reaping; no per-command descendant cleanup is
 claimed on normal exit. Background tasks can survive until reset/final cleanup.
 
 Output up to 64 KiB raw bytes is returned whole; larger output retains head/tail
-and explicit truncation/counts. UTF-8 decoding replaces invalid bytes. To retain
-omitted output, commands can redirect it to files. Automatic artifact retrieval
-is deliberately removed. The recorded tool observation is exactly what the model
-receives. Initial package inventory uses ordinary Python metadata; an optional
+with per-stream omitted-byte markers. `preview_bytes` excludes marker/metadata
+overhead; UTF-8 decoding replaces invalid bytes. Overflow creates separate raw
+stdout/stderr files in the private run directory, bounded by explicit settings:
+10 MiB per command and 100 MiB per attempt, combined across streams. Only actually
+retained bytes consume that allowance, across timeout restarts too. The reader
+continues draining after caps or storage errors. `capture` reports byte counts,
+relative artifact paths, completeness, cap exhaustion and errors. Timeout capture
+is partial even when all received bytes were retained. Short outputs create no
+output files. This does not impose a quota on arbitrary solver-created files.
+
+The controller streams each retained file into a fixed non-root Python writer
+through Docker stdin without loading the full file into host memory. The writer
+walks `/workspace/.command-output/<capture-id>` descriptor-relatively with
+`O_NOFOLLOW` and creates regular files exclusively with mode 0600, refusing
+collisions, symlinks and special files. Only successful byte-count acknowledgement
+adds a `solver_path` to the observation. Host artifacts survive cleanup; solver
+copies persist across restarts. These are received command bytes, not exports of
+arbitrary agent files. Stream ordering beyond each individual stream is not claimed.
+
+File delivery gets at most five seconds total, clipped to the remaining attempt
+time. It never restarts the solver or extends the attempt. Ordinary writer/storage
+failure is explicit metadata alongside the original command result. Internal
+delivery timeout records the bounded command result and stops the attempt as
+infrastructure error: killing a Docker client alone could leave the writer alive.
+Terminal reasons already set retain precedence. Capture metadata is traced before
+recovery so files remain discoverable if recovery/remaining-time checks fail.
+No new dependency, model tool, application class or persistent worker is added.
+The exact tool observation, including file metadata, passes into model history
+and native traces. Agent guidance favors selected file inspection and programmatic
+intermediate values. The prompt adds verified environment facts and independent
+validation/contradiction diagnosis; no mandatory planner or notes subsystem.
+
+Initial package inventory uses ordinary Python metadata; an optional
 final inventory records availability, commonly unavailable after terminal stop.
 There are no repeated per-tool scans; installation activity remains in the trace.
 Historical records and output files remain unchanged.

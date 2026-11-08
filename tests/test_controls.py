@@ -179,7 +179,7 @@ def test_larger_output_retains_observed_size_and_remains_bounded(attempt):
     assert len(result["stdout"]) == 17_001 and "diagnostic-marker" in result["stderr"]
     result = attempt["call_tool"]("run_command", python_command("print('x' * 40000)"))
     assert result["truncated"] and result["output_bytes"] > 32_768
-    assert len(result["stdout"].encode()) + len(result["stderr"].encode()) <= 32_768
+    assert result["preview_bytes"] <= 32_768 and "bytes omitted" in result["stdout"]
 
 
 def test_filesystem_credentials_privileges_output(attempt: dict, target: dict, settings):
@@ -223,7 +223,7 @@ def test_filesystem_credentials_privileges_output(attempt: dict, target: dict, s
         f"from pathlib import Path; print(Path({str(marker.resolve())!r}).exists())"))
     assert result["stdout"].strip() == "False"
     result = attempt["call_tool"]("run_command", python_command("print('x' * 100000)"))
-    assert result["truncated"] and len(result["stdout"].encode()) <= settings["max_output_bytes"]
+    assert result["truncated"] and result["preview_bytes"] <= settings["max_output_bytes"]
 
 
 def check_denial(attempt: dict, command: str, telemetry):
@@ -400,12 +400,121 @@ def self_check(config_path: Path, output_root: Path) -> Path:
 
 
 def test_output_excerpt_and_late_diagnostic(attempt):
+    import hashlib
+
+    short = attempt['call_tool']('run_command', {'command': 'printf short'})
+    assert short['stdout'] == 'short' and 'capture' not in short
+    assert not (attempt['directory'] / 'outputs').exists()
     result = attempt['call_tool']('run_command', python_command("print('start-'+'x'*1100000+'-end-diagnostic')"))
     assert result['truncated'] and result['stdout'].startswith('start-')
     assert result['stdout'].rstrip().endswith('-end-diagnostic')
     assert result['output_bytes'] == 1100022
-    assert not {'output_file', 'recorded_output', 'session_id'} & result.keys()
-    assert not (attempt['directory'] / 'outputs').exists()
+    assert 'bytes omitted' in result['stdout'] and 'session_id' not in result
+    capture = result['capture']
+    expected = b'start-' + b'x'*1100000 + b'-end-diagnostic\n'
+    assert capture['complete'] and capture['bytes'] == len(expected)
+    for stream, record in capture['files'].items():
+        artifact = attempt['directory'] / record['artifact']
+        assert artifact.read_bytes() == (expected if stream == 'stdout' else b'')
+    paths = {stream: record['solver_path'] for stream, record in capture['files'].items()}
+    proof = attempt['call_tool']('run_command', python_command(
+        f"import pathlib,hashlib,json; paths={paths!r}; "
+        "print(json.dumps({n:{'uid':pathlib.Path(p).stat().st_uid,'size':pathlib.Path(p).stat().st_size,"
+        "'sha256':hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()} for n,p in paths.items()}))"))
+    files = json.loads(proof['stdout'])
+    assert files['stdout'] == {'uid': 1000, 'size': len(expected), 'sha256': hashlib.sha256(expected).hexdigest()}
+    assert files['stderr']['size'] == 0
+
+
+def test_timeout_output_remains_retrievable_after_restart(attempt):
+    result = attempt['call_tool']('run_command', python_command(
+        "import os,time; os.write(1,b'x'*90000); os.write(2,b'diagnostic'); time.sleep(30)")
+        | {'timeout_seconds': .5})
+    assert result['timed_out'] and result['solver_restarted'] and result['process_state_reset']
+    assert not result['capture']['complete'] and result['capture']['bytes'] == 90010
+    paths = {n:r['solver_path'] for n,r in result['capture']['files'].items()}
+    proof = attempt['call_tool']('run_command', python_command(
+        f"from pathlib import Path; paths={paths!r}; "
+        "assert Path(paths['stdout']).read_bytes()==b'x'*90000; "
+        "assert Path(paths['stderr']).read_bytes()==b'diagnostic'; print('retrieved')"))
+    assert proof['stdout'].strip() == 'retrieved' and proof['exit_code'] == 0
+
+
+def test_default_capture_limit_delivers_large_prefix(attempt, settings):
+    result = attempt['call_tool']('run_command', python_command(
+        f"import sys; sys.stdout.buffer.write(b'start'+b'x'*{settings['max_capture_bytes']}+b'-end')"))
+    capture = result['capture']
+    assert result['exit_code'] == 0 and result['stdout'].endswith('-end')
+    assert capture['limit_reached'] and not capture['complete']
+    record = capture['files']['stdout']
+    assert capture['bytes'] == record['bytes'] == settings['max_capture_bytes']
+    artifact = attempt['directory'] / record['artifact']
+    assert artifact.stat().st_size == settings['max_capture_bytes']
+    proof = attempt['call_tool']('run_command', python_command(
+        f"from pathlib import Path; p=Path({record['solver_path']!r}); "
+        f"assert p.stat().st_size=={settings['max_capture_bytes']}; "
+        "f=p.open('rb'); assert f.read(5)==b'start'; f.seek(-4,2); assert f.read()==b'xxxx'; print('large-copy-ok')"))
+    assert proof['exit_code'] == 0 and proof['stdout'].strip() == 'large-copy-ok'
+
+
+@pytest.mark.parametrize('attempt', [{'max_output_bytes': 1024, 'max_capture_bytes': 2048,
+                                     'max_attempt_capture_bytes': 3072}], indirect=True)
+def test_capture_caps_keep_command_running_and_attempt_usable(attempt):
+    for retained in [2048, 1024, 0]:
+        result = attempt['call_tool']('run_command', python_command("print('x'*4000+'-done')"))
+        assert result['exit_code'] == 0 and result['stdout'].rstrip().endswith('-done')
+        capture = result['capture']
+        assert not capture['complete'] and capture['limit_reached'] and capture['bytes'] == retained
+        if retained:
+            path = attempt['directory'] / capture['files']['stdout']['artifact']
+            assert path.read_bytes() == b'x'*retained
+            assert capture['files']['stdout']['solver_path']
+        else:
+            assert not capture['files']
+    assert attempt['result']['termination_reason'] is None
+
+
+@pytest.mark.parametrize('hazard', ['directory_symlink', 'file_exists', 'fifo'])
+def test_output_writer_rejects_symlink_collision_and_fifo(attempt, hazard):
+    from ctf_agent.docker import bounded_exec
+    from ctf_agent.tools import COPY_OUTPUT
+
+    setup = ("from pathlib import Path; import os; p=Path('.command-output'); "
+             "Path('trap').mkdir(); Path('trap/marker').write_text('unchanged'); ")
+    if hazard == 'directory_symlink':
+        setup += "p.symlink_to('trap',target_is_directory=True)"
+    else:
+        setup += "(p/'fixed').mkdir(parents=True); "
+        setup += ("(p/'fixed/stdout.bin').write_text('existing')" if hazard == 'file_exists'
+                  else "os.mkfifo(p/'fixed/stdout.bin')")
+    assert attempt['call_tool']('run_command', python_command(setup))['exit_code'] == 0
+    result = bounded_exec(['exec', '--interactive', '--user', '1000:1000', attempt['solver'],
+                          'python', '-I', '-c', COPY_OUTPUT, 'fixed', 'stdout.bin', '3'],
+                         b'new', min(3, attempt['remaining_seconds']()), 4096)
+    assert result['exit_code'] != 0 and not result['timed_out']
+    proof = attempt['call_tool']('run_command', python_command(
+        "from pathlib import Path; assert Path('trap/marker').read_text()=='unchanged'; "
+        + ("assert Path('.command-output/fixed/stdout.bin').read_text()=='existing'; "
+           if hazard == 'file_exists' else '') + "print('safe')"))
+    assert proof['stdout'].strip() == 'safe'
+    if hazard == 'directory_symlink':
+        captured = attempt['call_tool']('run_command', python_command("print('x'*90000)"))
+        assert captured['exit_code'] == 0 and captured['capture']['complete']
+        assert captured['capture']['delivery_error']
+        assert all('solver_path' not in record for record in captured['capture']['files'].values())
+        assert (attempt['directory'] / captured['capture']['files']['stdout']['artifact']).stat().st_size == 90001
+
+
+def test_captured_files_survive_solver_cleanup(settings, target, output_root, telemetry, record_property):
+    with run_attempt(settings, target['network'], target['endpoints'], target['expected_flag'],
+                     output_root, langfuse=telemetry['client'], label='capture_cleanup') as run:
+        record_property('run_id', run['run_id'])
+        result = run['call_tool']('run_command', python_command("print('x'*90000)"))
+        artifact = run['directory'] / result['capture']['files']['stdout']['artifact']
+        assert artifact.stat().st_size == 90001
+    save_spans(telemetry, run['directory'], run['result']['trace_id'])
+    assert artifact.read_bytes() == b'x'*90000+b'\n'
+    assert run['result']['captured_output_bytes'] == 90001 and not run['result']['cleanup_errors']
 
 
 def test_fresh_python_environment(attempt):

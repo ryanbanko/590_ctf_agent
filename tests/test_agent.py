@@ -20,7 +20,9 @@ from .fixtures.tracing import attribute, read_spans
 def test_observations_drive_recovery_and_only_public_history_is_passed(local_attempt, telemetry, monkeypatch, request):
     command_seconds = request.node.callspec.params["local_attempt"]["command_seconds"]
     execute = Mock(side_effect=[{"exit_code": 7, "stdout": "", "stderr": "failed"},
-                               {"exit_code": 0, "stdout": "new observation", "stderr": ""}])
+                               {"exit_code": 0, "stdout": "new observation", "stderr": "",
+                                "capture": {"complete": True, "files": {"stdout": {
+                                    "solver_path": "/workspace/.command-output/test/stdout.bin"}}}}])
     monkeypatch.setattr("ctf_agent.attempt.execute_tool", execute)
     histories = []
 
@@ -45,6 +47,7 @@ def test_observations_drive_recovery_and_only_public_history_is_passed(local_att
             assert messages[-1]["tool_call_id"] == "failed-command"
             return tool_response("run_command", {"command": "echo new observation"}, "changed-command")
         assert json.loads(messages[-1]["content"])["stdout"] == "new observation"
+        assert json.loads(messages[-1]["content"])["capture"]["files"]["stdout"]["solver_path"] == "/workspace/.command-output/test/stdout.bin"
         return {"role": "assistant", "content": "Cannot complete the task."}
 
     with local_attempt(respond, "Only this public task") as run:
@@ -58,6 +61,8 @@ def test_observations_drive_recovery_and_only_public_history_is_passed(local_att
     assert all(attribute(span, "input")["tools"][0]["function"]["parameters"]["properties"]
                ["timeout_seconds"]["maximum"] == command_seconds for span in generations)
     assert sum(span.attributes.get("langfuse.observation.type") == "tool" for span in spans) == 2
+    recovered = next(span for span in spans if span.name == "run_command" and attribute(span, "output").get("exit_code") == 0)
+    assert attribute(recovered, "output") == json.loads(histories[-1][-1]["content"])
     assert "private-expected-answer" not in "".join(span.to_json() for span in spans)
     assert run["result"]["model_calls"] == 0 and run["result"]["tokens"] is None
     assert run["result"]["cost_usd"] == 0 and not run["result"]["cleanup_errors"]

@@ -53,7 +53,7 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
 
     The answer stays in this trusted scope. Neither the loop nor Langfuse receives
     the private state dictionary. The supplied Langfuse client owns detailed traces;
-    only summary.json is written by this runner. Live sources supply model_usage;
+    summary.json and bounded command-output artifacts are retained locally. Live sources supply model_usage;
     their Langfuse OpenAI integration creates generations automatically.
     """
     validate_settings(settings)
@@ -211,6 +211,7 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
                 result["active_seconds"] = round(time.monotonic() - started, 6)
                 cleanup_started = time.monotonic()
                 result["solver_restarts"] = sandbox["restarts"]
+                result["captured_output_bytes"] = sandbox["captured_output_bytes"]
                 snapshot_packages(sandbox, "final", 2)
                 result["cleanup_errors"] = close_sandbox(sandbox)
                 result["cleanup_seconds"] = round(time.monotonic() - cleanup_started, 6)

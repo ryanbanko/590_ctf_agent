@@ -5,6 +5,11 @@ latest development traces, prompt structure, output handling, solver information
 models/reasoning, the NYU reference prompt, and plans/notes. These are proposals,
 not implemented changes or authorization for live comparisons.
 
+**November 8 implementation update:** the user-approved combined first fix is now
+implemented and synthetically verified. See [milestone evidence](../evidence/agent-first-fix/README.md).
+The dated proposals below preserve the decisions before implementation; no live
+behavioral comparison has been run.
+
 The [user follow-up](#user-follow-up-explanations-and-current-recommendations)
 below records later preferences, successful read-only Duke model discovery and
 the more detailed output-capture proposal. It supersedes the earlier unavailable-

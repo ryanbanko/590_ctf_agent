@@ -178,7 +178,7 @@ def test_complete_configuration_has_one_model_call_limit(tmp_path):
 def test_failed_restart_stops_attempt(local_attempt, monkeypatch, telemetry):
     from ctf_agent.agent import AttemptStopped
 
-    monkeypatch.setattr('ctf_agent.tools.bounded_exec', lambda *args:
+    monkeypatch.setattr('ctf_agent.tools.bounded_exec', lambda *args, **kwargs:
                         {'timed_out': True, 'stdout': 'partial', 'stderr': '', 'exit_code': None})
     def failed(*args):
         raise RuntimeError('synthetic restart failure')

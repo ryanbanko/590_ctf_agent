@@ -2,7 +2,7 @@
 
 Last reviewed: November 8, 2026 (America/New_York).
 
-**Latest development-batch trace review complete: six verified successes in eleven attempts; independent validation and diagnosis before stopping are the first proposed improvements. Runtime checkpoint remains `616b5f2`; two older committed private snapshots still need publication-history review.**
+**Combined prompt/tool-contract/output-recovery milestone implemented: 132 offline tests and 43 distinct synthetic Docker cases passed, cleanup verified. No new model calls or real challenge attempts. Changes await review; two older committed private snapshots still need publication-history review.**
 
 Use the [current plan](#latest-course-clarification-and-current-plan),
 [Git checkpoint](#current-git-checkpoint) and [assignment checklist](#assignment-checklist)
@@ -10,7 +10,42 @@ for remaining work. Dated milestone sections preserve their completion state and
 next-step recommendations at the time; later completed work supersedes those
 historical pending-stage notes.
 
-## First-fix implementation proposal and cost check — November 8
+## Combined first fix — implemented and verified November 8
+
+The user authorized the planned combined improvements after documentation checkpoint
+`4620032`. The prompt now describes verified solver capabilities/persistence and
+adds original-evidence validation/contradiction diagnosis. The command contract
+clarifies shells, connections, deadlines, reset effects and capture metadata.
+Oversized output retains marked 64 KiB raw-byte head/tail previews plus bounded
+separate stdout/stderr files, private retained artifacts and acknowledged solver
+paths. New capture settings are 10 MiB per command and 100 MiB per attempt; all
+existing settings, including model/effort/token bounds, remain unchanged.
+
+**Verification:** 132 offline tests; full 42-case Docker suite, then ten focused
+output cases after close-error hardening and one added actual-10-MiB test. These
+cover 43 distinct Docker cases with overlapping focused reruns. The audit checked
+52 summaries and 19 overflow observations/artifacts; all have zero model calls and
+no cleanup errors. No managed containers/networks remain. One fault-injection test
+mock was corrected; its initial failure record is preserved. Documentation links
+and whitespace are checked separately. [Evidence and reproduction](evidence/agent-first-fix/README.md).
+
+Capture keeps draining after storage limits/errors. Complete/partial status and
+delivery errors are explicit; safe non-root file delivery uses at most five seconds
+within remaining attempt time. A timed-out internal writer stops the attempt
+rather than leaving a Docker exec alive or restarting unrelated processes. Host
+artifacts survive cleanup; arbitrary solver-file storage still has no disk quota.
+No new dependencies, images, tools, sessions, planner, notes or continuation policy.
+
+Implementation is uncommitted for review. No real development/held-out attempts,
+paid requests or hosted writes were run. Review the completed milestone, then
+separately authorize any matched development comparison. This verifies the
+mechanical contract, not a solve-rate gain. The preregistered hypothesis and
+historical records remain intact; cost-pricing reconciliation is still separate.
+
+## Earlier first-fix proposal and cost check — November 8
+
+Recorded before implementation; the completed milestone above supersedes its
+pending implementation status.
 
 The discussion is consolidated into an [implementation proposal](docs/IMPROVEMENT_OPTIONS.md#consolidated-first-fix-implementation-proposal--november-8):
 verified solver/environment instructions; concise command/connection/deadline
@@ -339,6 +374,12 @@ evaluation above; a broader live development pilot remains separately authorized
 
 ## Latest course clarification and current plan
 
+**Current next step:** review the [implemented combined first fix](evidence/agent-first-fix/README.md),
+then separately authorize a matched development comparison if desired. Runtime
+implementation and synthetic verification are complete; its effect on solving is
+unmeasured. The following paragraphs preserve the earlier decisions and milestones
+that led to this point; pending proposal wording is superseded by the latest result.
+
 The professor [explicitly accepted](docs/REFERENCES.md#november-6-course-guide-and-professor-confirmations)
 repository Compose files/private controller verification, Langfuse JSON exports,
 and developing on separate CTFTiny IDs while holding ten out. Keep all three;
@@ -418,6 +459,12 @@ synthetic check, development pilot and web retry are setup/development evidence,
 not scored evaluation or report work.
 
 ## Current Git checkpoint
+
+Latest saved HEAD is `4620032`, the documentation/review/hypothesis checkpoint.
+The combined implementation and its new verification evidence are currently
+uncommitted for review. Nothing was committed or pushed by this implementation
+milestone. Model/configuration controls remain as described above, with only
+the two explicit capture allowances added.
 
 The runtime baseline is `616b5f2d854f58b2e305697cee21d5f739e81d03` (`616b5f2`),
 “integrated NYU solver image with expanded tooling, ready for testing.” The working

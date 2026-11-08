@@ -24,6 +24,7 @@ def make_sandbox(run_id: str, observation, stop):
         "observation": observation, "stop": stop, "ready": threading.Event(),
         "closing": threading.Event(), "stopping": threading.Event(),
         "lifecycle": threading.RLock(), "restarts": 0, "monitor": None, "log_process": None,
+        "captured_output_bytes": 0,
     }
 
 
