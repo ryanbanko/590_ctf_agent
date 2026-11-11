@@ -9,11 +9,20 @@ The ten scored challenges are reserved; use the forty development IDs in
 [Design](docs/DESIGN.md) · [Section 2 experiments](docs/EXPERIMENTS.md) ·
 [References and attribution](docs/REFERENCES.md)
 
+**Open infrastructure issue:** repeated target listener/container exits are
+documented in the [teammate handoff](docs/TARGET_PROCESS_ISSUE.md), with filtered
+evidence, completed Docker checks, unresolved questions and suggested next steps.
+The cause remains unresolved; no service fix is implemented.
+
 **Teammates and coding agents:** start with
 [Ryan's shared development runs](evidence/ryan-shared-runs/README.md) for offline
 copies of all 65 pilot attempts, comparison context, trace-reading instructions
 and sharing/export limitations. These reviewed copies travel with Git; `runs/`
 remains local. No model credentials or Docker setup are needed to read them.
+
+For an independent model review, use the
+[trace-review prompt and attachment guide](docs/TRACE_REVIEW_PROMPT.md). It includes
+the design context, evidence checks and requested diagnosis/improvement format.
 
 The [combined agent improvement milestone](evidence/agent-first-fix/README.md) adds
 verified environment/validation guidance and recoverable oversized command output.
@@ -239,6 +248,11 @@ trusted controller, and the run record identifies that omission.
 
 ### Run a development batch
 
+For the current unattempted-challenge capability test, use the
+[recorded 20-attempt plan and command](evidence/ryan-shared-runs/unseen-development-three-per-category/README.md).
+It includes a configuration snapshot and explains how to publish reviewed results
+for teammates after execution; raw runs do not automatically enter Git.
+
 `run-batch` repeats the existing launcher sequentially, with fresh processes,
 solver/target environments and attempt records. For example, this makes **live
 model requests** for two development challenges, one attempt each:
@@ -295,11 +309,11 @@ top-level `--config` applies to image builds and synthetic checks.
 | --- | --- |
 | Whole attempt | 600 seconds, including solver preparation; cleanup/export add time. |
 | Ordinary command | Up to 120 seconds, clipped to remaining attempt time. |
-| Model request | Up to 60 seconds; no client retries. |
+| Model request | Up to 90 seconds, clipped to remaining attempt time; no client retries. |
 | Model / tool calls | 40 / 80 maximum. |
 | Blocked-command recovery | One per attempt; `max_scope_recoveries = 0` selects strict stopping. |
 | Model reasoning | GPT-6 Luna, medium effort for the current development experiment. |
-| Model input / output | 512 KiB serialized input; 8,192 generated tokens per request, including reasoning. |
+| Model input / output | 2 MiB serialized input; 8,192 generated tokens per request, including reasoning. |
 | Solver resources | 1 CPU, 1 GiB memory, 64 PIDs; writable disk has no per-attempt quota. |
 | Tool preview / file write | 64 KiB combined raw stdout/stderr preview, plus omission markers/metadata; 64 KiB UTF-8 write. |
 | Automatic output retention | 10 MiB per overflowing command, 100 MiB per attempt, combined stdout/stderr. |
@@ -418,6 +432,14 @@ Each invocation prints a fresh record directory:
 | `observations.json` | Native hosted trace export; verify payload availability before detailed review. Older records use `cli-observations.json`; supplemental refreshes preserve the original. |
 | `public-task.json`, `target/` | Public task and trusted target runtime configuration/lifecycle record. |
 
+For service failures, inspect `target.service_checks.before_cleanup` in `run.json`
+or `service_checks.before_cleanup` in `target/target.json`. It records bounded,
+passive target state and network attachments before removal; missing/unavailable
+states include sanitized error types. Diagnostic failures do not replace the
+attempt outcome or prevent cleanup. This is teardown state, not continuous health
+monitoring. Raw target runtime configuration remains private; share only reviewed
+fields. [Diagnostic verification](evidence/target-precleanup-snapshot/README.md).
+
 `verified_success` means trusted verification accepted a candidate.
 `evidence_complete` means the launch's hosted trace audit passed. They describe
 different outcomes. The current audit checks structural completeness but can pass
@@ -499,8 +521,33 @@ Both groups contain all six categories:
 | Web | 2 | 1 |
 
 The ten scored IDs were selected by a fixed hash of their IDs, without reading
-answers or solutions. **The selection is not balanced by difficulty**: the index
-has no difficulty ratings, and we have not established how hard each challenge is.
+answers or solutions. The selection is not balanced by difficulty. The public index
+has no difficulty field, but the
+[upstream README lists difficulty ratings](https://github.com/NYU-LLM-CTF/CTFTiny/blob/f1c9531672c45b24b7fb5f3aa44a7ac33d3602f8/README.md#challenge-list).
+Those ratings were checked on November 11 against the pinned version and current
+upstream table; all 50 ratings agree. The table calls `dockerleakage` what our
+index identifies as `rev-dockreleakage`.
+
+**Current development focus: hard challenges, keeping the existing holdout.**
+The user selected this focus rather than changing the split merely to balance
+difficulty. These are upstream labels, not estimates inferred from our solve rate:
+
+| Category | Hard development challenge | Existing agent attempts |
+| --- | --- | --- |
+| Crypto | `cry-ecxor` | Yes |
+| Misc | `msc-algebra` | Yes |
+| Pwn | `pwn-baby-boi` | Yes; latest two attempts unsuccessful |
+| Web | `web-shreeramquest` | Yes |
+| Reverse engineering | `rev-gibberish-check` | None recorded; recommended next hard development target |
+| Forensics | None available in development | The only hard entry, `for-whyos`, stays held out |
+
+For broader hard coverage, other unattempted development options include
+`cry-lupin`, `pwn-roppity` and `rev-a-walk-through-x86-part-2`. Being listed here
+does not establish runtime readiness or authorize an automatic run. Hard web
+`web-shreeramquest` has already been used in development and must not be relabelled
+as unseen evaluation data. Saved [development evidence](evidence/ryan-shared-runs/README.md)
+retains all successes and failures; future hard attempts should use separate run
+records and the same recorded settings when comparing performance.
 
 The setup below downloads **all 50 challenge directories once**. After that, choose
 challenges by ID without a separate download step. Dataset files are local to each

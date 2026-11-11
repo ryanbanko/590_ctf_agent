@@ -5,6 +5,210 @@ comparisons, the exact change, run references and conclusions. Keep raw evidence
 in Langfuse and run records; use `PROJECT_STATUS.md` for the overall checklist.
 This is Section 2 of [Part 1](../ASSIGNMENT.md), not the later competition Part 2.
 
+## Generic Docker/process investigation — November 11
+
+The user authorized investigating the listener/process failure and possible
+constraints introduced by our setup, explicitly excluding challenge logic,
+binaries and payloads. No real challenge attempt or model request is authorized
+by this diagnostic milestone.
+
+**Hypothesis before synthetic checks:** an attached child failure may be handled
+by its per-connection relay, while an orphan adopted by a PID-1 listener may be
+handled differently and terminate the listener. Compare fixed trivial children
+that exit normally, receive SIGSEGV while attached, or fork an orphan that later
+receives SIGSEGV. Test Docker init as a separate variable. Inspect whitelisted
+effective HostConfig/cgroup limits and compare a generic supplied Compose service
+with the same service through our target launcher. Use only generic images and
+new synthetic resources; always remove our containers/networks. No production
+service/init/restart/security/model setting changes are part of this milestone.
+
+The initial ten synthetic variants (native ARM64 and emulated AMD64, five each)
+all survived five connections. The generic launcher/direct-Compose limit records
+matched on both architectures. The orphan-child hypothesis is not reproduced.
+Before a final positive control: deliberately remove only the generic listener's
+`fork` option and compare signal-exit behavior with/without init. This tests whether
+the observed signature uniquely identifies missing init; it is not a change to
+any benchmark service or evidence of its supplied listener options.
+
+**Completed result:** all ten forking-listener cases survived (50 successful
+connections). Both one-connection controls exited code 1 and lost connectivity,
+including with init. Without init the control produced the same `socat[1] E
+waitpid()` message shape as the historical observation. This disproves uniqueness
+of that signature, not a historical target configuration. Actual task startup
+argument inspection was blocked by automatic approval review under the user's
+challenge-exclusion boundary and remains unperformed. No added target quotas were
+found; no production fix is justified yet. All diagnostic containers/networks and
+temporary image tags were removed. [Audit, checks and limits](../evidence/docker-process-constraints/README.md).
+
+## Passive target snapshot before cleanup — November 11
+
+**Subsequent user-run diagnostic result:** `pwn-target-snapshots/batch-bebe62296ff3`
+completed four attempts, all without verified success. All four final target states
+were exited/code 1, no OOM flag and no restart. Passive lifecycle events in attempt
+003 establish exit before a later connection failure, well before controller
+removal. This supports the snapshot's diagnostic hypothesis, not a solving gain.
+A filtered socat PID-1 child-exit message motivates a generic process-lifecycle
+reproduction; it does not prove an init/emulation/listener defect or authorize a
+target workaround. [Infrastructure-only review](../evidence/target-snapshot-batch-review/README.md).
+No source/runtime change or new paid request was made while monitoring.
+
+The user approved a small diagnostic change after service reachability failed
+again in the first pwn rerun. The completed `pwn-service-recheck/batch-8c72ac67cab7`
+contains four ordinary unsuccessful attempts (two each for roppity and baby-boi).
+Only the first rerun trace has a detailed infrastructure review; do not infer an
+identical cause for the other three from outcomes alone. Historical startup-only
+state and removed containers leave the actual runtime cause unresolved.
+
+**Hypothesis recorded before implementation/follow-up:** a whitelisted target
+snapshot before teardown will distinguish exited/OOM-killed/restarting/missing
+containers and changed network attachments from targets still running at the end.
+It is end-state evidence, not proof of state at the instant a connection failed.
+It diagnoses rather than repairs reachability. Snapshot collection must be bounded,
+exclude environment/argv/health-log/target contents, preserve the original outcome
+or exception, and never prevent cleanup. Genuine cleanup failures remain failures.
+
+Reuse startup state extraction, include network names/IDs/IP addresses, record a
+`before_cleanup` phase and sanitized error categories. Do not add a monitor,
+active connection probe, target restart, dependency, agent tool or configuration
+setting. Keep all current model/attempt limits and scope controls unchanged.
+Verify healthy/exited/missing/error capture, privacy, exception/cleanup precedence
+and real synthetic-container capture before removal. No paid challenge run is
+launched by implementation; a fresh user-run development rerun remains subsequent.
+
+Implementation complete: shared snapshot extraction and bounded best-effort
+`before_cleanup` capture preserve target state in `target.json` and `run.json`.
+Forty-nine focused offline cases passed. Initial synthetic Docker run: three
+passed and one failed while resolving the local fixture image; that single case
+passed on focused retry, for four distinct passing cases. Original failure and
+retry remain recorded. Tests cover sanitized errors, shared time bound, exception/
+cleanup precedence and real exited/missing/detached target records. No model call,
+benchmark solving, target workaround, guard/scope change or new dependency.
+[Evidence and limitations](../evidence/target-precleanup-snapshot/README.md).
+
+## Original-artifact validation and reusable computation — November 11
+
+### Subsequent service investigation — November 11
+
+At the user's authorization, fixed model-free solver probes checked fresh roppity
+and baby-boi services with unchanged historical target images. Both survived nine
+ordinary connect/read/close/short-input exchanges. One generic roppity invalid-line
+check produced a child signal-11 signature but left the listener reachable. That
+check preceded the user's instruction to avoid challenge analysis; no further
+stress probing or challenge-logic inspection followed. The diagnostic helper's
+stress option was removed. The first diagnostic's Docker `top` formatting failure
+was corrected and retained separately. All completed runs recorded clean teardown,
+zero model calls/submissions and zero scope incidents.
+
+The historical connection outage is not reproduced or explained. No production
+runtime/target/image/guard/prompt change was made. The user prefers a small fresh
+rerun instead of speculative fixes. [Filtered evidence and command](../evidence/service-lifecycle-investigation/README.md)
+schedule two trials each for roppity and baby-boi under the current 90-second
+request profile; no paid attempt was launched here. This checks repeatability,
+not the effect of a service repair. Original failures remain intact.
+
+### Subsequent 90-second request allowance — November 11
+
+The user-run `validation-checkpoint/batch-983d82df4d2f` stopped after four of six
+planned attempts. The first trial of each task succeeded (lupin 52.01 active
+seconds, gibberish 406.04, x86 walk 41.11). The second lupin attempt ended on its
+sixth model request: generation `c444907e2e2a0481` lasted 60.047 seconds and
+recorded `Request timed out.`; event `69b69688cd4f69a2` records `APITimeoutError`.
+The attempt had used 155.18 active seconds; captured generation input was about
+76.6 KB, well below the 2 MiB cap. No scope incident or cleanup error was recorded.
+The two remaining trials were not started. Original records remain unchanged.
+
+The user approved raising the default request allowance from 60 to **90 seconds**.
+Hypothesis before follow-up: modest additional waiting can accommodate occasional
+slow requests without extending the **600-second attempt deadline**. Exact cause
+(model generation, gateway queue or network stall) remains unknown. A stalled
+request can waste an extra 30 seconds; the larger allowance does not prove this
+historical request would have completed. No automatic retries are introduced.
+Older named profiles and evidence snapshots remain unchanged. A separate
+[90-second snapshot and follow-up command](../evidence/validation-checkpoint-prompt/README.md#90-second-request-follow-up)
+preserve the changed condition; no live rerun is launched by this adjustment.
+
+The user approved a small prompt change before further development testing.
+Observed failures include circular checks based on incorrectly copied data,
+late original-checker validation, exact-value transcription errors, and repeated
+expensive computation after editing only a later stage. The current prompt already
+contains broad validation/data-handling advice; this refinement makes the timing
+and independence of checks more explicit rather than introducing a new tool.
+
+**Hypothesis recorded before implementation/follow-up:** small original-artifact
+checks before expensive search, exact-value rechecks after contradiction, and
+saved intermediate results reduce work based on incorrect reconstructions and
+repeated computation during recovery. Success may improve, but is not guaranteed;
+extra validation can consume calls/time and stale checkpoints can propagate errors.
+Instructions explicitly require recomputing results whose inputs/assumptions change.
+
+Replace the working-method paragraph and add one intermediate-result sentence.
+Keep Luna/medium/8,192, tools, scope, stopping behavior and existing limits fixed,
+including the separately approved **2 MiB** default input cap. No planner, notes
+system, submission-interface change, automatic checkpoint subsystem, service
+investigation or target reset is included. The service investigation requires the
+user's separate go-ahead. Verify prompt propagation, public-history/recovery and
+native replay through focused existing local tests, without model/container calls.
+
+A subsequent user-run targeted pilot can repeat `cry-lupin`,
+`rev-gibberish-check`, and `rev-a-walk-through-x86-part-2` twice, preserving
+failures, settings and provenance. Assess original-checker use before search,
+exact-value checking after rejection, checkpoint reuse, calls/time/tokens and
+verified success. The historical batch used 512 KiB, so a historical comparison
+tests the combined prompt/headroom changes, not prompt causality. A clean prompt
+comparison needs both versions at the same 2 MiB allowance and fresh conditions.
+No live run is launched by this implementation milestone.
+
+Implementation completed: the agreed paragraph replacement and intermediate-result
+sentence are applied. Five existing focused offline cases passed (0.40 seconds),
+covering prompt/public-history propagation, recovery, verified stopping and native
+replay. No new tests, model/container calls, target investigation or unrelated
+runtime change. [Exact prompt snapshots, settings, hashes and test evidence](../evidence/validation-checkpoint-prompt/README.md).
+The follow-up command is prepared for the user; no behavioral result is claimed.
+
+## Previously unattempted development capability test — planned November 11
+
+### Subsequent default input-cap increase — November 11
+
+The user approved increasing the local serialized-request cap from 512 KiB to
+2 MiB, retaining Luna and deferring compaction. Before any new comparison, the
+hypothesis is that additional request headroom prevents premature local input-limit
+stops for otherwise supported histories. The largest recorded native input across
+620 available generation observations was 112,068 tokens; the failed gibberish
+attempt's reconstructed next request was about 536,570 serialized bytes. This is
+an application byte guard, not the model's token context window.
+
+Only `configs/development.toml` changes behavior. Explicit historical/comparison
+profiles and saved batch snapshots retain their recorded caps. More headroom
+permits longer replay and possible higher usage; it neither forces that usage nor
+establishes better solving. Current configuration loading and unchanged other
+settings are checked locally; no live/model/container call or behavioral comparison
+is performed. Service diagnostics, validation/tool changes, notes and model
+experiments remain separate decisions.
+
+**Subsequent result/review:** `batch-8c98b0fc7e14` reached 20 scheduled attempts;
+14 succeeded, five completed unsuccessfully and the final response-source failure
+stopped the batch. [Detailed read-only review](../evidence/unseen-development-trace-review/README.md)
+and [filtered inventory](../evidence/unseen-development-trace-review/review.json)
+cover all six unsuccessful attempts plus four matched successes. The primary
+findings are exact-data/validation mistakes, cumulative input growth, repeated
+roppity endpoint unavailability of unknown cause, and an Android source failure
+with incomplete telemetry. No fix or comparison was run; options in the report
+are hypotheses for a future approved milestone. Unlike task sets and mixed/random
+outcomes do not establish an improvement over earlier pilots. The pre-run plan
+below remains historical.
+
+The user requested up to three different unattempted challenges per category,
+using the hardest supported development entries available and two trials each.
+The [recorded plan](../evidence/ryan-shared-runs/unseen-development-three-per-category/README.md)
+selects nine Hard challenges across crypto/pwn/reversing plus Easy
+`msc-android-dropper`. No unattempted development web/forensics entries remain;
+the other misc entry, `msc-showdown`, has an unsupported setup and is excluded.
+The same medium/8,192 configuration is saved before execution; the agent and
+held-out selection are unchanged. This tests capability on new development tasks,
+not a controlled agent-change effect. Twenty attempts are planned, not completed.
+The guide specifies existing logging and the reviewed Git-publication step so
+teammates can inspect eventual results. No new model call was made in preparation.
+
 ## Shared development records for teammates — November 8
 
 [Ryan's shared runs](../evidence/ryan-shared-runs/README.md) provides sanitized

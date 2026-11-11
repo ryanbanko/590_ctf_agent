@@ -2,7 +2,7 @@
 
 Prepared November 8, 2026 for teammates and their coding agents. Start here when
 reviewing the project's development results. This directory contains sanitized
-copies of **all 65 attempts currently under `runs/pilots/`**, including failed,
+copies of **all 65 attempts saved under `runs/pilots/` on November 8**, including failed,
 interrupted and scope-stopped attempts. All challenge IDs were checked against
 the development manifest; no held-out evaluation attempts are included.
 
@@ -13,6 +13,12 @@ the directory name does not attribute teammates' future work to Ryan. Existing
 [contribution and AI-assistance disclosure](../../README.md) still applies.
 
 ## Where to start
+
+The [November 11 new-development batch plan](unseen-development-three-per-category/README.md)
+records ten previously unattempted supported challenges, up to three per category
+where available, and two trials each (20 planned attempts). Its settings and
+logging/publication instructions are saved before execution. It has no results
+yet; planned attempts are not part of the 65 historical attempts below.
 
 Read [PROJECT_STATUS](../../PROJECT_STATUS.md), the original
 [assignment](../../ASSIGNMENT.md), and the later guide/instructor clarifications

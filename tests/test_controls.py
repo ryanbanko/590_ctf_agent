@@ -675,7 +675,38 @@ def test_target_state_checks_detect_failed_dependency(settings, output_root, pha
     states = target['service_checks']['startup_failed' if phase == 'startup' else 'after_probes']
     assert states['frontend']['running']
     assert states['database']['health'] == 'unhealthy' if phase == 'startup' else not states['database']['running']
+    final = target['service_checks']['before_cleanup']
+    assert final['frontend']['running']
+    assert final['frontend']['networks']
+    assert final['database']['health'] == 'unhealthy' if phase == 'startup' else not final['database']['running']
     assert not target['cleanup_errors']
+
+
+@pytest.mark.parametrize('change', ['removed', 'detached'])
+def test_final_target_snapshot_records_missing_or_detached_service(settings, output_root, change):
+    from types import SimpleNamespace
+    from ctf_agent.challenge import challenge_target
+
+    source = output_root / ('target-final-source-' + uuid.uuid4().hex[:12])
+    source.mkdir(parents=True)
+    (source / 'docker-compose.yml').write_text(json.dumps({
+        'services': {'frontend': {'image': settings['target_image'], 'command': ['sleep', '300'],
+                                  'networks': {'ctfnet': {}}}}, 'networks': {'ctfnet': {}}}))
+    challenge = SimpleNamespace(container=True, challenge_dir=source, server_name='frontend', port=8000, challenge={})
+    with challenge_target(challenge, source / 'runtime') as target:
+        assert target['service_checks']['startup']['frontend']['networks']
+        container = target['containers']['frontend']
+        if change == 'removed':
+            docker('rm', '--force', container)
+        else:
+            docker('network', 'disconnect', target['network'], container)
+    record = json.loads((source / 'runtime/target.json').read_text())
+    final = record['service_checks']['before_cleanup']['frontend']
+    if change == 'removed':
+        assert final == {'status': 'missing', 'error_type': 'RuntimeError'}
+    else:
+        assert final['running'] and final['networks'] == {}
+    assert not record['cleanup_errors']
 
 
 # Supplied toolkit capabilities and privilege boundary.

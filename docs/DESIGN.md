@@ -67,9 +67,14 @@ This avoids per-challenge path lookup or maintaining an automatic downloader.
 `CTFChallenge` includes private metadata and the
 answer key; its package object stays on the trusted host. Only name, category,
 description, listed filenames and allowed endpoints form the public task.
-The workspace has all fifty directories; the live serialized-input cap is now 512 KiB.
+The workspace has all fifty directories; the default serialized-input cap is now 2 MiB.
 
 ## Supplied targets and contestant files
+
+Repeated target listener exits remain an open infrastructure issue. The
+[teammate handoff](TARGET_PROCESS_ISSUE.md) records the observed failure, completed
+Docker/process checks and proposed next investigation. No listener/init/restart
+workaround is implemented; the integration described below remains current.
 
 File-only entries create one fresh ordinary Docker bridge. Service-backed entries
 use the supplied Compose definitions, canonicalized by Docker itself, with fresh
@@ -105,7 +110,8 @@ environment, commands, backend graph and endpoint scope are preserved.
 
 Compose `up --wait --wait-timeout 20` uses its standard running/healthy handling
 within the existing 30-second CLI timeout. A shared small function records only
-status/running/restarting, restart count, exit code, OOM and health status. It
+status/running/restarting, restart count, exit code, OOM and health status, plus
+network names/IDs and assigned IP addresses. It
 rejects exited/restarting/OOM-killed or non-healthy declared-healthcheck states;
 old restart counts alone do not reject a currently healthy service. Normal startup
 and preparation's post-probe phase use it, retaining failure states before cleanup.
@@ -113,6 +119,18 @@ Environment values and healthcheck command/log bodies are excluded. There is no
 new daemon, readiness framework, per-challenge application probe or configuration
 field. Services without healthchecks still have no universal application-health
 guarantee, and failures after these snapshots are possible.
+
+Immediately before target removal, the same extraction records
+`service_checks.before_cleanup`. This final snapshot is best-effort with one
+three-second allowance shared across services; inspection failures become
+sanitized `missing`/`unavailable` statuses and error types. An unexpected diagnostic
+error is recorded separately. Collection never rejects a completed attempt or
+skips teardown; actual cleanup failures retain their existing terminal behavior.
+It adds bounded teardown time, without extending the model/attempt deadline or
+actively probing the service. The state is recorded in `target/target.json` and
+the launcher's `run.json` target object, outside solver/model context. It is an
+end-state observation, not continuous monitoring or a verdict about the cause of
+an earlier connection failure. [Verification](../evidence/target-precleanup-snapshot/README.md).
 
 Standard Compose `down --volumes` resets project/anonymous volumes. Read-only
 server-file binds/configs/secrets must resolve inside the challenge directory;
@@ -349,8 +367,8 @@ values; missing/unknown fields fail clearly. Alternative experiments copy that
 file and use `--experiment`. One `max_model_turns` value also supplies the
 model adapter's internal `max_requests` guard. The current live profile permits
 600 seconds per attempt, ordinary commands up to
-120 seconds, 60-second model requests, forty model turns/requests and eighty tool
-calls. Model input is bounded to 512 KiB serialized data and output to 8,192 tokens
+120 seconds, 90-second model requests clipped to remaining attempt time, forty model turns/requests and eighty tool
+calls. Model input is bounded to 2 MiB serialized data and output to 8,192 tokens
 under the current medium-reasoning experiment; earlier low-effort batches used 4,096.
 Synthetic controls and preparation use the same complete file; the optional
 paid model check applies small explicit test bounds inside `tests/check_model.py`.

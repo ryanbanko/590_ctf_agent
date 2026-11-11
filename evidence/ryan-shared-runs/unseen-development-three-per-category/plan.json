@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-11",
+  "status": "planned_not_run",
+  "purpose": "Assess the unchanged agent on up to three previously unattempted, hardest available supported development challenges per category; not a configuration comparison or scored evaluation.",
+  "challenges": [
+    "cry-lupin",
+    "cry-open-ellipti-ph",
+    "cry-beyond-quantum",
+    "pwn-roppity",
+    "pwn-pilot",
+    "pwn-got-milk",
+    "rev-gibberish-check",
+    "rev-a-walk-through-x86-part-2",
+    "rev-the-big-bang",
+    "msc-android-dropper"
+  ],
+  "trials": 2,
+  "planned_attempts": 20,
+  "difficulty_source": "https://github.com/NYU-LLM-CTF/CTFTiny/blob/f1c9531672c45b24b7fb5f3aa44a7ac33d3602f8/README.md#challenge-list",
+  "split_manifest": "configs/ctftiny.json",
+  "split_manifest_sha256": "3d9b9068823eabc34a5afa8684f09ac5a3217d1fa3712be7c4b57a87b33b1654",
+  "experiment": "experiment.toml",
+  "experiment_sha256": "7821a8921b8fe5e4d402bbf68c238e8d3e3393d6c7010de99892bafcfbd2f3d5",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "medium",
+  "max_output_tokens": 8192,
+  "local_output_root": "runs/pilots/unseen-development-three-per-category",
+  "shared_results_directory": "evidence/ryan-shared-runs/unseen-development-three-per-category",
+  "checks": {
+    "development_only": true,
+    "no_prior_model_attempt_in_saved_local_records": true,
+    "holdout_unchanged": true
+  },
+  "sharing": "Raw logs remain local and in Langfuse; reviewed sanitized result copies require an explicit publication step, followed by Git commit/push. No results exist in this directory yet.",
+  "limits": [
+    "New target environments have not passed readiness checks yet.",
+    "Prior exposure outside the saved local records is not established.",
+    "Retain failures, stopped batches, unknown usage and missing payloads; do not report planned attempts as completed."
+  ],
+  "categories": {
+    "cry": [
+      "cry-lupin",
+      "cry-open-ellipti-ph",
+      "cry-beyond-quantum"
+    ],
+    "pwn": [
+      "pwn-roppity",
+      "pwn-pilot",
+      "pwn-got-milk"
+    ],
+    "rev": [
+      "rev-gibberish-check",
+      "rev-a-walk-through-x86-part-2",
+      "rev-the-big-bang"
+    ],
+    "msc": [
+      "msc-android-dropper"
+    ]
+  },
+  "selection": "Three unattempted Hard development entries each for crypto/pwn/reverse engineering, tied by the existing SHA-256 ctf590-v1:<id> rank; the only additional supported unattempted misc entry is Easy. No unattempted development web/forensics entries remain.",
+  "category_limits": {
+    "for": "No unattempted development entry; only Hard entry remains held out.",
+    "msc": "Only new supported development entry is Easy msc-android-dropper, included; Very Easy msc-showdown is excluded pending a separate compatibility review.",
+    "web": "No unattempted development entry; only Hard entry was already used in development."
+  },
+  "difficulty_by_challenge": {
+    "cry-lupin": "Hard",
+    "cry-open-ellipti-ph": "Hard",
+    "cry-beyond-quantum": "Hard",
+    "pwn-roppity": "Hard",
+    "pwn-pilot": "Hard",
+    "pwn-got-milk": "Hard",
+    "rev-gibberish-check": "Hard",
+    "rev-a-walk-through-x86-part-2": "Hard",
+    "rev-the-big-bang": "Hard",
+    "msc-android-dropper": "Easy"
+  }
+}

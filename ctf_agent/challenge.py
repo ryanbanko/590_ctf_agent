@@ -164,17 +164,38 @@ def target_compose(supplied: dict, root: Path, *, architecture: str = "") -> tup
     return runtime, adjustments
 
 
-def check_target_services(target: dict, phase: str) -> None:
-    """Record safe dependency state and reject failures, not just a closed port."""
+def snapshot_target_services(target: dict, phase: str, *, best_effort: bool = False) -> dict:
+    """Whitelist service state; final diagnostics share a three-second allowance."""
     states = {}
     target.setdefault("service_checks", {})[phase] = states
+    deadline = time.monotonic() + 3 if best_effort else None
     for name, container in target["containers"].items():
-        info = json.loads(docker("inspect", container))[0]
-        state = info["State"]
-        states[name] = {"status": state["Status"], "running": state["Running"],
-                        "restarting": state["Restarting"], "restart_count": info["RestartCount"],
-                        "exit_code": state["ExitCode"], "oom_killed": state["OOMKilled"],
-                        "health": state.get("Health", {}).get("Status")}
+        try:
+            timeout = deadline - time.monotonic() if deadline is not None else 15
+            if timeout <= 0:
+                raise TimeoutError("Target diagnostic allowance exhausted")
+            info = json.loads(docker("inspect", container, timeout=timeout))[0]
+            state = info["State"]
+            states[name] = {"status": state["Status"], "running": state["Running"],
+                           "restarting": state["Restarting"], "restart_count": info["RestartCount"],
+                           "exit_code": state["ExitCode"], "oom_killed": state["OOMKilled"],
+                           "health": state.get("Health", {}).get("Status"),
+                           "networks": {network: {"address": details.get("IPAddress"),
+                                                  "network_id": details.get("NetworkID")}
+                                        for network, details in info.get("NetworkSettings", {}).get("Networks", {}).items()}}
+        except Exception as error:
+            if not best_effort:
+                raise
+            missing = isinstance(error, RuntimeError) and any(
+                marker in str(error) for marker in ("No such container", "No such object"))
+            states[name] = {"status": "missing" if missing else "unavailable",
+                            "error_type": type(error).__name__}
+    return states
+
+
+def check_target_services(target: dict, phase: str) -> None:
+    """Record safe dependency state and reject failures, not just a closed port."""
+    states = snapshot_target_services(target, phase)
     failed = [name for name, state in states.items() if not state["running"]
               or state["restarting"] or state["oom_killed"] or state["health"] not in {None, "healthy"}]
     if failed:
@@ -248,15 +269,20 @@ def challenge_target(challenge, directory: Path):
         yield target
     finally:
         try:
-            if compose_path.exists():
-                docker(*compose, "down", "--volumes", "--remove-orphans", "--timeout", "2", timeout=15)
-                for volume in target["volumes"]:
-                    if docker("volume", "ls", "--filter", f"name=^{volume}$", "--format", "{{.Name}}"):
-                        target["cleanup_errors"].append("Target volume removal failed")
-            elif target["network"]:
-                docker("network", "rm", target["network"], timeout=5)
-        except (RuntimeError, subprocess.TimeoutExpired) as error:
-            target["cleanup_errors"].append(type(error).__name__ + ": target cleanup failed")
-        (directory / "target.json").write_text(json.dumps(target, indent=2) + "\n")
-        if target["cleanup_errors"]:
-            raise RuntimeError("Target cleanup incomplete; see target.json")
+            snapshot_target_services(target, "before_cleanup", best_effort=True)
+        except Exception as error:
+            target["diagnostic_error"] = {"phase": "before_cleanup", "error_type": type(error).__name__}
+        finally:
+            try:
+                if compose_path.exists():
+                    docker(*compose, "down", "--volumes", "--remove-orphans", "--timeout", "2", timeout=15)
+                    for volume in target["volumes"]:
+                        if docker("volume", "ls", "--filter", f"name=^{volume}$", "--format", "{{.Name}}"):
+                            target["cleanup_errors"].append("Target volume removal failed")
+                elif target["network"]:
+                    docker("network", "rm", target["network"], timeout=5)
+            except (RuntimeError, subprocess.TimeoutExpired) as error:
+                target["cleanup_errors"].append(type(error).__name__ + ": target cleanup failed")
+            (directory / "target.json").write_text(json.dumps(target, indent=2) + "\n")
+            if target["cleanup_errors"]:
+                raise RuntimeError("Target cleanup incomplete; see target.json")

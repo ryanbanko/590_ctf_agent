@@ -5,6 +5,13 @@ latest development traces, prompt structure, output handling, solver information
 models/reasoning, the NYU reference prompt, and plans/notes. These are proposals,
 not implemented changes or authorization for live comparisons.
 
+**November 11 infrastructure handoff:** repeated target container/listener exits
+remain unresolved. See [TARGET_PROCESS_ISSUE](TARGET_PROCESS_ISSUE.md) for the
+four-attempt evidence, generic native/emulated checks, resource audit and suggested
+next steps. Missing init, emulation and insufficient target quotas are unproven
+causes; no service fix is selected or implemented. This later issue is separate
+from the dated agent-behavior proposals below.
+
 **November 8 implementation update:** the user-approved combined first fix is now
 implemented and synthetically verified. See [milestone evidence](../evidence/agent-first-fix/README.md).
 The dated proposals below preserve the decisions before implementation. The

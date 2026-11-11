@@ -1,0 +1,82 @@
+{
+  "kind": "docker_process_only_constraint_audit",
+  "model_calls": 0,
+  "real_challenge_attempts": 0,
+  "engine": {
+    "architecture": "aarch64",
+    "operating_system": "Docker Desktop",
+    "cpus": 8,
+    "memory_bytes": 8322969600,
+    "cgroup_version": "2",
+    "security_options": [
+      "name=seccomp,profile=builtin",
+      "name=cgroupns"
+    ],
+    "default_runtime": "runc",
+    "server_version": "28.3.2"
+  },
+  "historical_generated_compose_resource_fields": [
+    {
+      "attempt": "attempt-001",
+      "source_sha256": "991309fb9307fd9e06e21881d9681eb4df5f60adb95cad4a51564c26b6888e7c",
+      "settings": {
+        "web": {
+          "platform": "linux/amd64"
+        }
+      }
+    },
+    {
+      "attempt": "attempt-002",
+      "source_sha256": "cc290e450c503ca5a47e835c4de11cbf56bb2c9e377bf75f8746485d6b0de624",
+      "settings": {
+        "game-server": {
+          "platform": "linux/amd64"
+        }
+      }
+    },
+    {
+      "attempt": "attempt-003",
+      "source_sha256": "991309fb9307fd9e06e21881d9681eb4df5f60adb95cad4a51564c26b6888e7c",
+      "settings": {
+        "web": {
+          "platform": "linux/amd64"
+        }
+      }
+    },
+    {
+      "attempt": "attempt-004",
+      "source_sha256": "cc290e450c503ca5a47e835c4de11cbf56bb2c9e377bf75f8746485d6b0de624",
+      "settings": {
+        "game-server": {
+          "platform": "linux/amd64"
+        }
+      }
+    }
+  ],
+  "synthetic_records": {
+    "native-arm64.json": {
+      "source": "runs/process-lifecycle/arm64-e9a148a4/check.json",
+      "sha256": "bdad673d927a091d5563be96e47b91d76fcc3ef10740d8061a636666c97051da"
+    },
+    "emulated-amd64.json": {
+      "source": "runs/process-lifecycle/amd64-942975ef/check.json",
+      "sha256": "c156b895b38ebce6ee7032c5dd390cd860390b4587d803028ad6aa0fa25f18fe"
+    },
+    "one-shot-control.json": {
+      "source": "runs/process-lifecycle/arm64-3dbb568e/check.json",
+      "sha256": "b3d6759607f67a9afa60731d38dd8b33037fa7119330d06736ef8ca8aebe1ce7"
+    }
+  },
+  "source_sha256": {
+    "ctf_agent/challenge.py": "bd8cc69768c8b4f3628b3cf2395d4a8afc5b063f67f662c206e17da6e1bd54d7",
+    "ctf_agent/sandbox.py": "52b6ec75467b9bca08f32c25846dbe520b0f1f7ccaf24a5b24df414e91b7f031",
+    "configs/development.toml": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b",
+    "tests/check_process_lifecycle.py": "3e357c188769765749e76ce576fd424146fc4bfe0f066bc266a309b9c13b8a54"
+  },
+  "limits": {
+    "historical_host_config_not_available": true,
+    "historical_image_startup_argument_read_blocked_by_automatic_review": true,
+    "challenge_programs_sources_payloads_not_examined": true,
+    "expected_solver_fixture_tags_absent_on_current_engine": true
+  }
+}

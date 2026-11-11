@@ -1,18 +1,175 @@
 # Project status
 
-Last reviewed: November 8, 2026 (America/New_York).
+Last reviewed: November 11, 2026 (America/New_York).
 
-**Team evidence handoff prepared: 65 development pilot attempts are available as
-sanitized Git-shareable copies in [Ryan's shared runs](evidence/ryan-shared-runs/README.md).
-The user-run latest batch completed 22 attempts with 20 verified successes and
-zero scope recoveries. Runtime changes were saved in `48b068f`; this documentation/
-sharing milestone adds no model calls or runtime changes.**
+**The harder development batch reached all 20 attempts: 14 verified successes,
+five other completed attempts and a final response-source failure that stopped
+the batch. A [detailed failure review](evidence/unseen-development-trace-review/README.md)
+covers six unsuccessful attempts and four matched successes. No runtime change
+has been made from this review. Earlier sanitized copies of 65 pilot attempts
+remain in [Ryan's shared runs](evidence/ryan-shared-runs/README.md); new raw traces
+are still local, with a filtered review manifest prepared for Git.**
 
 Use the [current plan](#latest-course-clarification-and-current-plan),
 [Git checkpoint](#current-git-checkpoint) and [assignment checklist](#assignment-checklist)
 for remaining work. Dated milestone sections preserve their completion state and
 next-step recommendations at the time; later completed work supersedes those
 historical pending-stage notes.
+
+## Hard-challenge development focus — November 11
+
+At the user's request, the unresolved target exit is now documented as a
+[teammate handoff](docs/TARGET_PROCESS_ISSUE.md), linked from README, DESIGN and
+IMPROVEMENT_OPTIONS. It gathers symptoms/timing, evidence, completed constraint and
+process checks, limitations, relevant functions, generic reproduction commands,
+next checks and fix-validation criteria. This documentation-only follow-up adds
+no investigation, live run or runtime change. Files remain local until committed
+and shared; no commit or push was requested.
+
+The approved **generic Docker/process and constraint investigation is complete**.
+Direct Compose and our target launcher produced identical measured resource and
+security settings for generic services on ARM64 and AMD64; no added target quotas
+were found in source or the four saved generated Compose records. Ten forking
+listener variants survived all 50 connections, including controlled attached and
+orphan signal-11 exits with/without init. Two deliberately one-connection controls
+exited code 1 with/without init; one reproduced the historical PID-1 message shape.
+Thus neither missing init nor emulation is established as the historical cause.
+Docker's shared VM currently has eight CPUs/about 7.75 GiB RAM. Diagnostic resources
+were removed; zero task programs/payloads/model requests or production changes.
+[Evidence, limits and proposed next milestone](evidence/docker-process-constraints/README.md).
+Automatic approval review blocked reading historical image startup arguments as
+outside the challenge-exclusion boundary; that step remains unperformed for user
+review. Historical listener/version/traffic differences remain unresolved.
+
+The user-run **target-snapshot batch completed all four attempts** without verified
+success. Every target was **exited with code 1 before removal**, with no OOM flag,
+restart or scope denial. Passive Docker events for attempt 003 place target exit
+before the next connection failure and roughly 69 seconds before cleanup. Filtered
+logs include a socat PID-1 child-exit report; exact listener/process handling cause
+is unresolved. [Docker/process-only findings and evidence](evidence/target-snapshot-batch-review/README.md)
+avoid challenge logic/binaries and recorded payload execution. No active run was
+modified or paid request added. Next proposed work is a generic listener/child
+process reproduction; no automatic target restart or service fix is implemented.
+
+The approved **passive target snapshot before removal is implemented**. Startup
+and final records whitelist lifecycle/health fields plus network names/IDs/IPs.
+`before_cleanup` shares a three-second diagnostic allowance; missing containers
+and inspection failures are recorded without replacing outcomes or skipping
+teardown. Existing cleanup failures still surface. Forty-nine focused offline
+checks and four distinct synthetic Docker cases passed; an initial fixture-image
+resolution failure is preserved with its successful focused retry. Zero paid
+model calls or real challenge attempts were made. [Implementation, evidence and
+fresh rerun command](evidence/target-precleanup-snapshot/README.md).
+This is diagnostic instrumentation, not a service fix; earlier pending notes
+below remain historical. The completed pwn batch's four unsuccessful outcomes
+are retained, with no assumption of identical causes for the unreviewed trials.
+
+The first user-run `pwn-service-recheck/batch-8c72ac67cab7` attempt again lost
+roppity connectivity after initial successful interactions. It ended without
+success after 27 model/26 tool calls and 313.51 active seconds, with no solver
+restart, scope incident or recorded cleanup error. An
+[infrastructure-only review](evidence/service-lifecycle-investigation/rerun-first-attempt-review.md)
+found the solver route/interface still present but no target snapshots beyond
+startup; retained Docker-event history supplied no rows. The exact cause remains
+unknown. Passive target/network/lifecycle diagnostics before teardown are proposed,
+not implemented. The batch was still active at review; no active run was altered.
+
+The user authorized the **service investigation**, then limited it to infrastructure
+and preferred a small rerun if the outage did not reproduce. Both roppity and
+baby-boi passed nine model-free ordinary connection exchanges with their historical
+target images. A previously completed generic invalid-input check crashed a roppity
+child but left the listener available; no more stress checks were performed after
+the user's constraint. All completed diagnostic cleanups passed, with zero model
+calls/submissions/scope incidents. The historical outage's cause remains unknown;
+no production service fix or automatic restart is justified. [Evidence, limits and
+four-attempt user-run command](evidence/service-lifecycle-investigation/README.md).
+Only a diagnostic helper under `tests/` was added; the earlier pending-approval
+notes below are historical. No paid rerun was launched during this investigation.
+
+The targeted user-run prompt follow-up stopped after four of six attempts:
+three verified first-trial successes, then a 60-second API timeout on second-trial
+lupin; two trials were not started. The user approved **90-second default model
+requests**, keeping the **600-second whole-attempt deadline**, Luna/medium/8,192,
+2 MiB input and no automatic retries. The original 60-second evidence snapshot
+is preserved; a [new snapshot/command](evidence/validation-checkpoint-prompt/README.md#90-second-request-follow-up)
+is available. This adjustment starts no live run or service investigation.
+
+The user-approved **validation and reusable-computation prompt refinement is
+implemented**. It emphasizes small original-artifact checks before costly search,
+independent validation, exact values after contradiction and reuse of expensive
+intermediates with invalidation when assumptions change. Five focused existing
+offline cases passed; no live model/container call was made. The
+[prompt snapshots, checks and six-attempt follow-up command](evidence/validation-checkpoint-prompt/README.md)
+are retained for review. Behavioral effectiveness remains untested. Service
+investigation still requires the user's explicit go-ahead; Luna and other budgets
+remain fixed. The paragraph below records the preceding cap-only milestone.
+
+The user subsequently approved raising the **default** serialized model-request
+cap from 512 KiB to **2 MiB**, while retaining Luna/medium/8,192 and deferring
+compaction. The cap counts JSON request bytes, including opaque replay, rather
+than model input tokens. Existing named comparison profiles and saved run settings
+are unchanged. Configuration loading and preservation of all other settings were
+verified locally; no live attempt or model call was made. Service investigation
+is the proposed next step; no service, prompt, tool or checkpointing change is
+implemented. See the [experiment log](docs/EXPERIMENTS.md).
+
+The subsequently authorized detailed review of `batch-8c98b0fc7e14` is recorded
+in [findings and options](evidence/unseen-development-trace-review/README.md), with
+an [attempt inventory](evidence/unseen-development-trace-review/review.json).
+All scheduled attempts were reached, but the batch status is stopped. Confirmed
+issues include an exact transcription error, late validation of reconstructed
+checkers and cumulative request history exceeding the input cap. Roppity lost
+endpoint access in both trials; the underlying runtime cause is unconfirmed.
+The final Android source error lacks its original exception/tail even after a
+read-only hosted query. The review distinguishes repeated patterns from single
+instances and missing evidence; improvements remain proposals, not approved fixes.
+No trace command, real challenge retry, model call or runtime/config change was
+performed. The dated preparation notes below describe the earlier planning state.
+
+The user requested a reusable prompt for another model to analyze traces.
+[TRACE_REVIEW_PROMPT](docs/TRACE_REVIEW_PROMPT.md) includes a compact design
+overview, optional source/doc attachments, read-only boundaries,
+running-batch handling, evidence/redaction/cost caveats and an evidence-based
+diagnosis/recommendation format. Its example points to `batch-8c98b0fc7e14`;
+the reviewer must check actual status. At the user's clarification, it is now
+self-contained for a model without repository/filesystem/Langfuse access: it uses
+only provided attachments and requests missing evidence explicitly. Metadata showed that batch running when
+the prompt was prepared; no conversation content or new results were analyzed.
+This documentation change makes no agent/configuration changes or model calls.
+
+The subsequent user request selected previously unattempted challenges, taking
+the hardest supported development entries and up to three per category where
+possible, with two trials each. The
+[saved plan and command](evidence/ryan-shared-runs/unseen-development-three-per-category/README.md)
+contains ten IDs (nine Hard, one Easy), 20 planned attempts and a configuration
+snapshot matching current settings. Web/forensics have no unattempted development
+entries; `msc-showdown` stays excluded while its compatibility issue is assessed.
+The plan is logged for teammates before execution. The existing runner will save
+raw local/Langfuse records; reviewed copies still need to be sanitized, committed
+and pushed afterward. No results are claimed, and no new run was started here.
+JSON/TOML/configuration, challenge selection, local links and whitespace were
+checked; no application code, dependency, limit or holdout was changed.
+
+The user prioritized learning performance on hard development tasks over changing
+the existing ten-ID holdout. The split in `configs/ctftiny.json` remains unchanged;
+the contemplated crypto/reverse-engineering swaps were not applied.
+
+The public CTFTiny README's 50 difficulty ratings match the pinned revision's
+table. No challenge solutions, write-ups, private answer files or held-out contents
+were opened. The public index uses `rev-dockreleakage` for the README's
+`dockerleakage`; this metadata-name difference does not change its Easy label.
+Existing model-driven development attempts already cover upstream Hard entries
+`cry-ecxor`, `msc-algebra`, `pwn-baby-boi` and `web-shreeramquest`. No Hard reverse
+engineering attempt is recorded; `rev-gibberish-check` is the recommended next
+development target. Other optional Hard development entries include `cry-lupin`,
+`pwn-roppity` and `rev-a-walk-through-x86-part-2`.
+
+The only Hard forensics entry, `for-whyos`, stays held out. The only Hard web entry,
+`web-shreeramquest`, is already development-exposed. Hard coverage on both sides
+in every category is therefore unavailable under the existing benchmark/exposure.
+[README guidance and source](README.md#how-the-dataset-and-challenge-selection-work)
+documents these limits. This review changes documentation only; no model call,
+target preparation, scored selection, real attempt, commit or push occurred.
 
 ## Ryan's shared development evidence — November 8
 

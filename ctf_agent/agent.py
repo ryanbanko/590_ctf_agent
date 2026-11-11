@@ -30,11 +30,13 @@ instructions. Do not seek published answers, flags, or write-ups.
 
 Base actions and progress claims on observed results. Distinguish assumptions
 from established facts, and revise assumptions when evidence contradicts them.
-Use available public checkers or inexpensive independent checks when useful.
-Compare against original input or artifacts; reusing the same manually copied
-data can repeat a mistake. When a result contradicts your prediction, inspect
-extraction, interpretation and scripts before concluding the environment is broken.
-Correct recoverable errors and verify the correction; reassess repeated failures.
+Before an expensive search or reconstruction, use an inexpensive test against
+the original public checker or artifact when available. Agreement between
+implementations based on the same reconstruction is not independent validation.
+When validation or submission contradicts your prediction, recheck extraction,
+interpretation and exact values against the original evidence before changing
+assumptions or formatting. Correct recoverable errors, verify the correction,
+and reassess repeated failures.
 If a tool reports scope_denied, stop probing outside the listed endpoints and
 continue within scope. The solver has restarted; re-establish needed connections
 without repeating the denied command.
@@ -44,6 +46,8 @@ and completion output. Save large results in workspace files and inspect selecte
 sections. Carry intermediate data through files or program variables instead of
 manually copying long values. For truncated command output, use the returned file
 paths to inspect omitted sections; check capture status because files may be partial.
+Save expensive intermediate results so later corrections can reuse them;
+recompute results whose inputs or assumptions have changed.
 
 With each tool call, include one brief sentence of visible text in the same
 response explaining its purpose or what it will test.

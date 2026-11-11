@@ -1,0 +1,166 @@
+{
+  "kind": "generic_process_diagnostic",
+  "platform": "linux/arm64",
+  "model_calls": 0,
+  "challenge_code_used": false,
+  "cases": [
+    {
+      "mode": "attached-signal",
+      "init": false,
+      "platform": "linux/arm64",
+      "fork_listener": false,
+      "effective_limits": {
+        "host_config": {
+          "Memory": 0,
+          "MemorySwap": 0,
+          "MemoryReservation": 0,
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "PidsLimit": null,
+          "Ulimits": [],
+          "CapAdd": null,
+          "CapDrop": null,
+          "SecurityOpt": null,
+          "ReadonlyRootfs": false,
+          "Privileged": false,
+          "Init": null,
+          "RestartPolicy": {
+            "Name": "no",
+            "MaximumRetryCount": 0
+          }
+        },
+        "inside": {
+          "cgroups": {
+            "memory.max": "max",
+            "memory.swap.max": "max",
+            "pids.max": "max",
+            "cpu.max": "max 100000"
+          },
+          "rlimits": {
+            "RLIMIT_NOFILE": [
+              1048576,
+              1048576
+            ],
+            "RLIMIT_NPROC": [
+              -1,
+              -1
+            ],
+            "RLIMIT_AS": [
+              -1,
+              -1
+            ]
+          }
+        }
+      },
+      "probes": [
+        {
+          "number": 1,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 2,
+          "connected": false,
+          "error_type": "gaierror",
+          "errno": -2
+        }
+      ],
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "generic_logs": [
+        "synthetic-child mode=attached-signal pid=13 ppid=1",
+        "2026/11/11 21:34:57 socat[1] E waitpid(): child 13 exited on signal 11"
+      ]
+    },
+    {
+      "mode": "attached-signal",
+      "init": true,
+      "platform": "linux/arm64",
+      "fork_listener": false,
+      "effective_limits": {
+        "host_config": {
+          "Memory": 0,
+          "MemorySwap": 0,
+          "MemoryReservation": 0,
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "PidsLimit": null,
+          "Ulimits": [],
+          "CapAdd": null,
+          "CapDrop": null,
+          "SecurityOpt": null,
+          "ReadonlyRootfs": false,
+          "Privileged": false,
+          "Init": true,
+          "RestartPolicy": {
+            "Name": "no",
+            "MaximumRetryCount": 0
+          }
+        },
+        "inside": {
+          "cgroups": {
+            "memory.max": "max",
+            "memory.swap.max": "max",
+            "pids.max": "max",
+            "cpu.max": "max 100000"
+          },
+          "rlimits": {
+            "RLIMIT_NOFILE": [
+              1048576,
+              1048576
+            ],
+            "RLIMIT_NPROC": [
+              -1,
+              -1
+            ],
+            "RLIMIT_AS": [
+              -1,
+              -1
+            ]
+          }
+        }
+      },
+      "probes": [
+        {
+          "number": 1,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 2,
+          "connected": false,
+          "error_type": "gaierror",
+          "errno": -2
+        }
+      ],
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "generic_logs": [
+        "synthetic-child mode=attached-signal pid=14 ppid=7",
+        "2026/11/11 21:35:00 socat[7] E waitpid(): child 14 exited on signal 11"
+      ]
+    }
+  ],
+  "image_id": "sha256:f0b4673ab1e3e78d793667555a037d7d9fa15f5eec0d2c74513de4f57b30584c",
+  "image_architecture": "arm64",
+  "socat_version": [
+    "socat by Gerhard Rieger and contributors - see www.dest-unreach.org",
+    "socat version 1.7.4.4 on 06 Nov 2022 08:15:51",
+    "   running on Linux version #1 SMP Thu Aug 14 19:26:13 UTC 2025, release 6.10.14-linuxkit, machine aarch64",
+    "features:"
+  ],
+  "network_cleanup": true,
+  "image_cleanup": true
+}

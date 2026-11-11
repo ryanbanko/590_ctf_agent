@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-11",
+  "hash_kind": "sha256_of_saved_file_bytes_including_trailing_newline",
+  "files": {
+    "prompt-before.txt": "b9a4be2594a0a2b4a05a27b40dd6a15fe427f51f8b18fa070ee9b97586a06340",
+    "prompt-after.txt": "e399e799f76c800ee40df601034404cd8add57ea538851b0de9c4d7c0457ae53",
+    "experiment.toml": "b848d7d3cd808cfdd846c60b760ae4e6b9dd0dd73eafd5e04f0c92a4e3b1cc86"
+  },
+  "stripped_prompt_sha256": {
+    "prompt-before.txt": "4c3f94400d2aa3bc2e6e38189a2aa3f797c57bc739586f949c8f3f71089633c7",
+    "prompt-after.txt": "03b73f828deeb358869c3aa34903c82c053db64d8fe5cc42d84e43621108239b"
+  },
+  "checks": {
+    "local_pytest_passed": 5,
+    "model_calls": 0,
+    "container_calls": 0
+  },
+  "prompt_words": {
+    "prompt-before.txt": 395,
+    "prompt-after.txt": 423
+  }
+}

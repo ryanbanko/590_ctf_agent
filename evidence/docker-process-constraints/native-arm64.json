@@ -1,0 +1,567 @@
+{
+  "kind": "generic_process_diagnostic",
+  "platform": "linux/arm64",
+  "model_calls": 0,
+  "challenge_code_used": false,
+  "cases": [
+    {
+      "mode": "attached",
+      "init": false,
+      "platform": "linux/arm64",
+      "effective_limits": {
+        "host_config": {
+          "Memory": 0,
+          "MemorySwap": 0,
+          "MemoryReservation": 0,
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "PidsLimit": null,
+          "Ulimits": [],
+          "CapAdd": null,
+          "CapDrop": null,
+          "SecurityOpt": null,
+          "ReadonlyRootfs": false,
+          "Privileged": false,
+          "Init": null,
+          "RestartPolicy": {
+            "Name": "no",
+            "MaximumRetryCount": 0
+          }
+        },
+        "inside": {
+          "cgroups": {
+            "memory.max": "max",
+            "memory.swap.max": "max",
+            "pids.max": "max",
+            "cpu.max": "max 100000"
+          },
+          "rlimits": {
+            "RLIMIT_NOFILE": [
+              1048576,
+              1048576
+            ],
+            "RLIMIT_NPROC": [
+              -1,
+              -1
+            ],
+            "RLIMIT_AS": [
+              -1,
+              -1
+            ]
+          }
+        }
+      },
+      "probes": [
+        {
+          "number": 1,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 2,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 3,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 4,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 5,
+          "connected": true,
+          "eof": true
+        }
+      ],
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "generic_logs": [
+        "synthetic-child mode=attached pid=14 ppid=13",
+        "synthetic-child mode=attached pid=16 ppid=15",
+        "synthetic-child mode=attached pid=18 ppid=17",
+        "synthetic-child mode=attached pid=20 ppid=19",
+        "synthetic-child mode=attached pid=22 ppid=21"
+      ]
+    },
+    {
+      "mode": "attached-signal",
+      "init": false,
+      "platform": "linux/arm64",
+      "effective_limits": {
+        "host_config": {
+          "Memory": 0,
+          "MemorySwap": 0,
+          "MemoryReservation": 0,
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "PidsLimit": null,
+          "Ulimits": [],
+          "CapAdd": null,
+          "CapDrop": null,
+          "SecurityOpt": null,
+          "ReadonlyRootfs": false,
+          "Privileged": false,
+          "Init": null,
+          "RestartPolicy": {
+            "Name": "no",
+            "MaximumRetryCount": 0
+          }
+        },
+        "inside": {
+          "cgroups": {
+            "memory.max": "max",
+            "memory.swap.max": "max",
+            "pids.max": "max",
+            "cpu.max": "max 100000"
+          },
+          "rlimits": {
+            "RLIMIT_NOFILE": [
+              1048576,
+              1048576
+            ],
+            "RLIMIT_NPROC": [
+              -1,
+              -1
+            ],
+            "RLIMIT_AS": [
+              -1,
+              -1
+            ]
+          }
+        }
+      },
+      "probes": [
+        {
+          "number": 1,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 2,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 3,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 4,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 5,
+          "connected": true,
+          "eof": true
+        }
+      ],
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "generic_logs": [
+        "synthetic-child mode=attached-signal pid=14 ppid=13",
+        "2026/11/11 21:33:08 socat[13] E waitpid(): child 14 exited on signal 11",
+        "synthetic-child mode=attached-signal pid=16 ppid=15",
+        "2026/11/11 21:33:09 socat[15] E waitpid(): child 16 exited on signal 11",
+        "synthetic-child mode=attached-signal pid=18 ppid=17",
+        "2026/11/11 21:33:10 socat[17] E waitpid(): child 18 exited on signal 11",
+        "synthetic-child mode=attached-signal pid=20 ppid=19",
+        "2026/11/11 21:33:10 socat[19] E waitpid(): child 20 exited on signal 11",
+        "synthetic-child mode=attached-signal pid=22 ppid=21",
+        "2026/11/11 21:33:11 socat[21] E waitpid(): child 22 exited on signal 11"
+      ]
+    },
+    {
+      "mode": "orphan",
+      "init": false,
+      "platform": "linux/arm64",
+      "effective_limits": {
+        "host_config": {
+          "Memory": 0,
+          "MemorySwap": 0,
+          "MemoryReservation": 0,
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "PidsLimit": null,
+          "Ulimits": [],
+          "CapAdd": null,
+          "CapDrop": null,
+          "SecurityOpt": null,
+          "ReadonlyRootfs": false,
+          "Privileged": false,
+          "Init": null,
+          "RestartPolicy": {
+            "Name": "no",
+            "MaximumRetryCount": 0
+          }
+        },
+        "inside": {
+          "cgroups": {
+            "memory.max": "max",
+            "memory.swap.max": "max",
+            "pids.max": "max",
+            "cpu.max": "max 100000"
+          },
+          "rlimits": {
+            "RLIMIT_NOFILE": [
+              1048576,
+              1048576
+            ],
+            "RLIMIT_NPROC": [
+              -1,
+              -1
+            ],
+            "RLIMIT_AS": [
+              -1,
+              -1
+            ]
+          }
+        }
+      },
+      "probes": [
+        {
+          "number": 1,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 2,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 3,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 4,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 5,
+          "connected": true,
+          "eof": true
+        }
+      ],
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "generic_logs": [
+        "synthetic-child mode=orphan pid=14 ppid=1",
+        "synthetic-child mode=orphan pid=17 ppid=1",
+        "synthetic-child mode=orphan pid=20 ppid=1",
+        "synthetic-child mode=orphan pid=23 ppid=1",
+        "synthetic-child mode=orphan pid=26 ppid=1"
+      ]
+    },
+    {
+      "mode": "orphan-signal",
+      "init": false,
+      "platform": "linux/arm64",
+      "effective_limits": {
+        "host_config": {
+          "Memory": 0,
+          "MemorySwap": 0,
+          "MemoryReservation": 0,
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "PidsLimit": null,
+          "Ulimits": [],
+          "CapAdd": null,
+          "CapDrop": null,
+          "SecurityOpt": null,
+          "ReadonlyRootfs": false,
+          "Privileged": false,
+          "Init": null,
+          "RestartPolicy": {
+            "Name": "no",
+            "MaximumRetryCount": 0
+          }
+        },
+        "inside": {
+          "cgroups": {
+            "memory.max": "max",
+            "memory.swap.max": "max",
+            "pids.max": "max",
+            "cpu.max": "max 100000"
+          },
+          "rlimits": {
+            "RLIMIT_NOFILE": [
+              1048576,
+              1048576
+            ],
+            "RLIMIT_NPROC": [
+              -1,
+              -1
+            ],
+            "RLIMIT_AS": [
+              -1,
+              -1
+            ]
+          }
+        }
+      },
+      "probes": [
+        {
+          "number": 1,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 2,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 3,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 4,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 5,
+          "connected": true,
+          "eof": true
+        }
+      ],
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "generic_logs": [
+        "synthetic-child mode=orphan-signal pid=15 ppid=1",
+        "synthetic-child mode=orphan-signal pid=18 ppid=1",
+        "synthetic-child mode=orphan-signal pid=21 ppid=1",
+        "synthetic-child mode=orphan-signal pid=24 ppid=1",
+        "synthetic-child mode=orphan-signal pid=27 ppid=1"
+      ]
+    },
+    {
+      "mode": "orphan-signal",
+      "init": true,
+      "platform": "linux/arm64",
+      "effective_limits": {
+        "host_config": {
+          "Memory": 0,
+          "MemorySwap": 0,
+          "MemoryReservation": 0,
+          "NanoCpus": 0,
+          "CpuQuota": 0,
+          "CpuPeriod": 0,
+          "CpusetCpus": "",
+          "PidsLimit": null,
+          "Ulimits": [],
+          "CapAdd": null,
+          "CapDrop": null,
+          "SecurityOpt": null,
+          "ReadonlyRootfs": false,
+          "Privileged": false,
+          "Init": true,
+          "RestartPolicy": {
+            "Name": "no",
+            "MaximumRetryCount": 0
+          }
+        },
+        "inside": {
+          "cgroups": {
+            "memory.max": "max",
+            "memory.swap.max": "max",
+            "pids.max": "max",
+            "cpu.max": "max 100000"
+          },
+          "rlimits": {
+            "RLIMIT_NOFILE": [
+              1048576,
+              1048576
+            ],
+            "RLIMIT_NPROC": [
+              -1,
+              -1
+            ],
+            "RLIMIT_AS": [
+              -1,
+              -1
+            ]
+          }
+        }
+      },
+      "probes": [
+        {
+          "number": 1,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 2,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 3,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 4,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "number": 5,
+          "connected": true,
+          "eof": true
+        }
+      ],
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "generic_logs": [
+        "synthetic-child mode=orphan-signal pid=16 ppid=1",
+        "synthetic-child mode=orphan-signal pid=19 ppid=1",
+        "synthetic-child mode=orphan-signal pid=22 ppid=1",
+        "synthetic-child mode=orphan-signal pid=25 ppid=1",
+        "synthetic-child mode=orphan-signal pid=28 ppid=1"
+      ]
+    }
+  ],
+  "image_id": "sha256:b3d054992951c218eae8b1aa75065fe257287e4e3f021f10e095369be7e92427",
+  "image_architecture": "arm64",
+  "socat_version": [
+    "socat by Gerhard Rieger and contributors - see www.dest-unreach.org",
+    "socat version 1.7.4.4 on 06 Nov 2022 08:15:51",
+    "   running on Linux version #1 SMP Thu Aug 14 19:26:13 UTC 2025, release 6.10.14-linuxkit, machine aarch64",
+    "features:"
+  ],
+  "launcher_comparison": {
+    "direct_compose": {
+      "host_config": {
+        "Memory": 0,
+        "MemorySwap": 0,
+        "MemoryReservation": 0,
+        "NanoCpus": 0,
+        "CpuQuota": 0,
+        "CpuPeriod": 0,
+        "CpusetCpus": "",
+        "PidsLimit": null,
+        "Ulimits": null,
+        "CapAdd": null,
+        "CapDrop": null,
+        "SecurityOpt": null,
+        "ReadonlyRootfs": false,
+        "Privileged": false,
+        "Init": null,
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        }
+      },
+      "inside": {
+        "cgroups": {
+          "memory.max": "max",
+          "memory.swap.max": "max",
+          "pids.max": "max",
+          "cpu.max": "max 100000"
+        },
+        "rlimits": {
+          "RLIMIT_NOFILE": [
+            1048576,
+            1048576
+          ],
+          "RLIMIT_NPROC": [
+            -1,
+            -1
+          ],
+          "RLIMIT_AS": [
+            -1,
+            -1
+          ]
+        }
+      }
+    },
+    "project_launcher": {
+      "host_config": {
+        "Memory": 0,
+        "MemorySwap": 0,
+        "MemoryReservation": 0,
+        "NanoCpus": 0,
+        "CpuQuota": 0,
+        "CpuPeriod": 0,
+        "CpusetCpus": "",
+        "PidsLimit": null,
+        "Ulimits": null,
+        "CapAdd": null,
+        "CapDrop": null,
+        "SecurityOpt": null,
+        "ReadonlyRootfs": false,
+        "Privileged": false,
+        "Init": null,
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        }
+      },
+      "inside": {
+        "cgroups": {
+          "memory.max": "max",
+          "memory.swap.max": "max",
+          "pids.max": "max",
+          "cpu.max": "max 100000"
+        },
+        "rlimits": {
+          "RLIMIT_NOFILE": [
+            1048576,
+            1048576
+          ],
+          "RLIMIT_NPROC": [
+            -1,
+            -1
+          ],
+          "RLIMIT_AS": [
+            -1,
+            -1
+          ]
+        }
+      }
+    },
+    "equal": true,
+    "cleanup_errors": []
+  },
+  "network_cleanup": true,
+  "image_cleanup": true
+}

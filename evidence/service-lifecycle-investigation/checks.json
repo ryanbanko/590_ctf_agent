@@ -1,0 +1,857 @@
+{
+  "date": "2026-11-11",
+  "kind": "filtered_model_free_diagnostics",
+  "engine": {
+    "version": "28.3.2",
+    "architecture": "arm64"
+  },
+  "limits": "Short model-free probes only; no original payload replay or full solve; raw target/build/answer files excluded.",
+  "runs": [
+    {
+      "source": "runs/service-diagnostic/pwn-baby-boi-d5b539377f50/check.json",
+      "source_sha256": "5e33f8f21695c55c2340a7cfe26e6a8e1aa97c367d8e4b3b99e7fef9dfced971",
+      "challenge_id": "pwn-baby-boi",
+      "stress": false,
+      "error_type": null,
+      "model_calls": 0,
+      "submissions": 0,
+      "before": {
+        "game-server": {
+          "status": "running",
+          "running": true,
+          "restarting": false,
+          "restart_count": 0,
+          "exit_code": 0,
+          "oom_killed": false,
+          "health": null,
+          "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+          "process_names": {
+            "socat": 1
+          }
+        }
+      },
+      "steps": [
+        {
+          "number": 1,
+          "action": "connect_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "connect_close",
+            "connected": true,
+            "received_bytes": 0,
+            "seconds": 0.003421
+          },
+          "target": {
+            "game-server": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 2,
+          "action": "read_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "read_close",
+            "connected": true,
+            "received_bytes": 33,
+            "initial_eof": false,
+            "seconds": 0.012685
+          },
+          "target": {
+            "game-server": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 3,
+          "action": "short_input",
+          "exit_code": 0,
+          "probe": {
+            "action": "short_input",
+            "connected": true,
+            "received_bytes": 33,
+            "initial_eof": false,
+            "after_input_eof": true,
+            "seconds": 0.013804
+          },
+          "target": {
+            "game-server": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 4,
+          "action": "connect_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "connect_close",
+            "connected": true,
+            "received_bytes": 0,
+            "seconds": 0.003212
+          },
+          "target": {
+            "game-server": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 5,
+          "action": "read_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "read_close",
+            "connected": true,
+            "received_bytes": 33,
+            "initial_eof": false,
+            "seconds": 0.01264
+          },
+          "target": {
+            "game-server": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 6,
+          "action": "short_input",
+          "exit_code": 0,
+          "probe": {
+            "action": "short_input",
+            "connected": true,
+            "received_bytes": 33,
+            "initial_eof": false,
+            "after_input_eof": true,
+            "seconds": 0.013819
+          },
+          "target": {
+            "game-server": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 7,
+          "action": "connect_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "connect_close",
+            "connected": true,
+            "received_bytes": 0,
+            "seconds": 0.003226
+          },
+          "target": {
+            "game-server": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 8,
+          "action": "read_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "read_close",
+            "connected": true,
+            "received_bytes": 33,
+            "initial_eof": false,
+            "seconds": 0.013346
+          },
+          "target": {
+            "game-server": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 9,
+          "action": "short_input",
+          "exit_code": 0,
+          "probe": {
+            "action": "short_input",
+            "connected": true,
+            "received_bytes": 33,
+            "initial_eof": false,
+            "after_input_eof": true,
+            "seconds": 0.013667
+          },
+          "target": {
+            "game-server": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        }
+      ],
+      "after": {
+        "game-server": {
+          "status": "running",
+          "running": true,
+          "restarting": false,
+          "restart_count": 0,
+          "exit_code": 0,
+          "oom_killed": false,
+          "health": null,
+          "image": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+          "process_names": {
+            "socat": 1
+          }
+        }
+      },
+      "target_images": {
+        "game-server": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665"
+      },
+      "target_cleanup_errors": [],
+      "solver_cleanup_errors": [],
+      "scope_incidents": 0,
+      "denied_packets": 0,
+      "termination_reason": "service_diagnostic_complete"
+    },
+    {
+      "source": "runs/service-diagnostic/pwn-roppity-2791969045ac/check.json",
+      "source_sha256": "10558bdfa199cbcc97906777842f3ee51e0ffd69c43d820c5a7a08e1ceb55f70",
+      "challenge_id": "pwn-roppity",
+      "stress": true,
+      "error_type": null,
+      "model_calls": 0,
+      "submissions": 0,
+      "before": {
+        "web": {
+          "status": "running",
+          "running": true,
+          "restarting": false,
+          "restart_count": 0,
+          "exit_code": 0,
+          "oom_killed": false,
+          "health": null,
+          "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+          "process_names": {
+            "socat": 1
+          },
+          "log_signatures": {
+            "signal 11": 0,
+            "signal 6": 0,
+            "segmentation fault": 0,
+            "core dumped": 0,
+            "rosetta": 0,
+            "out of memory": 0
+          }
+        }
+      },
+      "steps": [
+        {
+          "number": 1,
+          "action": "read_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "read_close",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "seconds": 0.0132
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              },
+              "log_signatures": {
+                "signal 11": 0,
+                "signal 6": 0,
+                "segmentation fault": 0,
+                "core dumped": 0,
+                "rosetta": 0,
+                "out of memory": 0
+              }
+            }
+          }
+        },
+        {
+          "number": 2,
+          "action": "long_input",
+          "exit_code": 0,
+          "probe": {
+            "action": "long_input",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "after_input_eof": true,
+            "seconds": 0.015347
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              },
+              "log_signatures": {
+                "signal 11": 1,
+                "signal 6": 0,
+                "segmentation fault": 0,
+                "core dumped": 0,
+                "rosetta": 0,
+                "out of memory": 0
+              }
+            }
+          }
+        },
+        {
+          "number": 3,
+          "action": "read_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "read_close",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "seconds": 0.012911
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              },
+              "log_signatures": {
+                "signal 11": 1,
+                "signal 6": 0,
+                "segmentation fault": 0,
+                "core dumped": 0,
+                "rosetta": 0,
+                "out of memory": 0
+              }
+            }
+          }
+        },
+        {
+          "number": 4,
+          "action": "short_input",
+          "exit_code": 0,
+          "probe": {
+            "action": "short_input",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "after_input_eof": true,
+            "seconds": 0.016459
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              },
+              "log_signatures": {
+                "signal 11": 1,
+                "signal 6": 0,
+                "segmentation fault": 0,
+                "core dumped": 0,
+                "rosetta": 0,
+                "out of memory": 0
+              }
+            }
+          }
+        },
+        {
+          "number": 5,
+          "action": "read_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "read_close",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "seconds": 0.01428
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              },
+              "log_signatures": {
+                "signal 11": 1,
+                "signal 6": 0,
+                "segmentation fault": 0,
+                "core dumped": 0,
+                "rosetta": 0,
+                "out of memory": 0
+              }
+            }
+          }
+        }
+      ],
+      "after": {
+        "web": {
+          "status": "running",
+          "running": true,
+          "restarting": false,
+          "restart_count": 0,
+          "exit_code": 0,
+          "oom_killed": false,
+          "health": null,
+          "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+          "process_names": {
+            "socat": 1
+          },
+          "log_signatures": {
+            "signal 11": 1,
+            "signal 6": 0,
+            "segmentation fault": 0,
+            "core dumped": 0,
+            "rosetta": 0,
+            "out of memory": 0
+          }
+        }
+      },
+      "target_images": {
+        "web": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c"
+      },
+      "target_cleanup_errors": [],
+      "solver_cleanup_errors": [],
+      "scope_incidents": 0,
+      "denied_packets": 0,
+      "termination_reason": "service_diagnostic_complete"
+    },
+    {
+      "source": "runs/service-diagnostic/pwn-roppity-b32b7fc76fa8/check.json",
+      "source_sha256": "939659181e5be8334b96284c6e5524c9f4946f2e2b58a52fe7dfcaeac17cb98e",
+      "challenge_id": "pwn-roppity",
+      "stress": false,
+      "error_type": null,
+      "model_calls": 0,
+      "submissions": 0,
+      "before": {
+        "web": {
+          "status": "running",
+          "running": true,
+          "restarting": false,
+          "restart_count": 0,
+          "exit_code": 0,
+          "oom_killed": false,
+          "health": null,
+          "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+          "process_names": {
+            "socat": 1
+          }
+        }
+      },
+      "steps": [
+        {
+          "number": 1,
+          "action": "connect_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "connect_close",
+            "connected": true,
+            "received_bytes": 0,
+            "seconds": 0.00325
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 2,
+          "action": "read_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "read_close",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "seconds": 0.012518
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 3,
+          "action": "short_input",
+          "exit_code": 0,
+          "probe": {
+            "action": "short_input",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "after_input_eof": true,
+            "seconds": 0.014062
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 4,
+          "action": "connect_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "connect_close",
+            "connected": true,
+            "received_bytes": 0,
+            "seconds": 0.003126
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 5,
+          "action": "read_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "read_close",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "seconds": 0.01278
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 6,
+          "action": "short_input",
+          "exit_code": 0,
+          "probe": {
+            "action": "short_input",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "after_input_eof": true,
+            "seconds": 0.014093
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 7,
+          "action": "connect_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "connect_close",
+            "connected": true,
+            "received_bytes": 0,
+            "seconds": 0.003198
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 8,
+          "action": "read_close",
+          "exit_code": 0,
+          "probe": {
+            "action": "read_close",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "seconds": 0.012434
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        },
+        {
+          "number": 9,
+          "action": "short_input",
+          "exit_code": 0,
+          "probe": {
+            "action": "short_input",
+            "connected": true,
+            "received_bytes": 6,
+            "initial_eof": false,
+            "after_input_eof": true,
+            "seconds": 0.014268
+          },
+          "target": {
+            "web": {
+              "status": "running",
+              "running": true,
+              "restarting": false,
+              "restart_count": 0,
+              "exit_code": 0,
+              "oom_killed": false,
+              "health": null,
+              "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+              "process_names": {
+                "socat": 1
+              }
+            }
+          }
+        }
+      ],
+      "after": {
+        "web": {
+          "status": "running",
+          "running": true,
+          "restarting": false,
+          "restart_count": 0,
+          "exit_code": 0,
+          "oom_killed": false,
+          "health": null,
+          "image": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+          "process_names": {
+            "socat": 1
+          }
+        }
+      },
+      "target_images": {
+        "web": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c"
+      },
+      "target_cleanup_errors": [],
+      "solver_cleanup_errors": [],
+      "scope_incidents": 0,
+      "denied_packets": 0,
+      "termination_reason": "service_diagnostic_complete"
+    },
+    {
+      "source": "runs/service-diagnostic/pwn-roppity-facf87ec816d/check.json",
+      "source_sha256": "0902aea1addb8c906fe6d24b2e176bef6bc17cfada04542ad5f22578cf50647e",
+      "challenge_id": "pwn-roppity",
+      "stress": false,
+      "error_type": "RuntimeError",
+      "model_calls": 0,
+      "submissions": 0,
+      "before": null,
+      "steps": [],
+      "after": null,
+      "target_images": {
+        "web": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c"
+      },
+      "target_cleanup_errors": [],
+      "solver_cleanup_errors": null,
+      "scope_incidents": null,
+      "denied_packets": null,
+      "termination_reason": null
+    }
+  ]
+}
