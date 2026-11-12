@@ -27,3 +27,7 @@ batch-*.zip
 # answer-separation consistency — metrics are in summary.json/run.json).
 **/outputs/**
 *.bin
+
+# Submission build artifacts (regenerated; delivered via Canvas, not git).
+/CTF590-Part1-Submission/
+/CTF590-Part1-Submission.zip
