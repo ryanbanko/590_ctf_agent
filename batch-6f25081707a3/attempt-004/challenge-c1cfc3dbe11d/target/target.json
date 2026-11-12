@@ -1,0 +1,59 @@
+{
+  "project": "ctf590-target-f6d0b860ab09",
+  "network": "ctf590-target-f6d0b860ab09_ctfnet",
+  "container": "a1713d67656ef3a56e043fca8225aac35218e5e075c27edfbb9b6cc3e99ba24b",
+  "containers": {
+    "smug-dino": "a1713d67656ef3a56e043fca8225aac35218e5e075c27edfbb9b6cc3e99ba24b"
+  },
+  "images": {
+    "smug-dino": "sha256:3d6ff9e053698b18be5fb7f608f56b7a1852963a980bc9f8c33d62d4d83d8d42"
+  },
+  "volumes": [],
+  "endpoints": [
+    {
+      "address": "172.18.0.2",
+      "protocol": "tcp",
+      "port": 3009
+    }
+  ],
+  "adjustments": [],
+  "cleanup_errors": [],
+  "address": "172.18.0.2",
+  "image_id": "sha256:3d6ff9e053698b18be5fb7f608f56b7a1852963a980bc9f8c33d62d4d83d8d42",
+  "service_checks": {
+    "startup": {
+      "smug-dino": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null,
+        "networks": {
+          "ctf590-target-f6d0b860ab09_ctfnet": {
+            "address": "172.18.0.2",
+            "network_id": "3c25a94e63e51845477e41a62b3e22f92e1ded64a4bf02b38901953c78fe06c6"
+          }
+        }
+      }
+    },
+    "before_cleanup": {
+      "smug-dino": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null,
+        "networks": {
+          "ctf590-target-f6d0b860ab09_ctfnet": {
+            "address": "172.18.0.2",
+            "network_id": "3c25a94e63e51845477e41a62b3e22f92e1ded64a4bf02b38901953c78fe06c6"
+          }
+        }
+      }
+    }
+  }
+}

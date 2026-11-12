@@ -999,10 +999,19 @@ calls or API spending.
   original exports, recover missing `rev-tablez` payloads and audit provenance.
 - [ ] Review the new batch's messages/tool results against the hypothesis and assess
   changed outcomes before choosing the next experiment.
-- [ ] Freeze code, dependencies, images, dataset and settings for evaluation.
-- [ ] Following the new guide, run one fixed configuration for three fresh trials
+- [x] Freeze code, dependencies, images, dataset and settings for evaluation.
+  Frozen at the tagged scored commit; pinned `uv.lock`, `experiment.toml`, dataset
+  revision `f1c9531672c45b24b7fb5f3aa44a7ac33d3602f8`, and reproducible image build.
+- [x] Following the new guide, run one fixed configuration for three fresh trials
   on each of the ten reserved challenges; preserve failures, missing usage and
   incomplete incidents. Actual counts remain honest if course limits prevent completion.
+  **Done: 30/30 completed, 29 verified successes; pass@1/2/3 = 100%; mean solve
+  rate 96.7% (SD 5.8 pp). One `for-whyos` `wall_limit` failure; one `pwn-slithery`
+  `response_source_error` infrastructure incident (gateway fault that stopped the
+  primary batch), documented and excluded from the solve rate. The primary batch
+  stopped at 26 attempts and was completed by a four-attempt resume batch on
+  byte-identical agent code. Evidence, aggregator and reproduce command in
+  [evidence/scored/](evidence/scored/README.md).**
 
 ### Sections 3–4 and submission: remaining
 

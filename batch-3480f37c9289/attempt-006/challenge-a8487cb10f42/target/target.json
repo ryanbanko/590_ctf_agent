@@ -1,0 +1,69 @@
+{
+  "project": "ctf590-target-3b400d404a77",
+  "network": "ctf590-target-3b400d404a77_ctfnet",
+  "container": "91a9661de36c4866ebbc6323699ddd3248d5be7a8ed76c4534a4adadb036899b",
+  "containers": {
+    "game-server": "91a9661de36c4866ebbc6323699ddd3248d5be7a8ed76c4534a4adadb036899b"
+  },
+  "images": {
+    "game-server": "sha256:d95c8b63410593d1520302f77678b0cd12c2a272adc585d40684ab43b69d4123"
+  },
+  "volumes": [],
+  "endpoints": [
+    {
+      "address": "172.19.0.2",
+      "protocol": "tcp",
+      "port": 31140
+    }
+  ],
+  "adjustments": [
+    {
+      "service": "game-server",
+      "removed": "ports"
+    },
+    {
+      "service": "game-server",
+      "removed": "docker_socket",
+      "reason": "shared trusted daemon"
+    }
+  ],
+  "cleanup_errors": [],
+  "address": "172.19.0.2",
+  "image_id": "sha256:d95c8b63410593d1520302f77678b0cd12c2a272adc585d40684ab43b69d4123",
+  "service_checks": {
+    "startup": {
+      "game-server": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null,
+        "networks": {
+          "ctf590-target-3b400d404a77_ctfnet": {
+            "address": "172.19.0.2",
+            "network_id": "e188fb0713b55b79a7f2ed5ecf2446d638eb2281a818203db5be689a2500ca5f"
+          }
+        }
+      }
+    },
+    "before_cleanup": {
+      "game-server": {
+        "status": "running",
+        "running": true,
+        "restarting": false,
+        "restart_count": 0,
+        "exit_code": 0,
+        "oom_killed": false,
+        "health": null,
+        "networks": {
+          "ctf590-target-3b400d404a77_ctfnet": {
+            "address": "172.19.0.2",
+            "network_id": "e188fb0713b55b79a7f2ed5ecf2446d638eb2281a818203db5be689a2500ca5f"
+          }
+        }
+      }
+    }
+  }
+}

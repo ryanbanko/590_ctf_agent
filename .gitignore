@@ -11,3 +11,19 @@ datasets/
 
 # Runtime Compose snapshots may contain private target flags/environment.
 evidence/**/compose.json
+
+# Scored-run evidence: commit metrics/provenance only.
+# observations.json holds the solver transcript including the discovered flag
+# (the challenge answer); compose.json holds private target build/env. Never commit.
+**/observations.json
+**/compose.json
+
+# Submission video is delivered via Canvas, not the git package (size).
+*.mov
+__MACOSX/
+batch-*.zip
+
+# Raw solver command-output captures (transcript material; kept out for
+# answer-separation consistency — metrics are in summary.json/run.json).
+**/outputs/**
+*.bin

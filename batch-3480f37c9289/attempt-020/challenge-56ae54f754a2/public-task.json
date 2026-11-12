@@ -1,0 +1,1 @@
+{"name": "Smug-Dino", "category": "web", "description": "Don't you know it's wrong to smuggle dinosaurs... and other things?", "files": [], "endpoints": [{"address": "172.19.0.2", "protocol": "tcp", "port": 3009}]}
