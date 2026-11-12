@@ -1,7 +1,7 @@
 # CTF Agent Benchmarking — Final Project Part 1
 
-CYBERSEC 590, Assignment 4. Team: Ryan Banko, Alex Mages, Theo, David. Bracketed
-numbers cite repository files listed at the end.
+CYBERSEC 590, Assignment 4. Team: Ryan Banko, Alex Mages, Theo Prosise, David
+Jiang. Bracketed numbers cite repository files listed at the end.
 
 ## 1. Benchmark, architecture and controls
 
@@ -152,9 +152,10 @@ contents were opened, and we do not suspect model recall.
 
 - **Ryan Banko:** agent design and implementation, solver environment, development experiments.
 - **Alex Mages:** trace and failure analysis, answer-lookup review, results, setup docs and report.
-- **Theo:** deployment, evaluation runs, and the demonstration video.
-- **David:** report writing/editing and documentation review.
-- **Reused code:** solver-image install recipe from NYU's [nyuctf_agents](https://github.com/NYU-LLM-CTF/nyuctf_agents) (MIT) [3]. **AI tools:** OpenAI Codex and Claude Code.
+- **Theo Prosise:** deployment, evaluation runs, and the demonstration video.
+- **David Jiang:** evaluation runs, aggregation and metrics tooling, and report writing/editing.
+- **Reused code:** solver-image install recipe from NYU's [nyuctf_agents](https://github.com/NYU-LLM-CTF/nyuctf_agents) (MIT) [3].
+- **AI use (course policy):** We used OpenAI Codex and Claude Code as coding assistants for the agent, solver environment, tests, aggregation tooling and report drafting; the team reviewed and verified all AI output, which was never given challenge answers, held-out contents or credentials.
 
 **Repository files cited:** [1] `configs/ctftiny.json`; [2] `ctf_agent/`,
 `docker/guard.py`, `configs/development.toml`; [3] `docs/REFERENCES.md`; [4]
