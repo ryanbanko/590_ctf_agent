@@ -176,37 +176,53 @@ Solved per challenge (S = solved, F = not solved; C ran twice) [5]:
 ## 8. Scored evaluation (10 held-out challenges × 3 trials)
 
 Final configuration (Section 10) at commit `aedfd62`. Every attempt starts fresh.
+The primary batch stopped after 26 completed attempts on a gateway
+`response_source_error` (an infrastructure fault, not a solve failure); a
+four-attempt resume batch completed the missing trial-3 runs on byte-identical
+agent code. The stopped `pwn-slithery` attempt is reported as an infrastructure
+incident and excluded from the solve rate (it was retried and solved). The frozen
+package is tagged `part1-submission` [14].
 
 | Run detail | Value |
 | --- | --- |
-| Batch ID | |
-| Run date | |
-| Recorded commit and clean working tree | |
-| `pytest`: result and evidence | |
-| `self-check`: result and evidence | |
-| `prepare-challenge` for all ten: result and evidence | |
+| Batch ID | `3480f37c9289` (primary, 26 completed) + `6f25081707a3` (resume, 4) [14] |
+| Run date | November 11, 2026 |
+| Recorded commit and clean working tree | `aedfd62`, clean (`working_tree_dirty = false` in every record) |
+| `pytest`: result and evidence | 161 passed, 49 deselected (offline), on the frozen tree [2, 14] |
+| `self-check` / controls: result and evidence | 47 Docker control tests at readiness [9]; this run recorded 0 scope incidents, 0 denied-packet leaks, 0 solver restarts and 0 cleanup errors across all 31 records [14] |
+| `prepare-challenge` for all ten: result and evidence | Ten held-out environments passed readiness cycles [8]; all 30 scored attempts staged, reset and cleaned with no errors [14] |
 
 | Challenge | Trial 1 | Trial 2 | Trial 3 | Solved / 3 | Success % | SD (pp) | Mean calls model / tool | Mean tokens in / out | Mean seconds | Mean cost (USD) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| cry-babycrypto | | | | | | | | | | |
-| cry-collision-course | | | | | | | | | | |
-| for-whyos | | | | | | | | | | |
-| msc-quantum-leap | | | | | | | | | | |
-| msc-weak-password | | | | | | | | | | |
-| pwn-puffin | | | | | | | | | | |
-| pwn-slithery | | | | | | | | | | |
-| pwn-unlimited-subway | | | | | | | | | | |
-| rev-rebug-2 | | | | | | | | | | |
-| web-smug-dino | | | | | | | | | | |
-| **All** | | | | / 30 | | | | | | |
+| cry-babycrypto | S | S | S | 3/3 | 100% | 0 | 4.7 / 4.7 | 27,060 / 782 | 16.7 | 0.0016 |
+| cry-collision-course | S | S | S | 3/3 | 100% | 0 | 5.0 / 5.0 | 15,629 / 1,286 | 40.4 | 0.0012 |
+| for-whyos | S | S | F (wall_limit) | 2/3 | 67% | 58 | 25.0 / 24.7 | 1,522,426 / 14,146 | 334.9 | 0.0382 |
+| msc-quantum-leap | S | S | S | 3/3 | 100% | 0 | 5.0 / 5.0 | 19,664 / 3,082 | 42.6 | 0.0024 |
+| msc-weak-password | S | S | S | 3/3 | 100% | 0 | 2.3 / 2.3 | 3,522 / 637 | 12.4 | 0.0005 |
+| pwn-puffin | S | S | S | 3/3 | 100% | 0 | 4.3 / 4.3 | 18,752 / 697 | 15.7 | 0.0011 |
+| pwn-slithery | S | S | S | 3/3 | 100% | 0 | 13.7 / 13.7 | 76,145 / 5,048 | 75.2 | 0.0042 |
+| pwn-unlimited-subway | S | S | S | 3/3 | 100% | 0 | 8.0 / 8.0 | 63,240 / 3,690 | 55.6 | 0.0038 |
+| rev-rebug-2 | S | S | S | 3/3 | 100% | 0 | 9.3 / 9.3 | 94,361 / 4,486 | 64.0 | 0.0042 |
+| web-smug-dino | S | S | S | 3/3 | 100% | 0 | 6.7 / 6.7 | 29,665 / 3,550 | 44.0 | 0.0030 |
+| **All** | | | | 29/30 | 96.7% | 5.8 | 8.4 / 8.4 | 141,000 / 3,382 | 70.1 | 0.0049 |
+
+`for-whyos` dominates token use: its two solved trials average ~1.5 M input tokens
+(large tool outputs fed back), ~3 M of the 4.1 M total. Its trial-3 `wall_limit`
+has no recorded usage, so its token and cost means are over the two solved trials;
+seconds are over all three. The **All** row's token and cost means are over the 29
+attempts with recorded usage; calls and seconds are over all 30.
 
 | pass@1 | pass@2 | pass@3 | Run 1 | Run 2 | Run 3 | Mean solve rate | Variance (pp²) |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| | | | | | | | |
+| 96.7% | 100% | 100% | 100% | 100% | 90% | 96.7% | 33.3 |
 
 | Totals | Seconds | Model calls | Tool calls | Input tokens | Output tokens | Cost (USD) | Scope incidents |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| All 30 attempts | | | | | | | |
+| All 30 attempts | 2,104.3 | 252 | 251 | 4,088,971 | 98,064 | 0.14239 | 0 |
+
+The excluded infrastructure incident (`pwn-slithery` `response_source_error`) used
+3 model calls, 2 tool calls and 97.7 s before the gateway fault; it is kept in the
+preserved records but not in the totals above.
 
 **Metric definitions:**
 - **pass@k** = 1 − C(3 − c, k) / C(3, k), averaged over challenges, where c is the number
@@ -218,9 +234,13 @@ Final configuration (Section 10) at commit `aedfd62`. Every attempt starts fresh
 - **Time** is launch-to-finish seconds. Means and totals include failed attempts. Missing
   usage is reported as unknown; cost is estimated from recorded tokens and prices.
 
-Figure 1. pass@k for k = 1, 2, 3. [Plot pending.]
+![Figure 1. pass@k for k = 1, 2, 3.](../evidence/scored/figure1-passk.png)
 
-Figure 2. Solve rate per run, with mean and variance. [Plot pending.]
+Figure 1. pass@k for k = 1, 2, 3 (pass@1 = 96.7%, pass@2 = pass@3 = 100%).
+
+![Figure 2. Solve rate per run, with mean and variance.](../evidence/scored/figure2-solve-rate.png)
+
+Figure 2. Solve rate per run (100%, 100%, 90%), with mean 96.7% and variance 33.3 pp².
 
 ## 9. Failure analysis and weaknesses
 
@@ -295,3 +315,6 @@ not suspect model recall.
 11. `evidence/validation-checkpoint-prompt/README.md`: Experiment D runs and the prepared follow-up
 12. `evidence/target-snapshot-batch-review/README.md`: pwn target exits
 13. `evidence/development-trace-review/gateway-candidates.json`: model prices
+14. `evidence/scored/` (README, `report.txt`, `final_summary.json`), `aggregate.py`,
+    and the scored batches `batch-3480f37c9289/` + `batch-6f25081707a3/`, frozen at
+    tag `part1-submission` (commit `44b60ee`)

@@ -1015,18 +1015,26 @@ calls or API spending.
 
 ### Sections 3–4 and submission: remaining
 
-- [ ] Report per-challenge success rate, sample SD (percentage points), mean input/
+- [x] Report per-challenge success rate, sample SD (percentage points), mean input/
   output/total tokens and launch-to-termination time across all three trials.
   Calls/cost remain useful recorded extras; older Canvas pass@k/variance wording is preserved separately.
-- [ ] Explain trace-supported findings, changes, follow-up checks and prior exposure.
-- [ ] Select the competition configuration and explain its tradeoffs.
-- [ ] Prepare the guide's 1–3 page report with contributions, reused-code
-  citations and AI disclosure.
-- [ ] Record an identified autonomous-run video or live demo showing tools/results;
+  Filled in [REPORT](docs/REPORT.md) Section 8 from the merged scored data, with
+  pass@k and per-run figures in [evidence/scored/](evidence/scored/).
+- [x] Explain trace-supported findings, changes, follow-up checks and prior exposure.
+  Report Sections 5–9 and 11 (experiments, annotated failure, weaknesses, prior exposure).
+- [x] Select the competition configuration and explain its tradeoffs. Report Section 10.
+- [x] Prepare the guide's 1–3 page report with contributions, reused-code
+  citations and AI disclosure. [REPORT.md](docs/REPORT.md) complete; `REPORT.docx`
+  regenerated from it and validated.
+- [x] Record an identified autonomous-run video or live demo showing tools/results;
   the guide does not require a solve. If a solve is shown, include submission and
   evaluator confirmation. Preserve identifying configuration/commit/challenge/run records.
-- [ ] Finalize the repository package, aggregation script, frozen commit and
+  Demonstration video held by the team (`AgenticCTFSubmissionVideo.mov`), submitted
+  via Canvas rather than the git package.
+- [x] Finalize the repository package, aggregation script, frozen commit and
   reproducible launch instructions; submit by November 11 at 11:59 p.m. Eastern.
+  Frozen at tag `part1-submission`; `aggregate.py`, scored batches and
+  [evidence/scored/](evidence/scored/README.md) committed.
 
 ## Current implementation
 
