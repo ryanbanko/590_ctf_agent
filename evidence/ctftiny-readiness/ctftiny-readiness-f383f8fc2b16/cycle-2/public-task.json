@@ -1,1 +1,0 @@
-{"name": "baby_boi", "category": "pwn", "description": "Welcome to pwn.\n\n`nc 172.19.0.1 8000`", "files": ["baby_boi", "libc-2.27.so", "baby_boi.c"], "endpoints": [{"address": "172.19.0.1", "protocol": "tcp", "port": 8000}]}

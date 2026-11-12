@@ -4,8 +4,8 @@ Record-only follow-up for the user-run batch
 `runs/pilots/agent-first-fix/batch-48f3b134d5c3`. The eleven development challenges
 each received one fresh attempt using clean commit
 `e7e366c9cc2c77a45126d8d451c053bfb97abf5b`. This is the package described in the
-[implementation evidence](../agent-first-fix/README.md), with its
-[hypothesis recorded beforehand](../../docs/EXPERIMENTS.md#combined-prompt-tool-contract-and-output-recovery--hypothesis-recorded-november-8).
+implementation evidence, with its
+[hypothesis recorded beforehand](../../docs/EXPERIMENTS.md#experiment-a--prompt-tool-contract-and-output-capture).
 
 This document checks saved result/export metadata and preserves provenance.
 Detailed message/tool-result interpretation remains pending. No challenge commands

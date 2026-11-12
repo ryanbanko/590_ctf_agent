@@ -2,7 +2,7 @@
 
 Completed November 6, 2026. No live model requests, challenge solving, new hosted
 traces, pilot or scored attempts. Target/network policy and image selection are
-separate later checkpoints. [Plan](../../docs/SIMPLIFICATION_PLAN.md).
+separate later checkpoints. Plan.
 
 ## Baseline and scope
 

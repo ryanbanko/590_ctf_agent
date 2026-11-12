@@ -1,2 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="4.281" timestamp="2026-11-11T16:10:12.266633-05:00"><testcase classname="tests.test_controls" name="test_target_state_checks_detect_failed_dependency[startup]" file="tests/test_controls.py" line="653" time="4.031" /></testsuite></testsuites>

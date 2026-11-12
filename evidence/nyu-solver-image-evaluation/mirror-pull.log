@@ -1,2 +1,0 @@
-22.04: Pulling from docker/library/ubuntu
-failed to copy: httpReadSeeker: failed open: failed to do request: Get "https://d2glxqk2uabbnd.cloudfront.net/v2/4197b2-985539785177-b2be5bc4-51c4-930e-dada-5d491c17d8a8/01dcd7d0-9f23-4dc8-b5e7-63735bebe789?REDACTED": EOF

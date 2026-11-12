@@ -71,7 +71,7 @@ requests followed that inspection. Detailed native observations remain local/
 hosted as already recorded; no expected answer is separately added to them.
 
 
-A subsequent [same-release ARM64 Mongo evaluation](../mongo-arm64-evaluation/README.md)
+A subsequent same-release ARM64 Mongo evaluation
 passed two fresh zero-model functional/control cycles. Only the database
 architecture changed temporarily; normal production integration remains pending.
 The original pilot result above is not replaced, and no live retry ran.

@@ -1,1 +1,0 @@
-{"name": "puffin", "category": "pwn", "description": "Huff, puff, and blow that buffer over.", "files": ["puffin", "readme.txt"], "endpoints": [{"address": "172.19.0.2", "protocol": "tcp", "port": 31140}]}

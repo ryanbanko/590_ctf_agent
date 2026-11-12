@@ -1,8 +1,0 @@
-{
-  "host_registry_v2_status": 401,
-  "host_auth_status": 200,
-  "docker_hub_pull": "manifest HEAD failed: EOF",
-  "official_ecr_mirror_pull": "manifest/layer resolution progressed; signed layer download failed: EOF",
-  "mirror_log_url_queries": "redacted",
-  "vpn_status": "User confirmed disconnected before retry"
-}

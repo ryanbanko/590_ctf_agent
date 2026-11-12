@@ -1,5 +1,0 @@
-{
-  "host_available_bytes": 14240411648,
-  "docker_system_df": "TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE\nImages          35        3         33.66GB   33.56GB (99%)\nContainers      7         0         68.48MB   68.48MB (100%)\nLocal Volumes   2         2         182.4MB   0B (0%)\nBuild Cache     198       0         1.52GB    1.52GB\n",
-  "note": "Retains original images, raw candidate, adapted candidate and archives; no final image choice cleanup performed. One prior accounting query had a missing-snapshot error; retry succeeded."
-}

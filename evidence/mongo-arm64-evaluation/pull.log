@@ -1,1 +1,0 @@
-Error response from daemon: failed to resolve reference "docker.io/library/mongo:7.0.9": failed to do request: Head "https://registry-1.docker.io/v2/library/mongo/manifests/7.0.9": EOF

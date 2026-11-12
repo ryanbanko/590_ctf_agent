@@ -1,2 +1,0 @@
-{"time_utc": "2026-11-07T22:02:00.865071+00:00", "vm_memory": {"MemTotal": 8322969600, "MemAvailable": 7147053056, "SwapTotal": 1073737728, "SwapFree": 1073737728}, "host_swap": "vm.swapusage: total = 8192.00M  used = 7356.12M  free = 835.88M  (encrypted)"}
-{"time_utc": "2026-11-07T22:15:05.412460+00:00", "stage": "export", "vm_memory": {"MemTotal": 8322969600, "MemAvailable": 7508103168, "SwapTotal": 1073737728, "SwapFree": 1073737728}, "host_swap": "vm.swapusage: total = 8192.00M  used = 7804.50M  free = 387.50M  (encrypted)"}

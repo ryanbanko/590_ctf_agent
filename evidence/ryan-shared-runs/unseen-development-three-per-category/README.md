@@ -77,7 +77,7 @@ Record source/shared hashes and check every actual attempt's metrics, trace link
 call counts and payload availability. Keep missing exports/payloads explicit;
 prefer an existing supplemental refreshed export while retaining its original.
 Add a results index linking all copied attempts, including failures and partial
-batches, and update this guide and PROJECT_STATUS with the actual status. Preserve
+batches, and update this guide with the actual status. Preserve
 `plan.json` as the pre-run plan; do not rewrite it as though all planned attempts
 ran. Commit and push the reviewed evidence/docs so teammates receive them on pull.
 

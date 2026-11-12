@@ -1,9 +1,0 @@
-{
-  "network": "ctf590-target-7edb988d6272-net",
-  "container": null,
-  "containers": {},
-  "images": {},
-  "endpoints": [],
-  "cleanup_errors": [],
-  "gateway": "172.19.255.254"
-}

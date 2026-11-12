@@ -74,7 +74,7 @@ SHA-256:
 
 The original lean image remains tagged `ctf590-solver:before-nyu-evaluation-00e6a41`;
 its RootFS/configuration match the [pre-switch inspection](baseline-image.json).
-Its [previous verified archive](../nyu-solver-image-evaluation/frozen-current-image.json)
+Its previous verified archive
 remains unchanged. Neither image binary has been uploaded or distributed. About
 **11.0 GiB** host space remained after the additional archive; no broad pruning,
 reset or deletion was performed during integration.
@@ -90,7 +90,7 @@ Sherlock wrapper broken. No claim that all installed programs or live GDB work,
 that every challenge is ready, or that solve rate improves. No repairs were made
 to the optional installer chain.
 
-[README setup](../../README.md#one-time-setup) explains source builds, optional
+[README setup](../../README.md#setup) explains source builds, optional
 frozen-image loading and unchanged challenge commands. Fresh-machine cold startup
 and teammate archive loading have not been measured here. Review this checkpoint,
 then save a source checkpoint and separately authorize final-runtime environment

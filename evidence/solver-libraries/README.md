@@ -63,5 +63,5 @@ uv pip compile docker/solver-requirements.in --python-version 3.13.2 --python-pl
 Network deadlines remain guidance, not automatic enforcement of socket options.
 Outputs larger than the cap can still lose a late error; scripts must preserve
 their own terminal buffers. Library availability and these benign checks do not
-establish improved solve rate. [Experiment 2](../../docs/EXPERIMENTS.md#experiment-2--solver-libraries-output-visibility-and-network-guidance)
+establish improved solve rate. [Experiment 2](../../docs/EXPERIMENTS.md#experiment-2--solver-libraries-and-output-limit)
 records the rationale and the pending live comparison.

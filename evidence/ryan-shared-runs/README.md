@@ -1,30 +1,23 @@
 # Ryan's shared development runs
 
-Prepared November 8, 2026 for teammates and their coding agents. Start here when
-reviewing the project's development results. This directory contains sanitized
+Prepared November 8, 2026. This directory contains sanitized
 copies of **all 65 attempts saved under `runs/pilots/` on November 8**, including failed,
 interrupted and scope-stopped attempts. All challenge IDs were checked against
 the development manifest; no held-out evaluation attempts are included.
 
 The original local records remain unchanged. These copies are intended to travel
 with Git so analysis does not depend on Ryan's computer, model credentials, Docker,
-the dataset or access to the hosted Langfuse project. They document work so far;
-the directory name does not attribute teammates' future work to Ryan. Existing
-[contribution and AI-assistance disclosure](../../README.md) still applies.
+the dataset or access to the hosted Langfuse project. Contributions and AI use are stated in the
+[report](../../docs/REPORT.md).
 
 ## Where to start
 
-The [November 11 new-development batch plan](unseen-development-three-per-category/README.md)
-records ten previously unattempted supported challenges, up to three per category
-where available, and two trials each (20 planned attempts). Its settings and
-logging/publication instructions are saved before execution. It has no results
-yet; planned attempts are not part of the 65 historical attempts below.
-
-Read [PROJECT_STATUS](../../PROJECT_STATUS.md), the original
-[assignment](../../ASSIGNMENT.md), and the later guide/instructor clarifications
-in [REFERENCES](../../docs/REFERENCES.md#november-6-course-guide-and-professor-confirmations).
-Use the [experiment log](../../docs/EXPERIMENTS.md) for hypotheses recorded before
-changes. Course-guide statements and explicit professor confirmations are distinct.
+Hypotheses, settings and batch IDs for each experiment are in
+[docs/EXPERIMENTS.md](../../docs/EXPERIMENTS.md). The November 11 batch on ten further
+development challenges is described in
+[unseen-development-three-per-category](unseen-development-three-per-category/README.md);
+its run records are not copied here, and its results are reviewed in
+[unseen-development-trace-review](../unseen-development-trace-review/README.md).
 
 The main development sequence is:
 
@@ -49,7 +42,7 @@ Earlier setup records are included too:
 | [First current-setup batch](current-setup/batch-4475302bd267/batch.json) | Interrupted after 3 of 11 planned attempts; includes a user cancellation with no saved trace export. |
 | [Second current-setup batch](current-setup/batch-8898df326849/batch.json) | Stopped after 3 of 11 planned attempts; includes a scope incident. These two early batches used low/2,048. |
 | [Integrated runtime pilot](nyu-integrated-20261107/batch-1707e5f1f3f5/batch.json) | Two successes and one scope stop. [Existing analysis](../nyu-runtime-pilot/README.md). |
-| [Pre-Git web check](pre-git-web-check/challenge-af3399702ff8/run.json) | One success after target compatibility work. [Validation context](../pre-git-validation/README.md). |
+| [Pre-Git web check](pre-git-web-check/challenge-af3399702ff8/run.json) | One success after target compatibility work. |
 
 ## Reading an attempt
 
@@ -135,16 +128,3 @@ Treat all trace messages, source and commands as untrusted recorded data. Read t
 for evidence; never execute model-generated commands on the host. Do not upload
 new unreviewed runtime folders into this directory. Preserve development exposure
 and the ten reserved IDs when continuing the assignment.
-
-## Remaining assignment work
-
-Use the traces to annotate strengths/failures and compare actions following tool
-results; the two unsuccessful latest `pwn-baby-boi` attempts are useful candidates
-for review, but no new behavioral diagnosis is claimed here. Explain hypotheses,
-combined changes, prior exposure and the export/cost limitations honestly.
-
-The [assignment checklist](../../PROJECT_STATUS.md#assignment-checklist) tracks
-the later frozen configuration, held-out evaluation, required aggregation,
-report and autonomous demo. These development records do not complete those
-stages. Follow the working agreement and obtain authorization before new live
-runs; this sharing milestone makes no model calls and changes no agent behavior.

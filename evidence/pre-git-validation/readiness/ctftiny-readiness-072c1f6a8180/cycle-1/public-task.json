@@ -1,1 +1,0 @@
-{"name": "whyOS", "category": "forensics", "description": "Have fun digging through that one. No device needed. Note: the flag is a hex string.", "files": ["com.yourcompany.whyos_4.2.0-28+debug_iphoneos-arm.deb", "console.log"], "endpoints": []}
