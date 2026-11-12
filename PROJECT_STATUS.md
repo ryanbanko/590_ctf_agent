@@ -1,6 +1,6 @@
 # Project status
 
-Last reviewed: November 11, 2026 (America/New_York).
+Last reviewed: November 12, 2026 (America/New_York).
 
 **The harder development batch reached all 20 attempts: 14 verified successes,
 five other completed attempts and a final response-source failure that stopped
@@ -15,6 +15,30 @@ Use the [current plan](#latest-course-clarification-and-current-plan),
 for remaining work. Dated milestone sections preserve their completion state and
 next-step recommendations at the time; later completed work supersedes those
 historical pending-stage notes.
+
+## Submission consistency review — November 12
+
+A rubric review of the submission package found the report and the repository
+disagreeing; these are now reconciled (no new runs, no agent/Docker/config/test change):
+
+- `aggregate.py` computed pass@1 = 100 % ("any success in the first k trials") while
+  the report stated 96.7 % (unbiased estimator). It now uses the estimator the
+  report describes, 1 − C(n−c, k)/C(n, k), and prints per-challenge mean resources.
+- The failed `for-whyos` attempt had no recorded usage (the agent nulls an attempt's
+  token totals when any model request fails), so totals silently omitted 3.8 M
+  input tokens / $0.083. New `trace_audit.py` sums it from the local trace export
+  (matches `run.json` exactly on all 29 complete attempts) and scans every scored
+  tool call for outside hosts (none). Totals are now 31 attempts incl. the incident:
+  2,232 s, 255/253 calls, 7,893,345/151,223 tokens, $0.226.
+- New `plot_figures.py` regenerates both report figures (previously no plotting code).
+- Report: HTTPS egress described accurately (any public 443, approved for pip; checked
+  by trace review), resume-batch dirty-tree provenance disclosed, comparison limits
+  stated, scored `for-whyos` failure annotated, usage-recording gap listed as a
+  weakness, citations renumbered 1–12, figures no longer stretched. Still 3 pages.
+
+Open for Part 2: keep completed calls' usage when a later model request fails
+(`ctf_agent/agent.py`). Demo-video identifiers (commit `b69eb3c`, OpenAI base URL)
+are not in this repository; see `README-SUBMISSION.txt` in the package.
 
 ## Hard-challenge development focus — November 11
 

@@ -172,6 +172,21 @@ final commit so every run records clean provenance:
 uv run --frozen --env-file .env python -m ctf_agent run-batch --challenges cry-babycrypto cry-collision-course for-whyos msc-quantum-leap msc-weak-password pwn-puffin pwn-slithery pwn-unlimited-subway rev-rebug-2 web-smug-dino --trials 3 --output runs/scored
 ```
 
+**Compute the report metrics** (pass@k, solve rate per run and its variance, time,
+calls, tokens and cost, failed attempts included) from one or more batch
+directories; extra directories are merged as resumes. For the committed scored run:
+
+```sh
+python aggregate.py batch-3480f37c9289 batch-6f25081707a3 \
+    --recovered-usage evidence/scored/trace-audit.json --json evidence/scored/final_summary.json
+uv run --no-project --with matplotlib==3.11.2 python plot_figures.py \
+    evidence/scored/final_summary.json evidence/scored
+```
+
+`trace_audit.py` builds `trace-audit.json` from the local (git-ignored) trace
+exports: it recovers usage the agent did not record and checks every tool call for
+outside hosts. See [evidence/scored](evidence/scored/README.md).
+
 **Options:**
 - `--experiment FILE` selects a settings file; the default is
   [configs/development.toml](configs/development.toml). Every field is required, so

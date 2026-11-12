@@ -29,12 +29,14 @@ network, and the challenge's **target** services [2].
 
 **Limits in code** [2]: 600 s/attempt, 120 s/command, 90 s/request; 40 model and
 80 tool calls; 8,192 output tokens and 2 MiB per request; 1 CPU, 1 GiB, 64 PIDs.
-**Controls** [2, 9]: the answer, `challenge.json`, server source, build files,
+**Controls** [2, 8]: the answer, `challenge.json`, server source, build files,
 credentials and the Docker socket never enter the solver, and no tool opens a
-target shell, so a flag must come through the challenge. The guard allows only the
-assigned endpoints, Docker DNS and HTTPS for `pip`, blocking and logging the rest;
-the first blocked request in an attempt warns the agent, a second ends it. Each
-trace is checked to confirm secret keys never appear. 47 Docker tests cover
+target shell, so a flag must come through the challenge. The guard allows the
+assigned endpoints, Docker DNS and outbound HTTPS (port 443 to any public address,
+so `pip` can download packages as the professor approved [3]), blocking and logging
+the rest; the first blocked request in an attempt warns the agent, a second ends it.
+Allowed HTTPS is not logged, so answer lookups are checked by reading traces
+(Section 3). Each trace is checked to confirm secret keys never appear. 47 Docker tests cover
 blocking, isolation, timeouts, limits and cleanup; one confirms a blocked
 connection never reaches its destination.
 
@@ -46,7 +48,7 @@ hand-copied values caused several failures; one attempt found the flag but typed
 it as a message instead of calling `submit_flag`; and there were **no answer
 lookups** — every address used was the assigned endpoint, the only outside access
 was 9 `pip` installs, and three blocked requests were all stopped by the firewall
-[5, 10]. Early problems we fixed first: missing solver libraries, a 30 s command
+[5, 9]. Early problems we fixed first: missing solver libraries, a 30 s command
 limit and no `pip` (fixed with NYU's image, 120 s commands, approved `pip`); a
 MongoDB container that crashed under Apple-Silicon emulation (fixed with the ARM64
 build); and `msc-showdown`, excluded because it needs privileged Docker [2, 4].
@@ -61,9 +63,12 @@ more general solver [5]. A stricter-validation prompt alone (Experiment A) gave 
 change (6/11) [5]. A later scope-rule change plus one allowed recovery solved
 20/22 over two trials without widening access [5], and a verify-before-searching
 prompt with a 2 MiB request cap (Experiment D, our competition prompt) solved 3/4
-in a small pilot [11]. Medium reasoning's gain cost about 2.3× input tokens, 3×
+in a small pilot [10]. Medium reasoning's gain cost about 2.3× input tokens, 3×
 output, 2.8× time and 2.2× cost per attempt — still under half a cent and ~80 s
-per attempt; estimates include failed attempts [5, 6].
+per attempt; estimates include failed attempts [5, 6]. Limits: each configuration
+ran once on these eleven challenges, so the +27 points rests on three challenges
+changing outcome, and the full competition configuration (B + C + D) was not itself
+compared with the baseline on one fixed set.
 
 | Batch | Reasoning | Trials | Solved |
 | --- | --- | --- | --- |
@@ -76,21 +81,27 @@ per attempt; estimates include failed attempts [5, 6].
 
 ## 3. Scored evaluation — 10 held-out challenges × 3 trials
 
-Frozen configuration (Section 5) at commit `aedfd62`, tag `part1-submission`;
-every attempt starts fresh [14]. `pytest` 161 passed on the frozen tree; this run
-recorded **0 scope incidents, 0 denied-packet leaks, 0 cleanup errors** across all
-records. The primary batch (`3480f37c9289`) stopped after 26 attempts on a gateway
-`response_source_error` — an infrastructure fault, not a solve failure; a
-four-attempt resume batch (`6f25081707a3`) completed the missing trial-3 runs on
-byte-identical agent code. That stopped `pwn-slithery` attempt is reported as an
-infrastructure incident and excluded from the solve rate (it was retried and
-solved) [14].
+Frozen configuration (Section 5); every attempt starts fresh [12]. Scored runs used
+agent code at commit `aedfd62`; the submission tag `part1-submission` is a later
+commit whose agent code, Docker files, configs, tests and lockfile are unchanged.
+`pytest` 161 passed on the frozen tree; this run recorded **0 scope incidents, 0
+denied-packet leaks, 0 cleanup errors** across all records. **Answer-lookup check:**
+all 251 tool calls in the 30 scored attempts reached only target addresses or
+localhost, with no public hosts or IPs, web requests or package installs [12]. The
+primary batch (`3480f37c9289`) stopped after 26 attempts on a gateway
+`response_source_error`, an infrastructure fault, not a solve failure; a
+four-attempt resume batch (`6f25081707a3`) completed the missing trial-3 runs. It
+was launched from commit `c27f523` with uncommitted changes outside the agent; its
+recorded hashes of the agent, Docker, config, test and lock files are identical to
+the primary batch. The stopped `pwn-slithery` attempt is an infrastructure incident:
+excluded from the solve rate (it was retried and solved) but counted in resource
+totals [12].
 
 | Challenge | T1 | T2 | T3 | Solved | SD (pp) | Calls m/t | Tokens in/out | Sec | Cost $ |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | cry-babycrypto | S | S | S | 3/3 | 0 | 4.7/4.7 | 27,060/782 | 16.7 | 0.0016 |
 | cry-collision-course | S | S | S | 3/3 | 0 | 5.0/5.0 | 15,629/1,286 | 40.4 | 0.0012 |
-| for-whyos | S | S | F | 2/3 | 58 | 25.0/24.7 | 1,522,426/14,146 | 334.9 | 0.0382 |
+| for-whyos | S | S | F | 2/3 | 58 | 25.0/24.7 | 2,283,076/27,151 | 334.9 | 0.0532 |
 | msc-quantum-leap | S | S | S | 3/3 | 0 | 5.0/5.0 | 19,664/3,082 | 42.6 | 0.0024 |
 | msc-weak-password | S | S | S | 3/3 | 0 | 2.3/2.3 | 3,522/637 | 12.4 | 0.0005 |
 | pwn-puffin | S | S | S | 3/3 | 0 | 4.3/4.3 | 18,752/697 | 15.7 | 0.0011 |
@@ -98,17 +109,20 @@ solved) [14].
 | pwn-unlimited-subway | S | S | S | 3/3 | 0 | 8.0/8.0 | 63,240/3,690 | 55.6 | 0.0038 |
 | rev-rebug-2 | S | S | S | 3/3 | 0 | 9.3/9.3 | 94,361/4,486 | 64.0 | 0.0042 |
 | web-smug-dino | S | S | S | 3/3 | 0 | 6.7/6.7 | 29,665/3,550 | 44.0 | 0.0030 |
-| **All** | | | | **29/30** | 5.8 | 8.4/8.4 | 141,000/3,382 | 70.1 | 0.0049 |
+| **All** | | | | **29/30** | 5.8 | 8.4/8.4 | 263,112/5,041 | 70.1 | 0.0075 |
 
 **pass@1 = 96.7%, pass@2 = pass@3 = 100%.** Per-run solve rate 100% / 100% / 90%;
-mean **96.7%**, variance **33.3 pp²**, SD 5.8 pp. Totals over 30 attempts: 2,104 s,
-252 model and 251 tool calls, 4,088,971 input and 98,064 output tokens, **$0.142**
-estimated, **0 scope incidents**. The one non-infrastructure failure is `for-whyos`
-trial 3 (`wall_limit`); its two solved trials average ~1.5 M input tokens (large
-tool outputs fed back) and drive most of the token total. pass@k uses
-1 − C(3−c, k)/C(3, k) averaged over challenges; SD is 100× the sample SD of the
-0/1 outcomes (the All row uses the three run rates); time is launch-to-finish and
-includes failed attempts; cost is estimated from recorded tokens and prices [14].
+mean **96.7%**, variance **33.3 pp²**, SD 5.8 pp. Totals over all 31 attempts (30
+trials and the incident): 2,232 s, 255 model and 253 tool calls, 7,893,345 input and
+151,223 output tokens, **$0.226** estimated, **0 scope incidents**; the incident's 3
+model calls have no recorded usage. The one non-infrastructure failure, `for-whyos`
+trial 3 (`wall_limit`, Section 4), alone used 3.8 M input tokens ($0.083, 37% of the
+cost). When a model request fails, the agent drops the attempt's token totals, so we
+summed this attempt's usage from its trace; for the 29 complete attempts that sum
+equals the recorded usage exactly [12]. pass@k uses 1 − C(3−c, k)/C(3, k) averaged
+over challenges; SD is 100× the sample SD of the 0/1 outcomes (the All row uses the
+three run rates); table values are per-attempt means; time is launch-to-finish and
+includes failed attempts; cost is estimated from tokens and prices [12].
 
 <table style="border:none;width:100%"><tr>
 <td style="border:none;text-align:center"><img src="../evidence/scored/figure1-passk.png" style="width:8cm"></td>
@@ -126,13 +140,24 @@ wrapper and padding while keeping the typo, all rejected; the agent gave up with
 time and calls left. It never compared what it submitted against what the decoder
 printed. **Testable fix:** after a rejection, re-check the exact value against the
 original output before changing format (the Experiment D prompt adds this); rerun
-this challenge, `cry-lupin` and `rev-gibberish-check` twice each and compare [11].
+this challenge, `cry-lupin` and `rev-gibberish-check` twice each and compare [10].
+
+**Scored failure — `for-whyos`, trial 3** [12]. Calls 1–8 unpacked the `.deb` and
+disassembled the tweak's binaries; call 9 submitted a value built from hex found in
+them and was rejected. Over the next 24 calls it made 11 more rejected submissions,
+each from a new guess (other embedded hex, then BLE manufacturer data in
+`console.log`) with no evidence tying the value to the challenge, while commands
+returned up to 67 KB each. Requests grew to ~208k input tokens and the 600 s limit
+stopped call 34. **Testable fix:** after three rejections, require the next candidate
+to quote the output it came from, and return at most 16 KiB per command; rerun three
+development forensics challenges twice each and compare solves and tokens.
 
 **Remaining weaknesses:** (1) pwn targets sometimes stop responding mid-attempt —
 in one batch all four pwn containers had exited before cleanup, cause unknown;
-`pwn-baby-boi` has never solved and three held-out challenges are pwn [12]. (2)
+`pwn-baby-boi` has never solved and three held-out challenges are pwn [11]. (2)
 Long attempts can outgrow the request cap; the larger cap delays but does not
-remove this [7]. Other ideas to test: one extra turn when the agent stops without a
+remove this [7]. (3) A failed model request drops the attempt's token totals
+(Section 3); keeping completed calls' usage is a small fix. Other ideas to test: one extra turn when the agent stops without a
 verified flag, and separating reasoning level from token allowance [5].
 
 ## 5. Competition configuration and prior exposure
@@ -143,7 +168,7 @@ per attempt, 40 model and 80 tool calls, and one scope recovery. **Tradeoff:**
 medium reasoning gave the largest measured gain (+27 points) for ~2× cost and ~3×
 time — still under half a cent and ~80 s per attempt; the larger request cap and
 timeout remove two observed causes of early stops; the Experiment D prompt's effect
-is not yet precisely measured [5, 11].
+is not yet precisely measured [5, 10].
 
 **Prior exposure:** no answer files, solutions, write-ups or held-out challenge
 contents were opened, and we do not suspect model recall.
@@ -161,7 +186,7 @@ contents were opened, and we do not suspect model recall.
 `docker/guard.py`, `configs/development.toml`; [3] `docs/REFERENCES.md`; [4]
 `docs/EXPERIMENTS.md`; [5] `evidence/ryan-shared-runs/`; [6]
 `evidence/development-trace-review/`; [7] `evidence/unseen-development-trace-review/`;
-[9] `evidence/scope-recovery/`; [10] `evidence/reasoning-medium-scope-stop/`; [11]
-`evidence/validation-checkpoint-prompt/`; [12] `evidence/target-snapshot-batch-review/`;
-[14] `evidence/scored/`, `aggregate.py`, scored batches `batch-3480f37c9289/` +
+[8] `evidence/scope-recovery/`; [9] `evidence/reasoning-medium-scope-stop/`; [10]
+`evidence/validation-checkpoint-prompt/`; [11] `evidence/target-snapshot-batch-review/`;
+[12] `evidence/scored/`, `aggregate.py`, `trace_audit.py`, `plot_figures.py`, scored batches `batch-3480f37c9289/` +
 `batch-6f25081707a3/` (tag `part1-submission`).

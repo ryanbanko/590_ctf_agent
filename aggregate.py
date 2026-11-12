@@ -16,15 +16,26 @@ Usage:
     uv run --frozen python aggregate.py batch-3480f37c9289 \\
         runs/scored-resume/batch-XXXX --json out.json
 
+    # Final scored numbers, with the usage trace_audit.py recovered for the
+    # attempt whose run.json has none:
+    python aggregate.py batch-3480f37c9289 batch-6f25081707a3 \\
+        --recovered-usage evidence/scored/trace-audit.json \\
+        --json evidence/scored/final_summary.json
+
+pass@k is the unbiased estimator 1 - C(n-c, k) / C(n, k) averaged over
+challenges (n trials, c successes), so it does not depend on trial order.
+
 The script is read-only over the batch directories and uses only the standard
-library. Failed and stopped attempts are counted in resources; their missing
-token/cost usage is reported separately so the totals stay honest.
+library. Failed and stopped attempts are counted in resources; usage missing
+from run.json is filled from --recovered-usage when given, and any still-missing
+usage is reported separately so the totals stay honest.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import math
 import statistics
 from pathlib import Path
 
@@ -57,6 +68,7 @@ def load_attempts(batch_dir: Path) -> tuple[dict, list[dict]]:
         attempts.append(
             {
                 "challenge_id": row["challenge_id"],
+                "run_id": result.get("run_id"),
                 "trial": row["trial"],
                 "source": batch_dir.name,
                 "status": row.get("status"),
@@ -73,9 +85,22 @@ def load_attempts(batch_dir: Path) -> tuple[dict, list[dict]]:
                 "active_seconds": result.get("active_seconds"),
                 "wall_seconds": result.get("total_seconds"),
                 "usage_complete": result.get("usage_complete"),
+                "usage_recovered": False,
             }
         )
     return batch, attempts
+
+
+def apply_recovered_usage(attempts: list[dict], recovered: dict) -> None:
+    """Fill missing token/cost fields from trace_audit.py's recovered_usage."""
+    for a in attempts:
+        found = recovered.get(a["run_id"])
+        if a["input_tokens"] is None and found:
+            tokens = found["tokens"]
+            a.update(input_tokens=tokens["input"], output_tokens=tokens["output"],
+                     cached_input_tokens=tokens["cached_input"],
+                     reasoning_tokens=tokens["reasoning"], cost_usd=found["cost_usd"],
+                     usage_recovered=True)
 
 
 def _sum(values) -> float:
@@ -109,13 +134,14 @@ def per_challenge(attempts: list[dict], trials: int) -> list[dict]:
             "solve_rate": len(successes) / len(runs) if runs else 0.0,
             "outcomes": [a["outcome"] for a in runs],
         }
-        # pass@k over the first k trials actually run for this challenge.
+        # Unbiased pass@k: chance that k of the n trials, drawn without
+        # replacement, include at least one success.
+        n, c = len(runs), len(successes)
         for k in range(1, trials + 1):
-            first_k = [a for a in runs if a["trial"] <= k]
-            if len(first_k) >= k and first_k:
-                row[f"pass@{k}"] = int(any(a["verified_success"] for a in first_k))
-            else:
-                row[f"pass@{k}"] = None
+            row[f"pass@{k}"] = 1 - math.comb(n - c, k) / math.comb(n, k) if n >= k else None
+        for field in ("model_calls", "tool_calls", "input_tokens", "output_tokens",
+                      "wall_seconds", "cost_usd"):
+            row[f"mean_{field}"] = _mean([a[field] for a in runs])
         rows.append(row)
     return rows
 
@@ -137,6 +163,7 @@ def resources(attempts: list[dict]) -> dict:
     return {
         "attempts": n,
         "attempts_with_usage": len(with_usage),
+        "attempts_with_recovered_usage": sum(a["usage_recovered"] for a in attempts),
         "attempts_missing_usage": n - len(with_usage),
         "model_calls_total": _sum(a["model_calls"] for a in attempts),
         "tool_calls_total": _sum(a["tool_calls"] for a in attempts),
@@ -270,15 +297,26 @@ def print_report(summary: dict) -> None:
     )
     print()
 
-    head_pass = "  ".join(f"p@{k}" for k in range(1, trials + 1))
+    head_pass = "  ".join(f"p@{k}".rjust(4) for k in range(1, trials + 1))
     print(f"{'challenge':24} {'run':>3} {'ok':>3} {'rate':>6}  {head_pass}  outcomes")
     for r in summary["per_challenge"]:
         passes = "  ".join(
-            _fmt(r[f'pass@{k}'], 0).rjust(3) for k in range(1, trials + 1)
+            _fmt(r[f'pass@{k}'], 2).rjust(4) for k in range(1, trials + 1)
         )
         print(
             f"{r['challenge_id']:24} {r['trials_run']:>3} {r['successes']:>3} "
             f"{r['solve_rate']*100:5.0f}%  {passes}  {','.join(r['outcomes'])}"
+        )
+    print()
+
+    print(f"{'challenge':24} {'model/tool calls':>16} {'input tok':>10} {'output tok':>10} "
+          f"{'sec':>6} {'cost $':>8}   (means per attempt)")
+    for r in summary["per_challenge"]:
+        print(
+            f"{r['challenge_id']:24} "
+            f"{_fmt(r['mean_model_calls'],1):>7}/{_fmt(r['mean_tool_calls'],1):<8} "
+            f"{_fmt(r['mean_input_tokens'],0):>10} {_fmt(r['mean_output_tokens'],0):>10} "
+            f"{_fmt(r['mean_wall_seconds'],1):>6} {_fmt(r['mean_cost_usd'],4):>8}"
         )
     print()
 
@@ -310,7 +348,8 @@ def print_report(summary: dict) -> None:
     print("Resources (all attempts, failures and incidents included):")
     print(
         f"  usage present: {res['attempts_with_usage']}/{res['attempts']} "
-        f"(missing on {res['attempts_missing_usage']} failed/stopped)"
+        f"(recovered from traces: {res['attempts_with_recovered_usage']}; "
+        f"missing on {res['attempts_missing_usage']} failed/stopped)"
     )
     print(f"  model calls total: {res['model_calls_total']}   "
           f"tool calls total: {res['tool_calls_total']}")
@@ -340,13 +379,21 @@ def main() -> None:
         help="one or more batch-<id> directories; extra ones are merged as resumes",
     )
     parser.add_argument("--json", type=Path, help="also write the summary as JSON")
+    parser.add_argument("--recovered-usage", type=Path,
+                        help="trace_audit.py output; fills usage missing from run.json")
     args = parser.parse_args()
+    recovered = {}
+    if args.recovered_usage:
+        recovered = json.loads(args.recovered_usage.read_text())["recovered_usage"]
 
     if len(args.batch_dir) == 1:
         batch, attempts = load_attempts(args.batch_dir[0])
+        apply_recovered_usage(attempts, recovered)
         summary = summarize(batch, attempts)
     else:
         loaded = [load_attempts(d) for d in args.batch_dir]
+        for _, attempts in loaded:
+            apply_recovered_usage(attempts, recovered)
         meta, trials_attempts, incidents = merge_batches(loaded)
         summary = summarize(meta, trials_attempts, incidents)
 
