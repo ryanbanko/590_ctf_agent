@@ -3,6 +3,13 @@
 Setup and run instructions for the agent. Architecture, experiments and results are in
 the report, [docs/REPORT.md](docs/REPORT.md).
 
+For development or agent handoff, start with [current status](PROJECT_STATUS.md)
+and the [working agreement](AGENTS.md). [Project history](docs/PROJECT_HISTORY.md)
+preserves milestones; [experiments](docs/EXPERIMENTS.md) holds detailed test records.
+The [historical development guide](docs/DEVELOPMENT_GUIDE.md) preserves our longer
+November 11 README; use this README for current setup and commands.
+The [target-listener issue](docs/TARGET_PROCESS_ISSUE.md) remains open.
+
 ## Requirements
 
 - **Docker:** Linux or macOS with Docker Engine or Docker Desktop (Linux containers,

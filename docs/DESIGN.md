@@ -1,5 +1,10 @@
 # Design choices and alternatives
 
+This file owns the implemented architecture. Use [current status](../PROJECT_STATUS.md)
+for the active handoff, [project history](PROJECT_HISTORY.md) for milestones, and
+[experiments](EXPERIMENTS.md) for detailed comparisons. Dated verification counts
+below describe their original checkpoint, not newly rerun checks.
+
 The [assignment](../ASSIGNMENT.md) requires adaptive tool use, solver/evaluator
 separation, enforced limits, trusted verification and complete records. CTFTiny
 is the active benchmark. [Original references](REFERENCES.md) explain how the
@@ -8,7 +13,7 @@ resource-owning context managers keep the implementation understandable without
 an agent framework or application class hierarchy.
 
 This document describes implemented behavior. The approved
-[simplification plan](SIMPLIFICATION_PLAN.md) separates execution replacement
+[simplification plan](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/docs/SIMPLIFICATION_PLAN.md) separates execution replacement
 from the completed target/network checkpoint and the independent image evaluation. Our agent, three
 tools, model integration, native SDK export, complete TOML and batch wrapper remain.
 
@@ -19,7 +24,7 @@ formats. The course guide's references to separate components do not require a
 course-runtime adapter, JSONL layer or NYU development migration for this project.
 
 Solver-image selection remains independent of execution. Following the successful
-[8 GiB evaluation](../evidence/nyu-solver-image-evaluation/retry-8g/README.md), the
+[8 GiB evaluation](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/nyu-solver-image-evaluation/retry-8g/README.md), the
 [production integration](../evidence/nyu-solver-integration/README.md) uses one
 Dockerfile with the supplied NYU release installation body and small project
 additions. The unused HTTP entrypoint is omitted. The normal build/default tag
@@ -29,7 +34,7 @@ passed. The larger toolkit costs roughly 11.5 GB; optional installer failures
 remain documented. The lean image and its archive remain historical baselines.
 That image milestone left agent/tool/guard/evaluator, model/SDK and batch behavior
 unchanged. The later prompt/output milestone is described below and in its
-[verification evidence](../evidence/agent-first-fix/README.md).
+[verification evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/agent-first-fix/README.md).
 
 ## One challenge path
 
@@ -105,8 +110,8 @@ with platform `linux/arm64`. AMD64 engines and all other references remain suppl
 Both are MongoDB **7.0.9-jammy** in the same official manifest index. This is a
 recorded compatibility adjustment, not a generic image resolver. Application,
 environment, commands, backend graph and endpoint scope are preserved.
-[Evaluation](../evidence/mongo-arm64-evaluation/README.md) and
-[normal integration](../evidence/mongo-arm64-integration/README.md) record the checks.
+[Evaluation](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/mongo-arm64-evaluation/README.md) and
+[normal integration](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/mongo-arm64-integration/README.md) record the checks.
 
 Compose `up --wait --wait-timeout 20` uses its standard running/healthy handling
 within the existing 30-second CLI timeout. A shared small function records only
@@ -130,7 +135,7 @@ It adds bounded teardown time, without extending the model/attempt deadline or
 actively probing the service. The state is recorded in `target/target.json` and
 the launcher's `run.json` target object, outside solver/model context. It is an
 end-state observation, not continuous monitoring or a verdict about the cause of
-an earlier connection failure. [Verification](../evidence/target-precleanup-snapshot/README.md).
+an earlier connection failure. [Verification](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/target-precleanup-snapshot/README.md).
 
 Standard Compose `down --volumes` resets project/anonymous volumes. Read-only
 server-file binds/configs/secrets must resolve inside the challenge directory;
@@ -328,7 +333,7 @@ inputs. The answer is used only by trusted exact-equality verification.
 `submit_flag` is one of the three existing tools, not a separate evaluator API.
 Candidates and verdicts are recorded; the expected answer is never separately
 exposed. The other tools run commands and write files only inside the solver.
-Their [contracts](../README.md#architecture-and-tool-contracts) cover validation,
+Their [contracts](DEVELOPMENT_GUIDE.md#architecture-and-tool-contracts) cover validation,
 outputs, timeout and error behavior. Host validation and one-shot filesystem checks
 protect distinct boundaries and remain separate.
 
@@ -461,8 +466,8 @@ needed for the normal one-invocation lifecycle.
 Four later development preparations passed, bringing runtime coverage to fifteen
 challenges. All fifty file inventories were checked; the remaining thirty-five
 environments have not passed runtime preparation. `msc-showdown` is a known
-unsupported privileged target. Subsequent [solver checks](../evidence/solver-readiness/README.md)
+unsupported privileged target. Subsequent [solver checks](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/solver-readiness/README.md)
 cover baseline utilities and benign executable handling, separately from challenge
 preparation. Preparation is not a solve, pilot, scored evaluation or improvement
-comparison. [Status](../PROJECT_STATUS.md) and [readiness evidence](../evidence/benchmark-readiness/README.md)
+comparison. [Status](../PROJECT_STATUS.md) and [readiness evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/benchmark-readiness/README.md)
 record the completed scope and the Section 2 handoff.

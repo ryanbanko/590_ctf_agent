@@ -1,5 +1,11 @@
 # Original resources and design context
 
+This file preserves source attribution and instructor clarification. Dated
+implementation notes below are historical provenance; [current status](../PROJECT_STATUS.md)
+owns the active handoff and [project history](PROJECT_HISTORY.md) the milestone
+timeline. Links to evidence removed from the current tree open a fixed historical
+commit. The original resource links and professor quotations remain intact.
+
 These are the five technical resources the user supplied at the start of this
 project. They informed the design and should be reviewed when working on the
 corresponding integration. Findings below describe the November 3, 2026 review;
@@ -233,7 +239,7 @@ and [query documentation](https://langfuse.com/docs/api-and-data-platform/featur
 guided the hosted verification. The pinned SDK's own OpenAI integration confirmed
 our messages/tools generation input shape. One synthetic hosted trace was read
 through the current observations API and independently through `langfuse-cli`;
-[evidence](../evidence/langfuse-cloud/README.md) records the result. This verifies
+[evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/langfuse-cloud/README.md) records the result. This verifies
 hosted delivery/readback for that project, not real model usage or general service
 reliability. The CLI was used for review, not added as an application dependency.
 
@@ -244,7 +250,7 @@ transports verified native model/token observations. The normal SDK includes its
 public project identifier in instrumentation scope; secret credentials remain
 excluded. A response hook keeps raw provider HTTP error bodies outside tracing.
 The CLI retrieved the live synthetic trace and usage/cost totals agreed with
-the local estimate. See [model evidence](../evidence/model-integration/README.md).
+the local estimate. See [model evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/model-integration/README.md).
 
 ## Initial readiness milestone (historical)
 
@@ -263,7 +269,7 @@ and [bridge networking](https://docs.docker.com/engine/network/drivers/bridge/)
 informed that arrangement. The target image is pinned by digest, and actual AMD64
 target response is verified on the ARM64 host. No target solver/write-up/flag file
 was inspected; trusted `nyuctf` loading holds the answer programmatically. At that first milestone, no held-out challenge contents were opened.
-See [readiness completion evidence](../evidence/ctftiny-readiness/COMPLETED.md).
+See [readiness completion evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/ctftiny-readiness/COMPLETED.md).
 
 All original links are retained here; external repositories/sites have not been
 vendored or fully archived. Local code, assignment, decisions, status, and
@@ -313,7 +319,7 @@ canonicalization and service controls support the supplied image/service/alias/p
 arrangement. Nginx startup diagnostics demonstrated that the disposable target needs
 writable log/temp storage and CHOWN; solver permissions were unchanged. Eleven
 zero-model preparation commands passed, with two fresh cycles per challenge.
-[Current evidence](../evidence/benchmark-readiness/README.md) records scope, setup
+[Current evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/benchmark-readiness/README.md) records scope, setup
 diagnostics and remaining limits. CTFTiny is the active dataset; additional NYU
 dataset setup was deferred at the user's request.
 
@@ -334,7 +340,7 @@ historical export and a fresh official CLI readback for IDs, parentage, inputs,
 outputs, metadata, model and usage/cost. No new model calls or traces were created.
 The CLI was used only for independent verification. Complete TOML settings and
 package write-on-change checks are recorded with this milestone's
-[evidence](../evidence/config-sdk-cleanup/README.md).
+[evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/config-sdk-cleanup/README.md).
 
 ## November 5 NYU infrastructure comparison — proposal only
 
@@ -361,7 +367,7 @@ separate challenge daemon.
 
 The source review and read-only Compose configuration inventory did not build the
 NYU image, prototype recovery or solve challenges. The
-[implementation proposal](SIMPLIFICATION_PLAN.md) records what would be reused,
+[implementation proposal](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/docs/SIMPLIFICATION_PLAN.md) records what would be reused,
 removed, newly integrated and verified. It supersedes earlier conversational
 suggestions to remove the file writer/batch wrapper or require terminal command
 timeouts. Current runtime behavior remains documented in DESIGN and README.
@@ -407,7 +413,7 @@ No flags, solutions or write-ups were consulted. Six zero-solving development
 preparation cycles and synthetic multi-service DNS/volume/scope checks passed.
 Docker Desktop rejected read-only host bind execution; that policy has offline
 coverage only. No host-sharing workaround was added. No model calls or new hosted
-traces ran. [Evidence](../evidence/target-network-simplification/README.md) preserves
+traces ran. [Evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/target-network-simplification/README.md) preserves
 provenance, failures, scope and capability/resource tradeoffs. Supplied image
 selection is still independent and pending.
 
@@ -421,7 +427,7 @@ and [Langfuse trace guidance](https://langfuse.com/docs/observability/best-pract
 were consulted; the unchanged implementation used native response replay, linked
 tool observations and installed SDK hosted readback. Two model calls and two tools
 ended in trusted synthetic success, with usage/cost/privacy/parentage/cleanup
-audits passing. [Evidence](../evidence/live-simplification-smoke/README.md) records
+audits passing. [Evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/live-simplification-smoke/README.md) records
 limits, source/images, the trace and the untested scope. No CTFTiny challenge,
 source/image change, dependency migration or broader live pilot was included.
 
@@ -438,7 +444,7 @@ The unchanged AMD64 build progressed after the user disconnected the VPN, then
 was canceled for host storage during the external installer. No completed image
 or NYU runtime compatibility result exists. The current image is retained,
 reverified and archived; its eleven focused control checks are baseline evidence,
-not candidate results. [Evidence](../evidence/nyu-solver-image-evaluation/README.md)
+not candidate results. [Evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/nyu-solver-image-evaluation/README.md)
 records source hashes, build logs, storage bounds, scoped cache cleanup and limits
 on the conclusion. Neither the guide nor professor confirmations require adopting
 that toolkit. No source defect or incompatibility is inferred from cancellation.
@@ -463,7 +469,7 @@ informed the benign symbolic-function test. No benchmark solution code or answer
 content was reviewed. Installed SDKs and existing local spans verify controls;
 no new hosted/model call was part of this checkpoint.
 
-[Evidence](../evidence/nyu-solver-image-evaluation/retry-8g/README.md) records the
+[Evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/nyu-solver-image-evaluation/retry-8g/README.md) records the
 successful build, earlier diagnostic timeout, ignored optional installer errors,
 all checks, inventories and checksummed local artifact. The existing image/defaults
 remain unchanged. Exact frozen artifact loading is distinguished from rebuilding
@@ -487,7 +493,7 @@ not freeze external downloads; exact reproduction uses the verified archive.
 
 ## Same-release MongoDB ARM64 compatibility — November 7
 
-A zero-model [local evaluation](../evidence/mongo-arm64-evaluation/README.md)
+A zero-model [local evaluation](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/mongo-arm64-evaluation/README.md)
 verified official MongoDB 7.0.9 ARM64 as a working sibling of the supplied AMD64
 manifest. Docker's release manifest records the Docker Official Images source
 revision and Ubuntu Jammy build. MongoDB's
@@ -508,7 +514,7 @@ registry resolution. `target.json` records the exact original/replacement and
 reason. Compose's installed `up --help` confirmed native `--wait`/`--wait-timeout`;
 that standard behavior handles supplied healthchecks. A safe state snapshot
 adds detection/reporting of restarting/exited/health failures before paid work and
-after preparation probes. [Exact source/verification](../evidence/mongo-arm64-integration/README.md).
+after preparation probes. [Exact source/verification](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/mongo-arm64-integration/README.md).
 No solver/agent/model/endpoint change or new dependency; no live model retry.
 
 
@@ -519,7 +525,7 @@ and 22 fresh final-code preparation cycles covering the ten reserved IDs plus th
 web development target. A separately authorized fresh live web attempt achieved
 trusted success in four requests/four tools; automatic record/privacy/cleanup
 audits passed. Detailed conversation review is deferred at the user's request.
-[Validation and source evidence](../evidence/pre-git-validation/README.md).
+[Validation and source evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/pre-git-validation/README.md).
 Current private deployment copies were redacted with originals preserved locally;
 older committed copies remain a separate publication/history decision. No source
 behavior change, version migration, commit, push or history rewrite was part of

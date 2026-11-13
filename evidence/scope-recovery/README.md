@@ -1,9 +1,9 @@
 # One blocked-command recovery and scope instructions — November 8
 
 Implemented the user-approved milestone against `b6ec0e5`. The
-[hypothesis was recorded before implementation](../../docs/EXPERIMENTS.md#experiment-c--endpoint-wording-and-one-scope-recovery).
+[hypothesis was recorded before implementation](../../docs/EXPERIMENTS.md#one-blocked-connection-recovery-and-scope-clarification--november-8).
 The user selected the interpretation that prevented access can receive corrective
-feedback; this is [user direction, not professor confirmation](../../docs/REFERENCES.md#course-clarifications).
+feedback; this is [user direction, not professor confirmation](../../docs/REFERENCES.md#november-8-blocked-connection-recovery--user-direction).
 The original scope-stopped development result remains unchanged.
 
 ## Behavior

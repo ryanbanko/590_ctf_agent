@@ -1,5 +1,12 @@
 # Agent improvement options
 
+**Historical decision record, November 7–11.** Several proposals below have since
+been implemented. Use [current status](../PROJECT_STATUS.md) for selected settings,
+active issues and next work; [project history](PROJECT_HISTORY.md) and
+[experiments](EXPERIMENTS.md) record what was approved, implemented and verified.
+Priorities and feasibility judgments below describe their dated review, not a
+new implementation plan or authorization. No proposal text is discarded here.
+
 November 7, 2026. Decision review requested by the user after discussion of the
 latest development traces, prompt structure, output handling, solver information,
 models/reasoning, the NYU reference prompt, and plans/notes. These are proposals,
@@ -13,7 +20,7 @@ causes; no service fix is selected or implemented. This later issue is separate
 from the dated agent-behavior proposals below.
 
 **November 8 implementation update:** the user-approved combined first fix is now
-implemented and synthetically verified. See [milestone evidence](../evidence/agent-first-fix/README.md).
+implemented and synthetically verified. See [milestone evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/agent-first-fix/README.md).
 The dated proposals below preserve the decisions before implementation. The
 [subsequent eleven-ID development rerun](../evidence/agent-first-fix-batch/README.md)
 completed on `e7e366c` with 6/11 successes, matching the historical baseline total.
@@ -37,7 +44,7 @@ profile. No tool output was runtime-truncated, and no scope-denial, outer comman
 timeout or cleanup failure was recorded in that batch. Earlier failures remain
 historical evidence, not observations under every part of the current runtime.
 
-Current settings are `gpt-6-luna`, low reasoning, 4,096 generated tokens/request,
+Settings at the November 7 review were `gpt-6-luna`, low reasoning, 4,096 generated tokens/request,
 60-second requests, 512 KiB serialized model input and 64 KiB tool output. The
 agent already receives full public conversation history and native response-item
 replay. Workspace files are available through tools but are not automatically

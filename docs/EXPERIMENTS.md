@@ -1,5 +1,12 @@
 # Section 2 experiment log
 
+This is the detailed experimental record. [Project history](PROJECT_HISTORY.md)
+summarizes milestones; [current status](../PROJECT_STATUS.md) owns the active task
+and next action. “Current,” “proposed” and “not implemented” in dated entries refer
+to that checkpoint. Keep original hypotheses, failed checks and limits; later
+results supersede pending notes without erasing them. Historical evidence links
+may open the version retained in Git rather than the current checkout.
+
 Use this file for development trace findings, hypotheses recorded before live
 comparisons, the exact change, run references and conclusions. Keep raw evidence
 in Langfuse and run records; use `PROJECT_STATUS.md` for the overall checklist.
@@ -83,7 +90,7 @@ passed on focused retry, for four distinct passing cases. Original failure and
 retry remain recorded. Tests cover sanitized errors, shared time bound, exception/
 cleanup precedence and real exited/missing/detached target records. No model call,
 benchmark solving, target workaround, guard/scope change or new dependency.
-[Evidence and limitations](../evidence/target-precleanup-snapshot/README.md).
+[Evidence and limitations](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/target-precleanup-snapshot/README.md).
 
 ## Original-artifact validation and reusable computation — November 11
 
@@ -536,7 +543,7 @@ prepared eleven IDs; the pilot started but stopped as recorded below. The existi
 account/per-attempt limits and usage records remain;
 the user requested no additional batch-cost management.
 
-[Offline verification](../evidence/batch-wrapper/README.md): 17 batch cases and
+[Offline verification](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/batch-wrapper/README.md): 17 batch cases and
 81 fast tests passed. Child outcomes were simulated to test orchestration and
 record handling without paid model calls. No new benchmark results are claimed.
 The record audit found the required IDs and evidence already available; demo work
@@ -570,7 +577,7 @@ This does not guarantee every attempted download fails softly: direct URLs,
 other download commands or overrides remain subject to the network guard.
 No decoder was added, and no new real challenge/model attempt ran during this fix.
 
-[Verification and reversal instructions](../evidence/runtime-package-policy/README.md).
+[Verification and reversal instructions](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/runtime-package-policy/README.md).
 Verification: 81 fast tests and 24 synthetic Docker controls passed. A missing
 package request failed locally in about 0.42 seconds and a following command ran
 successfully in the same attempt. The new solver image is built locally. No live
@@ -634,7 +641,7 @@ preserve the model, numeric live profile, three tools and existing isolation.
 Verification uses synthetic processes, offline model transports and zero-model
 preparation only; it does not measure solve-rate improvement. Historical evidence
 remains unchanged. Results are recorded in
-[reliability evidence](../evidence/agent-reliability/README.md): **91 fast tests,
+[reliability evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/agent-reliability/README.md): **91 fast tests,
 31 Docker cases in one complete run and two zero-model preparation cycles passed**.
 Preparation settings match the selected live experiment and cleanup passed. Stop for review
 before a new live pilot or scored evaluation.
@@ -652,7 +659,7 @@ are still scanned; identical inventories no longer rewrite `packages.json`.
 This reduces maintenance and redundant writes; it is not a performance hypothesis
 or a benchmark comparison. Checks and hosted readback use substitutes and an
 existing synthetic trace, with no new model requests. See
-[evidence](../evidence/config-sdk-cleanup/README.md): 95 fast tests, 31 synthetic
+[evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/config-sdk-cleanup/README.md): 95 fast tests, 31 synthetic
 Docker cases with cleanup verified, and matching readback of the existing ten-row
 synthetic trace passed. Context management remains
 a possible later hypothesis. GDB and output-copy optimization remain deferred.
@@ -660,7 +667,7 @@ a possible later hypothesis. GDB and output-copy optimization remain deferred.
 ## Historical November 5 infrastructure proposal — since implemented in checkpoints 1–2
 
 The November 5 source review led to a
-[consolidated implementation proposal](SIMPLIFICATION_PLAN.md). It retains our
+[consolidated implementation proposal](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/docs/SIMPLIFICATION_PLAN.md). It retains our
 agent, three tools, prompt strategy, model integration, Langfuse and batch wrapper.
 It proposes a writable disposable solver, standard Docker copy/exec, one-shot
 file writing, bounded head/tail output and narrower target configuration changes.
@@ -727,7 +734,7 @@ private verification, fresh trials and records. The existing nftables/NFLOG guar
 is retained; it joins the challenge-facing bridge directly. Standard Docker DNS
 retains supplied hostnames, and normal bridge NAT supplies package connectivity.
 
-[Evidence](../evidence/target-network-simplification/README.md): 100 offline tests,
+[Evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/target-network-simplification/README.md): 100 offline tests,
 29 synthetic Docker cases and two fresh preparation cycles each for development
 `pwn-baby-boi`, `web-shreeramquest` and `cry-ecxor`. Multi-service DNS, backend scope
 and fresh named-volume state passed. Read-only host binds have offline coverage
@@ -756,7 +763,7 @@ observations and clean cleanup. Usage was 1,585 input/191 output tokens includin
 7 reasoning; estimated cost $0.000254 matched hosted totals. Active time was
 5.72 seconds; complete check/readback 22.25 seconds. Initial model input and root
 excluded the answer; credential audit passed.
-[Evidence](../evidence/live-simplification-smoke/README.md).
+[Evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/live-simplification-smoke/README.md).
 
 This is live synthetic setup evidence, not a CTFTiny solve, scored trial,
 performance comparison, or live verification of file writing/restarts. Existing
@@ -786,7 +793,7 @@ passed on that image. Scoped cleanup reclaimed only the evaluation's 19 cache
 records (6.742 GB). No runtime/test/dependency/configuration change or new subsystem;
 no model call, real challenge attempt, agent-effect comparison or candidate
 performance claim. A local storage cancellation does not establish an upstream
-source defect. [Evidence and unresolved checks](../evidence/nyu-solver-image-evaluation/README.md).
+source defect. [Evidence and unresolved checks](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/nyu-solver-image-evaluation/README.md).
 
 ## Infrastructure image retry — successful November 7
 
@@ -811,7 +818,7 @@ Cutter errors; the positive result is limited to verified functionality. A first
 60-second raw-image probe timed out and a repeat took 1.405s, so recommend a
 one-time Docker image preflight before normal attempts. Exact first-probe cause
 was not established. Current image/defaults are untouched and test cleanup passed.
-[Build, resources, functional results, archive and proposed integration](../evidence/nyu-solver-image-evaluation/retry-8g/README.md).
+[Build, resources, functional results, archive and proposed integration](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/nyu-solver-image-evaluation/retry-8g/README.md).
 
 
 ## Infrastructure image integration — completed November 7
@@ -858,7 +865,7 @@ substituted temporarily. Normal-account registration/login/profile through port
 80, database ping, stable services after 35s, fresh reset, unchanged guard/private
 boundaries and cleanup passed. No solving, submissions or model/agent comparison.
 This supports a target compatibility fix, not an agent-performance claim. Production
-integration/readiness changes await review. [Evidence](../evidence/mongo-arm64-evaluation/README.md).
+integration/readiness changes await review. [Evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/mongo-arm64-evaluation/README.md).
 
 
 ## MongoDB compatibility/readiness integration — November 7
@@ -870,7 +877,7 @@ and two normal functional cycles passed, preserving supplied service semantics,
 registration/login/profile behavior, DB reset, stable services, guard/private
 boundaries and cleanup. 111 offline and three targeted Docker cases passed; the
 existing network/reset case required one explicitly recorded daemon-lookup retry.
-[Evidence](../evidence/mongo-arm64-integration/README.md).
+[Evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/mongo-arm64-integration/README.md).
 
 No agent/prompt/model/solver/endpoint change or live retry. This is infrastructure
 reliability evidence, not a solve-rate or agent-improvement comparison. The original
@@ -888,7 +895,7 @@ Agent/prompt and model settings were unchanged. This supports working target/liv
 integration after the CPU fix; a single run is not a solve-rate improvement
 measurement. The prior scope-stopped attempt remains recorded. Automatic native
 export and privacy/parentage/cleanup audits passed; detailed trace review is
-explicitly deferred to the user. [Evidence](../evidence/pre-git-validation/README.md).
+explicitly deferred to the user. [Evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/pre-git-validation/README.md).
 
 ## Latest eleven-attempt development trace review — November 7
 
@@ -1025,7 +1032,7 @@ focused output cases after close-error hardening and one additional 10 MiB defau
 capacity case: 43 distinct Docker cases covered. One new fault-injection test had
 a mock read-handle error, corrected before the passing final offline suite; the
 original failure remains recorded. Artifact/summary audit and final managed-resource
-cleanup passed. [Evidence, report files, provenance and limits](../evidence/agent-first-fix/README.md).
+cleanup passed. [Evidence, report files, provenance and limits](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/agent-first-fix/README.md).
 
 The mechanical hypothesis is supported by synthetic checks, including exact omitted
 content recovery, caps, partial/error statuses, non-root safe paths, timeout resets

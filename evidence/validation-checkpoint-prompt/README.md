@@ -6,7 +6,7 @@ of validation, exact-value rechecks after contradictions, and reusable expensive
 intermediates invalidated when inputs/assumptions change. Existing long-value
 file/variable guidance, tools, isolation, scope, verification and stopping remain.
 
-The [hypothesis and follow-up criteria](../../docs/EXPERIMENTS.md#experiment-d--validation-and-reuse-prompt-request-cap-and-timeout)
+The [hypothesis and follow-up criteria](../../docs/EXPERIMENTS.md#original-artifact-validation-and-reusable-computation--november-11)
 were recorded before implementation/testing. This adds no planner, automatic
 checkpointing or new submission interface. Luna/medium/8,192 remains selected;
 the separately approved 2 MiB default cap is included in the
@@ -76,7 +76,7 @@ existing offline cases passed in 0.42 seconds for no-retry timeout handling,
 late-response action blocking and configuration call-limit consistency.
 [JUnit evidence](request-90-pytest.xml) omits host-name attributes. No new model or
 container calls were made by this adjustment. Its hypothesis is recorded in
-[EXPERIMENTS](../../docs/EXPERIMENTS.md#experiment-d--validation-and-reuse-prompt-request-cap-and-timeout).
+[EXPERIMENTS](../../docs/EXPERIMENTS.md#original-artifact-validation-and-reusable-computation--november-11).
 
 For a fresh six-attempt batch under the new allowance:
 

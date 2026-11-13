@@ -10,6 +10,28 @@ additional course requirements. Distinguish direct professor confirmations from
 other changes stated only in the guide.
 CTFTiny is the benchmark goal; NYU documentation/package conventions support it.
 
+## Agent context and document roles
+
+- Start with `PROJECT_STATUS.md` for the active task, implemented baseline, open
+  issues, authorization and next step, then complete the required reading above.
+- `README.md` owns current setup/run instructions; `docs/DESIGN.md` owns current
+  architecture. Configuration values come from `configs/development.toml`.
+- `docs/PROJECT_HISTORY.md` preserves dated milestones and the earlier status
+  record. `docs/EXPERIMENTS.md` separately preserves detailed hypotheses, conditions,
+  results and limitations. Read relevant entries/evidence before revisiting work;
+  a full project-context review should include both documents.
+- Historical links pinned to a Git commit can be read locally with
+  `git show COMMIT:path` when that object is present; an absent current file is
+  not evidence that the milestone never happened. Preserve the same data boundaries
+  when consulting history.
+- `docs/DEVELOPMENT_GUIDE.md` is the preserved November 11 README, not a second
+  current setup guide. Historical proposals, pending actions and approvals belong
+  to their recorded milestone; consult current status and user direction before
+  acting. Keep original requirements/professor clarifications intact.
+- Keep current status concise. Append new milestone history with links to detailed
+  experiments/evidence rather than repeatedly copying history into status. Move
+  unique information deliberately; do not silently drop decisions or failed checks.
+
 ## Code and complexity
 
 - Prioritize clean, understandable code and reduce unnecessary complexity across

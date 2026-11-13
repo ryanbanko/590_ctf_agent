@@ -2,9 +2,20 @@
 
 Each folder is kept because a document or test uses it.
 
+This index describes retained evidence. The [current handoff](../PROJECT_STATUS.md),
+[milestone history](../docs/PROJECT_HISTORY.md) and
+[target issue](../docs/TARGET_PROCESS_ISSUE.md) link to the relevant records.
+Older evidence removed during submission cleanup stays in Git history; repaired
+historical links open a fixed commit. This reconciliation restores no raw evidence
+files and changes no recorded results, hashes or test fixtures.
+
+Pinned historical files can also be read without a browser from a full checkout,
+for example `git show aedfd62:evidence/target-precleanup-snapshot/README.md`.
+
 | Folder | Contents | Used by |
 | --- | --- | --- |
 | `ryan-shared-runs/` | Sanitized run records and traces: pilot, baseline and Experiments A–C | Report (results, trace review, answer-lookup check) |
+| `scored/` | Final metrics, trace-usage audit and figures; attempt records in the two root batch directories | Report, reporting scripts |
 | `development-trace-review/` | Baseline trace review, cost check, gateway model prices | Report |
 | `unseen-development-trace-review/` | Trace review of the ten-challenge development batch | Report, `docs/EXPERIMENTS.md` |
 | `final-runtime-readiness/` | Readiness checks of the ten held-out environments | Report |
