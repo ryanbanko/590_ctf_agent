@@ -1,0 +1,62 @@
+{
+  "images": [
+    {
+      "label": "roppity",
+      "original_image_id": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+      "fixed_image_id": "sha256:fc8ade2691433b51bedf07b0cace07ecf60928298141aa0ce931e3ba97982a25",
+      "fixed_reference": "ctf590-target-roppity:socat-1.7.3.3",
+      "config_equal_except_labels": {
+        "ExposedPorts": true,
+        "ArgsEscaped": true,
+        "Entrypoint": true,
+        "Cmd": true,
+        "User": true,
+        "Volumes": true,
+        "OnBuild": true,
+        "Env": true,
+        "WorkingDir": true
+      },
+      "original_layers_preserved": true,
+      "added_filesystem_layers": 1,
+      "versions": [
+        "socat version 1.7.3.2 on Apr  4 2018 10:06:49",
+        "socat version 1.7.3.3 on Oct 26 2019 17:42:04"
+      ],
+      "feature_flags_equal": true
+    },
+    {
+      "label": "baby-boi",
+      "original_image_id": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+      "fixed_image_id": "sha256:970ccd1341be55a2c75c9839eead44594ebad3c4534cddc07aad9983a61e7386",
+      "fixed_reference": "ctf590-target-baby-boi:socat-1.7.3.3",
+      "config_equal_except_labels": {
+        "ExposedPorts": true,
+        "ArgsEscaped": true,
+        "Entrypoint": true,
+        "Cmd": true,
+        "User": true,
+        "Volumes": true,
+        "OnBuild": true,
+        "Env": true,
+        "WorkingDir": true
+      },
+      "original_layers_preserved": true,
+      "added_filesystem_layers": 1,
+      "versions": [
+        "socat version 1.7.3.2 on Apr  4 2018 10:06:49",
+        "socat version 1.7.3.3 on Oct 26 2019 17:42:04"
+      ],
+      "feature_flags_equal": true
+    }
+  ],
+  "package": {
+    "version": "1.7.3.3-2",
+    "url": "https://archive.ubuntu.com/ubuntu/pool/main/s/socat/socat_1.7.3.3-2_amd64.deb",
+    "sha256": "deeaf50bf877d5474fb8654695ab745a54da20e1536a5d5a9492c0966f9c01cf",
+    "verified_against": "https://archive.ubuntu.com/ubuntu/dists/focal/main/binary-amd64/Packages.xz"
+  },
+  "initial_build_failure": {
+    "reason": "Bare local image IDs are treated as repository names by BuildKit FROM; corrected to known immutable registry references",
+    "images_changed": false
+  }
+}

@@ -42,8 +42,10 @@ unchanged. The later prompt/output milestone is described below and in its
 `nyuctf` package and uses the same lifecycle, agent, tools and evaluator for every
 selected ID. The existing manifest supplies the development/scored result label.
 A separate scoring agent or CLI mode would duplicate behavior; separation belongs
-in the challenge selection and experiment records. The ten reserved IDs remain
-held out from development solving.
+in the challenge selection and experiment records. The ten scored IDs were held
+out for the original Part 1 evaluation. On November 14 the user allowed reuse for
+a new practice comparison; such reused tasks are tuning evidence, with separate
+outputs, rather than fresh held-out evaluation. Manifest labels remain unchanged.
 
 `run-batch` is one additional function in the existing launcher. It invokes
 `run-challenge` in a fresh process for each ID/trial, sequentially, and copies the
@@ -76,10 +78,12 @@ The workspace has all fifty directories; the default serialized-input cap is now
 
 ## Supplied targets and contestant files
 
-Repeated target listener exits remain an open infrastructure issue. The
-[teammate handoff](TARGET_PROCESS_ISSUE.md) records the observed failure, completed
-Docker/process checks and proposed next investigation. No listener/init/restart
-workaround is implemented; the integration described below remains current.
+The two diagnosed socat 1.7.3.2 listeners now receive a narrow binary-only
+correction to 1.7.3.3. The [teammate handoff](TARGET_PROCESS_ISSUE.md) links the
+failure reproduction and [fixed-image validation](../evidence/listener-update/README.md).
+No init, restart or `nofork` workaround is used. Both subsequent development
+attempts succeeded with targets running before cleanup; one attempt per target
+does not establish a general solve probability.
 
 File-only entries create one fresh ordinary Docker bridge. Service-backed entries
 use the supplied Compose definitions, canonicalized by Docker itself, with fresh
@@ -101,12 +105,25 @@ are explicit exceptions, not proof that all challenge behavior is unchanged.
 A demonstrated need for Docker administration would require a separate engine;
 a read-only socket bind still permits Docker API writes and is not a solution.
 
+The listener correction recognizes only two exact source images, by their recorded
+local ID or immutable registry reference. `fixed_listener_image()` inspects the
+cached derivative and, if absent, uses the standard [two-stage Dockerfile](../docker/socat.Dockerfile)
+with the original digest-pinned base and a checksum-pinned Ubuntu package. The final
+image copies only `/usr/bin/socat`; original layers/configuration and feature flags
+were verified unchanged except for its compatibility label. The base package
+database is unchanged; the effective binary is verified with `socat -V`.
+The first-use build is bounded to 120 seconds, before the agent attempt starts.
+Original/replacement references/IDs, version and reason enter target adjustments;
+the actual image ID still pins the runtime Compose service. No other image is
+substituted by this rule, and no dataset or historical run is edited.
+
 One demonstrated CPU exception is explicit: on ARM64/aarch64 **Docker engines**,
 the exact supplied MongoDB 7.0.9 AMD64 reference
 `mongo:latest@sha256:7b88befc893008d7139ce3276c093b3efd435023af8bb76a9d79fa90be1eaeb6`
 is replaced by its same-release native sibling
 `mongo@sha256:8ff69162926750978451697274dc3c93eac609894b9cff7ed977e76e6bcabcbe`,
-with platform `linux/arm64`. AMD64 engines and all other references remain supplied.
+with platform `linux/arm64`. AMD64 engines retain the supplied MongoDB reference;
+the separate listener correction above applies only to its two verified images.
 Both are MongoDB **7.0.9-jammy** in the same official manifest index. This is a
 recorded compatibility adjustment, not a generic image resolver. Application,
 environment, commands, backend graph and endpoint scope are preserved.
@@ -389,9 +406,14 @@ The user approved removing the local spending cap and all reservation accounting
 `make_responder()` still returns a function and per-attempt usage dictionary.
 API usage supplies token counts and estimates from configured gateway rates;
 cached/reasoning subsets are not double counted. Missing usage sets aggregate
-token/cost totals to null and marks
-usage incomplete, while valid replies continue. Per-response usage remains in
-native observations where supplied. Provider/account limits are separate.
+token/cost totals to null and marks usage incomplete, while valid replies continue.
+The November 14 accounting correction adds `known_usage`: the reported-call count,
+token subtotals and configured-rate cost subtotal. These survive a later request
+failure and include usage-bearing responses after an earlier missing usage record.
+Complete totals retain their existing meaning; a partial subtotal never replaces
+an unknown complete total. No retry, budget, model or stopping change is included.
+Per-response usage remains in native observations where supplied. Provider/account
+limits are separate. [Verification](../evidence/usage-preservation/README.md).
 
 ## Tracing and evidence
 

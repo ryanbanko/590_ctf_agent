@@ -18,6 +18,37 @@ from .docker import docker
 MONGO_AMD64_IMAGE = "mongo:latest@sha256:7b88befc893008d7139ce3276c093b3efd435023af8bb76a9d79fa90be1eaeb6"
 MONGO_ARM64_IMAGE = "mongo@sha256:8ff69162926750978451697274dc3c93eac609894b9cff7ed977e76e6bcabcbe"
 
+# Only these exact images were diagnosed and validated with the binary-only fix.
+SOCAT_FIXED_IMAGES = {
+    "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c":
+        ("llmctf/2020q-pwn-roppity", "ctf590-target-roppity:socat-1.7.3.3"),
+    "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665":
+        ("llmctf/2019q-pwn-baby_boi", "ctf590-target-baby-boi:socat-1.7.3.3"),
+}
+
+
+def fixed_listener_image(info: dict) -> tuple[dict, dict | None]:
+    """Cache a standard binary-only derivative for two verified old listeners."""
+    original = info["Id"]
+    for digest, (repository, reference) in SOCAT_FIXED_IMAGES.items():
+        base = repository + "@" + digest
+        if original == digest or base in info.get("RepoDigests", []):
+            break
+    else:
+        return info, None
+    try:
+        updated = json.loads(docker("image", "inspect", reference))[0]
+    except RuntimeError as error:
+        if "No such image" not in str(error):
+            raise
+        recipe = Path(__file__).resolve().parent.parent / "docker/socat.Dockerfile"
+        docker("build", "--platform", "linux/amd64", "--build-arg", "TARGET_IMAGE=" + base,
+               "-f", str(recipe), "-t", reference, str(recipe.parent), timeout=120)
+        updated = json.loads(docker("image", "inspect", reference))[0]
+    return updated, {"original_image": base, "original_image_id": original,
+                     "replacement_image": reference, "replacement_image_id": updated["Id"],
+                     "version": "1.7.3.3", "reason": "socat post-fork diagnostic-channel fix"}
+
 
 def load_challenge(dataset_json: Path, challenge_id: str, manifest_path: Path):
     """Load an indexed challenge through nyuctf; its package object stays trusted."""
@@ -231,6 +262,9 @@ def challenge_target(challenge, directory: Path):
                         raise
                     docker("pull", "--platform", service.get("platform", "linux/amd64"), reference, timeout=300)
                     info = json.loads(docker("image", "inspect", reference))[0]
+                info, adjustment = fixed_listener_image(info)
+                if adjustment:
+                    target["adjustments"].append({"service": service_name, **adjustment})
                 service["image"] = info["Id"]
                 service["platform"] = "linux/" + info["Architecture"]
                 target["images"][service_name] = info["Id"]

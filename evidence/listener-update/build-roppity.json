@@ -1,0 +1,16 @@
+{
+  "command": [
+    "docker",
+    "build",
+    "--platform",
+    "linux/amd64",
+    "--build-arg",
+    "TARGET_IMAGE=llmctf/2020q-pwn-roppity@sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+    "-f",
+    "docker/socat.Dockerfile",
+    "-t",
+    "ctf590-target-roppity:socat-1.7.3.3",
+    "."
+  ],
+  "exit_code": 0
+}

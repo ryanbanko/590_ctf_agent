@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-14",
+  "method": "Read-only Langfuse observations CLI; core,basic,model,usage fields only; no io or settings changes.",
+  "traces": [
+    {
+      "trace_id": "12a2422a87bf028848fc54ce9acc9409",
+      "http_status": 200,
+      "observations": 42,
+      "generations": 17,
+      "generations_with_cost": 17,
+      "native_generation_cost_usd": 0.015578494998,
+      "models": [
+        "gpt-6-luna"
+      ],
+      "root_observations": [
+        {
+          "name": "attempt",
+          "type": "SPAN",
+          "totalCost": null
+        }
+      ],
+      "has_more": false
+    },
+    {
+      "trace_id": "0ebc50da6a9d81ce5868d97bf4677beb",
+      "http_status": 200,
+      "observations": 60,
+      "generations": 26,
+      "generations_with_cost": 26,
+      "native_generation_cost_usd": 0.019064114996,
+      "models": [
+        "gpt-6-luna"
+      ],
+      "root_observations": [
+        {
+          "name": "attempt",
+          "type": "SPAN",
+          "totalCost": null
+        }
+      ],
+      "has_more": false
+    }
+  ],
+  "limits": [
+    "UI was not inspected; a particular hidden column/filter/rounding cause cannot be confirmed.",
+    "First CLI envelope parser read the wrong level; corrected to body.data. No empty-cost conclusion is drawn from that parse."
+  ]
+}

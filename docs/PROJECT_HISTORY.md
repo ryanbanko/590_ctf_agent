@@ -12,9 +12,135 @@ and results. Historical proposal/approval records do not authorize new runs.
 | November 3–5 | Isolated tools, evaluator, tracing, model integration, libraries and reliability checks | Preserved milestone record below; experiment log and dated evidence |
 | November 6–7 | Ordinary Docker execution, supplied targets, NYU solver image and MongoDB ARM64 compatibility | [Design](DESIGN.md), [experiments](EXPERIMENTS.md), [reference provenance](REFERENCES.md) |
 | November 7–8 | Development trace review, validation/output changes, medium reasoning and scope recovery | [Shared development records](../evidence/ryan-shared-runs/README.md) |
-| November 11 | Harder development review, larger request cap, prompt validation/reuse, 90-second requests and target-exit investigation | [Experiments](EXPERIMENTS.md), [open target issue](TARGET_PROCESS_ISSUE.md) |
+| November 11 | Harder development review, larger request cap, prompt validation/reuse, 90-second requests and target-exit investigation | [Experiments](EXPERIMENTS.md), [target issue and later resolution](TARGET_PROCESS_ISSUE.md) |
 | November 11–12 | Primary scored batch, four-attempt follow-up, report and resource reconciliation | [Scored evidence](../evidence/scored/README.md), [Part 1 report](REPORT.md) |
 | November 13 | Documentation reconciliation based on team main `36307ce` | Reconciliation entry below |
+| November 14 | Exact-listener synthetic reproduction identifies the socat 1.7.3.2 diagnostic-channel bug | [Diagnosis and constraint review](../evidence/listener-version-diagnosis/README.md) |
+| November 14 | Binary-only fixed listener, behavior/readiness validation and two verified development successes | [Correction evidence](../evidence/listener-update/README.md) |
+| November 14 | Review of completed improvements, remaining candidates and a proposed development comparison | [Current shortlist and comparison proposal](IMPROVEMENT_OPTIONS.md#current-review-and-proposed-comparison--november-14) |
+| November 14 | Reported-call usage preservation and read-only Langfuse/model-cost checks | [Accounting and cost evidence](../evidence/usage-preservation/README.md) |
+
+## Expanded comparison scope — November 14
+
+The user expanded the proposed notes experiment to at least two challenges per
+category and three trials, allowing both development and test tasks. A metadata-
+only check produced a 12-task CTFTiny proposal: ten Hard, two Easy, 72 attempts
+across baseline/candidate conditions. This uses `for-whyos` and `msc-quantum-leap`
+from the original scored list as new practice, with the historical scored results
+preserved. README/DESIGN now distinguish original holdout from authorized practice
+reuse. Separate ordinary batches retain manifest labels and sequential behavior.
+
+Documented how the user can commit current reviewed changes, tag the baseline and
+create a detached worktree while notes work proceeds on an experiment branch.
+No Git mutation, challenge run or candidate edit occurred. Full-NYU collection
+inspection was limited to the public generic README/development index before the
+user permitted the existing CTFTiny test tasks; no task source, flags or solutions
+were consulted. Exact task selection/readiness and spending remain for review.
+[Expanded proposal and freeze instructions](IMPROVEMENT_OPTIONS.md#expanded-comparison-and-baseline-freeze--november-14).
+
+## Usage preservation and cost follow-up — November 14
+
+The user agreed to implement usage preservation and requested explanations of
+cost display, plans/notes, continuation and Sol/Daybreak compatibility. Added a
+reported-call subtotal to existing results; full totals stay null after unknown
+usage. Focused verification passed 58 tests (two Docker cases deselected),
+including later timeout/missing usage and root-span output. The initial test
+helper assertion error and sandboxed cache access failure are retained in evidence.
+
+Read-only Langfuse CLI checks found native cost on all 43 generations of the
+two latest traces; root SPAN cost fields are null. The CLI's response-envelope
+parser was corrected before interpreting results. Read-only Duke metadata matched
+official price rates; fixed-volume repricing was recorded with billing/behavior
+limitations. No hosted settings, model/prompt/limits/dependencies, ordinary batch
+behavior, historical evidence or submitted report artifacts changed. No new model
+generation/challenge run, commit or push. Planning/notes and stopping-policy
+experiments remain unimplemented. [Details](../evidence/usage-preservation/README.md).
+
+## Improvement review — November 14
+
+At the user's request, reviewed the experiment log, earlier proposals, shared
+development summaries, hard-batch review and current controller contracts. Updated
+IMPROVEMENT_OPTIONS with a current shortlist while retaining historical proposals.
+The review distinguishes concrete accounting/export correctness gaps from the
+unmeasured planning/notes behavior hypothesis; continuation, feedback/budget and
+model changes remain separate conditional candidates. Larger memory/framework and
+parallel-runner work is not recommended for the next step.
+
+Proposed a frozen fixed-listener baseline and one candidate on six CTFTiny
+development tasks, two fresh trials per condition, with successful controls and
+the original sequential runner. Full-NYU support/fresh confirmation is a possible
+later stage, not an existing dataset switch or authorization. Lightweight editing
+can overlap a baseline run only from a separate source checkout; timed workloads
+should not compete for Docker resources. No new runtime edit, model call,
+challenge run, hosted mutation, commit or push occurred. Historical evidence and
+submitted report artifacts remain preserved.
+
+Review verification: local file-link targets in 13 Markdown documents/summaries,
+the new handoff heading anchor, all six proposed IDs against the development-only
+manifest, correction runtime source hashes and unchanged regular-run/configuration/
+report files passed. Whitespace checks passed. Runtime tests were not repeated
+for this documentation-only review.
+
+## Listener correction and development follow-up — November 14
+
+The user approved replacing only the faulty listener and testing the two targets.
+Ubuntu socat 1.7.3.3-2 was verified against the official package-index checksum and
+copied into standard derivatives of the exact original images. OS/libraries,
+application, command, user, relay, timeout and solver/model controls remain.
+The controller builds/caches this only for the two exact source identities and
+records original/replacement IDs and reason. No `nofork`, init or restart workaround.
+
+Both fixed images passed crash/normal-exit, I/O, disconnect and real 60-second
+timeout checks. Readiness passed for both; one global cleanup assertion overlapped
+another check and was preserved with a passing sequential rerun. The offline
+suite passed 167 tests. After the user's VPN confirmation resolved initial gateway
+reachability, the approved two-attempt sequential development batch achieved 2/2
+verified successes (204.16 / 330.42 active seconds), with both targets running
+before cleanup, complete evidence and no scope incident/solver restart/cleanup error.
+Total estimated cost $0.03305. [Records, failed checks, provenance and limits](../evidence/listener-update/README.md).
+One attempt per target is not a solve-probability estimate; historical scored runs
+and submitted artifacts remain unchanged. No commit or push was made.
+
+The user briefly considered optional concurrency, then required the regular batch
+path to remain unchanged and chose to keep the sequential runner. The shared-path
+prototype was reverted, a separate opt-in prototype was explored, then all new
+concurrency source/tests were removed. The regular launcher, CLI and batch tests
+match main byte-for-byte. Exploratory test XML remains locally under
+`runs/batch-concurrency/`; it is not shipped functionality or a paid concurrency
+experiment. No additional paid attempt, commit or push was made.
+
+At the user's subsequent documentation review, current handoff wording was
+reconciled with the completed fix and decision to retain sequential runs. README
+now distinguishes current architecture/experiments from the preserved Part 1
+report; reference provenance and the evidence index include the new listener
+work. Earlier pending recommendations are explicitly historical. Local file-link
+targets in 13 Markdown documents/summaries and correction source/record hashes
+passed checks, with regular-run/configuration/report files unchanged. No runtime
+tests or paid attempts were repeated for this documentation-only follow-up.
+
+## Listener diagnosis and constraint review — November 14
+
+The documentation reconciliation reached main at user commit `bc3ca3a` via a
+fast-forward push; team additions/history were retained. The user then authorized
+diagnosing the two development services, preferring simple tests and expanding
+access to infrastructure startup definitions/scripts/arguments. Challenge program
+logic, payloads, answers and solutions remain excluded.
+
+Both historical socat 1.7.3.2 listeners fail with harmless synthetic child SIGSEGVs
+in ordinary Docker, without our solver/guard. The upstream 1.7.3.3 correction and
+generic source comparison explain a shared post-fork error/exit channel reaching
+the wrong process. The earlier generic 1.7.4.4 tests used a corrected version.
+Init, no-user-switch and delayed-crash controls also failed. Six final cases on
+both images verified normal survival, baseline failure and survival with the
+`EXEC ...,nofork` workaround; all ten exploratory records are also retained.
+
+The diagnostic helper lives under tests; records, upstream hashes, limits and the
+requested constraint review are [in evidence](../evidence/listener-version-diagnosis/README.md).
+Syntax, record/hash checks, local documentation links and whitespace were checked;
+diagnostic resources were removed. No production correction, model/paid/challenge
+run, dependency/settings change, commit or push was made for this milestone.
+Next: review a pinned listener-only update/backport that preserves relay/timeouts;
+the tested one-option workaround changes those semantics and is not silently adopted.
 
 ## Documentation reconciliation — November 13
 

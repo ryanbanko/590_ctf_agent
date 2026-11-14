@@ -1,5 +1,252 @@
 # Agent improvement options
 
+## Expanded comparison and baseline freeze — November 14
+
+The user requested at least two challenges per category, preferably harder ones,
+and three trials each, then explicitly allowed development and test challenges.
+For this proposal, both existing CTFTiny manifest lists are eligible for new
+practice. The original Part 1 scored records remain fixed; reused scored tasks
+are no longer fresh held-out evidence for selecting the notes candidate.
+No flags, solutions, write-ups or task programs were consulted for this selection.
+
+This supersedes the earlier six-task/two-trial proposal. **Proposed set: 12 tasks,
+three fresh trials each, 36 baseline + 36 candidate = 72 attempts.** The selected
+IDs/difficulties were checked against the local pinned public CTFTiny README,
+sanitized index metadata and existing manifest. Labels have no ranking within
+Hard and are not a claim about this agent's observed difficulty.
+
+| Category | Proposed challenges | Published difficulty |
+| --- | --- | --- |
+| Crypto | `cry-lupin`, `cry-open-ellipti-ph` | Hard / Hard |
+| Pwn | `pwn-roppity`, `pwn-pilot` | Hard / Hard |
+| Reversing | `rev-gibberish-check`, `rev-a-walk-through-x86-part-2` | Hard / Hard |
+| Web | `web-shreeramquest`, `web-poem-collection` | Hard / Easy |
+| Forensics | `for-whyos`, `for-1black0white` | Hard / Easy |
+| Misc | `msc-algebra`, `msc-quantum-leap` | Hard / Hard |
+
+Ten are Hard. CTFTiny contains only one Hard web task and one Hard forensics task,
+so the two Easy cases are necessary to meet category coverage within CTFTiny.
+`for-whyos` and `msc-quantum-leap` come from the originally scored list; the other
+ten are development. The existing runner rejects mixed-list batches. Use two
+ordinary sequential batches per condition (30 development attempts and six
+formerly held-out attempts), with explicit practice output directories. Preserve
+the manifest and runner; document practice purpose alongside their original mode
+labels. Do not merge them into the original scored result directories/aggregates.
+
+### Freezing the baseline
+
+Freezing means preserving the exact current implementation/configuration/images
+while the notes candidate is edited elsewhere. A tag alone does not capture
+uncommitted files. Current listener and usage fixes include new untracked files,
+so review and commit those along with tracked edits before tagging. Commits are
+the user's responsibility; no branch, commit, tag or worktree was created here.
+
+Suggested sequence from the current checkout:
+
+1. Create a working branch, for example `git switch -c experiments/planning-notes`.
+2. Stage the reviewed fixes/docs/evidence, including the new listener Dockerfile,
+   helpers and evidence folders; review `git diff --cached`, then commit. Confirm
+   `git status --short` is clean. Do not stage credentials or raw ignored runs.
+3. Tag that commit and create a separate detached checkout:
+
+```sh
+git tag baseline-before-notes-2026-11-14
+git worktree add --detach ../590_baseline baseline-before-notes-2026-11-14
+```
+
+4. Keep baseline code untouched under `../590_baseline`; install locked host
+   dependencies there with `uv sync --frozen`. Supply the original host `.env`
+   through an absolute `--env-file` path and the existing pinned dataset through
+   an absolute `--dataset` path, since ignored files are absent from a new worktree.
+   Keep output in separate baseline practice directories. Credentials remain
+   outside Git and the solver.
+5. Edit and verify the notes candidate in the original checkout on the experiment
+   branch. Use the same configuration/model and actual Docker image IDs, including
+   the fixed listener. Do not rebuild/retag images or run competing heavy Docker
+   work during baseline timing. Existing per-run hashes/IDs verify the conditions.
+6. Freeze the candidate commit after review, then run the same selected set/trials
+   in separate candidate practice directories. All targets/solver workspaces start
+   fresh per attempt; notes do not carry across trials.
+
+A tag/worktree freezes code, not mutable Docker tags or upstream downloads; retain
+the exact image IDs and check them across conditions. Three trials provide more
+stability than two, but 12 tasks still form a selected practice comparison, not a
+general benchmark estimate. At 600 active seconds per attempt, 72 attempts allow
+up to 12 hours of active attempt time, plus setup/export/cleanup. Spending allowance
+and readiness still need review before execution. No paid run, model/prompt edit,
+manifest change or full-NYU integration is started by this proposal.
+
+## Usage, cost and workflow follow-up — November 14
+
+**Completed accounting change:** the user agreed to proceed with usage
+preservation. `known_usage` now retains reported-call subtotals while complete
+attempt totals stay unknown after missing/failed usage. Focused offline checks
+passed (58 tests). The remaining local error-category and export-payload checks
+in rank 1 below are still proposals. No prompt/controller stopping/model change.
+[Implementation, tests and filtered cost evidence](../evidence/usage-preservation/README.md).
+
+The two latest Langfuse traces have costs on all 43 model generations; their root
+SPAN cost fields are null. Local estimates in root output are distinct from native
+generation costs. Native combined cost is about $0.03464; the local $0.03305 differs
+by the cache-write premium. Display filters/rounding were not inspected. Current
+Duke metadata and official rates agree: Sol is 20x uncached input/output/write and
+10x cached input; repricing these same calls gives about $0.62840 versus $0.03464.
+Different model behavior can change that ratio. No pricing/configuration update
+or hosted setting change was made.
+
+**Recommendation for planning and notes:** start with them together as one small
+working-method experiment. A short per-attempt note can hold both the current
+plan and established evidence, avoiding a separate planner/state system. Read
+or update at meaningful checkpoints and skip unnecessary notes on simple tasks.
+Evaluate the package honestly; separate conditions would be needed to determine
+which component helped. More expensive component-by-component comparisons can
+follow if the package produces a useful signal.
+
+**Continuation is a separate stopping-policy experiment.** Currently a text-only
+reply ends the attempt. A candidate policy would allow one additional model
+re-evaluation after an unsuccessful voluntary final reply, using the same history,
+remaining time and call counters. It would ask for a feasible untried action or
+a justified stop; a second text-only reply would end normally. Success, incidents,
+request errors, limit stops and other terminal conditions would remain terminal.
+It is not a fresh trial or a target reset. Defer until a healthy-target baseline
+shows premature endings; old dead-listener failures do not establish its value.
+
+**Daybreak access is unverified for Duke.** OpenAI's
+[Responses guide](https://developers.openai.com/api/docs/guides/daybreak) says
+Sol uses standard safeguards without eligible access. Reduced refusals require
+Daybreak Red approval and project access, with `daybreak_blue` as the request value
+for Sol. The current runner sends no access-program selection. Gateway forwarding,
+permissions and refusal behavior need verification before an approved Sol pilot;
+model visibility alone does not prove that setup. No request parameter or access
+configuration was changed, and no refusal workaround is proposed.
+
+## Current review and proposed comparison — November 14
+
+**Status: review/proposal only.** The user requested an updated assessment of
+past experiments and a possible before/after development comparison. This entry
+does not authorize runtime edits, challenge selection/runs, a new dataset or
+hosted writes. The original sequential runner stays in use. The dated November
+7–11 proposals below remain intact; this section supersedes their priorities for
+the current discussion. [Current handoff](../PROJECT_STATUS.md).
+
+### What we considered and what actually happened
+
+| Idea or milestone | Current state | Evidence and interpretation |
+| --- | --- | --- |
+| Evidence/recovery instructions; verified environment/tool information; clearer shell/connection contract | Implemented | The early prompt follow-up had 3/5 successes. A later combined prompt/tool/output package had 6/11, the same total as its historical 6/11 baseline. Useful capabilities were verified, but prompt benefit was not isolated. |
+| Libraries and larger toolkit; writable workspace/Python; pip installation; ordinary Docker execution/networking | Implemented | Synthetic and readiness checks verified the environment. Old missing-import/session/worker problems are not reasons to reintroduce those earlier designs. |
+| Head/tail omission markers, bounded raw output files and solver retrieval | Implemented | Synthetic capture/retrieval tests passed; a later hard attempt used retained output successfully. The first eleven-ID rerun never overflowed, so it did not measure this feature's solving benefit. |
+| Luna low/4,096 to medium/8,192 | Implemented | Historical totals moved from 6/11 to 9/11, including a final scope incident. This changed effort and headroom together; it is suggestive, not a controlled effort-only effect. |
+| Clear endpoint wording and one confirmed blocked-command recovery | Implemented | The follow-up reached 20/22 successes with zero live scope incidents/recoveries. Synthetic tests verified recovery; the live total does not demonstrate that recovery caused the gain. |
+| Input cap 512 KiB to 2 MiB | Implemented | One historical next request exceeded the old byte guard; largest reviewed generation input was 112,068 tokens. The cap is serialized request bytes, not a model token window. New headroom is not evidence that compaction is needed now. |
+| Early original-artifact validation, exact-value rechecking and saved expensive intermediates | Implemented | A targeted follow-up had three first-trial successes, then a 60-second API timeout stopped the batch. Mixed conditions/incomplete trials prevent a clean prompt-effect claim. Avoid adding the same instructions again. |
+| Model request timeout 60 to 90 seconds | Implemented | Supported by an observed 60.047-second request timeout; not proof that the failed request would have finished at 90 seconds. The overall attempt limit remains 600 seconds. |
+| Target lifecycle snapshots and listener repair | Implemented and verified | Exact old socat versions reproduced the generic child-crash failure. The binary-only correction passed synthetic/readiness checks, then 2/2 fresh development attempts succeeded. Old outages are poor evidence for a generic persistence/planning fix. |
+| Plans/notes, bounded text-only continuation, neutral budget feedback, compaction, stronger models or larger budgets | Considered; not implemented | These require distinct hypotheses and current evidence rather than treating every old suggestion as an outstanding defect. |
+| Optional parallel runner | Considered and removed | User chose the original sequential runner; no concurrency feature is proposed here. |
+
+Supporting records: [experiment log](EXPERIMENTS.md),
+[shared development sequence](../evidence/ryan-shared-runs/README.md),
+[harder-batch review](../evidence/unseen-development-trace-review/README.md),
+[validation/timeout follow-up](../evidence/validation-checkpoint-prompt/README.md)
+and [listener correction](../evidence/listener-update/README.md).
+Counts describe selected development samples, not comparable benchmark scores.
+Prior assistant trace diagnoses remain review findings, not human annotation
+ground truth; this update does not inspect challenge programs or solutions.
+
+### Ranked remaining candidates
+
+Ease includes meaningful verification: **Easy** is a small localized change;
+**Moderate** touches a controller/record contract; **Hard** adds substantial state
+or compatibility work. Engineering correctness and solving effectiveness are
+separate objectives.
+
+| Rank | Candidate | Ease | Recommendation and evidence needed |
+| --- | --- | --- | --- |
+| 1 — engineering | Preserve completed-call usage when a later request fails; save a sanitized local failure category; distinguish structural trace export from payload completeness | Moderate overall; usage retention is relatively easy | Concrete recurring accounting/export gaps. Keep complete totals unknown when any request is unknown, but retain explicitly labeled known partial usage. Exception classes already enter hosted events; add durable local categories rather than duplicate that mechanism or log raw bodies. Audit required generation/tool payloads without claiming every null event body is an error. Verify with offline failed-request/export fixtures; no solve campaign is needed to prove these contracts. |
+| 2 — behavior | Brief, revisable plan and optional per-attempt working notes | Easy code/prompt edit; benefit unproven | Best next low-cost behavior experiment. For multi-stage work, record established facts/evidence paths, current hypothesis, failed approaches and next discriminating test. Update after a material discovery, skip simple tasks, use existing workspace tools, and keep notes within the attempt. No planner model, mandatory planning tool or automatic injection. Notes are not compaction and may add overhead or reinforce a wrong assumption. |
+| 3 — conditional behavior | One bounded continuation after a voluntary unsuccessful text-only reply | Moderate | Historical premature endings motivate it, but several arose with low effort or dead services. Test only if a fresh healthy-target baseline still ends with a feasible untried next step and remaining budget. Preserve success/incident/deadline stops, counters and original deadline; allow at most one re-evaluation. Compare separately from notes. |
+| 4 — conditional behavior | Neutral remaining-time/call feedback; one measured budget adjustment | Easy configuration change or moderate feedback-interface change | First measure the binding limit. Feedback should be factual counters without urgency or demands to rush; whether it helps is unmeasured. Retain 600 s/40 model/80 tool calls, 90 s requests, 8,192 output tokens and 2 MiB input for the first comparison. Consider 900 s only if otherwise useful healthy runs repeatedly hit wall time; raise turns/output/input only for their respective measured stops. Do not bundle every limit increase. |
+| 5 — later | Stronger model or higher reasoning effort | Easy configuration edit; moderate compatibility/cost evaluation | Stay with Luna under the user's cost preference. Reconsider a small separate model experiment if healthy-target failures mainly reflect reasoning despite adequate budgets. Historical prices are snapshots, not current verified rates or cost forecasts. |
+| 6 — defer | Compaction/automatic memory, further output/toolkit growth, interactive sessions/frameworks, automatic API retries/batch resume | Moderate to hard | No current need established for the larger mechanisms. Existing file capture, notes through ordinary tools and fixed byte headroom are simpler starting points. Retries/resume are separate reliability policies: an uncertain request may have consumed cost, and a partially used target is not a fresh trial. Revisit only with concrete failure evidence. |
+
+Timing labels also need an explicit engineering decision: distinguish active time,
+attempt lifecycle, launch lifecycle and batch elapsed time. Preserve submitted
+report snapshots and historical metrics; a corrected label does not justify
+silently rewriting evidence. Submission-tag/demo provenance remains an
+administrative follow-up, not an agent performance experiment.
+
+### Proposed development comparison
+
+**Recommendation: start with CTFTiny development tasks already supported by our
+launcher.** The loader currently verifies the CTFTiny manifest, revision and index;
+the full NYU collection is not a drop-in CLI switch. New collection support,
+readiness and selection would be a separate milestone. CTFTiny is the benchmark
+goal, and known mixed-outcome tasks plus successful controls give a simpler first
+test. Difficulty labels alone are weaker selection evidence than observed
+long/mixed attempts. Do not use the ten reserved scored IDs for tuning or merge
+new practice outcomes into the historical scored results.
+
+Proposed six-task development set, not yet selected for execution:
+
+| Role | Proposed ID | Reason from existing records |
+| --- | --- | --- |
+| Longer/mixed stress case | `cry-lupin` | Historical wall-limited attempt and successful counterparts; useful for work organization/reuse. |
+| Longer/mixed stress case | `rev-gibberish-check` | Historical input growth, expensive work and successful counterpart. |
+| Exact-data/recovery case | `rev-a-walk-through-x86-part-2` | Mixed outcome, including a documented transcription/recovery failure. |
+| Hard successful control in another category | `pwn-pilot` | Two successes in the harder development batch; checks overhead/regression beyond crypto/reversing. |
+| Short successful control | `rev-checker` | Previously successful, relatively short work; optional plans should not impose large overhead. |
+| Web control | `web-poem-collection` | Previously successful; adds a different workload and catches unnecessary extra calls. |
+
+1. Freeze the **current fixed-listener baseline**, including actual source hashes,
+   prompt, settings, dataset and all image IDs. Prefer a user-created commit and
+   separate fixed checkout; uncommitted changes must be captured too if used.
+   A commit label alone is insufficient. Both conditions keep the listener fix.
+2. Agree on selection, hypothesis, trial count and spending allowance before
+   running. Recommend **two fresh attempts per task per condition: 12 baseline +
+   12 candidate = 24 attempts**. Three each would be 36 and give more stability,
+   still a small exploratory sample. At the current ten-minute active deadline,
+   24 attempts permit up to four hours of active attempt time, plus preparation,
+   export and cleanup; this is not an elapsed-time or dollar guarantee. Estimate
+   cost from recorded longer attempts and choose an explicit allowance first.
+3. Baseline attempts may run sequentially while lightweight candidate editing or
+   documentation proceeds in a **different checkout**. Do not run a batch from
+   source files being edited: later child processes could import a new version.
+   Avoid competing Docker builds, another challenge batch or heavy tests during
+   timed attempts; keep the ordinary sequential runner unchanged.
+4. Review baseline outcomes before choosing the behavior change. If unsupported
+   stopping no longer recurs, continuation is a weaker candidate. If long tasks
+   already maintain useful state, notes may be unnecessary. Do not select only
+   baseline failures for the after condition: retain the preselected whole set.
+5. Test one candidate, initially lightweight plans/notes if supported by baseline
+   review, with the same images/model/budgets and fresh targets. Engineering-only
+   record changes should be common to both conditions or verified separately,
+   rather than silently introduced in only one arm. No cross-attempt notes or
+   challenge-specific hints. When possible, reserve extra same-configuration
+   baseline/candidate pairs after the edit to check time-of-day/gateway drift.
+6. Report per-task verified outcomes and denominators; model/tool calls, known
+   tokens/cost, all four distinct time intervals, termination reason, target
+   health, export quality and cleanup. Review note usefulness, repeated expensive
+   work and unsupported stopping from existing traces. Keep every failed attempt
+   and infrastructure incident with a predeclared counting policy; do not replace
+   errors invisibly or confuse them with reasoning failures. Missing telemetry
+   stays missing. Random instances and two trials limit causal confidence.
+
+A second stage could add a small **fresh development confirmation set** after
+the edit is frozen. Prefer supported unattempted CTFTiny entries when available;
+otherwise consider non-overlapping full-NYU practice tasks after infrastructure
+support/readiness is approved. Use metadata and recorded outcomes for selection,
+not flags, solutions or write-ups. Reusing known failures measures targeted
+recovery; fresh cases are needed before claiming broader generalization.
+
+The small representative-set approach follows
+[Langfuse's dataset guidance](https://langfuse.com/academy/datasets), including
+coverage of realistic cases rather than only difficult failures. Its
+[error-analysis guide](https://langfuse.com/guides/cookbook/error-analysis-llm-applications)
+supports connecting concrete observed failures to an intervention. No hosted
+dataset, annotation queue, judge model, SDK migration or new evaluation framework
+is needed for this proposal; existing batch records and trusted verification suffice.
+
 **Historical decision record, November 7–11.** Several proposals below have since
 been implemented. Use [current status](../PROJECT_STATUS.md) for selected settings,
 active issues and next work; [project history](PROJECT_HISTORY.md) and
@@ -12,12 +259,13 @@ latest development traces, prompt structure, output handling, solver information
 models/reasoning, the NYU reference prompt, and plans/notes. These are proposals,
 not implemented changes or authorization for live comparisons.
 
-**November 11 infrastructure handoff:** repeated target container/listener exits
-remain unresolved. See [TARGET_PROCESS_ISSUE](TARGET_PROCESS_ISSUE.md) for the
-four-attempt evidence, generic native/emulated checks, resource audit and suggested
-next steps. Missing init, emulation and insufficient target quotas are unproven
-causes; no service fix is selected or implemented. This later issue is separate
-from the dated agent-behavior proposals below.
+**Infrastructure follow-up, November 14:** the November 11 listener-exit issue
+has been diagnosed and a listener-only correction implemented and verified,
+including two successful development retries. See
+[TARGET_PROCESS_ISSUE](TARGET_PROCESS_ISSUE.md) for the original four-attempt
+evidence, later exact-version diagnosis and completed correction. No init,
+permission or resource-limit relaxation was needed. This issue is separate from
+the dated agent-behavior proposals below.
 
 **November 8 implementation update:** the user-approved combined first fix is now
 implemented and synthetically verified. See [milestone evidence](https://github.com/ryanbanko/590_ctf_agent/blob/aedfd62cf8379adee73a30546592036af6f82a42/evidence/agent-first-fix/README.md).

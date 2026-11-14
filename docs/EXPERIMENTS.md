@@ -12,6 +12,122 @@ comparisons, the exact change, run references and conclusions. Keep raw evidence
 in Langfuse and run records; use `PROJECT_STATUS.md` for the overall checklist.
 This is Section 2 of [Part 1](../ASSIGNMENT.md), not the later competition Part 2.
 
+## Expanded practice comparison — November 14 proposal
+
+The user requested at least two tasks per category, preferably harder tasks, and
+three trials each, then allowed development and test tasks. The
+[expanded proposal](IMPROVEMENT_OPTIONS.md#expanded-comparison-and-baseline-freeze--november-14)
+uses 12 CTFTiny tasks (ten Hard and two Easy), with 36 baseline and 36 planning/
+notes candidate attempts. The two originally scored IDs are explicit practice
+reuse; original scores remain historical and these reused tasks are no longer
+fresh held-out evidence for candidate selection. Two ordinary manifest-separated
+batches per condition preserve the existing runner. No batch, Git snapshot,
+candidate behavior edit or new dataset integration has started. The earlier
+six-task/two-trial idea below is superseded for this discussion.
+
+## Usage preservation and cost review — November 14
+
+At the user's request, implemented additive reported-call usage subtotals while
+retaining null complete totals after any failed/missing-usage request. No solving
+behavior or request/retry settings changed. Fifty-eight focused offline tests
+passed, with two Docker cases deselected; the initial new test's double-decoding
+assertion error is recorded. Read-only live Langfuse checks confirmed native costs
+on all 43 generations in the two latest traces and null root SPAN cost fields.
+Current Duke model metadata and official pricing support an approximately 18.14x
+Sol/Luna fixed-volume illustration, not a spending forecast. No generation,
+challenge run or hosted mutation occurred.
+[Evidence, failed check, source hashes and limits](../evidence/usage-preservation/README.md).
+Plans/notes together, continuation separately and Daybreak compatibility are
+discussed in the improvement review; these remain proposals.
+
+## Improvement review and proposed comparison — November 14
+
+The user requested a review of prior experiments and remaining ideas, then asked
+for the documentation to be updated. The
+[current improvement review](IMPROVEMENT_OPTIONS.md#current-review-and-proposed-comparison--november-14)
+records implemented versus deferred changes, ranked candidates and a proposed
+six-task/two-trial baseline versus candidate comparison. The fixed listeners
+belong in both conditions; the regular sequential runner remains unchanged.
+Selection, candidate changes, spending allowance and paid runs await a separate
+decision. No new experimental condition, challenge attempt or result is created
+by this review, and historical outcomes remain unchanged.
+
+## Fixed-listener validation — November 14
+
+The user approved testing an updated listener in both existing images, including
+normal I/O, child crashes, disconnects and the supplied 60-second inactivity limit,
+followed by a small development retry if the checks pass. Keep challenge logic
+out of the infrastructure review and preserve all historical results.
+
+**Hypothesis before validation:** Ubuntu's packaged socat 1.7.3.3-2 contains the
+upstream per-child diagnostic-channel correction and can replace just the socat
+binary without changing the target OS, libraries, application, user or command.
+The package checksum is pinned. An initial network-disabled `socat -V` check loads
+successfully in a disposable original-image container; full behavior is not yet
+validated. A standard two-stage Dockerfile copies only `/usr/bin/socat` into the
+original content-addressed base. No custom compilation or `nofork` workaround.
+
+Verify base-layer/config preservation, matching feature flags and version, repeated
+normal and crashing children, bidirectional synthetic I/O, peer disconnects and
+the actual `-T60` timeout. If these pass, apply only to the two exact known image
+IDs, record the replacement and verify the ordinary launcher. Solver/guard/model
+budgets and historical scored records remain unchanged.
+
+**Completed:** the packaged binary loads in both original runtimes. Fixed images
+preserve all original base layers and configuration except a compatibility label,
+with matching socat feature flags. Both passed 20 normal exits, 20 child SIGSEGVs,
+20 bidirectional exchanges, disconnect/reconnect, actual 60-second inactivity
+timeout and subsequent reconnect/no leftover connection child. Normal readiness
+passed for both targets; an overlapping global cleanup assertion was preserved
+with its passing sequential rerun. The final offline suite passed 167 tests.
+
+After the initial gateway TCP timeout and user's VPN confirmation, the approved
+sequential one-attempt-per-target follow-up completed with two verified successes:
+roppity 204.163 active seconds / 17 model calls, baby-boi 330.417 / 26. Both targets
+were running before cleanup; no solver restart, scope incident or cleanup error.
+Combined estimated cost $0.03304781; 708,442 input / 40,421 output tokens. Both
+native evidence exports passed, with source hashes matching the correction.
+[Full evidence and limits](../evidence/listener-update/README.md). One fresh attempt
+per target is not a general solve-rate estimate; no challenge logic/payload review
+was part of the infrastructure analysis. No further paid run is authorized.
+
+## Actual listener version and startup diagnosis — November 14
+
+The user approved diagnosing the process issue, preferring simple explanations
+and fixes. The scope now explicitly includes service definitions, startup scripts
+and executable paths/arguments needed to understand process handling; challenge
+program logic, payloads, flags and solutions remain excluded. No paid run or
+production service change is part of this diagnostic milestone.
+
+Both exact historical images use socat 1.7.3.2 as PID 1, with `-T60`, a forking
+TCP listener and `su` to a service user. The two saved effective Compose records
+have null entrypoint/command overrides, so image defaults apply. Earlier generic
+checks used socat 1.7.4.4 without the service-user switch.
+
+**Hypothesis before new synthetic checks:** the actual old listener/version and
+user-switch arrangement may handle child exits differently. Run only the installed
+listener, replacing the challenge executable with a fixed harmless shell child.
+Start with normal and signal exits; compare user switching, init or disconnect
+timing only as needed. Record version, state, synthetic logs and cleanup; no
+challenge executable is run. Helper: `tests/check_listener_image.py`.
+
+**Completed:** both exact listeners reproduced exit 1 after the first synthetic
+SIGSEGV; normal children survived 20 connections per image. Init, removing the user
+switch and delaying the signal did not prevent the failure. The generic upstream
+1.7.3.3 changelog describes the matching inherited diagnostic-channel bug; reviewed
+1.7.4.4 source reinitializes that channel after fork. `EXEC ...,nofork` survived
+20 synthetic crashes per image, but changes relay/I/O/timeout behavior and is not
+adopted as a production correction. Six final helper cases behaved as predicted;
+ten exploratory records retained. All diagnostic cleanup passed, syntax/whitespace
+checks passed, zero model/real challenge runs or production changes.
+
+The requested constraint review found no need to loosen controls for this failure:
+plain Docker without our solver/guard also reproduces it. New-shell behavior,
+whole-solver reset after timeouts, resource caps and emulation remain explicit
+tradeoffs, not demonstrated causes. The earlier overly narrow diagnostic metadata
+boundary was expanded with user approval. [Evidence, limits and next correction
+options](../evidence/listener-version-diagnosis/README.md).
+
 ## Generic Docker/process investigation — November 11
 
 The user authorized investigating the listener/process failure and possible

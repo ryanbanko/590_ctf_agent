@@ -150,13 +150,16 @@ def make_responder(client, settings: dict, *, langfuse_public_key: str | None = 
 
     The supplied client must use Langfuse's OpenAI integration and max_retries=0.
     Time/request/token limits bound calls. Missing usage leaves totals unknown
-    without rejecting an otherwise valid response.
+    without rejecting an otherwise valid response; known_usage retains the
+    reported-call subtotal, including calls after a missing usage record.
     """
     settings = dict(settings)
     validate_model_settings(settings)
+    known = {"model_calls": 0, "cost_usd": 0.0,
+             "tokens": {"input": 0, "output": 0, "cached_input": 0, "reasoning": 0}}
     usage = {"model_settings": settings, "model_calls": 0, "cost_usd": 0.0,
              "usage_complete": True,
-             "tokens": {"input": 0, "output": 0, "cached_input": 0, "reasoning": 0}}
+             "tokens": dict(known["tokens"]), "known_usage": known}
 
     def respond(*, messages, tools, timeout_seconds):
         if usage["model_calls"] >= settings["max_requests"]:
@@ -184,14 +187,15 @@ def make_responder(client, settings: dict, *, langfuse_public_key: str | None = 
         else:
             cached = getattr(returned.input_tokens_details, "cached_tokens", 0) or 0
             reasoning = getattr(returned.output_tokens_details, "reasoning_tokens", 0) or 0
-            if usage["tokens"] is not None:
-                for field, count in {"input": returned.input_tokens, "output": returned.output_tokens,
-                                     "cached_input": cached, "reasoning": reasoning}.items():
-                    usage["tokens"][field] += count
-            if usage["cost_usd"] is not None:
-                usage["cost_usd"] += ((returned.input_tokens - cached) * settings["input_usd_per_million"]
-                    + cached * settings["cached_input_usd_per_million"]
-                    + returned.output_tokens * settings["output_usd_per_million"]) / 1_000_000
+            known["model_calls"] += 1
+            for field, count in {"input": returned.input_tokens, "output": returned.output_tokens,
+                                 "cached_input": cached, "reasoning": reasoning}.items():
+                known["tokens"][field] += count
+            known["cost_usd"] += ((returned.input_tokens - cached) * settings["input_usd_per_million"]
+                + cached * settings["cached_input_usd_per_million"]
+                + returned.output_tokens * settings["output_usd_per_million"]) / 1_000_000
+            if usage["usage_complete"]:
+                usage.update(tokens=dict(known["tokens"]), cost_usd=known["cost_usd"])
         if response.status != "completed":
             raise AttemptStopped("model_response_incomplete")
         items = [item.model_dump(mode="json", exclude_none=True) for item in response.output]

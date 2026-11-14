@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-14",
+  "scope": "listener/process metadata only; no challenge executable, code, payload, answer or solution",
+  "engine": {
+    "version": "28.3.2",
+    "architecture": "aarch64",
+    "cpus": 8,
+    "memory_bytes": 8322969600
+  },
+  "images": [
+    {
+      "label": "roppity",
+      "image_id": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+      "architecture": "amd64",
+      "entrypoint": null,
+      "cmd": [
+        "socat",
+        "-T60",
+        "TCP-LISTEN:8000,reuseaddr,fork,su=rop",
+        "EXEC:/home/rop/rop"
+      ],
+      "socat_version": "1.7.3.2",
+      "saved_effective_compose_command": null,
+      "saved_effective_compose_entrypoint": null
+    },
+    {
+      "label": "baby-boi",
+      "image_id": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+      "architecture": "amd64",
+      "entrypoint": null,
+      "cmd": [
+        "socat",
+        "-T60",
+        "TCP-LISTEN:8000,reuseaddr,fork,su=baby_boi",
+        "EXEC:/home/baby_boi/baby_boi"
+      ],
+      "socat_version": "1.7.3.2",
+      "saved_effective_compose_command": null,
+      "saved_effective_compose_entrypoint": null
+    }
+  ]
+}

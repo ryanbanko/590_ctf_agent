@@ -55,6 +55,8 @@ def test_native_reasoning_and_tool_results_reach_next_request_with_one_generatio
     result = run["result"]
     assert result["model_calls"] == result["tool_calls"] == 2 and result["scripted_turns"] == 0
     assert result["tokens"] == {"input": 200, "output": 40, "cached_input": 20, "reasoning": 10}
+    assert result["known_usage"] == {"model_calls": 2, "tokens": result["tokens"],
+                                      "cost_usd": result["cost_usd"]}
     assert result["cost_usd"] == pytest.approx(2 * (90 * model_settings["input_usd_per_million"]
         + 10 * model_settings["cached_input_usd_per_million"]
         + 20 * model_settings["output_usd_per_million"]) / 1_000_000)
@@ -100,6 +102,38 @@ def test_timeout_is_not_retried_and_unknown_usage_is_not_free(local_attempt, tel
     assert len(requests) == 1 and run["result"]["model_calls"] == 1
     assert run["result"]["cost_usd"] is None and not run["result"]["usage_complete"]
     assert run["result"]["tool_calls"] == 0
+    assert run["result"]["known_usage"] == {"model_calls": 0, "cost_usd": 0.0,
+        "tokens": {"input": 0, "output": 0, "cached_input": 0, "reasoning": 0}}
+
+
+def test_successful_call_usage_survives_later_timeout(local_attempt, telemetry, model_settings):
+    calls = []
+
+    def handle(request):
+        calls.append(request)
+        if len(calls) == 2:
+            raise httpx2.ReadTimeout("synthetic later timeout", request=request)
+        return httpx2.Response(200, json=sdk_response([{
+            "type": "function_call", "call_id": "call_wrong", "name": "submit_flag",
+            "arguments": '{"candidate":"wrong"}'}]))
+
+    with OpenAI(api_key="dummy", max_retries=0,
+                http_client=httpx2.Client(transport=httpx2.MockTransport(handle))) as client:
+        respond, usage = make_responder(client, model_settings, langfuse_public_key="pk-lf-ctf590-local")
+        with local_attempt(respond, model_usage=usage) as run:
+            assert run_agent("public", run["respond"], run["call_tool"]) == "response_source_error"
+    result = run["result"]
+    assert len(calls) == result["model_calls"] == 2 and result["tool_calls"] == 1
+    assert result["tokens"] is None and result["cost_usd"] is None
+    assert result["usage_complete"] is False
+    known = result["known_usage"]
+    assert known["model_calls"] == 1
+    assert known["tokens"] == {"input": 100, "output": 20, "cached_input": 10, "reasoning": 5}
+    assert known["cost_usd"] == pytest.approx((90 * model_settings["input_usd_per_million"]
+        + 10 * model_settings["cached_input_usd_per_million"]
+        + 20 * model_settings["output_usd_per_million"]) / 1_000_000)
+    root = next(span for span in read_spans(telemetry, result["trace_id"]) if span.name == "attempt")
+    assert attribute(root, "output")["known_usage"] == known
 
 
 def test_late_native_response_keeps_usage_but_cannot_execute_tools(local_attempt, model_settings):
@@ -142,7 +176,7 @@ def test_raw_provider_error_does_not_reach_automatic_tracing(model_settings):
         tracing.shutdown()
 
 
-@pytest.mark.parametrize('missing_call', [1, 2])
+@pytest.mark.parametrize('missing_call', [1, 2, 3])
 def test_valid_responses_continue_with_unknown_usage(local_attempt, missing_call, model_settings):
     calls = []
 
@@ -150,7 +184,7 @@ def test_valid_responses_continue_with_unknown_usage(local_attempt, missing_call
         calls.append(request)
         number = len(calls)
         output = [{'type': 'function_call', 'call_id': f'call_{number}', 'name': 'submit_flag',
-                   'arguments': json.dumps({'candidate': 'wrong' if number == 1 else 'private-expected-answer'})}]
+                   'arguments': json.dumps({'candidate': 'wrong' if number < 3 else 'private-expected-answer'})}]
         return httpx2.Response(200, json=sdk_response(output, usage=number != missing_call))
 
     with OpenAI(api_key='dummy', max_retries=0,
@@ -158,7 +192,13 @@ def test_valid_responses_continue_with_unknown_usage(local_attempt, missing_call
         respond, usage = make_responder(client, model_settings, langfuse_public_key='pk-lf-ctf590-local')
         with local_attempt(respond, model_usage=usage) as run:
             assert run_agent('public', run['respond'], run['call_tool']) == 'success'
-    assert run['result']['verified_success'] and run['result']['model_calls'] == 2
+    assert run['result']['verified_success'] and run['result']['model_calls'] == 3
     assert run['result']['tokens'] is None and run['result']['cost_usd'] is None
     assert run['result']['usage_complete'] is False
-    assert run['result']['tool_calls'] == 2
+    assert run['result']['tool_calls'] == 3
+    known = run['result']['known_usage']
+    assert known['model_calls'] == 2
+    assert known['tokens'] == {'input': 200, 'output': 40, 'cached_input': 20, 'reasoning': 10}
+    assert known['cost_usd'] == pytest.approx(2 * (90 * model_settings['input_usd_per_million']
+        + 10 * model_settings['cached_input_usd_per_million']
+        + 20 * model_settings['output_usd_per_million']) / 1_000_000)

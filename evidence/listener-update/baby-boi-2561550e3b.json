@@ -1,0 +1,344 @@
+{
+  "kind": "fixed_listener_validation",
+  "label": "baby-boi",
+  "original_image_id": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+  "image_reference": "ctf590-target-baby-boi:socat-1.7.3.3",
+  "image_id": "sha256:970ccd1341be55a2c75c9839eead44594ebad3c4534cddc07aad9983a61e7386",
+  "model_calls": 0,
+  "challenge_program_executed": false,
+  "helper_sha256": "2f00657b7b5d9e95e6118caa12749d7b7176950049538cbd251266c4d209f5af",
+  "reproduction_helper_sha256": "1faa7185b279e39191f0d96b686011908dced815ea508059fd8df836ebbcc84a",
+  "cases": [
+    {
+      "child_mode": "normal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": [
+        {
+          "connection": 1,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 2,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 3,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 4,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 5,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 6,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 7,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 8,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 9,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 10,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 11,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 12,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 13,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 14,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 15,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 16,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 17,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 18,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 19,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 20,
+          "connected": true,
+          "eof": true
+        }
+      ],
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "processes": [
+        "PID                 PPID                COMMAND",
+        "1197                1173                socat"
+      ],
+      "synthetic_logs": [
+        "synthetic child pid=8 parent=7",
+        "synthetic child pid=10 parent=9",
+        "synthetic child pid=12 parent=11",
+        "synthetic child pid=14 parent=13",
+        "synthetic child pid=16 parent=15",
+        "synthetic child pid=18 parent=17",
+        "synthetic child pid=20 parent=19",
+        "synthetic child pid=22 parent=21",
+        "synthetic child pid=24 parent=23",
+        "synthetic child pid=26 parent=25",
+        "synthetic child pid=28 parent=27",
+        "synthetic child pid=30 parent=29",
+        "synthetic child pid=32 parent=31",
+        "synthetic child pid=34 parent=33",
+        "synthetic child pid=36 parent=35",
+        "synthetic child pid=38 parent=37",
+        "synthetic child pid=40 parent=39",
+        "synthetic child pid=42 parent=41",
+        "synthetic child pid=44 parent=43",
+        "synthetic child pid=46 parent=45"
+      ]
+    },
+    {
+      "child_mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": [
+        {
+          "connection": 1,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 2,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 3,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 4,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 5,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 6,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 7,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 8,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 9,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 10,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 11,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 12,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 13,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 14,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 15,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 16,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 17,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 18,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 19,
+          "connected": true,
+          "eof": true
+        },
+        {
+          "connection": 20,
+          "connected": true,
+          "eof": true
+        }
+      ],
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "processes": [
+        "PID                 PPID                COMMAND",
+        "1604                1582                socat"
+      ],
+      "synthetic_logs": [
+        "synthetic child pid=8 parent=7",
+        "2026/11/14 18:27:39 socat[7] E waitpid(): child 8 exited on signal 11",
+        "synthetic child pid=10 parent=9",
+        "2026/11/14 18:27:39 socat[9] E waitpid(): child 10 exited on signal 11",
+        "synthetic child pid=12 parent=11",
+        "2026/11/14 18:27:39 socat[11] E waitpid(): child 12 exited on signal 11",
+        "synthetic child pid=14 parent=13",
+        "2026/11/14 18:27:40 socat[13] E waitpid(): child 14 exited on signal 11",
+        "synthetic child pid=16 parent=15",
+        "2026/11/14 18:27:40 socat[15] E waitpid(): child 16 exited on signal 11",
+        "synthetic child pid=18 parent=17",
+        "2026/11/14 18:27:40 socat[17] E waitpid(): child 18 exited on signal 11",
+        "synthetic child pid=20 parent=19",
+        "2026/11/14 18:27:40 socat[19] E waitpid(): child 20 exited on signal 11",
+        "synthetic child pid=22 parent=21",
+        "2026/11/14 18:27:40 socat[21] E waitpid(): child 22 exited on signal 11",
+        "synthetic child pid=24 parent=23",
+        "2026/11/14 18:27:41 socat[23] E waitpid(): child 24 exited on signal 11",
+        "synthetic child pid=26 parent=25",
+        "2026/11/14 18:27:41 socat[25] E waitpid(): child 26 exited on signal 11",
+        "synthetic child pid=28 parent=27",
+        "2026/11/14 18:27:41 socat[27] E waitpid(): child 28 exited on signal 11",
+        "synthetic child pid=30 parent=29",
+        "2026/11/14 18:27:41 socat[29] E waitpid(): child 30 exited on signal 11",
+        "synthetic child pid=32 parent=31",
+        "2026/11/14 18:27:41 socat[31] E waitpid(): child 32 exited on signal 11",
+        "synthetic child pid=34 parent=33",
+        "2026/11/14 18:27:41 socat[33] E waitpid(): child 34 exited on signal 11",
+        "synthetic child pid=36 parent=35",
+        "2026/11/14 18:27:42 socat[35] E waitpid(): child 36 exited on signal 11",
+        "synthetic child pid=38 parent=37",
+        "2026/11/14 18:27:42 socat[37] E waitpid(): child 38 exited on signal 11",
+        "synthetic child pid=40 parent=39",
+        "2026/11/14 18:27:42 socat[39] E waitpid(): child 40 exited on signal 11",
+        "synthetic child pid=42 parent=41",
+        "2026/11/14 18:27:42 socat[41] E waitpid(): child 42 exited on signal 11",
+        "synthetic child pid=44 parent=43",
+        "2026/11/14 18:27:42 socat[43] E waitpid(): child 44 exited on signal 11",
+        "synthetic child pid=46 parent=45",
+        "2026/11/14 18:27:43 socat[45] E waitpid(): child 46 exited on signal 11"
+      ]
+    }
+  ],
+  "io_timeout": {
+    "checks": [
+      {
+        "check": "normal_io",
+        "exchanges": 20,
+        "passed": true
+      },
+      {
+        "check": "peer_disconnect_and_reconnect",
+        "passed": true
+      },
+      {
+        "check": "inactivity_timeout",
+        "seconds": 60.072948776999965,
+        "passed": true
+      },
+      {
+        "check": "reconnect_after_timeout",
+        "passed": true
+      }
+    ],
+    "listener_running": true,
+    "processes": [
+      "PID                 PPID                COMMAND",
+      "2026                2003                socat"
+    ]
+  },
+  "passed": true,
+  "network_cleanup": true
+}

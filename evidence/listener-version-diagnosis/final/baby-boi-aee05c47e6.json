@@ -1,0 +1,156 @@
+{
+  "kind": "known_listener_synthetic_child",
+  "image_id": "sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+  "label": "baby-boi",
+  "model_calls": 0,
+  "challenge_program_executed": false,
+  "helper_sha256": "1faa7185b279e39191f0d96b686011908dced815ea508059fd8df836ebbcc84a",
+  "version": [
+    "socat by Gerhard Rieger and contributors - see www.dest-unreach.org",
+    "socat version 1.7.3.2 on Apr  4 2018 10:06:49",
+    "   running on Linux version #1 SMP Thu Aug 14 19:26:13 UTC 2025, release 6.10.14-linuxkit, machine x86_64"
+  ],
+  "client_image_id": "sha256:6b3223eb4d93718828223966ad316909c39813dee3ee9395204940500792b740",
+  "case": {
+    "child_mode": "normal",
+    "init": false,
+    "switch_user": true,
+    "debug": false,
+    "nofork_exec": false,
+    "connections": [
+      {
+        "connection": 1,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 2,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 3,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 4,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 5,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 6,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 7,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 8,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 9,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 10,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 11,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 12,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 13,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 14,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 15,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 16,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 17,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 18,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 19,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 20,
+        "connected": true,
+        "eof": true
+      }
+    ],
+    "end": {
+      "Status": "running",
+      "Running": true,
+      "ExitCode": 0,
+      "OOMKilled": false
+    },
+    "processes": [
+      "PID                 PPID                COMMAND",
+      "4045                4023                socat"
+    ],
+    "synthetic_logs": [
+      "synthetic child pid=8 parent=7",
+      "synthetic child pid=10 parent=9",
+      "synthetic child pid=12 parent=11",
+      "synthetic child pid=14 parent=13",
+      "synthetic child pid=16 parent=15",
+      "synthetic child pid=18 parent=17",
+      "synthetic child pid=20 parent=19",
+      "synthetic child pid=22 parent=21",
+      "synthetic child pid=24 parent=23",
+      "synthetic child pid=26 parent=25",
+      "synthetic child pid=28 parent=27",
+      "synthetic child pid=30 parent=29",
+      "synthetic child pid=32 parent=31",
+      "synthetic child pid=34 parent=33",
+      "synthetic child pid=36 parent=35",
+      "synthetic child pid=38 parent=37",
+      "synthetic child pid=40 parent=39",
+      "synthetic child pid=42 parent=41",
+      "synthetic child pid=44 parent=43",
+      "synthetic child pid=46 parent=45"
+    ]
+  },
+  "network_cleanup": true
+}

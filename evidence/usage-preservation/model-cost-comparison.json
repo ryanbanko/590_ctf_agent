@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-14",
+  "kind": "same_volume_illustration_not_forecast_or_billing",
+  "baseline_attempts": 2,
+  "model_calls": 43,
+  "exclusive_usage_buckets": {
+    "input": 129,
+    "output": 9999,
+    "input_cache_write_tokens": 63792,
+    "input_cached_tokens": 644521,
+    "output_reasoning_tokens": 30422
+  },
+  "rates_usd_per_million": {
+    "gpt-6-luna": {
+      "input": 0.1,
+      "input_cached_tokens": 0.01,
+      "input_cache_write_tokens": 0.125,
+      "output": 0.5,
+      "output_reasoning_tokens": 0.5
+    },
+    "gpt-6.1-sol": {
+      "input": 2,
+      "input_cached_tokens": 0.1,
+      "input_cache_write_tokens": 2.5,
+      "output": 10,
+      "output_reasoning_tokens": 10
+    }
+  },
+  "costs_usd": {
+    "gpt-6-luna": 0.03464261,
+    "gpt-6.1-sol": 0.6284001
+  },
+  "sol_over_luna": 18.139513737561924,
+  "source": "Two listener-fixed native observation exports; official standard pricing and current Duke metadata.",
+  "limits": [
+    "Reprices fixed historical usage; different models can change tokens, caching, latency and outcomes.",
+    "Does not establish Duke account billing or remaining daily allowance."
+  ]
+}

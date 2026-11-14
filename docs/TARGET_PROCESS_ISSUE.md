@@ -1,8 +1,67 @@
 # Target listener exits: teammate handoff
 
-Status: **open; cause unresolved; no service fix implemented.** November 11, 2026.
+Status: **listener-only correction implemented and verified November 14; both
+development retries succeeded with healthy targets before cleanup.** Original handoff:
+November 11, 2026.
 Scope: Docker, listener/wrapper processes and lifecycle. Challenge programs,
 sources, payloads, answers and solving strategies are outside this investigation.
+
+## Implemented correction — November 14
+
+The user approved a fixed-version test and small development retry. Both exact
+images now receive a standard Docker derivative copying only the checksum-pinned
+Ubuntu socat 1.7.3.3 binary. Their OS/libraries, application, startup command,
+service user, forking relay and `-T60` remain. The runner builds/caches this only
+for the two recorded source images and records every substitution.
+
+Both derivatives survived 20 synthetic child crashes and 20 normal exits each,
+passed 20 bidirectional exchanges each, disconnect/reconnect and actual 60-second
+timeout/reconnect checks. Image configuration/base layers and feature flags were
+verified; ordinary zero-model readiness passed for both services. The final offline
+suite passed 167 tests. [Complete evidence and limits](../evidence/listener-update/README.md).
+
+No `nofork`, extra init, automatic restart or permission/budget change was adopted.
+The first roppity readiness global cleanup assertion overlapped the concurrent
+baby-boi check; all local checks passed, and its sequential rerun passed. That
+verification failure is preserved. After an initial gateway timeout and the user's
+VPN confirmation, both approved development retries succeeded (204.16 / 330.42
+active seconds; 17 / 26 model calls). Both targets were running before cleanup;
+no solver restart, scope incident or cleanup error occurred. Total estimated cost
+was $0.03305. This is one fresh attempt per target, not a general solve-rate estimate.
+
+## Earlier November 14 diagnosis
+
+This section records the diagnosis before the correction above was approved.
+
+Both original images use socat **1.7.3.2**, directly as PID 1, with a forking listener
+and an EXEC child. Replacing only the task executable with a harmless shell child
+reproduced exit 1 and loss of subsequent connections in both images. Normal exits
+survived 20 connections each. The failure also reproduced with init, without the
+service-user switch and after a one-second child delay. No solver or guard was
+needed to trigger it.
+
+The upstream 1.7.3.3 changelog documents a post-fork diagnostic-channel bug that
+could terminate the wrong process. Source review shows the inherited error/exit
+message socketpair in 1.7.3.2 and per-child reinitialization in the fixed source.
+This strongly explains the historical PID-1 error and intermittent listener exit.
+Earlier generic checks used 1.7.4.4, already containing that fix.
+
+Appending `nofork` to the EXEC address survived 20 synthetic crashes per image,
+but changes I/O and bypasses the relay transfer loop; it is not a behavior-neutral
+production fix. The recommendation at this checkpoint was to evaluate a pinned
+listener-only update/backport while preserving the application's runtime, user,
+endpoint and relay/timeouts. No production correction had yet been made.
+
+[Detailed evidence, final matrix, upstream sources and constraint review](../evidence/listener-version-diagnosis/README.md).
+All sixteen diagnostic records are preserved, including six final helper cases.
+The user explicitly expanded the infrastructure metadata boundary, so the earlier
+blocked startup-argument check described below has now been completed. No challenge
+program/logic, payload, flag or solution was inspected or executed.
+
+The November 11 findings and proposed checks below are historical; this follow-up
+supersedes their unresolved version/startup questions. The proposed next steps
+were a targeted correction and a separately approved development rerun; both are
+now complete as recorded above.
 
 ## Observed failure and impact
 

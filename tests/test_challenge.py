@@ -10,7 +10,7 @@ import pytest
 
 from ctf_agent.challenge import contestant_files, load_challenge, public_task, stage_files
 from ctf_agent.challenge import (MONGO_AMD64_IMAGE, MONGO_ARM64_IMAGE, check_target_services,
-                                 challenge_target, target_compose)
+                                 SOCAT_FIXED_IMAGES, challenge_target, fixed_listener_image, target_compose)
 
 
 def test_only_listed_files_and_public_fields_are_used(tmp_path, monkeypatch):
@@ -138,6 +138,54 @@ def test_other_mongo_releases_are_not_substituted(tmp_path):
     runtime, changes = target_compose({'services': {'mongo': {'image': 'mongo:7.0.10'}}},
                                     tmp_path, architecture='arm64')
     assert runtime['services']['mongo']['image'] == 'mongo:7.0.10' and not changes
+
+
+@pytest.mark.parametrize('original', SOCAT_FIXED_IMAGES)
+@pytest.mark.parametrize('cached', [True, False])
+def test_fixed_listener_uses_only_known_image_and_builds_only_if_missing(monkeypatch, original, cached):
+    repository, reference = SOCAT_FIXED_IMAGES[original]
+    updated = {'Id': 'sha256:fixed-listener', 'Architecture': 'amd64'}
+    calls = []
+    def command(*args, **kwargs):
+        calls.append((args, kwargs))
+        if args[:2] == ('image', 'inspect'):
+            assert args[2] == reference
+            if not cached and len(calls) == 1:
+                raise RuntimeError('No such image: fixed listener')
+            return json.dumps([updated])
+        assert args[0] == 'build'
+        assert args[1:5] == ('--platform', 'linux/amd64', '--build-arg', 'TARGET_IMAGE='+repository+'@'+original)
+        assert args[-2] == reference and Path(args[-1]).name == 'docker'
+        assert kwargs['timeout'] == 120
+        return ''
+    monkeypatch.setattr('ctf_agent.challenge.docker', command)
+    result, adjustment = fixed_listener_image({'Id': original, 'Architecture': 'amd64'})
+    assert result == updated
+    assert adjustment['original_image_id'] == original
+    assert adjustment['replacement_image_id'] == updated['Id'] and adjustment['version'] == '1.7.3.3'
+    assert sum(args[0] == 'build' for args, _ in calls) == (0 if cached else 1)
+
+
+def test_other_images_unchanged_and_listener_inspection_failures_surface(monkeypatch):
+    def denied(*args, **kwargs):
+        raise RuntimeError('permission denied')
+    monkeypatch.setattr('ctf_agent.challenge.docker', denied)
+    other = {'Id': 'sha256:other', 'Architecture': 'amd64'}
+    assert fixed_listener_image(other) == (other, None)
+    with pytest.raises(RuntimeError, match='permission denied'):
+        fixed_listener_image({'Id': next(iter(SOCAT_FIXED_IMAGES))})
+
+
+def test_listener_matches_exact_registry_digest_when_local_id_uses_config_digest(monkeypatch):
+    digest, (repository, reference) = next(iter(SOCAT_FIXED_IMAGES.items()))
+    original = {'Id': 'sha256:local-config-id', 'RepoDigests': [repository+'@'+digest]}
+    def inspect(*args, **kwargs):
+        assert args == ('image', 'inspect', reference)
+        return json.dumps([{'Id': 'sha256:fixed', 'Architecture': 'amd64'}])
+    monkeypatch.setattr('ctf_agent.challenge.docker', inspect)
+    _, adjustment = fixed_listener_image(original)
+    assert adjustment['original_image_id'] == original['Id']
+    assert adjustment['original_image'] == repository+'@'+digest
 
 
 @pytest.mark.parametrize('change', [

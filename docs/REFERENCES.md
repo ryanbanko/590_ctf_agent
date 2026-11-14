@@ -6,6 +6,26 @@ owns the active handoff and [project history](PROJECT_HISTORY.md) the milestone
 timeline. Links to evidence removed from the current tree open a fixed historical
 commit. The original resource links and professor quotations remain intact.
 
+## Listener correction sources — November 14
+
+The infrastructure review compared generic socat source and the
+[upstream changelog distributed by Debian](https://sources.debian.org/src/socat/1.7.4.4-2/CHANGES/).
+The post-fork diagnostic-channel correction first appears in 1.7.3.3. Source
+archive URLs, checksums and synthetic reproduction records are preserved in the
+[diagnosis evidence](../evidence/listener-version-diagnosis/README.md).
+
+The implemented replacement uses Ubuntu's
+[socat 1.7.3.3-2 AMD64 package](https://archive.ubuntu.com/ubuntu/pool/main/s/socat/socat_1.7.3.3-2_amd64.deb),
+verified against the official
+[Focal package index](https://archive.ubuntu.com/ubuntu/dists/focal/main/binary-amd64/Packages.xz).
+Only the listener binary is copied into the two original target images.
+[Correction evidence](../evidence/listener-update/README.md) records package/image
+hashes, runtime compatibility, synthetic checks, two development retries and
+their limitations. These are technical sources and verification results, not new
+course requirements or instructor confirmations.
+
+## Original resources and clarification record
+
 These are the five technical resources the user supplied at the start of this
 project. They informed the design and should be reviewed when working on the
 corresponding integration. Findings below describe the November 3, 2026 review;

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "docker",
+    "build",
+    "--platform",
+    "linux/amd64",
+    "--build-arg",
+    "TARGET_IMAGE=llmctf/2019q-pwn-baby_boi@sha256:e92afa986ce9c1fd01cdffb38cb46b8e66ffb802dab9382e912d33003144c665",
+    "-f",
+    "docker/socat.Dockerfile",
+    "-t",
+    "ctf590-target-baby-boi:socat-1.7.3.3",
+    "."
+  ],
+  "exit_code": 0
+}

@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-14",
+  "kind": "listener_only_update",
+  "package": {
+    "version": "1.7.3.3-2",
+    "sha256": "deeaf50bf877d5474fb8654695ab745a54da20e1536a5d5a9492c0966f9c01cf",
+    "binary_sha256": "88068cadb93a5ac1c51cf229fea37844304342cab46e4fc430755b3df053a926"
+  },
+  "source_sha256": {
+    "ctf_agent/challenge.py": "c38945984da5ec0becdc8e13c37646d96c2fe1a80e131e02655001518acd6b48",
+    "docker/socat.Dockerfile": "654ce2dab178c3ddfe59362b1dcb2dd13d576cb8bee9edccc077f6828011ee2f",
+    "tests/test_challenge.py": "f3c638c9a17ab5c84d8c917cd633b24d870401921452cdbe298c658b71635e74",
+    "tests/check_listener_update.py": "2f00657b7b5d9e95e6118caa12749d7b7176950049538cbd251266c4d209f5af",
+    "tests/check_listener_image.py": "1faa7185b279e39191f0d96b686011908dced815ea508059fd8df836ebbcc84a",
+    "configs/development.toml": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b"
+  },
+  "synthetic_records": [
+    {
+      "path": "baby-boi-2561550e3b.json",
+      "sha256": "24889515116693fa8ce9a4287294e943f84db74a444172a6d4e5bd7dc2192aa9",
+      "source": "runs/listener-update/baby-boi-2561550e3b/check.json"
+    },
+    {
+      "path": "roppity-02496f7d17.json",
+      "sha256": "95091956854ef4b518e8fb7b9fefd49ba99948e22431f1aa42bf23dcb1a58188",
+      "source": "runs/listener-update/roppity-02496f7d17/check.json"
+    }
+  ],
+  "offline_tests": {
+    "tests": 167,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "model_calls": 43,
+  "live_retry": {
+    "status": "completed",
+    "batch": "runs/pilots/listener-fixed/batch-b0bd899f04b3",
+    "planned_challenges": [
+      "pwn-roppity",
+      "pwn-baby-boi"
+    ],
+    "trials_each": 1,
+    "verified_successes": 2,
+    "gateway_preflight": "Initial timeout; successful TCP 443 check after user VPN confirmation.",
+    "user_question_pending": false,
+    "estimated_cost_usd": 0.033047810000000004
+  },
+  "cleanup": "No ctf590.managed=true or ctf590-listener-* containers/networks remained after completion; corrected images retained.",
+  "limits": [
+    "Synthetic validation on ARM64 Docker with AMD64 listeners, no native AMD64 rerun.",
+    "Actual challenge binaries/source were not inspected; readiness used existing trusted preparation checks.",
+    "Package database remains the base version; only the socat binary is overlaid.",
+    "Historical scored/pilot records unchanged.",
+    "Live follow-up: two verified successes, one fresh attempt per target; no solving analysis or general solve-rate claim."
+  ],
+  "regular_batch_unchanged": true,
+  "concurrency_experiment": "Removed at user direction; original launch.py, __main__.py and test_batch.py match HEAD byte-for-byte."
+}

@@ -1,0 +1,374 @@
+{
+  "date": "2026-11-14",
+  "kind": "listener_version_diagnosis",
+  "model_calls": 0,
+  "real_challenge_attempts": 0,
+  "challenge_program_executed": false,
+  "production_files_changed": false,
+  "final_helper_sha256": "1faa7185b279e39191f0d96b686011908dced815ea508059fd8df836ebbcc84a",
+  "source_archives": [
+    {
+      "version": "1.7.3.2",
+      "archive_url": "https://distfiles.macports.org/socat/socat-1.7.3.2.tar.bz2",
+      "archive_sha256": "e3561f808739383eb10fada1e5d4f26883f0311b34fd0af7837d0c95ef379251",
+      "files": {
+        "CHANGES": "07f382865ed532f31b631752892f823914b45ab12609979ddca28fbd5de75924",
+        "error.c": "88fa080775d27db28fb5f99c846ee0b91cba2cf6ac3a079df15ddf51964a6cc7",
+        "xioinitialize.c": "9ca21ce7146ca0b49f9662d85dc89ed7efce6d1bcc7192637042797f1e89d142",
+        "xiosigchld.c": "7e04620c1270bcc0f4bcbcccdf9ab99e2b669ae8db04cae058a5b504588cb3e5"
+      }
+    },
+    {
+      "version": "1.7.4.4",
+      "archive_url": "https://distfiles.macports.org/socat/socat-1.7.4.4.tar.bz2",
+      "archive_sha256": "fbd42bd2f0e54a3af6d01bdf15385384ab82dbc0e4f1a5e153b3e0be1b6380ac",
+      "files": {
+        "CHANGES": "f5d03cffda130ee91f84d91d30310a9f3ebe8af4d7e0913b9cdd11562268f69d",
+        "error.c": "0f57b685f58f8f0b71b0e8c31c4674acb5bbbb7fc19829406183e112dc81e82b",
+        "xioinitialize.c": "9cd3bc38892fd8e5c0c446aea1103056d5a971496ea22ef3d6803be3f05011fb",
+        "xiosigchld.c": "3f16afe1c15932ecf439467a5463bf692baba2a726562b3a5e4a875c48441f0c"
+      }
+    }
+  ],
+  "records": [
+    {
+      "record": "exploratory/baby-boi-96f10e6c36.json",
+      "sha256": "d39e262b49c4d812c42bf59c4df145ba2d45793b8840efff66c914913e315b89",
+      "source": "runs/listener-image-diagnostic/baby-boi-96f10e6c36/check.json",
+      "label": "baby-boi",
+      "mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": true,
+      "connections": 20,
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "exploratory"
+    },
+    {
+      "record": "exploratory/baby-boi-c1824d728f.json",
+      "sha256": "06abf5a2c6f8ecebbf70da678fb10e46bd08f1fd9e8e93cf1a249f34b795cf0e",
+      "source": "runs/listener-image-diagnostic/baby-boi-c1824d728f/check.json",
+      "label": "baby-boi",
+      "mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": 1,
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "exploratory"
+    },
+    {
+      "record": "final/baby-boi-67601e85cc.json",
+      "sha256": "eb3cb46faaaf704e5f2e636b62bf6d0880d5d8b0be383c9c68e9ba917a239789",
+      "source": "runs/listener-image-diagnostic/final-helper-checks/baby-boi-67601e85cc/check.json",
+      "label": "baby-boi",
+      "mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": true,
+      "connections": 20,
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "final"
+    },
+    {
+      "record": "final/baby-boi-915016a2cf.json",
+      "sha256": "90af6e9cfaf6b77204496d8c4d3ba1363dd30dc7669a93e0c226da971fec1b85",
+      "source": "runs/listener-image-diagnostic/final-helper-checks/baby-boi-915016a2cf/check.json",
+      "label": "baby-boi",
+      "mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": 1,
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "final"
+    },
+    {
+      "record": "final/baby-boi-aee05c47e6.json",
+      "sha256": "34bf720c52bd55983c24bcd5c8eff7481bfd57d6501f69abbb1b9e4185ee4fdd",
+      "source": "runs/listener-image-diagnostic/final-helper-checks/baby-boi-aee05c47e6/check.json",
+      "label": "baby-boi",
+      "mode": "normal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": 20,
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "final"
+    },
+    {
+      "record": "final/roppity-83aa802728.json",
+      "sha256": "f39b195a6ced6d0b2e6e061750076009b02da9aaafefb48ecb7a52bc79933eef",
+      "source": "runs/listener-image-diagnostic/final-helper-checks/roppity-83aa802728/check.json",
+      "label": "roppity",
+      "mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": 1,
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "final"
+    },
+    {
+      "record": "final/roppity-e6184a41af.json",
+      "sha256": "13d3c5baddbe8da955b8316b18378b0752766c7e47aad1ef9c7a1389552ce167",
+      "source": "runs/listener-image-diagnostic/final-helper-checks/roppity-e6184a41af/check.json",
+      "label": "roppity",
+      "mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": true,
+      "connections": 20,
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "final"
+    },
+    {
+      "record": "final/roppity-ee1e9fbc54.json",
+      "sha256": "1522ccacd217e4186ff1241df428d7196c234ec37cd43d33a9b883aac1b84cfe",
+      "source": "runs/listener-image-diagnostic/final-helper-checks/roppity-ee1e9fbc54/check.json",
+      "label": "roppity",
+      "mode": "normal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": 20,
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "final"
+    },
+    {
+      "record": "exploratory/roppity-29bc04b236.json",
+      "sha256": "12aa22fb7b9f62d2fdbb1725f732810205c747f5d7e3ea7826922297f8c076ec",
+      "source": "runs/listener-image-diagnostic/roppity-29bc04b236/check.json",
+      "label": "roppity",
+      "mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": true,
+      "nofork_exec": false,
+      "connections": 1,
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "exploratory"
+    },
+    {
+      "record": "exploratory/roppity-2b17721a7c.json",
+      "sha256": "935fd733878cbbff89b998ef80edd0689d8e324ed15f182c5619aeac58e10c5f",
+      "source": "runs/listener-image-diagnostic/roppity-2b17721a7c/check.json",
+      "label": "roppity",
+      "mode": "normal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": 20,
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "exploratory"
+    },
+    {
+      "record": "exploratory/roppity-2beebf1634.json",
+      "sha256": "fcc161bb833fcfec87b3a66f53006e70476477e815ced73342bb2c54d74b8009",
+      "source": "runs/listener-image-diagnostic/roppity-2beebf1634/check.json",
+      "label": "roppity",
+      "mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": 1,
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "exploratory"
+    },
+    {
+      "record": "exploratory/roppity-9e14df8a6a.json",
+      "sha256": "d839e0422c4fce589ce4acf61ca4033258c2b0fab3d21cf65d46fe8a54e43b2e",
+      "source": "runs/listener-image-diagnostic/roppity-9e14df8a6a/check.json",
+      "label": "roppity",
+      "mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": true,
+      "nofork_exec": true,
+      "connections": 20,
+      "end": {
+        "Status": "running",
+        "Running": true,
+        "ExitCode": 0,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "exploratory"
+    },
+    {
+      "record": "exploratory/roppity-a0a316594b.json",
+      "sha256": "44083a97deaea778ce6104f230964d2504fecf32305156dae4ee0a927ac6a246",
+      "source": "runs/listener-image-diagnostic/roppity-a0a316594b/check.json",
+      "label": "roppity",
+      "mode": "signal",
+      "init": false,
+      "switch_user": false,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": 1,
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "exploratory"
+    },
+    {
+      "record": "exploratory/roppity-dbcacd6f75.json",
+      "sha256": "62626f77af475795cf437c597c5ee212cb9cd4edbb25796941b7209fb5fa74b8",
+      "source": "runs/listener-image-diagnostic/roppity-dbcacd6f75/check.json",
+      "label": "roppity",
+      "mode": "delayed",
+      "init": false,
+      "switch_user": true,
+      "debug": true,
+      "nofork_exec": false,
+      "connections": 1,
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "exploratory"
+    },
+    {
+      "record": "exploratory/roppity-decb384b6e.json",
+      "sha256": "3277f6ba3c38b4b7c537fa976ab495a6b4cc7135d0c1736fd502b7a44a8128b6",
+      "source": "runs/listener-image-diagnostic/roppity-decb384b6e/check.json",
+      "label": "roppity",
+      "mode": "signal",
+      "init": false,
+      "switch_user": true,
+      "debug": true,
+      "nofork_exec": false,
+      "connections": 1,
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "exploratory"
+    },
+    {
+      "record": "exploratory/roppity-f911878870.json",
+      "sha256": "6691bfa80f67dbf4d359256757cfd6e03bd5f303b7c2eab20337f40ebb399fbd",
+      "source": "runs/listener-image-diagnostic/roppity-f911878870/check.json",
+      "label": "roppity",
+      "mode": "signal",
+      "init": true,
+      "switch_user": true,
+      "debug": false,
+      "nofork_exec": false,
+      "connections": 1,
+      "end": {
+        "Status": "exited",
+        "Running": false,
+        "ExitCode": 1,
+        "OOMKilled": false
+      },
+      "network_cleanup": true,
+      "group": "exploratory"
+    }
+  ],
+  "limits": [
+    "All live diagnostic services used AMD64 images on an ARM64 Docker engine.",
+    "Historical attempt traffic was not replayed.",
+    "Exact old listener failed with synthetic children; upstream source identifies the matching bug.",
+    "Fixed-version listener inside the original images has not yet been tested.",
+    "EXEC nofork is a tested workaround with I/O and timeout tradeoffs, not a production correction.",
+    "Exploratory helpers evolved; their original hashes remain in the untouched records. Final six cases use the committed helper hash."
+  ],
+  "verification": {
+    "final_cases": 6,
+    "exploratory_cases": 10,
+    "all_network_cleanup": true,
+    "python_compile": true,
+    "whitespace_check": true,
+    "final_resource_inventory": "no ctf590-listener-* containers or ctf590-listener-net-* networks remain",
+    "record_hashes_and_preservation": true,
+    "local_link_paths_checked": 150,
+    "production_diff_empty": true
+  }
+}

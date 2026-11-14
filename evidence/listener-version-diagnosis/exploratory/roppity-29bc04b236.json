@@ -1,0 +1,56 @@
+{
+  "kind": "known_listener_synthetic_child",
+  "image_id": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+  "label": "roppity",
+  "model_calls": 0,
+  "challenge_program_executed": false,
+  "helper_sha256": "3952bc1a65ff6fb7df4218c46277be787d55e1a9fddc909e2894fcc93982aa3f",
+  "version": [
+    "socat by Gerhard Rieger and contributors - see www.dest-unreach.org",
+    "socat version 1.7.3.2 on Apr  4 2018 10:06:49",
+    "   running on Linux version #1 SMP Thu Aug 14 19:26:13 UTC 2025, release 6.10.14-linuxkit, machine x86_64"
+  ],
+  "client_image_id": "sha256:6b3223eb4d93718828223966ad316909c39813dee3ee9395204940500792b740",
+  "case": {
+    "child_mode": "signal",
+    "init": false,
+    "switch_user": true,
+    "debug": true,
+    "connections": [
+      {
+        "connection": 1,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 2,
+        "error": "gaierror",
+        "errno": -3
+      }
+    ],
+    "end": {
+      "Status": "exited",
+      "Running": false,
+      "ExitCode": 1,
+      "OOMKilled": false
+    },
+    "synthetic_logs": [
+      "2026/11/14 17:44:59 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:44:59 socat[1] N accepting connection from AF=2 172.19.0.3:53098 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:44:59 socat[1] N forked off child process 7",
+      "2026/11/14 17:44:59 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:44:59 socat[7] N forking off child, using socket for reading and writing",
+      "2026/11/14 17:44:59 socat[7] N forked off child process 8",
+      "2026/11/14 17:44:59 socat[7] N forked off child process 8",
+      "2026/11/14 17:44:59 socat[7] N starting data transfer loop with FDs [9,9] and [8,8]",
+      "2026/11/14 17:44:59 socat[8] N execvp'ing \"/bin/sh\"",
+      "2026/11/14 17:44:59 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:44:59 socat[1] E waitpid(): child 8 exited on signal 11",
+      "2026/11/14 17:44:59 socat[1] N exit(1)",
+      "2026/11/14 17:44:59 socat[7] N socket 2 (fd 8) is at EOF",
+      "2026/11/14 17:44:59 socat[7] N socket 1 (fd 9) is at EOF",
+      "2026/11/14 17:44:59 socat[7] N socket 2 (fd 8) is at EOF"
+    ]
+  },
+  "network_cleanup": true
+}

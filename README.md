@@ -1,14 +1,17 @@
 # CTFTiny agent — CYBERSEC 590 Assignment 4
 
-Setup and run instructions for the agent. Architecture, experiments and results are in
-the report, [docs/REPORT.md](docs/REPORT.md).
+Setup and run instructions for the agent. [DESIGN](docs/DESIGN.md) describes the
+current architecture; [EXPERIMENTS](docs/EXPERIMENTS.md) records tests and results.
+The [Part 1 report](docs/REPORT.md) is the preserved submission snapshot; later
+development updates are recorded in the current status and linked evidence.
 
 For development or agent handoff, start with [current status](PROJECT_STATUS.md)
 and the [working agreement](AGENTS.md). [Project history](docs/PROJECT_HISTORY.md)
 preserves milestones; [experiments](docs/EXPERIMENTS.md) holds detailed test records.
 The [historical development guide](docs/DEVELOPMENT_GUIDE.md) preserves our longer
 November 11 README; use this README for current setup and commands.
-The [target-listener issue](docs/TARGET_PROCESS_ISSUE.md) remains open.
+The [target-listener handoff](docs/TARGET_PROCESS_ISSUE.md) records the implemented
+listener correction and its verification.
 
 ## Requirements
 
@@ -60,6 +63,12 @@ docker load -i ctf590-solver-nyu-integrated-20261107.tar
 docker build -f docker/guard.Dockerfile -t ctf590-guard:m1 .
 docker build -f docker/fixture.Dockerfile -t ctf590-fixture:m1 .
 ```
+
+For the two affected roppity/baby-boi target images, preparation automatically
+builds and caches a listener-only correction using a checksum-pinned Ubuntu socat
+1.7.3.3 package. The first use needs host internet access for that small download;
+startup commands, target libraries and application files stay as supplied. Other
+target images are unchanged. [Details and verification](evidence/listener-update/README.md).
 
 **3. Add credentials.** Copy the template, then fill in the four values below. `.env`
 is Git-ignored and stays on the host: it is never copied into the solver container.
@@ -133,7 +142,14 @@ uv run --frozen --env-file .env python -m ctf_agent run-challenge --challenge <I
 
 [configs/ctftiny.json](configs/ctftiny.json) splits the 50 challenges into two lists:
 - `development` (40): use these for testing.
-- `scored` (10): held out. Never run them during development.
+- `scored` (10): the originally held-out Part 1 selection.
+
+On November 14 the user allowed both lists for a new planning/notes practice
+comparison. Previously scored tasks reused for tuning are not fresh held-out
+evaluation evidence. Keep those new practice outputs separate from the original
+scored records/metrics. The manifest labels stay unchanged, and the runner still
+requires separate development/scored-list batches.
+[Proposed comparison and baseline freeze](docs/IMPROVEMENT_OPTIONS.md#expanded-comparison-and-baseline-freeze--november-14).
 
 The ten scored IDs are `cry-babycrypto`, `cry-collision-course`, `for-whyos`,
 `msc-quantum-leap`, `msc-weak-password`, `pwn-puffin`, `pwn-slithery`,
@@ -216,6 +232,14 @@ Each attempt writes a new directory `challenge-<random id>/` under the output di
 | `observations.json` | Langfuse export: model responses, tool inputs and results, flag submissions and verdicts |
 | `public-task.json` | Exactly what the agent was given |
 | `target/` | Target configuration and lifecycle record, including state before removal. Keep it local: it can contain private values. |
+
+For model-backed attempts, `result.known_usage` retains reported-call token/cost
+subtotals and their `model_calls` count. If any request fails or lacks usage,
+whole-attempt `tokens`/`cost_usd` remain null and `usage_complete` is false;
+the known subtotal is not the full attempt bill. Native Langfuse costs live on
+`model-response` generations; the root `attempt` span's output contains our local
+estimate, which can differ because of cache-write pricing.
+[Accounting verification and cost-display check](evidence/usage-preservation/README.md).
 
 A batch writes a `batch-<random id>/` directory containing:
 - one `attempt-NNN/` folder per attempt;

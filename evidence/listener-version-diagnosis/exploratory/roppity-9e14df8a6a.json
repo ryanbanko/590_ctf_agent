@@ -1,0 +1,257 @@
+{
+  "kind": "known_listener_synthetic_child",
+  "image_id": "sha256:e0fe9b2db871e1324ab71bc85d308783b6224fd62271d8ea4df3962aace4047c",
+  "label": "roppity",
+  "model_calls": 0,
+  "challenge_program_executed": false,
+  "helper_sha256": "be2a1d4b07563feee428e255318bfdc481fab163660bb03e5723e0febbf3ae87",
+  "version": [
+    "socat by Gerhard Rieger and contributors - see www.dest-unreach.org",
+    "socat version 1.7.3.2 on Apr  4 2018 10:06:49",
+    "   running on Linux version #1 SMP Thu Aug 14 19:26:13 UTC 2025, release 6.10.14-linuxkit, machine x86_64"
+  ],
+  "client_image_id": "sha256:6b3223eb4d93718828223966ad316909c39813dee3ee9395204940500792b740",
+  "case": {
+    "child_mode": "signal",
+    "init": false,
+    "switch_user": true,
+    "debug": true,
+    "nofork_exec": true,
+    "connections": [
+      {
+        "connection": 1,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 2,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 3,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 4,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 5,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 6,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 7,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 8,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 9,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 10,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 11,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 12,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 13,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 14,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 15,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 16,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 17,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 18,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 19,
+        "connected": true,
+        "eof": true
+      },
+      {
+        "connection": 20,
+        "connected": true,
+        "eof": true
+      }
+    ],
+    "end": {
+      "Status": "running",
+      "Running": true,
+      "ExitCode": 0,
+      "OOMKilled": false
+    },
+    "processes": [
+      "PID                 PPID                COMMAND",
+      "2496                2474                socat"
+    ],
+    "synthetic_logs": [
+      "2026/11/14 17:47:27 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:28 socat[1] N accepting connection from AF=2 172.19.0.3:51350 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:28 socat[1] N forked off child process 7",
+      "2026/11/14 17:47:28 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:28 socat[7] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=7 parent=1",
+      "2026/11/14 17:47:28 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:28 socat[1] N accepting connection from AF=2 172.19.0.3:51364 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:28 socat[1] N forked off child process 8",
+      "2026/11/14 17:47:28 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:28 socat[8] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=8 parent=1",
+      "2026/11/14 17:47:28 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:28 socat[1] N accepting connection from AF=2 172.19.0.3:51366 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:28 socat[1] N forked off child process 9",
+      "2026/11/14 17:47:28 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:28 socat[9] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=9 parent=1",
+      "2026/11/14 17:47:28 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:28 socat[1] N accepting connection from AF=2 172.19.0.3:51368 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:28 socat[1] N forked off child process 10",
+      "2026/11/14 17:47:28 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:28 socat[10] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=10 parent=1",
+      "2026/11/14 17:47:28 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:28 socat[1] N accepting connection from AF=2 172.19.0.3:51376 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:28 socat[1] N forked off child process 11",
+      "2026/11/14 17:47:28 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:28 socat[11] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=11 parent=1",
+      "2026/11/14 17:47:28 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:29 socat[1] N accepting connection from AF=2 172.19.0.3:51392 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:29 socat[1] N forked off child process 12",
+      "2026/11/14 17:47:29 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:29 socat[12] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=12 parent=1",
+      "2026/11/14 17:47:29 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:29 socat[1] N accepting connection from AF=2 172.19.0.3:51402 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:29 socat[1] N forked off child process 13",
+      "2026/11/14 17:47:29 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:29 socat[13] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=13 parent=1",
+      "2026/11/14 17:47:29 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:29 socat[1] N accepting connection from AF=2 172.19.0.3:51408 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:29 socat[1] N forked off child process 14",
+      "2026/11/14 17:47:29 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:29 socat[14] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=14 parent=1",
+      "2026/11/14 17:47:29 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:29 socat[1] N accepting connection from AF=2 172.19.0.3:51418 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:29 socat[1] N forked off child process 15",
+      "2026/11/14 17:47:29 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:29 socat[15] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=15 parent=1",
+      "2026/11/14 17:47:29 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:29 socat[1] N accepting connection from AF=2 172.19.0.3:51426 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:29 socat[1] N forked off child process 16",
+      "2026/11/14 17:47:29 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:29 socat[16] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=16 parent=1",
+      "2026/11/14 17:47:29 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:30 socat[1] N accepting connection from AF=2 172.19.0.3:51434 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:30 socat[1] N forked off child process 17",
+      "2026/11/14 17:47:30 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:30 socat[17] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=17 parent=1",
+      "2026/11/14 17:47:30 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:30 socat[1] N accepting connection from AF=2 172.19.0.3:51450 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:30 socat[1] N forked off child process 18",
+      "2026/11/14 17:47:30 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:30 socat[18] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=18 parent=1",
+      "2026/11/14 17:47:30 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:30 socat[1] N accepting connection from AF=2 172.19.0.3:51454 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:30 socat[1] N forked off child process 19",
+      "2026/11/14 17:47:30 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:30 socat[19] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=19 parent=1",
+      "2026/11/14 17:47:30 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:30 socat[1] N accepting connection from AF=2 172.19.0.3:51458 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:30 socat[1] N forked off child process 20",
+      "2026/11/14 17:47:30 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:30 socat[20] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=20 parent=1",
+      "2026/11/14 17:47:30 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:30 socat[1] N accepting connection from AF=2 172.19.0.3:51468 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:30 socat[1] N forked off child process 21",
+      "2026/11/14 17:47:30 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:30 socat[21] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=21 parent=1",
+      "2026/11/14 17:47:30 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:30 socat[1] N accepting connection from AF=2 172.19.0.3:51482 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:30 socat[1] N forked off child process 22",
+      "2026/11/14 17:47:30 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:30 socat[22] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=22 parent=1",
+      "2026/11/14 17:47:30 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:31 socat[1] N accepting connection from AF=2 172.19.0.3:51486 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:31 socat[1] N forked off child process 23",
+      "2026/11/14 17:47:31 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:31 socat[23] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=23 parent=1",
+      "2026/11/14 17:47:31 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:31 socat[1] N accepting connection from AF=2 172.19.0.3:51490 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:31 socat[1] N forked off child process 24",
+      "2026/11/14 17:47:31 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:31 socat[24] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=24 parent=1",
+      "2026/11/14 17:47:31 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:31 socat[1] N accepting connection from AF=2 172.19.0.3:51496 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:31 socat[1] N forked off child process 25",
+      "2026/11/14 17:47:31 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:31 socat[25] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=25 parent=1",
+      "2026/11/14 17:47:31 socat[1] N childdied(): handling signal 17",
+      "2026/11/14 17:47:31 socat[1] N accepting connection from AF=2 172.19.0.3:51502 on AF=2 172.19.0.2:8000",
+      "2026/11/14 17:47:31 socat[1] N forked off child process 26",
+      "2026/11/14 17:47:31 socat[1] N listening on AF=2 0.0.0.0:8000",
+      "2026/11/14 17:47:31 socat[26] N execvp'ing \"/bin/sh\"",
+      "synthetic child pid=26 parent=1",
+      "2026/11/14 17:47:31 socat[1] N childdied(): handling signal 17"
+    ]
+  },
+  "network_cleanup": true
+}

@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-14",
+  "milestone": "usage preservation and read-only cost review",
+  "commit": "bc3ca3a096f8874d6b57973915207c9194adf4a7",
+  "working_tree_dirty": true,
+  "source_sha256": {
+    "ctf_agent/agent.py": "5bb398f9aac11785800859559fcd0d0fcf722bc154fdcdf04d35b814bad9d5ed",
+    "tests/test_model.py": "896c11d100fb66a94b1008727446073863f74f0ba9516e1b0ce1c8e07aea9940",
+    "ctf_agent/attempt.py": "5064ee9141e3087290ce6d2fbbfae44d2b7e53992ba9dc427126c73d4a99af19",
+    "ctf_agent/launch.py": "a13b10e07ffcfbc6deabdc23836b2cee8986fa678c1b39421ca0cf47686f6f8d",
+    "configs/development.toml": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b"
+  },
+  "evidence_sha256": {
+    "README.md": "d88e0741187df060b2058218b34f35a4dd3c3d566a5b108b367ffc396a73bda5",
+    "gateway-model-costs.json": "6fd194128e5ba256c9dff5a0d11fb5c1ea063458ec9ac7fe63688b432ac5c926",
+    "langfuse-cost-check.json": "95961d6451346f52b844d6ddbc992c4b12f518851268b90e6d8f408aab19f61e",
+    "model-cost-comparison.json": "7ce4ac3daf28daceb75c524563ccdfee06e058064227395e8949999c97ce0092",
+    "pytest.xml": "04f2953c6a62ce6c264d19c03afdefd35dff0cb3f9c7f5a18d9ba8db75d1864a"
+  },
+  "offline_tests": {
+    "tests": 58,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "docker_cases_deselected": 2,
+  "model_generation_calls": 0,
+  "challenge_attempts": 0,
+  "hosted_mutations": 0,
+  "local_link_check": {
+    "files": 12,
+    "missing_file_targets": [],
+    "new_heading_anchor": "passed"
+  },
+  "protected_files_unchanged": {
+    "ctf_agent/launch.py": true,
+    "ctf_agent/__main__.py": true,
+    "tests/test_batch.py": true,
+    "configs/development.toml": true,
+    "docs/REPORT.md": true,
+    "pyproject.toml": true,
+    "uv.lock": true
+  },
+  "historical_audits": "Preserved as recorded; listener milestone source hashes predate this accounting edit.",
+  "limits": [
+    "Configured-rate cost estimator unchanged; excludes observed cache-write premium.",
+    "Known subtotal is not full billing; unknown complete totals remain null.",
+    "Read-only generation metadata confirms stored costs, not the user UI layout.",
+    "Duke metadata does not establish live Sol compatibility or Daybreak access.",
+    "Planning/notes/continuation remain recommendations, not implemented behavior."
+  ]
+}
