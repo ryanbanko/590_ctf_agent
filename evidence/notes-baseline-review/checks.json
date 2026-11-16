@@ -1,0 +1,94 @@
+{
+  "date": "2026-11-15",
+  "review_kind": "metadata_and_documentation_only",
+  "attempts_checked": 36,
+  "distinct_tasks": 12,
+  "observations_by_type": {
+    "EVENT": 267,
+    "TOOL": 354,
+    "GENERATION": 355,
+    "SPAN": 36
+  },
+  "source_and_export_hashes_match": true,
+  "clean_recorded_commit": "0395835e693a80813635721eb2619113c7aa7700",
+  "source_hash_sets": 1,
+  "model_setting_sets": 1,
+  "dataset_identity_sets": 1,
+  "per_task_image_identity_sets": {
+    "cry-lupin": 1,
+    "cry-open-ellipti-ph": 1,
+    "pwn-pilot": 1,
+    "pwn-roppity": 1,
+    "rev-a-walk-through-x86-part-2": 1,
+    "rev-gibberish-check": 1,
+    "web-poem-collection": 1,
+    "web-shreeramquest": 1,
+    "for-1black0white": 1,
+    "for-whyos": 1,
+    "msc-algebra": 1,
+    "msc-quantum-leap": 1
+  },
+  "current_runtime_source_hashes_match_records": true,
+  "required_payload_gap_fields": 6,
+  "missing_payload_observation_ids": [
+    "24f8a3b88dd13cfd",
+    "8a04db68be786730",
+    "ca7753b242899411",
+    "fa51947ccbe8a7b3"
+  ],
+  "all_report_observation_ids_exist": true,
+  "coverage_table_rows": 36,
+  "all_captures_report_complete": true,
+  "recorded_scope_incidents": 0,
+  "cleanup_errors": 0,
+  "timing_discrepancy": {
+    "run_id": "fd8707a7237b",
+    "generation_id": "26c613faea59aecc",
+    "hosted_generation_seconds": 132.723,
+    "hosted_root_seconds": 156.343,
+    "local_active_seconds": 83.345862,
+    "cause": "unconfirmed; clocks not treated as interchangeable"
+  },
+  "no_recorded_commands_replayed": true,
+  "new_model_calls": 0,
+  "new_docker_operations": 0,
+  "runtime_tests_run": false,
+  "runtime_tests_reason": "Documentation/metadata review; no runtime edits.",
+  "historical_records_modified": false,
+  "local_markdown_file_targets_exist": true,
+  "review_json_files_parse": true,
+  "review_candidate_pattern_screen_passed": true,
+  "git_diff_check_passed": true,
+  "files": [
+    {
+      "path": "PROJECT_STATUS.md",
+      "sha256": "a10b5b76a1c32c52ec804865d2f3786778f6df183b8f2bb3c72e46e08e7f688b"
+    },
+    {
+      "path": "docs/IMPROVEMENT_OPTIONS.md",
+      "sha256": "91f6061d95cad1fc2517937e75da6be8ebe73e35e8ee36f1b7ae57f13e56c1a6"
+    },
+    {
+      "path": "docs/EXPERIMENTS.md",
+      "sha256": "2b03a4e118f8fadc7071d488c909cb051ba6693acc87821e2b51470df065d0f3"
+    },
+    {
+      "path": "docs/PROJECT_HISTORY.md",
+      "sha256": "288d7441c494c3c9999a77f0f0d2bdd6e7b906c6e8a8b3e82935ee9f5d266e67"
+    },
+    {
+      "path": "evidence/README.md",
+      "sha256": "4bab2e32991075fd26ed7a2e065af9f99fd6f3a7fef29046dba777ba90adff88"
+    },
+    {
+      "path": "evidence/notes-baseline-review/README.md",
+      "sha256": "e2ce8f6daafe21931ae2936553dcb9e537ce607a79b627f4ae9f4e27ce8461d3"
+    },
+    {
+      "path": "evidence/notes-baseline-review/review.json",
+      "sha256": "881d9f8ec17fb53a019394e7c2330d7da582dae4c51100454942d817da8d1988"
+    }
+  ],
+  "output_usage_totals_match_all_36_records": true,
+  "new_review_files_whitespace_checked": true
+}

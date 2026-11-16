@@ -1,0 +1,305 @@
+{
+  "batch": "/var/folders/cm/6w44kpyj0vlb0bj661m97jj80000gn/T/ctf590-service-investigation-9e_63t1d/candidate-lupin-user/batch-26e636f325ef",
+  "review_scope": "Local exported observations; purpose text, tool lifecycle, errors, resource use and provenance. No expected answers, private server source, or target state contents consulted. No recorded command executed.",
+  "trials": [
+    {
+      "condition": "baseline",
+      "trial": 1,
+      "run_id": "98e5ac9ca868",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/2a567581fdf8b86608adcf59e30f9f41",
+      "outcome": "success",
+      "verified_success": true,
+      "active_seconds": 66.03152,
+      "model_calls": 7,
+      "tool_calls": 7,
+      "tokens": {
+        "input": 28711,
+        "output": 3525,
+        "cached_input": 21374,
+        "reasoning": 2272
+      },
+      "estimated_cost_usd": 0.00270994,
+      "visible_text_generations": 7,
+      "visible_text_chars": 997,
+      "generations_with_calls": 7,
+      "missing_generation_outputs": 0,
+      "new_guidance_in_all_available_requests": false,
+      "remote_json_error_tools": 0,
+      "command_timeouts_returned": [],
+      "nonzero_commands": [
+        {
+          "tool": 5,
+          "exit_code": 1
+        }
+      ],
+      "tool_span_seconds": 15.186,
+      "generation_span_seconds": 49.389,
+      "solver_restarts": 0,
+      "scope_incidents": 0,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "target_running_before_cleanup": true,
+      "record_sha256": "6c72e25de0f9f12d7b837e09e1f11ce21554ee41c20fc5e7dc0de85851585c09",
+      "observations_sha256": "b4a886239549effdaeec024671674660950112aeffb1dc3d2fb713ef58499e98"
+    },
+    {
+      "condition": "baseline",
+      "trial": 2,
+      "run_id": "b291028aaa4f",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/3ae0e7786cbcc48145716a9eed549441",
+      "outcome": "completed_without_success",
+      "verified_success": false,
+      "active_seconds": 47.889473,
+      "model_calls": 7,
+      "tool_calls": 6,
+      "tokens": {
+        "input": 21335,
+        "output": 2493,
+        "cached_input": 16966,
+        "reasoning": 1554
+      },
+      "estimated_cost_usd": 0.0018530600000000001,
+      "visible_text_generations": 7,
+      "visible_text_chars": 1328,
+      "generations_with_calls": 6,
+      "missing_generation_outputs": 0,
+      "new_guidance_in_all_available_requests": false,
+      "remote_json_error_tools": 3,
+      "command_timeouts_returned": [],
+      "nonzero_commands": [],
+      "tool_span_seconds": 9.126,
+      "generation_span_seconds": 37.267,
+      "solver_restarts": 0,
+      "scope_incidents": 0,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "target_running_before_cleanup": true,
+      "record_sha256": "128c0b2ed71807fb0470fcedce3cd7443d696cd39c8e9e79d158938773e0c128",
+      "observations_sha256": "6d29056973d9bc6cec7df8e2ba107268ae32ff0c4a5a6f05a6f8c3f42b4aaaa5"
+    },
+    {
+      "condition": "baseline",
+      "trial": 3,
+      "run_id": "339dd07d8012",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/a549808591fc0842d3ec7111e024b8d4",
+      "outcome": "success",
+      "verified_success": true,
+      "active_seconds": 70.389628,
+      "model_calls": 7,
+      "tool_calls": 7,
+      "tokens": {
+        "input": 26978,
+        "output": 2406,
+        "cached_input": 21520,
+        "reasoning": 1110
+      },
+      "estimated_cost_usd": 0.001964,
+      "visible_text_generations": 7,
+      "visible_text_chars": 1157,
+      "generations_with_calls": 7,
+      "missing_generation_outputs": 0,
+      "new_guidance_in_all_available_requests": false,
+      "remote_json_error_tools": 0,
+      "command_timeouts_returned": [],
+      "nonzero_commands": [],
+      "tool_span_seconds": 35.755,
+      "generation_span_seconds": 33.536,
+      "solver_restarts": 0,
+      "scope_incidents": 0,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "target_running_before_cleanup": true,
+      "record_sha256": "aec334728501abae4c8ed56192da077f1ea39b38c109bfeec5258210901a3f9d",
+      "observations_sha256": "d38250fc64b4e43150dc211577eaf1a6bfe6a8bb6aca0c94e0974630010eb2d3"
+    },
+    {
+      "condition": "candidate",
+      "trial": 1,
+      "run_id": "81fedc99546c",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/271ec39370278f171c50ab99b6969209",
+      "outcome": "success",
+      "verified_success": true,
+      "active_seconds": 28.890579,
+      "model_calls": 5,
+      "tool_calls": 5,
+      "tokens": {
+        "input": 15601,
+        "output": 1551,
+        "cached_input": 10367,
+        "reasoning": 926
+      },
+      "estimated_cost_usd": 0.0014025700000000001,
+      "visible_text_generations": 5,
+      "visible_text_chars": 866,
+      "generations_with_calls": 5,
+      "missing_generation_outputs": 0,
+      "new_guidance_in_all_available_requests": true,
+      "remote_json_error_tools": 0,
+      "command_timeouts_returned": [],
+      "nonzero_commands": [],
+      "tool_span_seconds": 7.452,
+      "generation_span_seconds": 20.333,
+      "solver_restarts": 0,
+      "scope_incidents": 0,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "target_running_before_cleanup": true,
+      "record_sha256": "c45974f6a9b7fa6c1e54e304a04194c956a3ffe131ceab5f73d4c086209adc86",
+      "observations_sha256": "dfcf8d683a9c86ed90008944f3244ee0c35ad3f48342c3e6b7e1679bfcd8bece"
+    },
+    {
+      "condition": "candidate",
+      "trial": 2,
+      "run_id": "9d3ba1eed519",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/af1ccf0a676e1203be590881c6fab7f4",
+      "outcome": "wall_limit",
+      "verified_success": false,
+      "active_seconds": 600.062265,
+      "model_calls": 21,
+      "tool_calls": 21,
+      "tokens": {
+        "input": 340112,
+        "output": 23912,
+        "cached_input": 306783,
+        "reasoning": 16655
+      },
+      "estimated_cost_usd": 0.01835673,
+      "visible_text_generations": 20,
+      "visible_text_chars": 4551,
+      "generations_with_calls": 21,
+      "missing_generation_outputs": 0,
+      "new_guidance_in_all_available_requests": true,
+      "remote_json_error_tools": 0,
+      "command_timeouts_returned": [
+        13
+      ],
+      "nonzero_commands": [
+        {
+          "tool": 6,
+          "exit_code": 2
+        },
+        {
+          "tool": 9,
+          "exit_code": 2
+        },
+        {
+          "tool": 10,
+          "exit_code": 2
+        },
+        {
+          "tool": 12,
+          "exit_code": 127
+        },
+        {
+          "tool": 15,
+          "exit_code": 2
+        },
+        {
+          "tool": 16,
+          "exit_code": 2
+        },
+        {
+          "tool": 17,
+          "exit_code": 2
+        },
+        {
+          "tool": 18,
+          "exit_code": 2
+        },
+        {
+          "tool": 19,
+          "exit_code": 2
+        }
+      ],
+      "tool_span_seconds": 376.069,
+      "generation_span_seconds": 222.841,
+      "solver_restarts": 1,
+      "scope_incidents": 0,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "target_running_before_cleanup": true,
+      "record_sha256": "fd080708fc181d00eb3aba96730973df0a6f5f2eca4905aca4bbad568e92f214",
+      "observations_sha256": "e428363da2bbcdd1f87955612f3e4bc60654b0547d30c6d6f790717e8ae70266"
+    },
+    {
+      "condition": "candidate",
+      "trial": 3,
+      "run_id": "122505c733a4",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/20b89b09a7fdc0f09b6e449a66471317",
+      "outcome": "wall_limit",
+      "verified_success": false,
+      "active_seconds": 600.085237,
+      "model_calls": 12,
+      "tool_calls": 12,
+      "tokens": {
+        "input": 112897,
+        "output": 11974,
+        "cached_input": 96455,
+        "reasoning": 7925
+      },
+      "estimated_cost_usd": 0.00859575,
+      "visible_text_generations": 12,
+      "visible_text_chars": 2111,
+      "generations_with_calls": 12,
+      "missing_generation_outputs": 0,
+      "new_guidance_in_all_available_requests": true,
+      "remote_json_error_tools": 0,
+      "command_timeouts_returned": [],
+      "nonzero_commands": [
+        {
+          "tool": 5,
+          "exit_code": 137
+        }
+      ],
+      "tool_span_seconds": 457.465,
+      "generation_span_seconds": 141.505,
+      "solver_restarts": 0,
+      "scope_incidents": 0,
+      "cleanup_errors": [],
+      "evidence_complete": true,
+      "target_running_before_cleanup": true,
+      "record_sha256": "1e03d00977fca2c86291aa087950a727c99fda065b9da32b045e2efb176d48a2",
+      "observations_sha256": "ffe4fa5b23f0de902d05c5503b6c0dce933ec0bfaad2384c9cdacd14cf2c2113"
+    }
+  ],
+  "comparability": {
+    "only_source_hash_difference": [
+      "ctf_agent/tools.py"
+    ],
+    "limits_equal": true,
+    "images_equal": true,
+    "model_settings_equal": true,
+    "random_fresh_instances_not_paired": true,
+    "summary_instruction_unchanged": true
+  },
+  "findings": [
+    {
+      "trial": 1,
+      "finding": "Complete initial read, compact saved data, verified success."
+    },
+    {
+      "trial": 2,
+      "finding": "Complete initial read; repeated implementation/search revisions and one full 120-second command timeout/restart. About 376 tool seconds and 223 generation seconds before wall limit. No submission."
+    },
+    {
+      "trial": 3,
+      "finding": "Complete initial read; preprocessing IndexError followed by continued command sequence and Killed/137. Four later commands each used about 98-107 seconds while correcting and re-running computations. Basic consistency checks came late. No submission. Cause of Killed not established by exit code alone."
+    }
+  ],
+  "summary_instruction_assessment": {
+    "generations": 38,
+    "with_visible_purpose": 37,
+    "with_tool_calls": 38,
+    "visible_text_chars": 7528,
+    "conclusion": "No observed text-only stop or evident summary-caused delay. No ablation, so benefit/harm is not causally identified. Some explanatory claims preceded adequate checks."
+  },
+  "limits": [
+    "Three trials on one reused practice task cannot establish solve-rate improvement or regression.",
+    "The prior service failure did not occur; this does not establish that wording prevents it.",
+    "Initial clients buffer on one connection with 10/15/30-second socket timeouts, but no explicit overall read-deadline clock; guidance uptake is partial.",
+    "Historical five-second disconnect counterexamples and randomized instances remain part of the comparison.",
+    "The earlier agent-started attempt was user-cancelled separately; do not include as a completed trial or silently replace it."
+  ],
+  "workspace_unchanged_files_checked": 1367,
+  "workspace_changed": []
+}

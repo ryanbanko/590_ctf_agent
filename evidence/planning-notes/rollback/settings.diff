@@ -1,0 +1,11 @@
+--- planning-notes/settings
++++ restored-0395835/settings
+@@ -6,7 +6,7 @@
+ target_image = "ctf590-fixture:m1"
+ wall_seconds = 600.0
+ command_seconds = 120.0
+-max_model_turns = 50 # Also supplies the model adapter request limit; planning/notes candidate.
++max_model_turns = 40 # Also supplies the model adapter request limit.
+ max_tool_calls = 80
+ max_scope_recoveries = 1 # One confirmed blocked command may receive corrective feedback.
+ max_output_bytes = 65536

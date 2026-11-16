@@ -28,6 +28,14 @@ for example `git show aedfd62:evidence/target-precleanup-snapshot/README.md`.
 | `listener-version-diagnosis/` | November 14 exact-listener synthetic reproduction, socat bug diagnosis and constraint review | Current status, target issue, `docs/EXPERIMENTS.md` |
 | `listener-update/` | Binary-only listener correction, synthetic/readiness checks and two successful development retries | Current status, README, DESIGN and experiments |
 | `usage-preservation/` | Reported-call usage preservation, focused offline checks, read-only native-cost check and fixed-volume model-cost comparison | Current status, README, DESIGN and improvement review |
+| `notes-baseline-review/` | November 15 assistant-assisted review of all 36 practice-baseline attempts; per-trial metadata/hashes, category findings, priorities and comparison limits | Current status, improvement options and experiment/history records |
+| `agent-change-proposal/` | Per-request token-growth/item-byte profiles for 355 generations, inventory-event classification and implementation-aware proposal checks; no new runs | `docs/AGENT_CHANGE_PROPOSAL.md`, current shortlist/status/history |
+| `prompt-validation/` | Exact original/revised prompts and offline verification; preceding service-diagnostic and non-adopted connection-pilot summaries | Current status, design, experiments and history |
+| `planning-notes/` | November 16 planning/notes-plus-50-turn implementation checkpoint: exact prompts/settings, diffs and offline verification; later trials and withdrawal are recorded under rollback/ | Current status, README, design, experiments and history |
+| `planning-notes/rollback/` | Later November 16 trial review: 12 outcomes, limited adoption and evidence gaps; exact original prompt/40-turn rollback, preserved records and offline verification | Current status, README, design, experiments and history |
+| `validation-pilot-review/` | All six validation-prompt pilot traces and six historical controls; metrics, behavior, provenance and limits | Current status, design, experiments and history |
+| `validation-expanded-review/` | Twelve additional trials/controls, combined 18-trial metrics, recurring payload gaps and timing anomaly | Current status, design, experiments and history |
+| `scored-recheck-stop/` | Metadata-only record of the separate later response-source/export stop; cause unconfirmed | Current status; separate from the 36-attempt practice baseline |
 | `prompt-recovery/` | Experiment 1 trial review | `docs/EXPERIMENTS.md` |
 | `solver-libraries/` | Experiment 2 build and checks | `docs/EXPERIMENTS.md` |
 | `agent-usability/`, `execution-simplification/` | Experiment 3 checks and the later move to one shell per command | `docs/EXPERIMENTS.md` |
@@ -35,3 +43,5 @@ for example `git show aedfd62:evidence/target-precleanup-snapshot/README.md`.
 | `agent-first-fix-batch/` | Experiment A batch | `docs/EXPERIMENTS.md` |
 | `nyu-solver-integration/` | Solver image record, including the archive checksum | `README.md` |
 | `ctftiny-readiness/index-metadata.json` | CTFTiny index metadata | `tests/test_challenge.py` (checks the held-out selection rule) |
+
+- [`validation-full-review/`](validation-full-review/README.md): November 16 partial full-rerun agent-pattern review; 23 outcomes, two solver failures and one unavailable API trace.

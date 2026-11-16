@@ -1,5 +1,173 @@
 # Agent improvement options
 
+## Original baseline restored after planning/notes review — November 16
+
+The user withdrew the planning/notes-plus-50-turn candidate and restored the exact
+original `0395835` prompt and 40-turn default. Twelve recorded attempts include ten
+successes, one service-blocked ending and one API incident. Available exports show
+no explicit notes.md activity, and no attempt exceeded 29 calls. Useful maintained
+working state or improvement was not demonstrated; missing exports/payloads and
+historical unpaired comparisons limit inference. This is a conservative selection,
+not proof the candidate is worse. All original evidence remains. Rollback passed
+41 focused offline checks. [Decision and verification](../evidence/planning-notes/rollback/README.md).
+
+No further behavior iteration or run starts automatically. Earlier proposals and
+rankings below retain their dated context; planning/notes and 50 turns are no
+longer active. Controller instrumentation and error/payload record improvements
+remain separate unimplemented proposals.
+
+## Planning/notes and 50-turn candidate — November 16
+
+The user selected a small planning/notes experiment after reassessing the partial
+full validation batch. The active prompt is now the exact original `0395835`
+prompt plus one paragraph for brief plans alongside tool calls and optional
+`/workspace/notes.md`, using existing tools. The user also raised the default
+model-turn allowance from 40 to 50; wall time and tool allowance remain 600 seconds
+and 80 calls. This is a combined prompt-and-budget condition, with 41 focused
+offline checks passed and no live trial. [Exact change and verification](../evidence/planning-notes/README.md).
+
+The validation/readability revision is withdrawn from active use; its pilot and
+partial full-batch evidence remain intact. The more prescriptive diagnostic
+wording discussed later was not implemented. Controller instrumentation, payload/
+error-record improvements, conditional notices, automatic continuation and
+compaction remain proposals. Historical rankings and recommendations below belong
+to their recorded checkpoint. Review this offline milestone before any new pilot.
+
+## Expanded regression decision — November 15
+
+Twelve additional candidate trials succeeded, matching their original 12/12
+controls. The revision now has 18/18 successes across six categories. It is
+reasonable to retain the small prompt change after this coverage, while causal
+benefit remains unproved. The expanded set used about 14% less estimated cost
+and 2% more recorded active time; including the first six leaves cost roughly
+unchanged and time about 22% higher than historical controls. Timing/instance
+differences and the success ceiling limit attribution.
+
+Two reversing trials still ran expensive searches before adequate original-
+artifact checks, timed out/restarted, then recovered. Broad output persists.
+Six required payload fields are absent in one Pwn export and a reversing span
+conflicts with local active time. These are recurring diagnostic gaps, not reasons
+to drop a verified result or raise budgets. [All-trial review](../evidence/validation-expanded-review/README.md).
+Keep subsequent behavior changes separate. The user requested commands for the
+original full 12-task/36-trial practice set; no automatic expansion was launched.
+
+## Validation pilot reviewed — November 15
+
+The user-run two-task/three-trial pilot achieved **6/6 successes**, versus 5/6 in
+the historical baseline. Total active time rose from 385.72 to 699.29 seconds;
+estimated model cost rose from $0.02071344 to $0.03489029. One long Lupin success
+accounts for much of the extra use. Cheap validation/correction behavior occurred,
+but parser errors, repeated computation, connection-state confusion and noisy
+output persisted. The baseline failure was a service JSON error, so its absence
+does not establish a validation effect. No infrastructure/scope/restart/cleanup
+incident occurred. [Every trial and comparison limits](../evidence/validation-pilot-review/README.md).
+
+Retain the candidate unchanged for a reviewed broader test rather than claim
+improvement or immediately add another instruction. The proposed expansion is
+the other ten tasks from the original 12-task practice set, three trials each;
+preserve these six. A fresh original control would strengthen causal inference
+at additional cost. No expansion is launched by this review. Runtime/budgets,
+notes, extra reuse instructions and context changes remain unchanged.
+
+## Validation candidate after connection pilot — November 15
+
+The external connection-wording pilot completed 1/3 successes versus 2/3 in the
+same task's baseline. Initial reads worked in all three, but two attempts spent
+their budgets on later computation/corrections. The user retained the original
+tool description. This small randomized comparison proves neither improvement
+nor causal regression. Separate fixed probes reproduced the service's early-
+disconnect failure; no target-state repair was adopted.
+
+The current implemented candidate changes only the system prompt: explicit cheap
+checks and preparation-failure handling, verbatim scope-recovery relocation and
+two sentence splits. Original-checker priority, independent validation and existing
+reuse/summary/stopping instructions remain. All 36 focused offline tests passed;
+live efficacy is unknown. [Exact wording and evidence](../evidence/prompt-validation/README.md).
+Next proposed pilot is cry-lupin/msc-algebra, three trials each, with all other
+settings fixed. Notes, extra reuse guidance, context changes, diagnostics and
+budgets remain separate. This entry supersedes the earlier connection-pilot
+recommendation; dated proposals below retain their original conditions.
+
+## Concrete implementation proposal — November 15 follow-up
+
+The [change proposal](AGENT_CHANGE_PROPOSAL.md) is the current implementation
+specification: exact files/functions, prompt wording, optional response fields,
+classification, effort and verification. It supersedes the broad recommended
+behavior package below with a smaller first experiment: **only the command tool's
+connection-reading wording changes**, on three existing tasks/three trials each.
+Notes, conditional annotations and selective-output edits remain separate.
+
+Per-request growth is useful even below the byte cap. Derived profiles now cover
+all 355 usage records and 353 request bodies; whyos trial 2 grows from 1,033 to
+170,959 input tokens. Proposed passive local request metrics would retain that
+view through export failures. Narrow new output first; defer automatic elision
+of older recoverable results until its remaining value and retrieval risks are
+measured. Preserve native call/result links and the exact request seen by the model.
+
+Optional notes can manage assumptions, rejected tests, valid intermediates and
+next actions, not only forgetting. Use a small revised workspace file when useful,
+without mandatory writes or repeated injection. Old note writes still remain in
+conversation history; file replacement alone is not compaction.
+
+Current tools already supply truncation/capture/reset feedback; any new notices
+should be brief, conditional facts about wrapper actions. The wrapper cannot
+certify server-response completeness or all inner-script stages from exit 0.
+The loop supports sequential sibling tool calls, but live requests explicitly set
+`parallel_tool_calls=False`; leave that policy unchanged in this experiment.
+
+Final inventory failures are understood: the solver is killed before the optional
+final exec. Propose an explicit `attempt_stopping` skip, not a restart. Different
+solver/target libraries and the socat package-database/binary discrepancy are
+known design facts; a claimed handout/runtime library mismatch still needs
+identity-based diagnosis before any library change.
+
+The full request audit finds two additional missing generation inputs in the
+same trace as the six previously counted action/tool fields: eight missing
+required input/output fields total. This correction preserves original exports.
+No proposal was implemented and no new attempt ran during this follow-up.
+
+## Baseline trace review — November 15
+
+The user-authorized 12-task, three-trial baseline completed at clean commit
+`0395835`: **35/36 verified successes**, with no candidate behavior edit yet.
+The [full category review](../evidence/notes-baseline-review/README.md) examines
+all trials, including inefficient successes, and supplies a ranked improvement
+table, per-trial inventory and comparison limitations.
+
+The sole unsuccessful attempt has repeated remote JSON-loading errors, despite a
+running target container. It supports a separate service initialization/state
+diagnosis, not a confident claim that notes or forced continuation would solve
+it. Delayed/partial reads and session-state mistakes recur across categories;
+unvalidated reconstructions, unbounded searches and broad output are stronger
+behavior candidates. Three command timeouts caused recoverable solver restarts;
+one other search returned 137, with the kill cause unconfirmed.
+
+Priorities now: (1) diagnose the service blocker with generic synthetic tests;
+(2) clarify same-session buffered reading; (3) make existing validation and
+bounded-search guidance operational; (4) distinguish required export payload
+completeness from structural evidence; (5) reduce output noise; (6) check tool /
+dependency interfaces early; (7) reconcile a hosted/local timing discrepancy.
+Brief revisable plans and optional notes remain a small conditional experiment,
+with no demonstrated forgetting problem. Avoid duplicating instructions already
+in the prompt. A combined plan/validation/notes change tests the package rather
+than isolating notes.
+
+Largest accepted input: 170,959 reported tokens. Largest reconstructed serialized
+request: 567,894 bytes, about 27% of the current 2 MiB cap. No attempt reached a
+model-input, model-output, wall, turn or tool-call termination limit. Retain Luna
+and current limits; defer larger budgets, stronger models, compaction, forced
+continuation, new frameworks and relaxed controls absent a measured need.
+
+For follow-up, freeze each condition, retain all trials/failures, and compare
+per-task success plus calls, cost, context peaks, timeout/restart frequency and
+median/tail time. Keep infrastructure repairs common or separately versioned.
+This high-success, 12-task practice set has substantial ceiling/tuning-reuse
+limits, six missing payload fields in one successful trace, one clock anomaly,
+and no causal before/after result yet. The separate scored-recheck API/export stop
+is not included in its 36-attempt denominator. This entry supersedes the earlier
+ranking; historical proposals below remain dated records. No runtime edit or
+additional paid attempt was made during this review.
+
 ## Expanded comparison and baseline freeze — November 14
 
 The user requested at least two challenges per category, preferably harder ones,

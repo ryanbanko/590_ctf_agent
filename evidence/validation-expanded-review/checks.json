@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-15",
+  "checks": {
+    "candidate_twelve_successful": true,
+    "source_and_settings_match_comparison": true,
+    "dataset_matches": true,
+    "original_tool_description_retained": true,
+    "all_available_request_bodies_match": true,
+    "exactly_six_missing_candidate_payload_fields_preserved": true,
+    "two_timeouts_and_restarts_preserved": true,
+    "no_scope_or_cleanup_failures": true,
+    "target_before_cleanup_running": true,
+    "original_records_unchanged": true,
+    "local_file_links_valid": true,
+    "git_diff_check_passed": true
+  },
+  "candidate_generations": 118,
+  "candidate_tools": 118,
+  "candidate_request_bodies_available": 117,
+  "required_payloads_complete": false,
+  "missing_payloads": [
+    {
+      "run_id": "7b008496a52b",
+      "id": "7a9fe1bed25a4320",
+      "field": "input"
+    },
+    {
+      "run_id": "7b008496a52b",
+      "id": "7a9fe1bed25a4320",
+      "field": "output"
+    },
+    {
+      "run_id": "7b008496a52b",
+      "id": "c64db280df4f7358",
+      "field": "output"
+    },
+    {
+      "run_id": "7b008496a52b",
+      "id": "c64db280df4f7358",
+      "field": "input"
+    },
+    {
+      "run_id": "7b008496a52b",
+      "id": "cd96546a051c94aa",
+      "field": "output"
+    },
+    {
+      "run_id": "7b008496a52b",
+      "id": "cd96546a051c94aa",
+      "field": "input"
+    }
+  ],
+  "timing_anomalies": [
+    {
+      "run_id": "fe967b23c21b",
+      "challenge": "rev-gibberish-check",
+      "trial": 2,
+      "requested_command_seconds": 120,
+      "reported_timed_out": true,
+      "tool_step": 13,
+      "tool_span_seconds": 314.303,
+      "root_span_seconds": 525.337,
+      "local_active_seconds": 331.335467,
+      "local_attempt_total_seconds": 331.89131,
+      "local_launch_total_seconds": 343.3615,
+      "cause": "Unconfirmed; host sleep/clock effects possible."
+    }
+  ],
+  "bad_links": [],
+  "whitespace": "",
+  "artifacts_sha256": {
+    "README.md": "328eb14d3b6f6de0ee1ee3980c5844005ae3b933733833856fac665df88845dc",
+    "review.json": "48b7b1c3fc3e8bd1941b36d57ec025fbcc4d56a2d834e010bbda88663d9d98c8"
+  },
+  "verification": "Derived metadata/provenance, raw file hashes, per-trial behavior, links and whitespace. No new model calls, Docker operations, command replay or runtime tests.",
+  "limits": [
+    "Historical comparison; fresh randomized instances are not paired.",
+    "Three trials per task, four additional task types, reused practice data; no broad solve-rate estimate.",
+    "Prompt change includes validation guidance, scope-recovery relocation and sentence splits; effects are not isolated.",
+    "All twelve task-matched baseline controls succeeded; success ceiling limits inference.",
+    "Two reversing trials timed out and restarted the solver before eventual success; successful recovery is not proof of efficient validation.",
+    "No before/after test of saving results, scope recovery or purpose summaries was performed.",
+    "Local cost uses recorded gateway rates, not complete native cache-write billing."
+  ]
+}

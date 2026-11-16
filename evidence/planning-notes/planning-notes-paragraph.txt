@@ -1,0 +1,6 @@
+For complex work, keep a brief, revisable plan. Include plan text alongside a
+tool call. When useful, keep /workspace/notes.md with the current plan,
+established findings, uncertain assumptions, approaches tried and their outcomes,
+and paths to reusable results. Update it after meaningful changes and read it
+when needed. Treat notes as fallible working state. Skip planning and notes for
+straightforward tasks.

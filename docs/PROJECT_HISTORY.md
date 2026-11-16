@@ -19,6 +19,138 @@ and results. Historical proposal/approval records do not authorize new runs.
 | November 14 | Binary-only fixed listener, behavior/readiness validation and two verified development successes | [Correction evidence](../evidence/listener-update/README.md) |
 | November 14 | Review of completed improvements, remaining candidates and a proposed development comparison | [Current shortlist and comparison proposal](IMPROVEMENT_OPTIONS.md#current-review-and-proposed-comparison--november-14) |
 | November 14 | Reported-call usage preservation and read-only Langfuse/model-cost checks | [Accounting and cost evidence](../evidence/usage-preservation/README.md) |
+| November 15 review | 36-attempt practice baseline completed at `0395835`; 35 successes; category review and revised priorities | [All-trial review and comparison limitations](../evidence/notes-baseline-review/README.md) |
+| November 15 follow-up | Implementation-aware change specification and one-variable connection-contract pilot proposal; no runtime edit/run | [Concrete proposal](AGENT_CHANGE_PROPOSAL.md), [derived context/inventory evidence](../evidence/agent-change-proposal/README.md) |
+| November 15 diagnostics/pilot | Early-disconnect service failure reproduced; external connection-wording pilot 1/3, not adopted | [Experiment record](EXPERIMENTS.md#service-diagnostics-and-connection-description-pilot--november-15) |
+| November 15 prompt revision | Cheap-validation guidance and limited readability edits; 36 offline tests passed, live testing pending | [Exact prompts and verification](../evidence/prompt-validation/README.md) |
+| November 15 validation pilot | Six user-run successes; higher aggregate resource use and remaining mistakes; no causal improvement claim | [All-trial review and limits](../evidence/validation-pilot-review/README.md) |
+| November 15 regression expansion | 12 additional successes, 18/18 combined; lower expanded-set cost, recurring search/export/timing issues | [Expanded review](../evidence/validation-expanded-review/README.md) |
+| November 16 planning/notes candidate | Original prompt restored plus brief plans/optional notes; default model allowance 40 to 50; 41 offline checks passed, no live result | [Exact condition and verification](../evidence/planning-notes/README.md) |
+| November 16 review/rollback | Twelve candidate attempts recorded; no explicit note use in ten exports; original prompt/40-turn default restored and 41 checks passed | [Decision and rollback evidence](../evidence/planning-notes/rollback/README.md) |
+
+## Planning/notes trial review and rollback — November 16
+
+The user ran five initial and seven broader development attempts: ten verified
+successes, one service-blocked ending and one model/API stop. Two exports are
+unavailable and a third lacks six final payload fields. The two additional
+originally scored-list practice tasks remain unstarted. In available records,
+no explicit notes.md action or write_file call appears, and no attempt exceeded
+29 model calls. Action explanations and ordinary recovery remain, but useful
+maintained plans/notes or benefit were not established. No hidden planning or
+causal regression is inferred.
+
+The user chose the original prompt and 40-turn limit. Runtime source/default
+settings now match last commit `0395835`; unrelated code, configuration,
+dependencies and tests were preserved. All 41 focused offline checks passed after
+rollback. Preserved the entire candidate, prior verification, all local outcomes
+and evidence gaps, plus the implementation README before adding its historical
+wrapper. No new challenge/model call, Docker operation, hosted mutation, command
+replay, commit or push. Only documentation/evidence remain uncommitted.
+[Review, hashes, exact reversal and checks](../evidence/planning-notes/rollback/README.md).
+
+## Brief plans/optional notes and 50-turn implementation — November 16
+
+After read-only reassessment of the latest traces and discussion of overspecified
+validation instructions, the user approved restoring the exact original prompt
+and adding brief plans/optional file notes. They also requested 50 model turns
+instead of 40 to make room for note reads. The API request guard derives the same
+allowance; wall time remains 600 seconds and tools remain capped at 80.
+This tests the combined prompt/budget condition. Existing tools, native replay,
+scope/resource controls, text-only stopping and historical records remain.
+
+The exact original, withdrawn validation candidate, new prompt and old/new
+settings are preserved. All 41 focused offline checks passed. Non-prompt code and
+other settings match baseline; no new test cases or runtime subsystem were added.
+No live model/challenge run, Docker operation, hosted change, recorded-command
+execution, commit or push occurred. Benefit/adoption remain untested. Stop for
+review before a separate pilot; isolating the prompt would require a same-budget
+original-prompt control. [Evidence and limits](../evidence/planning-notes/README.md).
+
+## Partial full rerun and agent-pattern review — November 16
+
+The user reran the full development set after a VPN interruption. The latest
+batch stopped after 23 attempts: 20 successes, two solver-limit failures and one
+API/export incident. At the user's direction, reviewed agent decision/action
+patterns without challenge-solving or infrastructure changes. Repeated failed
+self-tests led to premature external explanations; explicit checks came late.
+Successful workflows used small distinguishing tests and evidence-driven changes.
+Preserved all failed/interrupted records and the earlier 18/18 pilot separately.
+[Pattern findings and scope](../evidence/validation-full-review/README.md).
+
+## Validation regression expansion — November 15
+
+The user approved and ran four additional task types three times each; all twelve
+succeeded. The unchanged prompt now has 18/18 successes across six categories,
+versus 17/18 historical controls. Expanded-set estimated cost fell about 14%,
+recorded active time rose about 2%; combined cost is roughly unchanged and time
+higher. Two reversing searches timed out/restarted before recovery. A Pwn export
+lacks six final payload fields; a reversing span disagrees with local timing.
+Recommend retaining the small prompt revision, without a causal improvement
+claim. The user then requested the original full 36-attempt practice commands;
+no new run was started by the assistant. [Detailed findings](../evidence/validation-expanded-review/README.md).
+
+## Validation pilot completed — November 15
+
+The user ran cry-lupin/msc-algebra three times each with the validation/readability
+revision: six successes, no scope/restart/cleanup incident. Historical comparison
+is five successes out of six, with its one failure service-related. Candidate
+active time/cost increased, especially in one long successful Lupin run; cheap
+checks occurred but parser mistakes, repeated work, session confusion and output
+noise remain. All 62 requests used the exact candidate prompt; other runtime
+source/settings/images match. Retain unchanged for reviewed broader testing;
+no expansion, new model call, runtime edit, commit or push occurred during review.
+[Metrics, trace steps, hashes and comparison limits](../evidence/validation-pilot-review/README.md).
+
+## Validation revision after connection pilot — November 15
+
+The user retained the original tool description after an external connection-
+wording candidate achieved one success and two wall limits, versus two successes
+in its earlier three-trial baseline. Fixed service diagnostics and the live pilot
+remain separate evidence; no target repair was adopted. The user then approved
+explicit cheap validation/failure handling, verbatim scope-recovery relocation
+and two sentence splits in the system prompt. Original-checker priority and other
+contracts remain. All 36 focused offline tests passed; no live validation-prompt
+trial, commit or push occurred. Proposed later pilot: two tasks, three trials each,
+with broader practice coverage conditional on review. [Records and comparison limits](../evidence/prompt-validation/README.md).
+
+## Concrete proposal follow-up — November 15
+
+At the user's request, expanded the baseline review into exact proposed changes
+for passive per-request metrics, conditional feedback, optional working-state
+notes, explicit expected terminal inventory skips and local error/payload audits.
+Kept sequential sibling support distinct from the explicit live one-call policy;
+kept wrapper capture/reset facts distinct from unknown server/inner-script state.
+Recorded library differences already understood and the unconfirmed runtime
+identity claim requiring evidence before changes. Notes' decision/reuse value is
+explicit; file replacement does not erase old conversation snapshots.
+
+Derived 355 usage profiles from existing records (353 request bodies available).
+Two additional missing generation inputs expand the earlier six action-field
+count to eight required request/action fields in the same successful trace.
+The smallest proposed behavior experiment changes only command-tool connection
+wording, with three practice tasks/three trials and fixed other settings. No
+implementation, paid run, Docker diagnostic or original evidence edit occurred.
+[Specification and verification plan](AGENT_CHANGE_PROPOSAL.md).
+
+## Practice-baseline review — November 15
+
+The user committed listener and usage corrections as `0395835`, then ran the
+authorized 12-task/three-trial baseline: 29/30 in development batch `471fe180c113`
+and 6/6 in test-task practice batch `39f3da0c8fa3`. Every attempt records clean
+source/settings and stable per-task images. Original scored results are preserved;
+these authorized reused tasks are practice/tuning evidence. No planning/notes
+candidate has been implemented or run.
+
+Reviewed all 36 traces category by category, without replaying commands or
+consulting private task/answer material. The one unsuccessful attempt encountered
+repeated server JSON-loading errors while the container remained running.
+Recurring read/session, validation/search and noisy-output mistakes occurred
+inside successful runs. Preserved three recoverable command-timeout restarts,
+one unconfirmed kill cause, six absent final payload fields in one export and one
+hosted/local timing discrepancy. The separate later scored-recheck response /
+export error is not one of these 36 attempts. Updated current status and ranked
+options; no runtime behavior, budgets, runner, original evidence or report
+artifacts changed. [Detailed review and metadata inventory](../evidence/notes-baseline-review/README.md).
 
 ## Expanded comparison scope — November 14
 

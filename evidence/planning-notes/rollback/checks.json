@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-16",
+  "base_commit": "0395835e693a80813635721eb2619113c7aa7700",
+  "checks": {
+    "agent_source_matches_0395835": true,
+    "default_settings_match_0395835": true,
+    "no_tracked_runtime_config_test_dependency_diff_from_HEAD": true,
+    "shared_turn_and_request_caps_are_40": true,
+    "wall_and_tool_limits_preserved": true,
+    "all_focused_tests_passed": true,
+    "only_authorized_protected_files_changed": true,
+    "implementation_readme_preserved_verbatim": true,
+    "restored_settings_snapshot_matches": true,
+    "restored_prompt_snapshot_matches_original": true,
+    "tracked_changes_are_markdown_only": true,
+    "local_markdown_link_targets_exist": true,
+    "whitespace_passed": true,
+    "all_new_evidence_json_parses": true,
+    "all_new_test_xml_parses": true,
+    "new_artifact_whitespace_passed": true
+  },
+  "focused_tests": {
+    "tests": 41,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "protected_files_checked": 88,
+  "changed_protected_files": [
+    "configs/development.toml",
+    "ctf_agent/agent.py",
+    "evidence/planning-notes/README.md"
+  ],
+  "runtime_diff_from_HEAD": [],
+  "tracked_changes_from_HEAD": [
+    "PROJECT_STATUS.md",
+    "README.md",
+    "docs/DESIGN.md",
+    "docs/EXPERIMENTS.md",
+    "docs/IMPROVEMENT_OPTIONS.md",
+    "docs/PROJECT_HISTORY.md",
+    "evidence/README.md"
+  ],
+  "untracked_file_count": 50,
+  "untracked_roots": [
+    "docs/AGENT_CHANGE_PROPOSAL.md",
+    "evidence/agent-change-proposal",
+    "evidence/notes-baseline-review",
+    "evidence/planning-notes",
+    "evidence/prompt-validation",
+    "evidence/scored-recheck-stop",
+    "evidence/validation-expanded-review",
+    "evidence/validation-full-review",
+    "evidence/validation-pilot-review"
+  ],
+  "local_markdown_links_checked": 309,
+  "missing_links": [],
+  "whitespace_errors": "",
+  "artifacts_sha256": {
+    "README.md": "1fc3eb22c80ae1a304b59b8f09706c79adc3626d4137ef65465fbe9c649d8fc3",
+    "before-rollback-sha256.json": "0531a7fced4ddbf425e27b05bc53daa891e1861630a9c788e1b016a520ebd2db",
+    "checks-documentation-initial.json": "f89dd81a17c5eda1762a59e3c98abfc22dfaf53e2d9db12b0c65b9b1d586a19c",
+    "implementation-README.txt": "9e5bcdeb9a3450d0e8c6e026331ed51007645916ac0c0479309f4f67e4ab3bc3",
+    "pytest.xml": "7078db24214b0f7f6f33e70b4aedb3fd916c785d87728e5a4a69f1942dd77745",
+    "restored-settings.toml": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b",
+    "restored-system-prompt.txt": "e399e799f76c800ee40df601034404cd8add57ea538851b0de9c4d7c0457ae53",
+    "review.json": "01fc6ed1850085ab2d8091fa049facf7516719fbfa06230f191ea304d906d1de",
+    "settings.diff": "b176ec872f3cb7d86be7e824e5d1b1380e3b36974bd4d8c7c228530e729a3df1",
+    "system-prompt.diff": "c7e6d7e35d0ea8440a01c54a957538a8701eeb4ca30913c9bcf8561a6842d714"
+  },
+  "notes": [
+    "No live model, challenge, Docker or hosted mutation during rollback.",
+    "Original candidate verification remains historical; implementation README is archived verbatim before wrapper addition.",
+    "No commit or push."
+  ],
+  "documentation_files_checked": [
+    "PROJECT_STATUS.md",
+    "README.md",
+    "docs/AGENT_CHANGE_PROPOSAL.md",
+    "docs/DESIGN.md",
+    "docs/EXPERIMENTS.md",
+    "docs/IMPROVEMENT_OPTIONS.md",
+    "docs/PROJECT_HISTORY.md",
+    "evidence/README.md",
+    "evidence/agent-change-proposal/README.md",
+    "evidence/notes-baseline-review/README.md",
+    "evidence/planning-notes/README.md",
+    "evidence/planning-notes/rollback/README.md",
+    "evidence/prompt-validation/README.md",
+    "evidence/validation-expanded-review/README.md",
+    "evidence/validation-full-review/README.md",
+    "evidence/validation-pilot-review/README.md"
+  ],
+  "new_json_files_checked": 21,
+  "new_xml_files_checked": 3,
+  "new_artifact_whitespace_errors": []
+}

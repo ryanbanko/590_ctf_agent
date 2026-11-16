@@ -1,0 +1,109 @@
+{
+  "date": "2026-11-14",
+  "scope": "Infrastructure/result metadata only; no challenge content reviewed or new attempts run.",
+  "stopped_batch": {
+    "path": "runs/pilots/scored-recheck/batch-52f9be009bbc/batch.json",
+    "sha256": "ff6a8a31e7cb00ae0aa335cea8c647b02e009bf7390b4bbeab6167e6982d25a0",
+    "status": "stopped",
+    "planned_attempts": 30,
+    "started_attempts": 13,
+    "outcomes": {
+      "success": 12,
+      "response_source_error": 1
+    }
+  },
+  "failed_record": {
+    "path": "runs/pilots/scored-recheck/batch-52f9be009bbc/attempt-013/challenge-43c841d3dda3/run.json",
+    "sha256": "f0c1dbc42a2cc70a7dfe5b4989f7246cb3888ad6a5a8bca27657da3c8016e97a",
+    "phase": "trace-export",
+    "trace_export_error_type": "ConnectError",
+    "evidence_complete": false,
+    "result": {
+      "run_id": "796ea2a6384e",
+      "challenge_id": "for-whyos",
+      "termination_reason": "response_source_error",
+      "model_calls": 14,
+      "tool_calls": 13,
+      "tokens": null,
+      "cost_usd": null,
+      "known_usage": {
+        "model_calls": 13,
+        "cost_usd": 0.01526994,
+        "tokens": {
+          "input": 393371,
+          "output": 9137,
+          "cached_input": 318174,
+          "reasoning": 6906
+        }
+      },
+      "usage_complete": false,
+      "active_seconds": 224.32829,
+      "total_seconds": 254.613931,
+      "trace_id": "ce65b7eef7571fcdd9dd0fb6e40dbba7",
+      "trace_flush_seconds": 30.098424,
+      "solver_restarts": 0,
+      "scope_incidents": 0,
+      "denied_packets": 0,
+      "cleanup_errors": []
+    },
+    "commit": "0395835e693a80813635721eb2619113c7aa7700",
+    "working_tree_dirty": false
+  },
+  "read_only_hosted_query": {
+    "trace_id": "ce65b7eef7571fcdd9dd0fb6e40dbba7",
+    "method": "Langfuse observations CLI, fields core,basic,time,model,usage,metadata; whitelist error categories/timing only; no io.",
+    "http_status": 200,
+    "observations": 30,
+    "generation_count": 13,
+    "error_events_found": 0,
+    "has_more": false,
+    "missing": "Failed model request 14 and stopping tail are absent; original exception unavailable."
+  },
+  "connectivity_check": {
+    "method": "TCP connect to port 443, no API/model generation",
+    "litellm.oit.duke.edu": "reachable",
+    "us.cloud.langfuse.com": "reachable",
+    "limit": "Current reachability does not establish historical cause."
+  },
+  "notes_comparison_baseline": [
+    {
+      "path": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/batch.json",
+      "sha256": "df864a2eb53ed1d1f573253826d8be88fb497caa34d3d99052952dd20041d534",
+      "status": "completed",
+      "attempts": 30,
+      "outcomes": {
+        "success": 29,
+        "completed_without_success": 1
+      },
+      "recorded_commits": [
+        "0395835e693a80813635721eb2619113c7aa7700"
+      ],
+      "dirty_attempts": 0,
+      "unsuccessful_attempts": [
+        {
+          "challenge_id": "cry-lupin",
+          "trial": 2,
+          "outcome": "completed_without_success"
+        }
+      ]
+    },
+    {
+      "path": "runs/pilots/notes-comparison/baseline-test-practice/batch-39f3da0c8fa3/batch.json",
+      "sha256": "251baf37a4beb160f213f7c691e17dbdcee343cd5756778313750ac2c55da221",
+      "status": "completed",
+      "attempts": 6,
+      "outcomes": {
+        "success": 6
+      },
+      "recorded_commits": [
+        "0395835e693a80813635721eb2619113c7aa7700"
+      ],
+      "dirty_attempts": 0,
+      "unsuccessful_attempts": []
+    }
+  ],
+  "conclusion": "Response-source error followed by trace-export ConnectError triggered the existing stop-for-review policy. A transient connectivity problem is plausible, not confirmed. No evidence here identifies the original exception or implicates the listener fix.",
+  "new_model_generations": 0,
+  "reruns": 0,
+  "historical_records_modified": false
+}

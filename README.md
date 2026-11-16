@@ -117,11 +117,15 @@ uv run --frozen python -m pytest -q
 uv run --frozen python -m ctf_agent self-check
 ```
 
-## Selected configuration
+## Current configuration and scored baseline
 
-The configuration used for the scored runs and the competition is
-[configs/development.toml](configs/development.toml), the default, with the code at commit
-`aedfd62`:
+The current default is [configs/development.toml](configs/development.toml).
+The active runtime and configuration match practice baseline `0395835`, including
+the original prompt and 40 model calls. The validation/readability and planning/
+notes candidates were withdrawn after review; their prompts, settings, results
+and limitations remain preserved. [Latest decision and rollback verification](evidence/planning-notes/rollback/README.md).
+The original Part 1 scored configuration at `aedfd62` used 40 model calls;
+historical records and settings snapshots remain unchanged.
 
 | Setting | Value |
 | --- | --- |

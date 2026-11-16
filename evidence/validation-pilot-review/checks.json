@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-15",
+  "checks": {
+    "original_record_and_export_hashes_unchanged": true,
+    "all_exported_prompts_match_condition": true,
+    "all_candidate_provenance_matches_except_agent_prompt": true,
+    "original_tool_description_retained": true,
+    "candidate_count_six": true,
+    "all_candidate_successful": true,
+    "all_candidate_evidence_checks_pass": true,
+    "no_candidate_restarts_scope_or_cleanup_errors": true,
+    "candidate_targets_running_no_oom_or_restart": true,
+    "no_candidate_command_timeouts_or_truncation": true,
+    "local_file_links_valid": true,
+    "git_diff_check_passed": true
+  },
+  "candidate_generations": 62,
+  "candidate_tool_calls": 62,
+  "candidate_visible_purpose_generations": 62,
+  "reviewed_original_generations": 49,
+  "original_records_unchanged": true,
+  "missing_links": [],
+  "whitespace_output": "",
+  "runtime_agent_sha256": "e84a7caaee7a0ae3bc3db019f2cf2f361d6c3c458d6702f52e3121d7ee02a4b0",
+  "artifacts_sha256": {
+    "README.md": "36073c2e03fde296019c00446c20927549116677adcddc4f8f090cb2f437d72d",
+    "review.json": "e2d741fbef7a31226148afd5f32edcbaf8c95ddfef4bb8c66addc85793675f11"
+  },
+  "verification": "Read-only metadata/provenance, payload presence, trace review, links and whitespace. No repeated runtime tests, live calls or Docker operations.",
+  "limits": [
+    "Historical comparison; fresh randomized instances are not paired.",
+    "Three trials per task, two task types, reused practice data; no broad solve-rate estimate.",
+    "Prompt change includes validation guidance, scope-recovery relocation and sentence splits; effects are not isolated.",
+    "Original baseline failure was a service JSON error, not a validation failure. Its absence cannot be attributed to this prompt.",
+    "Lupin trial 1 used a different, longer solution path; completion alone does not establish improved algorithm selection or efficiency.",
+    "No before/after test of saving results, scope recovery or purpose summaries was performed.",
+    "Local cost uses recorded gateway rates, not complete native cache-write billing."
+  ]
+}

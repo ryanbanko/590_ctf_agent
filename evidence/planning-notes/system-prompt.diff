@@ -1,0 +1,16 @@
+--- 0395835/system-prompt
++++ planning-notes/system-prompt
+@@ -27,6 +27,13 @@
+ continue within scope. The solver has restarted; re-establish needed connections
+ without repeating the denied command.
+ 
++For complex work, keep a brief, revisable plan. Include plan text alongside a
++tool call. When useful, keep /workspace/notes.md with the current plan,
++established findings, uncertain assumptions, approaches tried and their outcomes,
++and paths to reusable results. Update it after meaningful changes and read it
++when needed. Treat notes as fallible working state. Skip planning and notes for
++straightforward tasks.
++
+ Keep output concise, but preserve diagnostic information, unexpected results,
+ and completion output. Save large results in workspace files and inspect selected
+ sections. Carry intermediate data through files or program variables instead of

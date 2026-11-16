@@ -325,7 +325,31 @@ No new dependency, model tool, application class or persistent worker is added.
 The exact tool observation, including file metadata, passes into model history
 and native traces. Agent guidance favors selected file inspection and programmatic
 intermediate values. The prompt adds verified environment facts and independent
-validation/contradiction diagnosis; no mandatory planner or notes subsystem.
+validation/contradiction diagnosis. After review on November 16, the user chose
+the original `0395835` prompt and 40-turn settings; agent.py and the default TOML
+match that commit byte-for-byte. No explicit planning/notes paragraph, new tool,
+planner, automatic note injection, compaction or cross-attempt memory is active.
+Existing file tools, full replay and text-only stopping remain.
+
+The withdrawn planning/notes-plus-50-turn candidate recorded 12 attempts across
+ten distinct practice tasks: ten verified successes, one service-blocked ending
+and one model/API stop. Ten local exports show no explicit notes.md action or
+write_file call, and the largest recorded model count was 29. Brief action
+explanations and recovery were visible, but no useful maintained working state
+or benefit was established. Two missing exports and six missing payload fields
+in one successful export limit review. The original candidate and its 41 passing
+offline checks remain preserved; rollback also passed 41 focused offline checks.
+[Decision, review and verification](../evidence/planning-notes/rollback/README.md).
+
+The earlier validation/readability candidate is withdrawn from active use after
+18/18 pilot successes and a partial full rerun with 20 successes, two limit failures
+and one API incident. Those historical results do not establish causal improvement
+or regression. Its exact prompts, source and results remain preserved in
+[prompt evidence](../evidence/prompt-validation/README.md),
+[initial pilot](../evidence/validation-pilot-review/README.md),
+[expanded pilot](../evidence/validation-expanded-review/README.md) and
+[partial full review](../evidence/validation-full-review/README.md).
+The earlier external connection-tool wording was not adopted.
 
 Initial package inventory uses ordinary Python metadata; an optional
 final inventory records availability, commonly unavailable after terminal stop.

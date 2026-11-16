@@ -1,0 +1,31 @@
+diff --git a/configs/development.toml b/configs/development.toml
+index e1016ed..9f5fada 100644
+--- a/configs/development.toml
++++ b/configs/development.toml
+@@ -6,7 +6,7 @@ guard_image = "ctf590-guard:m1"
+ target_image = "ctf590-fixture:m1"
+ wall_seconds = 600.0
+ command_seconds = 120.0
+-max_model_turns = 40 # Also supplies the model adapter request limit.
++max_model_turns = 50 # Also supplies the model adapter request limit; planning/notes candidate.
+ max_tool_calls = 80
+ max_scope_recoveries = 1 # One confirmed blocked command may receive corrective feedback.
+ max_output_bytes = 65536
+diff --git a/ctf_agent/agent.py b/ctf_agent/agent.py
+index 12eb728..f00a3b3 100644
+--- a/ctf_agent/agent.py
++++ b/ctf_agent/agent.py
+@@ -41,6 +41,13 @@ If a tool reports scope_denied, stop probing outside the listed endpoints and
+ continue within scope. The solver has restarted; re-establish needed connections
+ without repeating the denied command.
+ 
++For complex work, keep a brief, revisable plan. Include plan text alongside a
++tool call. When useful, keep /workspace/notes.md with the current plan,
++established findings, uncertain assumptions, approaches tried and their outcomes,
++and paths to reusable results. Update it after meaningful changes and read it
++when needed. Treat notes as fallible working state. Skip planning and notes for
++straightforward tasks.
++
+ Keep output concise, but preserve diagnostic information, unexpected results,
+ and completion output. Save large results in workspace files and inspect selected
+ sections. Carry intermediate data through files or program variables instead of

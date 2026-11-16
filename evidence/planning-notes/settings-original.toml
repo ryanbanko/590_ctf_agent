@@ -1,0 +1,31 @@
+# Complete default run settings; copy this file for a comparison experiment.
+# No secrets belong here. This configuration is not frozen for scoring.
+[attempt]
+solver_image = "ctf590-solver:m1"
+guard_image = "ctf590-guard:m1"
+target_image = "ctf590-fixture:m1"
+wall_seconds = 600.0
+command_seconds = 120.0
+max_model_turns = 40 # Also supplies the model adapter request limit.
+max_tool_calls = 80
+max_scope_recoveries = 1 # One confirmed blocked command may receive corrective feedback.
+max_output_bytes = 65536
+max_capture_bytes = 10485760 # Retained stdout + stderr per overflowing command.
+max_attempt_capture_bytes = 104857600 # Combined retained bytes across the attempt.
+memory_mb = 1024
+max_command_bytes = 16384
+max_write_bytes = 65536
+pids = 64
+cpus = 1.0
+
+[model]
+model = "gpt-6-luna"
+base_url = "https://litellm.oit.duke.edu/v1"
+reasoning_effort = "medium"
+max_output_tokens = 8192
+max_input_bytes = 2097152 # Serialized request bytes, including JSON and encrypted replay.
+request_seconds = 90.0
+# Gateway/official pricing snapshot, rechecked before live use.
+input_usd_per_million = 0.10
+output_usd_per_million = 0.50
+cached_input_usd_per_million = 0.01

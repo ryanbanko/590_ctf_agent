@@ -12,6 +12,296 @@ comparisons, the exact change, run references and conclusions. Keep raw evidence
 in Langfuse and run records; use `PROJECT_STATUS.md` for the overall checklist.
 This is Section 2 of [Part 1](../ASSIGNMENT.md), not the later competition Part 2.
 
+## Planning/notes review and original-baseline rollback — November 16
+
+The user ran initial batch `055588a94b64` (five successes; the fifth export timed
+out) and breadth-development batch `e7f3dbb55808` (five successes, one service-
+blocked ending, one model/API incident with failed export). The two originally
+scored-list practice tasks were not started. Preserve all 12 outcomes across ten
+distinct tasks, including the two extra repeats; this is not a completed 12-task
+once-each comparison or a 36-attempt campaign.
+
+Read-only behavior review found no explicit notes.md use or write_file call in
+the ten available local exports. All 97 available generation inputs match the
+candidate; one of the 98 exported generations lacks input/output, and two tool
+observations in that same successful run also lack both payloads. Two complete
+exports are unavailable. Initial forward-looking action explanations are visible,
+but do not establish a maintained/revised task-level working state; private
+planning is not inferred. No attempt exceeded 29 model calls, so the extra ten
+turns provided no observed benefit.
+
+Successful short workflows remain concise. A longer success still contains empty
+inspections, oversized output, unsupported explanations and a lost distinction
+between original and modified artifacts during correction. Other successes show
+useful narrow checks and recovery, behavior also present historically. These
+observations support **limited adoption and no demonstrated benefit**, not proof
+of a causal regression. Existing historical/unpaired, mixed-condition and
+service/evidence limitations remain.
+
+At the user's explicit direction, removed the planning/notes paragraph and
+restored the 40-turn default. Agent source and default configuration now match
+`0395835` byte-for-byte; all other runtime/configuration/test/dependency files are
+unchanged. The earlier validation revision remains withdrawn. All 41 focused
+offline checks passed after rollback. No new test cases, model/challenge run,
+Docker operation, hosted mutation, recorded-command execution, commit or push.
+[Per-run outcomes/hashes, behavior references, snapshots and rollback checks](../evidence/planning-notes/rollback/README.md).
+
+Stop for review. No further prompt iteration, continuation policy, budget change
+or completion of the remaining practice tasks starts automatically. Retain the
+original runtime and all experiment evidence; remaining working-tree differences
+from the last commit are documentation and retained evidence.
+
+## Brief plans/optional notes and 50 turns — November 16
+
+The user approved restoring the exact original `0395835` prompt, adding the agreed
+brief-planning/optional-notes paragraph and increasing `max_model_turns` from 40
+to 50 to allow room for note operations. This is a **combined prompt-and-budget
+candidate**, not an isolated notes experiment. The default loader derives the
+API request allowance from the same field. The 600-second wall deadline,
+80-tool-call cap, other settings, tools, loop, dependencies and Docker remain.
+
+**Hypothesis before live testing:** brief revisable plans and optional notes help
+complex attempts maintain direction, reuse valid work and avoid repeating rejected
+approaches, with limited overhead for straightforward tasks. Ten additional turns
+allow more note operations within existing time/tool limits; useful decisions and
+benefit are not guaranteed. Plans accompany tool calls; text-only replies still
+end attempts. Existing file tools handle notes, with no automatic injection or
+compaction. Old note text remains in native replay after a file overwrite.
+
+The earlier validation/readability candidate was not selected as the default:
+the latest read-only assessment found recurring diagnostic/correction problems
+and higher aggregate resources despite a lower median time. Small historical,
+unpaired comparisons do not establish prompt causality. Its exact prompts,
+18/18 pilot and incomplete full-rerun records remain preserved unchanged.
+
+**Verification:** 41 existing focused offline checks passed, covering public prompt
+propagation, recovery, native text/tool replay, success/text-only/terminal stops,
+bounded accounting and configuration sharing/validation. Mechanical checks verify
+exact original-plus-paragraph identity, non-prompt AST identity, the sole parsed
+configuration delta of 40 to 50 and preservation of existing source/evidence.
+[Exact snapshots, diffs and checks](../evidence/planning-notes/README.md).
+No new test cases, live model calls, challenge attempts, Docker operations, hosted
+changes, command replay, commit or push occurred. Offline checks do not establish
+model adoption, useful notes or performance improvement.
+
+Stop for review before a separately approved pilot. Compare against the original
+40-turn baseline as a combined condition; a fresh original-prompt control at 50
+turns would be needed to isolate the prompt effect from the larger allowance.
+Include complex tasks and a short-task control, preserve all failures/incidents,
+and assess success, repeated work, reuse, calls/time/tokens/cost, note overhead,
+stale claims and actual adoption. Rarely used notes are limited-adoption evidence.
+
+## Full validation rerun, partial agent-pattern review — November 16
+
+Batch `aaab2a5084b8` stopped after 23 development attempts: 20 successes,
+model_turn_limit on `61bf8e65e52b`, wall_limit on `4fbd9b2b538b`, and a final
+response_source_error with ConnectError on export (`83687a3f80cf`). The earlier
+user-confirmed VPN batch is separate. Seven development and six test-task trials
+remain unstarted. The final API trace is unavailable; do not infer its preceding
+agent behavior. Known usage remains partial rather than substituted for totals.
+
+The user explicitly narrowed review to observable agent reasoning/action patterns.
+The [pattern review](../evidence/validation-full-review/README.md) finds premature
+external explanations for failed self-tests, confident validation claims before
+a discriminating check, escalation/repetition without narrowing the weakest
+premise, and corrections that miss dependent code. Successful cases isolate a
+small prerequisite and use feedback to select the next action. The 40-turn run
+acknowledged its own layout error only at step 24; later self-test bugs undermined
+further external-restriction claims. The wall-limited run consumed two command
+allowances on diagnostic/search approaches before a simpler check came late.
+No task solution or infrastructure correction is proposed; no runtime edit,
+model call, container operation or command replay occurred during this review.
+The earlier 18/18 pilot is preserved, not used to hide these later failures.
+
+## Expanded validation regression completed — November 15
+
+User-run batch `10010bdf842e` completed pwn-pilot, rev-gibberish-check,
+web-shreeramquest and for-1black0white three times each: **12/12 successes**,
+matching their original controls. New candidate/control totals: 1166.17/1139.70
+recorded active seconds and $0.08215334/$0.09574549 estimated cost (about 2% more
+time and 14% less cost). With the first six trials, this revision has 18/18
+successes versus 17/18, 1865.46/1525.42 active seconds and
+$0.11704363/$0.11645893 estimated cost. The single baseline failure was service-
+related. These are reused practice tasks and historical comparisons, not causal
+proof of validation improvement. [All trials, metrics and limits](../evidence/validation-expanded-review/README.md).
+
+Pwn, web and forensics completed without excessive new validation rituals.
+Reversing trial 1 checked predictions against the original artifact before its
+later search. Trials 2/3 still searched reconstructed behavior before sufficient
+original-artifact validation and each hit a timeout/restart before succeeding.
+No scope incident or cleanup error occurred. Trial 3 also produced 500,979 output
+bytes; the tool returned a marked 65,536-byte preview with complete full capture.
+Largest individual context was 95,997 reported input tokens. Output discipline
+and unvalidated reconstructions remain improvement targets.
+
+Pwn trial 1 `7b008496a52b` lacks generation 9 input/output and tool 8/9 input/output:
+six missing required local export fields despite structural `evidence_complete`
+and local verified success. Its final submission payload/verdict cannot be
+independently inspected; hosted observations were not re-fetched. Reversing trial
+2 `fe967b23c21b` has a 314.303-second command span for a requested 120 seconds,
+returned timeout, and a 525.337-second root span versus 331.335 local active
+seconds. Host sleep/clock effects are plausible but unconfirmed. Native spans
+must not be equated with local active or CPU time. Both findings recur separately
+from the original baseline's known export/timing discrepancies.
+
+All 117 available expanded request bodies match the candidate; one is absent.
+All recorded runtime hashes identify the same revision, differing from original
+source only in agent.py. Settings, limits, tool descriptions, dataset and images
+match. It is reasonable to retain this small revision after regression coverage,
+without claiming an efficiency gain. The user subsequently requested commands
+for the original full 12-task/36-attempt practice set. No further run, runtime
+edit, model call, Docker operation or command replay occurred during this review.
+
+## Validation-prompt pilot completed and reviewed — November 15
+
+User-run batch `bfa61beea669` completed cry-lupin and msc-algebra three times each:
+**6/6 verified successes**, versus 5/6 for the corresponding historical baseline.
+Lupin active seconds: 374.69, 74.11, 43.29; Algebra: 50.87, 121.39, 34.94. Total
+active time was 699.29 versus 385.72 seconds; local estimated model cost was
+$0.03489029 versus $0.02071344. Means include the baseline's early service failure;
+medians and per-task/per-trial metrics are also retained. There is no aggregate
+resource-efficiency improvement. No solver restart, scope incident, target
+restart/OOM or cleanup error was recorded.
+
+The [all-trial review](../evidence/validation-pilot-review/README.md) separates
+observed validation from causal claims. Lupin 2 tested a local encoded sample
+after a failed prediction before switching strategy. Lupin 1's initial parser
+failures returned cheaply, but six avoidable parser/import mistakes and later
+repeated work remained. Lupin 3 needed two patches for one shape assumption.
+Algebra 2 repeated fixed answers across fresh sessions before eventual recovery;
+Algebra 3 printed 44,928 characters in one command, growing the following input
+from 7,493 to 31,813 tokens. Existing baseline traces also contain validation.
+No scope-denial event exercised the relocated scope paragraph.
+
+Exact candidate prompt identity is verified in all 62 model requests, and all
+62 generation plus 62 tool input/output payloads are present. Only `agent.py`
+differs in runtime source hashes; model/settings, budgets, dataset and per-task
+images match baseline. Three unpaired randomized trials/task, historical/cache
+conditions, different solution paths and combined behavior/readability edits
+limit inference. The baseline's one failure was service-related; its absence
+cannot be credited to validation. Compare against the original baseline, not
+only the rejected connection candidate.
+
+Recommendation: retain the candidate unchanged for reviewed broader testing,
+without claiming a demonstrated solve-rate/efficiency gain. Proposed expansion:
+the remaining ten original practice tasks, three trials each. A fresh original
+control would strengthen inference at extra cost. No further run was launched;
+this review made documentation/derived-evidence changes only, with no model
+call, Docker operation, command replay or runtime edit. Original records remain
+unchanged and Git-ignored; derived evidence includes hashes and observation IDs.
+
+## Validation and prompt readability revision — November 15
+
+The user approved one prompt revision after reviewing the original system prompt.
+Hypothesis: explicit cheap checks, stopping expensive dependent work after failed
+preparation, and checking corrections before expensive reruns will reduce wasted
+computation. Scope recovery moves verbatim beside network rules; two sentence
+splits improve readability. This is one behavior-and-readability condition, not
+an isolated measurement of validation wording. Original-checker priority and the
+independent-validation warning remain, along with output/reuse, summaries,
+submission, stopping and scope policy. Only `SYSTEM_PROMPT` changes in runtime
+source; model, limits, tools, loop, images and dependencies remain fixed.
+
+All **36 focused offline tests passed**. The [evidence](../evidence/prompt-validation/README.md)
+preserves exact prompts, source hashes and retained-instruction checks. No new
+model call or Docker operation occurred during this edit. Offline tests verify
+integration, not better model behavior. Proposed next stage: cry-lupin and
+msc-algebra, three fresh trials each, then broader practice coverage if warranted.
+Stop for review before these later paid stages. Compare success, time/cost,
+expensive failed commands, repeated work and useful versus unnecessary checks.
+
+## Service diagnostics and connection-description pilot — November 15
+
+Before this revision, fixed service probes reproduced persistent remote JSON errors
+after closing the first connection at four seconds (3/3); five-second closes did
+not reproduce them (0/3). Six longer/same-connection controls received data without
+that error. The listener stayed running. An interrupted initialization/publication
+mechanism is consistent with synthetic tests, but actual private state/write code
+was not inspected. No target repair, readiness workaround or budget relaxation
+was adopted. [Sanitized diagnostic snapshot](../evidence/prompt-validation/service-diagnostic-summary.json)
+predates the subsequent live pilot; its pending-comparison field is historical.
+Raw fixed-probe scripts/reports remain external temporary artifacts, not a
+fully retained reproducibility package.
+
+The user-run external connection-description candidate batch `26e636f325ef`
+completed **1/3 successes** versus **2/3** for that task in the earlier baseline.
+Trial 1 succeeded in 28.89 active seconds; trials 2/3 hit 600 seconds during later
+computation and correction. Initial reads completed in all three without the
+earlier remote JSON error. One full command timeout caused a solver restart;
+another command returned Killed/137 without establishing its cause. The candidate
+cost $0.02835505 in local gateway-rate estimates, versus $0.00652700 for the three
+baseline trials. All 38 model replies contained tool calls; 37 included purpose
+text. This does not establish benefit or harm from the unchanged summary rule.
+
+Fresh randomized instances, three trials, historical comparison and different
+solution paths prevent causal solve-rate claims. The user chose the original
+tool description, which remains unchanged in the main checkout. The earlier
+agent-started run `5a6bc0060000` was interrupted for user handoff (`user_cancel`,
+five model calls, $0.00236938 estimated) and remains separate from the three
+completed trials. [Derived trace review and hashes](../evidence/prompt-validation/connection-pilot-review.json)
+retain original trace links without flags or trace payloads. Original raw runs
+remain external. These observations motivated validation work; they are not
+results for the new validation prompt.
+
+## Concrete implementation and experiment proposal — November 15 follow-up
+
+The user requested exact changes for context efficiency, result-specific feedback,
+multiple tool calls, broader planning/notes value and recurring infrastructure
+findings. The [concrete proposal](AGENT_CHANGE_PROPOSAL.md) defines separate
+instrumentation, diagnostic and behavior milestones; none has been implemented.
+The smallest behavior condition replaces only command-tool connection-reading
+wording. Proposed pilot: open-ellipti-ph, algebra and pilot, three trials each,
+against their nine existing baseline attempts; fresh A/B would require additional
+authorization/spending. Historical comparison and small-sample limits remain.
+
+[Derived profiles](../evidence/agent-change-proposal/README.md) cover 355 reported
+usage records and 353 available request bodies, reconciling every run total.
+Two missing generation inputs expand the earlier six-action-field count to eight
+request/action fields. All initial inventories succeeded; 35 final inventories
+explicitly unavailable and one event metadata gap align with the implementation's
+post-kill optional inventory. Proposed skip semantics are precise about the
+stopping flag and do not assume successful kill. Library-identity assumptions
+remain separate from known image differences and the corrected listener.
+
+The source review confirms sequential sibling support but an explicit one-call
+live request policy. Existing truncation/capture/reset metadata is retained;
+wrapper-derived feedback cannot certify server/inner-script completeness. Notes
+would support hypotheses/rejected tests/reuse as well as memory, with revisions,
+bounded optional file use and no repeated injection. Prior writes remain in replay.
+No runtime tests, new model calls, Docker operations, task-private inspection or
+original-record modifications occurred; documentation/derived-metadata checks only.
+
+## Practice baseline completed and reviewed — November 15
+
+All 36 selected baseline attempts ran at clean commit `0395835`, with identical
+recorded source/settings and stable images per task: development batch
+`471fe180c113` achieved 29/30; test-task practice batch `39f3da0c8fa3` achieved
+6/6. The sole ordinary unsuccessful ending returned repeated remote JSON-loading
+errors while its container stayed running. Its cause is unconfirmed and its
+failure remains counted. Planning/notes and continuation have not been implemented
+or tested as candidate conditions.
+
+The user requested category-by-category review of agent, tools, context and
+infrastructure. The [assistant-assisted review](../evidence/notes-baseline-review/README.md)
+covers every trial, including successful recovery, with metrics, observation IDs,
+hashes, ranked proposals and limitations. Main recurring opportunities are
+same-connection buffered reads, early independent validation/bounded searches,
+and selective output. No existing top-level budget caused a stop. Largest
+individual input is 170,959 reported tokens; aggregate replay is not context size.
+Three command timeout restarts recovered; a separate search returned 137 without
+establishing OOM. Six required payload fields are absent in one otherwise
+structurally complete successful trace. One hosted/local timing discrepancy
+prevents treating all span latencies as request durations.
+
+These findings refine the pre-existing notes hypothesis; they do not establish
+an improvement or prove forgetting. An infrastructure repair and a behavior edit
+must not be credited as a notes-only effect. Keep all baseline failures, separate
+the later scored-recheck API/export incident, and acknowledge the ceiling,
+three-trial/task dependence, practice reuse, environment/cache and cost-basis
+limits. No recorded commands, challenge-private source or answer files were
+executed/read during review; no new model calls, Docker diagnostics or runtime
+edits occurred. Only documentation and metadata review records were added.
+
 ## Expanded practice comparison — November 14 proposal
 
 The user requested at least two tasks per category, preferably harder tasks, and
