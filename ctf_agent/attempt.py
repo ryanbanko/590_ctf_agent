@@ -2,6 +2,7 @@
 
 from contextlib import contextmanager, nullcontext
 from copy import deepcopy
+from datetime import datetime, timezone
 import json
 from pathlib import Path
 import subprocess
@@ -46,9 +47,10 @@ def watch_deadline(state: dict):
 
 @contextmanager
 def run_attempt(settings: dict, network: str, endpoints: list[dict],
-                expected_flag: str, output_root: Path, *, langfuse: Langfuse,
+                expected_flag: str | None, output_root: Path, *, langfuse: Langfuse,
                 label: str = "synthetic", public_task: str = "Synthetic controls check", respond=None,
-                model_usage: dict | None = None, mode: str = "synthetic-controls"):
+                model_usage: dict | None = None, mode: str = "synthetic-controls",
+                verify_candidate=None, verification_source: str = "local-answer"):
     """Own one run and yield bounded respond/call_tool functions plus result metadata.
 
     The answer stays in this trusted scope. Neither the loop nor Langfuse receives
@@ -57,6 +59,8 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
     their Langfuse OpenAI integration creates generations automatically.
     """
     validate_settings(settings)
+    if (expected_flag is None) == (verify_candidate is None):
+        raise ValueError("Supply either a private answer or an external verification function")
     run_id = uuid.uuid4().hex[:12]
     directory = output_root / run_id
     directory.mkdir(parents=True, exist_ok=False, mode=0o700)
@@ -80,6 +84,12 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
             sandbox.update(scope_limit=settings["max_scope_recoveries"], endpoints=endpoints)
             used_ids = set()
 
+            def record_submission(row: dict, status: str):
+                # Durable controller-only records; candidates never enter the root summary.
+                with (directory / "submissions.jsonl").open("a", encoding="utf-8") as handle:
+                    handle.write(json.dumps({**row, "status": status,
+                        "timestamp": datetime.now(timezone.utc).isoformat()}) + "\n")
+
             def call_tool(name: str, arguments: dict) -> dict:
                 remaining_seconds(state)
                 if result["tool_calls"] >= settings["max_tool_calls"]:
@@ -98,11 +108,23 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
                     if validation_error is not None:
                         tool.update(output=validation_error, level="WARNING", status_message="validation_error")
                         return validation_error
+                    submission = None
                     try:
                         audit_network(sandbox, remaining_seconds(state))
                         seconds_left = remaining_seconds(state)
                         if name == "submit_flag":
-                            returned = {"correct": arguments["candidate"] == expected_flag}
+                            submission = {"submission_id": f'{run_id}-{result["tool_calls"]}',
+                                "run_id": run_id, "challenge_id": label,
+                                "source": verification_source, "candidate": arguments["candidate"]}
+                            record_submission(submission, "pending")
+                            tool.update(metadata={"submission_id": submission["submission_id"],
+                                                  "verification_source": verification_source})
+                            returned = (verify_candidate(arguments["candidate"], lambda: remaining_seconds(state))
+                                        if verify_candidate is not None
+                                        else {"correct": arguments["candidate"] == expected_flag})
+                            if (not isinstance(returned, dict) or set(returned) != {"correct"}
+                                    or type(returned["correct"]) is not bool):
+                                raise RuntimeError("Verification did not return an accepted/rejected verdict")
                         else:
                             if name == "run_command":
                                 with sandbox["network_lock"]:
@@ -121,10 +143,20 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
                         if name == "submit_flag":
                             audit_network(sandbox, remaining_seconds(state))
                             remaining_seconds(state)
-                    except (RuntimeError, TimeoutError, subprocess.TimeoutExpired, json.JSONDecodeError) as error:
+                            record_submission(submission, "accepted" if returned["correct"] else "rejected")
+                    except (AttemptStopped, KeyboardInterrupt, EOFError) as error:
+                        reason = str(error) if isinstance(error, AttemptStopped) else "user_cancel"
+                        stop_attempt(state, reason)
+                        if submission is not None:
+                            record_submission(submission, result["termination_reason"])
+                        tool.update(output={"error": {"kind": result["termination_reason"]}}, level="WARNING")
+                        raise AttemptStopped(result["termination_reason"]) from None
+                    except (RuntimeError, OSError, ValueError, subprocess.TimeoutExpired) as error:
                         if result["termination_reason"] is None:
                             stop_attempt(state, "wall_limit" if time.monotonic() >= state["deadline"]
                                          else "infrastructure_error")
+                        if submission is not None:
+                            record_submission(submission, result["termination_reason"])
                         tool.update(output={"error": {"kind": result["termination_reason"],
                                                      "message": str(error)[:2000]}}, level="ERROR")
                         raise AttemptStopped(result["termination_reason"]) from None

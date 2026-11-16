@@ -142,7 +142,92 @@ Launch command for one challenge:
 uv run --frozen --env-file .env python -m ctf_agent run-challenge --challenge <ID>
 ```
 
-## Choosing a challenge
+## Manual HTB fallback
+
+The `feat/htb-manual` branch adds manual HTB setup and human-relayed flag
+verification. It reuses the same agent, isolated Docker solver, three tools,
+network guard, Langfuse tracing, usage accounting and cleanup. MCP integration
+is not implemented in this milestone. CTFTiny commands/defaults remain available.
+
+**Prepare a task.** In HTB, copy the full public description, download the
+contestant files, and spawn an instance if the challenge requires one. Then run:
+
+```sh
+uv run --frozen python -m ctf_agent setup-manual
+```
+
+The prompts request a name, category, multiline description (finish with a line
+containing only `.`), ZIP/folder path, and assigned IPv4 address/port/protocol.
+Leave the file path blank for no files; leave the address blank when all endpoints
+have been entered. Multiple assigned endpoints are supported. Public hostnames,
+URLs and IPv6 are not endpoint inputs; use the assigned IPv4 address and port.
+
+Review the displayed task and file list, then save it. This command makes no
+Docker, model, gateway, Langfuse or HTB requests. It prints a path such as
+`runs/htb/tasks/task-<id>/task.json`, beside a `files/` folder and `import.json`.
+The task has exactly `name`, `category`, `description`, `files` and `endpoints`;
+file paths are relative to its sibling `files/` folder. You can edit those public
+fields before running. File-only challenges use `"endpoints": []`.
+
+ZIP import uses Python's standard library and the documented HTB password
+`hackthebox`. Unsupported encryption/compression requires local extraction and
+selecting the extracted folder. Imports reject traversal, symlinks, special
+files, duplicate file paths and more than 10,000 files/512 MiB. Known private,
+credential and build paths (including Dockerfile/Compose, `.env`, `.git` and VPN
+profiles) are withheld and listed in `import.json`. Review your selection: this
+is not a general detector of secrets inside arbitrary files. Select only the
+downloaded contestant files, not the repository or home directory.
+
+**Run the saved task** after Docker, `.env`, Langfuse and Duke network access are
+ready. This command makes paid model calls:
+
+```sh
+uv run --frozen --env-file .env python -m ctf_agent run-manual --task runs/htb/tasks/task-<id>/task.json
+```
+
+The default [HTB configuration](configs/htb-manual.toml) allows 900 seconds,
+60 model calls and 80 tool calls. All other model/resource settings match the
+CTFTiny development defaults. These are starting allowances, not a measured
+performance improvement or a dollar-budget guarantee. Use `--experiment FILE`
+to select another complete configuration. Human input time counts toward the
+same deadline, including file staging and solver startup.
+
+When the agent calls `submit_flag`, the terminal identifies the challenge and
+prints the exact candidate as a JSON string. Submit that candidate on the HTB
+challenge card and enter `y` only for acceptance or `n` only for explicit
+rejection. `cancel`/Ctrl-C/closed input stop without success; `error` stops as
+`verification_unavailable` when the website cannot provide a verdict. Invalid
+answers reprompt. The deadline remains enforced while waiting, and late verdicts
+cannot create success. This is a human-relayed HTB verdict, not an independent
+automated HTB verification. No local answer key is loaded.
+
+The operator owns the remote HTB instance: the launcher neither starts nor stops
+it. Respawning may change its address/port; update and review `task.json` before
+starting a fresh attempt. Attempts get fresh local solvers; remote target state
+is not automatically reset. The launcher creates/removes only its own local
+Docker bridge, guard and solver.
+
+HTB's [CTF guide](https://help.hackthebox.com/en/articles/5200851-ctf-user-s-guide)
+distinguishes public Docker challenges (no HTB VPN) from Machines (HTB VPN).
+Gateway access separately requires Duke network access. Docker-to-target routing
+with the VPN still needs a live readiness check; a Docker target's assigned port,
+not ping, is the appropriate connectivity check. IPv4 endpoint scope remains
+enforced by the existing guard, including explicitly permitted private endpoints.
+The existing public HTTPS package-download policy is unchanged.
+
+Manual records go under `runs/htb/attempts/`: the existing `run.json`, public task,
+summary and Langfuse export, plus controller-only `submissions.jsonl` containing
+pending/completed submission events, candidate, challenge/run/submission IDs,
+verification source and UTC timestamp. Both local-answer and external submissions
+now get these records. Raw candidates stay out of the root summary; these files
+are Git-ignored and are never staged into the solver. Existing structural export
+checks do not guarantee that every hosted trace payload is present.
+
+This milestone is offline-verified only. No live HTB attempt, Docker/VPN check,
+paid model call or new hosted trace has been performed. See
+[verification and limits](evidence/htb-manual/README.md).
+
+## Choosing a CTFTiny challenge
 
 [configs/ctftiny.json](configs/ctftiny.json) splits the 50 challenges into two lists:
 - `development` (40): use these for testing.

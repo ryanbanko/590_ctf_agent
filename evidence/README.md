@@ -16,6 +16,7 @@ for example `git show aedfd62:evidence/target-precleanup-snapshot/README.md`.
 
 | Folder | Contents | Used by |
 | --- | --- | --- |
+| `htb-manual/` | Manual HTB integration, separate competition limits, offline checks and unverified live boundaries | Current status, README, DESIGN and history |
 | `ryan-shared-runs/` | Sanitized run records and traces: pilot, baseline and Experiments A–C | Report (results, trace review, answer-lookup check) |
 | `scored/` | Final metrics, trace-usage audit and figures; attempt records in the two root batch directories | Report, reporting scripts |
 | `development-trace-review/` | Baseline trace review, cost check, gateway model prices | Report |

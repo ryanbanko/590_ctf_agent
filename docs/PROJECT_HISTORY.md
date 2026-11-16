@@ -27,6 +27,33 @@ and results. Historical proposal/approval records do not authorize new runs.
 | November 15 regression expansion | 12 additional successes, 18/18 combined; lower expanded-set cost, recurring search/export/timing issues | [Expanded review](../evidence/validation-expanded-review/README.md) |
 | November 16 planning/notes candidate | Original prompt restored plus brief plans/optional notes; default model allowance 40 to 50; 41 offline checks passed, no live result | [Exact condition and verification](../evidence/planning-notes/README.md) |
 | November 16 review/rollback | Twelve candidate attempts recorded; no explicit note use in ten exports; original prompt/40-turn default restored and 41 checks passed | [Decision and rollback evidence](../evidence/planning-notes/rollback/README.md) |
+| November 16 manual HTB fallback | Feature branch, saved public tasks, human verdicts, separate 15-minute/60-call profile; 204 offline checks passed | [Implementation and limits](../evidence/htb-manual/README.md) |
+
+## Manual HTB fallback — November 16
+
+After the professor explicitly recommended implementing both MCP integration and
+a manual fallback, the user authorized branch creation and the first manual/
+offline milestone. Created `feat/htb-manual` from a clean main working tree.
+No commit or push was requested or performed. The first branch attempt hit the
+read-only Git metadata boundary; the authorized escalated retry created it.
+
+Added ZIP/folder setup prompts and reusable public tasks, shared isolated launch,
+human-relayed flag acceptance/rejection/cancellation/unavailability and controller-
+only pending/final submission records. Langfuse remains the single detailed
+tracing system. A separate configuration uses 900 seconds/60 model calls/80 tools;
+agent prompt, tools, model adapter and CTFTiny default settings are preserved.
+The remote HTB target remains operator-managed; only local resources are owned
+by the launcher. No framework, web interface or new dependency was added.
+
+All 204 offline tests passed, with 49 Docker tests deselected. The first focused
+check passed 93 tests. A new local SDK export test then exposed an unsubstituted
+trace-URL lookup (initial full result: 201 passes/one failure). The corrected
+substitute also emits the required cleanup event; final evidence retains both
+the failed check and correction. No paid model call, real challenge solving,
+Docker/VPN operation or hosted mutation occurred. These checks establish offline
+contracts, not live HTB/routing/ingestion or solver performance. Stop for review
+before a separately authorized readiness/live stage. MCP remains future work.
+[Commands, evidence and limits](../evidence/htb-manual/README.md).
 
 ## Planning/notes trial review and rollback — November 16
 

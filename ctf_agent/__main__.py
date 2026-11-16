@@ -11,6 +11,12 @@ def main():
     parser = argparse.ArgumentParser(description="Isolated CTFTiny agent and verification commands")
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
     commands = parser.add_subparsers(dest="command", required=True)
+    setup = commands.add_parser("setup-manual", help="Save a public HTB task from prompts; no model calls or Docker")
+    setup.add_argument("--output", type=Path, default=Path("runs/htb/tasks"))
+    manual = commands.add_parser("run-manual", help="Run a saved HTB task with human-relayed flag verdicts (LIVE)")
+    manual.add_argument("--task", type=Path, required=True)
+    manual.add_argument("--experiment", type=Path, default=Path("configs/htb-manual.toml"))
+    manual.add_argument("--output", type=Path, default=Path("runs/htb/attempts"))
     commands.add_parser("build-images", help="Build the solver, guard, and synthetic target")
     check = commands.add_parser("self-check", help="Run fixed synthetic controls checks; no model calls")
     check.add_argument("--output", type=Path, default=Path("runs"))
@@ -38,7 +44,21 @@ def main():
     batch.add_argument("--trials", type=int, default=1)
     batch.add_argument("--output", type=Path, default=Path("runs/batches"))
     args = parser.parse_args()
-    if args.command == "build-images":
+    if args.command in {"setup-manual", "run-manual"}:
+        try:
+            if args.command == "setup-manual":
+                from .manual import setup_manual_task
+
+                setup_manual_task(args.output)
+            else:
+                from .launch import launch_manual
+
+                launch_manual(args.experiment, args.task, args.output)
+        except (ValueError, OSError) as error:
+            parser.error(str(error))
+        except (KeyboardInterrupt, EOFError):
+            raise SystemExit("Manual setup/run cancelled") from None
+    elif args.command == "build-images":
         settings = load_settings(args.config)
         for role, key in [("solver", "solver_image"), ("guard", "guard_image"), ("fixture", "target_image")]:
             platform = ["--platform", "linux/amd64"] if role == "solver" else []

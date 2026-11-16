@@ -17,6 +17,7 @@ evidence/**/compose.json
 # (the challenge answer); compose.json holds private target build/env. Never commit.
 **/observations.json
 **/compose.json
+**/submissions.jsonl
 
 # Submission video is delivered via Canvas, not the git package (size).
 *.mov

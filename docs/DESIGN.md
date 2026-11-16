@@ -38,6 +38,61 @@ unchanged. The later prompt/output milestone is described below and in its
 
 ## One challenge path
 
+### Manual HTB integration — November 16
+
+The `feat/htb-manual` branch adds `setup-manual` and `run-manual`; CTFTiny's
+selection, answer boundary and default 600-second/40-call configuration remain.
+The original agent prompt/tools/model adapter are unchanged. A separate complete
+`configs/htb-manual.toml` selects 900 seconds/60 model calls/80 tool calls,
+with other controls and model settings preserved. This is an integration fallback,
+not an agent-performance experiment or MCP client.
+
+`manual.py` owns interactive setup, bounded ZIP/folder import, saved-task
+validation, manual verdict input and an ordinary local bridge context manager.
+The task uses the existing public fields: name/category/description/files/endpoints.
+Only listed regular handouts enter the solver; known private/build/credential
+paths are withheld at import, and private paths are rejected at load. No imported
+program is executed on the host. ZIP support uses the standard library; unsupported
+formats require an extracted folder. Imports are bounded to 10,000 files/512 MiB;
+ZIP archives additionally cap directory entries. Endpoint input is IPv4 with
+explicit TCP/UDP ports, without DNS resolution or scope discovery.
+
+The existing launcher now shares its `run_task`, `finish_run` and `model_session`
+functions between CTFTiny and manual entry points. CTFTiny still loads its pinned
+dataset/manifest, starts Compose targets and retains its expected answer privately.
+Manual runs load no dataset/answer, connect to operator-managed remote targets
+and record a task hash instead of claiming CTFTiny provenance. They create only
+local bridge/guard/solver resources. The operator owns remote spawning, resets,
+expiry and endpoint updates. Fresh solvers do not imply fresh remote instances.
+
+`run_attempt` accepts exactly one of a private expected answer or an external
+verification function `(candidate, remaining_seconds) -> {"correct": bool}`.
+The agent-facing submit_flag contract remains unchanged. Manual verification
+prints the bound challenge and candidate, accepts y/n/cancel/error and returns
+only confirmed accepted/rejected feedback. Unknown or cancelled verdicts stop
+without success. Terminal input uses select/os.read polling of the original
+deadline, including partially written pipes; no detached input thread can retain
+stdin after expiry. Ctrl-C/EOF are cancellable. The watchdog still stops the solver
+independently, and post-verification deadline/network checks reject late acceptance.
+Manual waiting counts in the same wall budget. This input mechanism targets the
+project's existing Linux/macOS host platforms.
+
+All submissions now have controller-only `submissions.jsonl` pending/final events,
+bound to run/challenge/submission IDs, candidate, source and UTC timestamp. The
+existing Langfuse tool span holds candidate/verdict plus verification source and
+submission ID; the root summary receives neither candidate nor private answer.
+Manual reports label verification as `htb-human-relay`, with no local answer key.
+Existing native model generations, replay, accounting and trace export remain.
+Manual export checks retain structure/parentage/credentials/cleanup checks without
+pretending to check an unavailable private answer. Structural completeness still
+does not guarantee hosted input/output payload completeness.
+
+MCP can later produce the same validated public task and provide a trusted
+verification callback. No general adapter hierarchy, provider registry, extra
+agent framework, SDK migration or web interface is introduced. Live Docker,
+HTB/VPN, gateway, hosted trace and MCP behavior are not established by the
+[offline verification](../evidence/htb-manual/README.md).
+
 `run-challenge --challenge ID` loads an indexed challenge through the installed
 `nyuctf` package and uses the same lifecycle, agent, tools and evaluator for every
 selected ID. The existing manifest supplies the development/scored result label.

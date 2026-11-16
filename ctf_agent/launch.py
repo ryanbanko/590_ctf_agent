@@ -1,6 +1,8 @@
 """One challenge launcher: public task, isolated tools, and trusted evaluation."""
 
+from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
+from functools import partial
 import hashlib
 import json
 import os
@@ -89,74 +91,91 @@ def run_challenge(settings: dict, dataset_json: Path, manifest_path: Path, chall
     started = time.monotonic()
     report = {"challenge_id": challenge_id, "phase": "loading",
               "evidence_complete": False, "model_calls": 0, "model_settings": dict(model_usage["model_settings"])}
+    expected_flag = None
     try:
         manifest = json.loads(manifest_path.read_text())
         challenge = load_challenge(dataset_json, challenge_id, manifest_path)
+        expected_flag = challenge.flag
         report["mode"] = "scored" if challenge_id in manifest["scored"] else "development"
         files = contestant_files(challenge)
         report["withheld_build_files"] = sorted(name for name in challenge.files if str(PurePosixPath(name)) not in files)
         report["dataset"] = {"revision": manifest["revision"], "index_sha256": manifest["index_sha256"]}
         report["phase"] = "target-startup"
         with challenge_target(challenge, directory / "target") as target:
-            report["target"] = target
-            report["provenance"] = collect_provenance(settings, target_images=target["images"])
             task = public_task(challenge, files, target["endpoints"])
-            (directory / "public-task.json").write_text(task + "\n")
-            report["phase"] = "attempt"
-            with run_attempt(settings, target["network"], target["endpoints"],
-                             challenge.flag, directory, langfuse=langfuse, label=challenge_id,
-                             public_task=task, respond=respond, model_usage=model_usage,
-                             mode=report["mode"]) as run:
-                report["files"] = stage_files(files, run["solver"],
-                                             run["remaining_seconds"]())
-                run_agent(task, run["respond"], run["call_tool"])
+            run_task(settings, directory, report, target, task, files, expected_flag,
+                     langfuse=langfuse, respond=respond, model_usage=model_usage)
         report["phase"] = "trace-export"
     except BaseException as error:
         report["error_type"] = type(error).__name__
         raise
     finally:
-        # The attempt may fail before its context yields; its summary still exists.
-        summaries = list(directory.glob("*/summary.json"))
-        try:
-            if summaries:
-                result = json.loads(summaries[0].read_text())
-                report.update(result=result, model_calls=result["model_calls"])
-                report["trace_url"] = langfuse.get_trace_url(trace_id=result["trace_id"])
-                if export_trace is not None:
-                    rows = export_trace(langfuse, result["trace_id"], result["model_calls"], result["tool_calls"], directory)
-                    roots = [row for row in rows if row["name"] == "attempt"]
-                    root = roots[0] if len(roots) == 1 else None
-                    secrets = [os.environ[name] for name in ("LITELLM_TOKEN", "LANGFUSE_SECRET_KEY") if os.getenv(name)]
-                    report["evidence_checks"] = {
-                        "one_root": root is not None,
-                        "parentage": root is not None and all(row.get("parentObservationId") == root["id"] for row in rows if row is not root),
-                        "expected_answer_not_in_root": root is not None and challenge.flag not in json.dumps(root),
-                        "credentials_absent": all(secret not in json.dumps(rows) for secret in secrets),
-                        "target_cleanup": not report["target"]["cleanup_errors"],
-                        "solver_cleanup": not result["cleanup_errors"],
-                    }
-                    report["evidence_complete"] = all(report["evidence_checks"].values())
-        except Exception as error:
-            report["trace_export_error_type"] = type(error).__name__
-        finally:
-            report["total_seconds"] = round(time.monotonic() - started, 6)
-            (directory / "run.json").write_text(json.dumps(report, indent=2) + "\n")
-            print(f"Run records: {directory}", flush=True)
+        finish_run(report, directory, started, langfuse, export_trace, expected_flag=expected_flag)
+    return checked_report(report, export_trace)
+
+
+def run_task(settings, directory, report, target, task, files, expected_flag, *,
+             langfuse, respond, model_usage, verify_candidate=None, verification_source="local-answer"):
+    """Common isolated execution for CTFTiny and manually prepared public tasks."""
+    report["target"] = target
+    report["provenance"] = collect_provenance(settings, target_images=target["images"])
+    (directory / "public-task.json").write_text(task + "\n")
+    report["phase"] = "attempt"
+    with run_attempt(settings, target["network"], target["endpoints"], expected_flag, directory,
+                     langfuse=langfuse, label=report["challenge_id"], public_task=task,
+                     respond=respond, model_usage=model_usage, mode=report["mode"],
+                     verify_candidate=verify_candidate, verification_source=verification_source) as run:
+        report["files"] = stage_files(files, run["solver"], run["remaining_seconds"]())
+        run_agent(task, run["respond"], run["call_tool"])
+
+
+def finish_run(report, directory, started, langfuse, export_trace, *, expected_flag=None):
+    # The attempt may fail before its context yields; its summary still exists.
+    summaries = list(directory.glob("*/summary.json"))
+    try:
+        if summaries:
+            result = json.loads(summaries[0].read_text())
+            report.update(result=result, model_calls=result["model_calls"])
+            report["trace_url"] = langfuse.get_trace_url(trace_id=result["trace_id"])
+            if export_trace is not None:
+                rows = export_trace(langfuse, result["trace_id"], result["model_calls"], result["tool_calls"], directory)
+                roots = [row for row in rows if row["name"] == "attempt"]
+                root = roots[0] if len(roots) == 1 else None
+                secrets = [os.environ[name] for name in ("LITELLM_TOKEN", "LANGFUSE_SECRET_KEY", "HTB_MCP_TOKEN") if os.getenv(name)]
+                checks = {
+                    "one_root": root is not None,
+                    "parentage": root is not None and all(row.get("parentObservationId") == root["id"] for row in rows if row is not root),
+                    "credentials_absent": all(secret not in json.dumps(rows) for secret in secrets),
+                    "target_cleanup": not report["target"]["cleanup_errors"],
+                    "solver_cleanup": not result["cleanup_errors"],
+                }
+                if expected_flag is not None:
+                    checks["expected_answer_not_in_root"] = root is not None and expected_flag not in json.dumps(root)
+                report["evidence_checks"] = checks
+                report["evidence_complete"] = all(checks.values())
+    except Exception as error:
+        report["trace_export_error_type"] = type(error).__name__
+    finally:
+        report["total_seconds"] = round(time.monotonic() - started, 6)
+        (directory / "run.json").write_text(json.dumps(report, indent=2) + "\n")
+        print(f"Run records: {directory}", flush=True)
+
+
+def checked_report(report, export_trace):
     if export_trace is not None and not report["evidence_complete"]:
         raise RuntimeError("Attempt records incomplete; inspect run.json before further runs")
     print(f'Outcome: {report["result"]["termination_reason"]}; verified success: {report["result"]["verified_success"]}', flush=True)
     return report
 
 
-def launch_challenge(experiment_path: Path, dataset_json: Path, manifest_path: Path,
-                       challenge_id: str, output_root: Path):
+@contextmanager
+def model_session(experiment_path: Path):
     """Own host-only clients and use the configured per-attempt limits."""
     names = ("LITELLM_TOKEN", "LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY", "LANGFUSE_BASE_URL")
     missing = [name for name in names if not os.getenv(name)]
     if missing:
         raise ValueError("Set host environment variables: " + ", ".join(missing))
     settings, model = load_experiment(experiment_path)
-    directory = output_root / ("challenge-" + uuid.uuid4().hex[:12])
     client = Langfuse(timeout=10)
     try:
         if not client.auth_check():
@@ -166,10 +185,59 @@ def launch_challenge(experiment_path: Path, dataset_json: Path, manifest_path: P
                     http_client=httpx2.Client(event_hooks={"response": [reject_gateway_errors]})) as model_client:
             respond, usage = make_responder(model_client, model,
                 langfuse_public_key=os.environ["LANGFUSE_PUBLIC_KEY"])
-            return run_challenge(settings, dataset_json, manifest_path, challenge_id, directory,
-                                   langfuse=client, respond=respond, model_usage=usage)
+            yield settings, client, respond, usage
     finally:
         client.shutdown()
+
+
+def launch_challenge(experiment_path: Path, dataset_json: Path, manifest_path: Path,
+                       challenge_id: str, output_root: Path):
+    with model_session(experiment_path) as (settings, client, respond, usage):
+        directory = output_root / ("challenge-" + uuid.uuid4().hex[:12])
+        return run_challenge(settings, dataset_json, manifest_path, challenge_id, directory,
+                             langfuse=client, respond=respond, model_usage=usage)
+
+
+def run_manual_challenge(settings, task_path, directory, *, langfuse, respond, model_usage,
+                         verify_candidate=None, export_trace=read_model_trace):
+    from .manual import load_manual_task, manual_network, manual_verdict
+
+    directory.mkdir(parents=True, exist_ok=False, mode=0o700)
+    started = time.monotonic()
+    report = {"mode": "htb-manual", "phase": "loading", "evidence_complete": False,
+              "model_calls": 0, "model_settings": dict(model_usage["model_settings"]),
+              "verification_source": "htb-human-relay", "local_answer_key": False}
+    try:
+        task, files = load_manual_task(task_path)
+        report["challenge_id"] = task["name"]
+        task_text = json.dumps(task, ensure_ascii=True)
+        report["task_sha256"] = hashlib.sha256(task_text.encode()).hexdigest()
+        report["phase"] = "target-startup"
+        verifier = verify_candidate if verify_candidate is not None else partial(manual_verdict, task["name"])
+        with manual_network(task["endpoints"], directory / "target") as target:
+            run_task(settings, directory, report, target, task_text, files, None,
+                     langfuse=langfuse, respond=respond, model_usage=model_usage,
+                     verify_candidate=verifier, verification_source="htb-human-relay")
+        report["phase"] = "trace-export"
+    except BaseException as error:
+        report["error_type"] = type(error).__name__
+        raise
+    finally:
+        finish_run(report, directory, started, langfuse, export_trace)
+    return checked_report(report, export_trace)
+
+
+def launch_manual(experiment_path: Path, task_path: Path, output_root: Path):
+    from .manual import load_manual_task
+
+    # Validate before creating clients or contacting hosted services.
+    task, _ = load_manual_task(task_path)
+    print(json.dumps(task, indent=2, ensure_ascii=True))
+    print("Human flag verdicts count toward the wall limit. Ctrl-C cancels.")
+    with model_session(experiment_path) as (settings, client, respond, usage):
+        directory = output_root / ("challenge-" + uuid.uuid4().hex[:12])
+        return run_manual_challenge(settings, task_path, directory, langfuse=client,
+                                    respond=respond, model_usage=usage)
 
 
 def launch_batch(experiment_path: Path, dataset_json: Path, manifest_path: Path,

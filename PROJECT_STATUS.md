@@ -4,12 +4,29 @@ Last reviewed: November 16, 2026 (America/New_York).
 
 ## Current step
 
-**The original `0395835` runtime and 40-turn configuration are restored.** The
+**The manual HTB fallback is implemented and offline-verified on `feat/htb-manual`.**
+The user authorized branch creation and the first implementation milestone:
+interactive ZIP/folder task setup, shared isolated execution, human-relayed
+accepted/rejected/cancel/error flag verdicts, submission records and a separate
+900-second/60-model-call configuration (80 tools). Langfuse remains the tracing
+system. All **204 offline tests passed; 49 Docker cases were deselected**.
+The first broad check exposed an unsubstituted SDK trace-URL lookup in a new test;
+the corrected local test also supplies the cleanup event required by export.
+[Implementation, commands, checks and limits](evidence/htb-manual/README.md).
+
+No real challenge attempt, Docker/VPN operation, paid model call, hosted mutation,
+MCP implementation, commit or push occurred. Stop for review before a separately
+authorized connectivity check and Try Out attempt. Raw tasks and submissions
+remain local/Git-ignored; old benchmark records are unchanged.
+
+**Before this milestone, the original `0395835` prompt and 40-turn default were restored.** The
 user withdrew planning/notes plus 50 turns after review found limited adoption
 and no demonstrated benefit. Both agent.py and development.toml match that commit
-byte-for-byte; other runtime/configuration/dependency/test files are unchanged.
-All 41 focused offline rollback checks passed. Remaining uncommitted work is
-documentation and retained experiment evidence. [Decision, review and verification](evidence/planning-notes/rollback/README.md).
+byte-for-byte. The manual integration now extends shared controller/launch code;
+the rollback's other-file identity claims describe that earlier checkpoint.
+All 41 focused offline rollback checks passed. At that checkpoint, remaining
+uncommitted work was documentation and retained experiment evidence.
+[Decision, review and verification](evidence/planning-notes/rollback/README.md).
 
 The user-run candidate recorded 12 attempts across ten distinct tasks: ten
 verified successes, one service-blocked ending and one model/API stop. Ten local
@@ -75,8 +92,9 @@ function, CLI and batch tests match main byte-for-byte. No parallel runner ships
 The listener diagnosis/correction and usage-preservation changes were committed
 on main at **`0395835`**, which is the clean recorded baseline for all 36 attempts.
 The earlier reconciliation is at `bc3ca3a`. Dated history and original scored/
-submitted report artifacts remain preserved. There is no remaining runtime or
-configuration diff from `0395835`. Documentation and evidence retain all candidate
+submitted report artifacts remain preserved. The active prompt and CTFTiny default
+configuration match `0395835`; the manual HTB branch adds shared controller/launch
+changes and a separate configuration. Documentation and evidence retain all candidate
 decisions/results. Commits and pushes remain the user's responsibility.
 
 The [November 14 improvement review](docs/IMPROVEMENT_OPTIONS.md#current-review-and-proposed-comparison--november-14)
@@ -119,8 +137,10 @@ of the two listener-validation traces; root SPAN costs are null.
 
 Agent/tool/model behavior retains scored baseline **`aedfd62`**, with the new
 two-image target-listener correction and additive usage-accounting records.
-The active runtime and configuration match `0395835`, including the original
-practice-baseline prompt and 40-turn allowance. Both withdrawn candidates and
+The active agent prompt/tools/model adapter and CTFTiny default configuration match
+`0395835`, including the original practice-baseline prompt and 40-turn allowance.
+The manual branch extends orchestration/verification; its separate configuration
+uses 900 seconds/60 model calls/80 tools. Both withdrawn candidates and
 their original settings/results remain in evidence.
 Team reporting/submission updates through
 **`36307ce`** and historical scored records remain unchanged. The configuration source is
@@ -203,15 +223,30 @@ checksum and per-run image IDs, not merely a Git commit.
 
 ## Next action and authorization
 
-Review the [completed rollback and retained trial findings](evidence/planning-notes/rollback/README.md).
-The user authorized restoring the original prompt/40-turn configuration and
-reconciling docs/evidence. Keep that runtime, preserve all runs/failures and API/
-export gaps, and stop further planning/notes prompt iteration for now. The
-remaining practice tasks are not automatically scheduled. No live run, new
-runtime/budget change, Docker operation, hosted mutation, commit or push starts
-automatically. Remaining changes from the last commit document what was tried.
+Review the [manual HTB implementation and offline checks](evidence/htb-manual/README.md).
+The authorized first milestone is complete. Next proposed stage: verify actual
+Docker-to-assigned-target connectivity while on the Duke network/VPN, then run
+one small ordinary Try Out challenge with manual submission. That stage needs
+separate authorization and selected public inputs; no live run, Docker operation,
+hosted mutation, new budget/prompt change, commit or push starts automatically.
+MCP can later fill the same public task and trusted verification function.
+Preserve the [rollback and trial findings](evidence/planning-notes/rollback/README.md),
+all failures/API/export gaps and the unchanged CTFTiny defaults. Further
+planning/notes iteration and the remaining practice tasks are not scheduled.
 
 ## Current milestone verification
+
+November 16 manual HTB fallback: **204 offline tests passed, 49 Docker cases
+deselected**. Covered ZIP/folder import (including the documented password),
+unsafe path/symlink/special-file/duplicate/size rejection, saved-task validation,
+CLI setup without credentials/Docker, y/n recovery, cancellation/EOF/Ctrl-C,
+verification errors, wall expiry/late verdict rejection, submission records,
+local bridge cleanup, CTFTiny regression and real SDK model/tool tracing/export
+with local transports. The initial broad suite had 201 passes and one test-fixture
+failure; its cause/correction are retained in the evidence. Docker isolation and
+real target routing are inherited controls, not newly live-verified here. No
+solve-rate/cost benefit or working MCP/hosted integration is claimed.
+[Verification and remaining limits](evidence/htb-manual/README.md).
 
 November 16 rollback: **41 focused offline checks passed** after restoring the
 original prompt and 40-turn default. Source/default config match `0395835`

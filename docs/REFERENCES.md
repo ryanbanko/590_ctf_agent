@@ -26,6 +26,47 @@ course requirements or instructor confirmations.
 
 ## Original resources and clarification record
 
+### November 16 competition/manual fallback clarification
+
+The user supplied the later Agent CTF competition assignment and announcements
+in conversation, separately from the original Part 1 [ASSIGNMENT](../ASSIGNMENT.md).
+The latest announcement explicitly states that MCP access will be available.
+In response to the user's question about MCP practice access and manual setup/
+submission, the professor replied, as supplied by the user:
+
+> Yeah, I would plan to do both. You may be able to have one person implement
+> manual challenge setup while the rest of your team tests the MCP integration.
+> There should be documentation that will help ahead of time. That way if MCP
+> works, you are good to go and if there are issues you have a fall back.
+
+This directly supports manual challenge setup and human flag submission as a
+fallback while retaining agent solving. It does not establish that MCP currently
+works for this account/event or that the course requires only manual operation.
+The user authorized a feature branch and the manual implementation/offline checks.
+No live attempt, paid model call, Docker/VPN operation or hosted mutation is
+authorized automatically by that implementation milestone.
+
+Technical references reviewed for that implementation:
+
+- [HTB CTF guide](https://help.hackthebox.com/en/articles/5200851-ctf-user-s-guide):
+  descriptions, downloadable files, public Docker IP/ports, website flag submission,
+  documented ZIP password, and the separate Machine VPN requirement. Ordinary
+  Docker challenges do not require HTB VPN; Duke gateway connectivity is separate.
+- [Python 3.13 zipfile](https://docs.python.org/3.13/library/zipfile.html): standard
+  ZIP reading/decryption, format limits and untrusted archive precautions. Use
+  explicit validation and bounded extraction instead of extractall; unsupported
+  encryption/compression can use a locally extracted folder.
+- [Langfuse instrumentation](https://langfuse.com/docs/observability/sdk/instrumentation)
+  and [trace best practices](https://langfuse.com/docs/observability/best-practices):
+  preserve the existing native model integration and root-linked tool spans,
+  meaningful candidate/verdict records and metadata. SDK 5.1.0 remains pinned;
+  offline local SDK verification is not a hosted ingestion/readback check.
+
+The professor's earlier gateway reply, supplied by the user, separately states
+that a likely $15 team key is sufficient for one running agent and that Duke
+network/VPN access is required, with VCM as an alternative. Neither longer attempt
+limits nor the external adapter guarantees staying within a dollar budget.
+
 These are the five technical resources the user supplied at the start of this
 project. They informed the design and should be reviewed when working on the
 corresponding integration. Findings below describe the November 3, 2026 review;

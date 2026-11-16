@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-16",
+  "branch": "feat/htb-manual",
+  "base_commit": "c34c33c29bbf0a34bb9d3664f43611521538b398",
+  "work_committed": false,
+  "verification_scope": "Offline only; synthetic data, local transports and Docker substitutes",
+  "tests": {
+    "passed": 204,
+    "docker_deselected": 49,
+    "failures": 0,
+    "errors": 0,
+    "seconds_reported": 2.1,
+    "junit_sha256": "b83616f016a6bd0229032ae0b333a175b3895992731d3e4e30ae00b14b9a1853"
+  },
+  "earlier_checks": [
+    {
+      "scope": "focused",
+      "passed": 93
+    },
+    {
+      "scope": "initial full offline",
+      "passed": 201,
+      "failed": 1,
+      "docker_deselected": 49,
+      "failure": "New export test left Langfuse.get_trace_url project lookup unsubstituted: ConnectError",
+      "correction": "Substitute trace URL lookup; emit the cleanup event needed by standard export checks"
+    },
+    {
+      "scope": "corrected manual tests before two additional cases",
+      "passed": 33
+    },
+    {
+      "scope": "initial provenance inventory",
+      "failure": "Included ignored docker/__pycache__ files absent at baseline",
+      "correction": "Use git ls-files docker for baseline identity inventory"
+    }
+  ],
+  "manual_limits": {
+    "wall_seconds": 900.0,
+    "max_model_turns": 60,
+    "max_tool_calls": 80
+  },
+  "unchanged_from_0395835_sha256": {
+    "ctf_agent/agent.py": "5bb398f9aac11785800859559fcd0d0fcf722bc154fdcdf04d35b814bad9d5ed",
+    "ctf_agent/tools.py": "86b56d81d5a967227ffbcbfa7be3444b578309a1ae2df5278a7bf732e922285d",
+    "ctf_agent/challenge.py": "c38945984da5ec0becdc8e13c37646d96c2fe1a80e131e02655001518acd6b48",
+    "ctf_agent/sandbox.py": "52b6ec75467b9bca08f32c25846dbe520b0f1f7ccaf24a5b24df414e91b7f031",
+    "ctf_agent/docker.py": "e8eb2374ab09981f36b786b0b8d1db2a677e4ff6e2a1f91edb69b7ed2ccaf785",
+    "configs/development.toml": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b",
+    "configs/ctftiny.json": "3d9b9068823eabc34a5afa8684f09ac5a3217d1fa3712be7c4b57a87b33b1654",
+    "pyproject.toml": "946d18054a3f3e77e56f9dd3c9ca1a264d7ccb777ce227e9b07905f0aaa7ce6e",
+    "uv.lock": "20a6cad09949fb65f02ccf04c834589115907ec8ddf83c37595eab52c9b449fa",
+    "docker/NYU-LICENSE": "ffe785deace99260d447a9ed1e682d128da6942977701677528354315e0b506b",
+    "docker/fixture.Dockerfile": "dd5ddd404a23facac903c375edb53a3462c61d65b0233eb936ba95649bcd0cb1",
+    "docker/guard.Dockerfile": "58142b2216aa36265423495b138b4c6bc30fd132f2b42d6a4744f72a350fe1cd",
+    "docker/guard.py": "c42d2a43fef168dedb469c54416288d275d10821cd55a93c51dfbb37bc901f2f",
+    "docker/socat.Dockerfile": "654ce2dab178c3ddfe59362b1dcb2dd13d576cb8bee9edccc077f6828011ee2f",
+    "docker/solver.Dockerfile": "171cb74317e4872f8fd8548a3d6623778d7b38f234cf37bbc8b933f1c670062e"
+  },
+  "implemented_source_sha256": {
+    "ctf_agent/__main__.py": "8d796dcab4f9d1fea31565c79d7ee97ac0dc6185aed5a5f8d4b11e9bc7a19299",
+    "ctf_agent/attempt.py": "08ed8e4c17ffd9514917e061899639f201e13bc0c1522f3ba1fcc481354469fb",
+    "ctf_agent/launch.py": "db6b560fee4931bfac1c8f362c1bbb22eeb6d0f8a223ce92a29db2c3290ee3ef",
+    "ctf_agent/manual.py": "3c950eaa2ce9146a97da9593b89e279e82194597c3440de1bccb32c8c5d8ce33",
+    "configs/htb-manual.toml": "9840df20b6846c5c953399a28f600efff6cc468306b605c9ee5433fb85139fce",
+    "tests/test_manual.py": "1a00a0655c20b5ff10feb1e1a9f69762eea3b5a61bc9d4578fef455b1f661b32"
+  },
+  "checks": {
+    "cli_help": true,
+    "config_only_wall_and_model_allowance_differ": true,
+    "baseline_files_byte_identical": true,
+    "python_ast_parse": true,
+    "local_doc_links": true,
+    "git_diff_check": true,
+    "recorded_source_hashes_match": true
+  },
+  "not_performed": [
+    "Docker operations",
+    "HTB challenge attempts",
+    "paid model calls",
+    "hosted mutations",
+    "MCP integration",
+    "commit",
+    "push"
+  ]
+}
