@@ -1,0 +1,379 @@
+{
+  "date": "2026-11-17",
+  "scope": "Observable model actions only; no cybersecurity challenge analysis or solution recommendations.",
+  "run_id": "c6bd2379fdc2",
+  "challenge_name": "Blueprint Heist",
+  "record": "runs/htb/attempts/challenge-7992374337bc/run.json",
+  "record_sha256": "426a8d3e5fac3107bc1bf1c684d79a95366167f5020c099f8bd2cc9523ba0c25",
+  "export": "runs/htb/attempts/challenge-7992374337bc/observations.json",
+  "export_sha256": "551fc4d6cfdf85aeece6a2c52cac8248a477f28fc68530d541a7582202400538",
+  "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/a8cf9c3cfd8918254ce9734aa8682eb0",
+  "recorded_commit": "ea6388803f61c397c330f1368210c1aa5aad9a36",
+  "recorded_dirty_tree": true,
+  "current_source_sha256": {
+    "ctf_agent/agent.py": "5bb398f9aac11785800859559fcd0d0fcf722bc154fdcdf04d35b814bad9d5ed",
+    "ctf_agent/tools.py": "86b56d81d5a967227ffbcbfa7be3444b578309a1ae2df5278a7bf732e922285d",
+    "ctf_agent/attempt.py": "08ed8e4c17ffd9514917e061899639f201e13bc0c1522f3ba1fcc481354469fb",
+    "ctf_agent/launch.py": "db6b560fee4931bfac1c8f362c1bbb22eeb6d0f8a223ce92a29db2c3290ee3ef",
+    "ctf_agent/manual.py": "3c950eaa2ce9146a97da9593b89e279e82194597c3440de1bccb32c8c5d8ce33"
+  },
+  "recorded_source_matches_current": {
+    "ctf_agent/agent.py": true,
+    "ctf_agent/tools.py": true,
+    "ctf_agent/attempt.py": true,
+    "ctf_agent/launch.py": true,
+    "ctf_agent/manual.py": true
+  },
+  "result": {
+    "termination_reason": "completed_without_success",
+    "verified_success": false,
+    "active_seconds": 212.397033,
+    "model_calls": 16,
+    "tool_calls": 15,
+    "tokens": {
+      "input": 251970,
+      "output": 12873,
+      "cached_input": 224246,
+      "reasoning": 8628
+    },
+    "cost_usd": 0.011451359999999999,
+    "usage_complete": true,
+    "solver_restarts": 0,
+    "scope_incidents": 0,
+    "cleanup_errors": []
+  },
+  "launch_seconds": 227.210568,
+  "limits": {
+    "wall_seconds": 900.0,
+    "max_model_turns": 60,
+    "max_tool_calls": 80
+  },
+  "native_generation_cost_usd": 0.012143259994999999,
+  "reconciled_tokens": {
+    "input": 251970,
+    "output": 12873,
+    "cached_input": 224246,
+    "reasoning": 8628
+  },
+  "peak_input_tokens": 27679,
+  "missing_required_fields": [],
+  "all_observations_ended": true,
+  "root_parentage_correct": true,
+  "linked_function_results": 15,
+  "generations": [
+    {
+      "turn": 1,
+      "observation_id": "96bcbc49b637ee98",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 1289,
+      "output_tokens": 80,
+      "system_matches_current": true
+    },
+    {
+      "turn": 2,
+      "observation_id": "b2d60f4bb3e3145f",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 1889,
+      "output_tokens": 133,
+      "system_matches_current": true
+    },
+    {
+      "turn": 3,
+      "observation_id": "7419656b61f10a91",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 9385,
+      "output_tokens": 207,
+      "system_matches_current": true
+    },
+    {
+      "turn": 4,
+      "observation_id": "803ad8613b1f122b",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 10289,
+      "output_tokens": 257,
+      "system_matches_current": true
+    },
+    {
+      "turn": 5,
+      "observation_id": "1ca486681beb1120",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 11060,
+      "output_tokens": 241,
+      "system_matches_current": true
+    },
+    {
+      "turn": 6,
+      "observation_id": "b4f8692fe32b5c84",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 13086,
+      "output_tokens": 889,
+      "system_matches_current": true
+    },
+    {
+      "turn": 7,
+      "observation_id": "e275bf846523df93",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 14307,
+      "output_tokens": 245,
+      "system_matches_current": true
+    },
+    {
+      "turn": 8,
+      "observation_id": "cf0f27cd8b0d6186",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 15304,
+      "output_tokens": 905,
+      "system_matches_current": true
+    },
+    {
+      "turn": 9,
+      "observation_id": "ac4effb6bc256874",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 16858,
+      "output_tokens": 535,
+      "system_matches_current": true
+    },
+    {
+      "turn": 10,
+      "observation_id": "0693b18ab584a0ad",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 17656,
+      "output_tokens": 1560,
+      "system_matches_current": true
+    },
+    {
+      "turn": 11,
+      "observation_id": "d123a33f0a34cd73",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 19573,
+      "output_tokens": 1086,
+      "system_matches_current": true
+    },
+    {
+      "turn": 12,
+      "observation_id": "ab1817d8d87e5ec7",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 20727,
+      "output_tokens": 1318,
+      "system_matches_current": true
+    },
+    {
+      "turn": 13,
+      "observation_id": "506e7564d1d6437d",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 22477,
+      "output_tokens": 2017,
+      "system_matches_current": true
+    },
+    {
+      "turn": 14,
+      "observation_id": "3599d624ebea110c",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 24563,
+      "output_tokens": 1196,
+      "system_matches_current": true
+    },
+    {
+      "turn": 15,
+      "observation_id": "b5f8b97ad7f38df6",
+      "visible_text": true,
+      "function_calls": 1,
+      "input_tokens": 25828,
+      "output_tokens": 1782,
+      "system_matches_current": true
+    },
+    {
+      "turn": 16,
+      "observation_id": "449ee30c5e40323e",
+      "visible_text": true,
+      "function_calls": 0,
+      "input_tokens": 27679,
+      "output_tokens": 422,
+      "system_matches_current": true
+    }
+  ],
+  "tools": [
+    {
+      "step": 1,
+      "observation_id": "85dddca566cefaf9",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 2,
+      "observation_id": "d3d3216b212c497f",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 3,
+      "observation_id": "c174c262dda2586f",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 4,
+      "observation_id": "a9837a4a28177847",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 5,
+      "observation_id": "9b80add8cec89cc9",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 6,
+      "observation_id": "673c75478a79490c",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 7,
+      "observation_id": "049a1b1317f4759e",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 8,
+      "observation_id": "3e523c3a8f203f3c",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 9,
+      "observation_id": "bb47188689b2f0f5",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 10,
+      "observation_id": "b45f2495c714f6d4",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 11,
+      "observation_id": "fba6712d690ee95e",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 12,
+      "observation_id": "1fbe523403327981",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 13,
+      "observation_id": "8c5a8f033793472f",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 14,
+      "observation_id": "df44f80ac5bf4690",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 15,
+      "observation_id": "e639a37353274bcf",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    }
+  ],
+  "findings": [
+    {
+      "finding": "Inspection and visible action purposes precede tool actions.",
+      "tool_steps": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "finding": "Repeated candidate lists expand one hypothesis without a clear distinguishing premise.",
+      "tool_steps": [
+        6,
+        11,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "finding": "Negative conclusions exceed tested cases.",
+      "generation_turns": [
+        10,
+        12,
+        14,
+        16
+      ]
+    },
+    {
+      "finding": "Diagnostic hides extractor stderr and has no positive extraction control.",
+      "tool_steps": [
+        9
+      ]
+    },
+    {
+      "finding": "Text-only final ends before enforced limits, with blocker incompletely established.",
+      "generation_turns": [
+        16
+      ]
+    }
+  ],
+  "limits_of_review": [
+    "Single run does not establish category-wide deficiency or prompt causality.",
+    "Empty diagnostic output does not prove either the tested mechanism or extractor was broken.",
+    "No alternative challenge solution is asserted.",
+    "Unused budget does not prove further work would succeed.",
+    "No withheld files, original challenge answers or writeups were inspected."
+  ]
+}

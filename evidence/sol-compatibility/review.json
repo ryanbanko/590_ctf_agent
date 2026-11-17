@@ -1,0 +1,248 @@
+{
+  "date": "2026-11-17",
+  "authorization": "User requested very simple single model calls to diagnose name/compatibility; announced maximum three calls, all synthetic with no tool execution.",
+  "failed_run": {
+    "record": "runs/htb/attempts/challenge-25dddcc3172e/run.json",
+    "record_sha256": "80744e17528ecf192898aaa1d26db4d56c2bb97541d7cc0eca57898d231f9f90",
+    "export_sha256": "3956daada3b008aa4e11fb37490927e8353910d635d3233f475eb4302318fc81",
+    "run_id": "b5a999ddfb5c",
+    "model": "gpt-6.1-sol",
+    "outcome": "response_source_error",
+    "model_calls": 1,
+    "tool_calls": 0,
+    "gateway_status": "gateway_http_400",
+    "cleanup_errors": [],
+    "usage_complete": false
+  },
+  "live_metadata_check": {
+    "endpoint": "GET /v1/model/info",
+    "http_status": 200,
+    "advertised_model_name": "gpt-6.1-sol",
+    "upstream_model": "openai/gpt-6.1-sol",
+    "mode": "chat",
+    "supports_reasoning": true,
+    "supports_function_calling": true,
+    "supports_responses": null,
+    "interpretation": "Exact name exists. Mode chat alone does not prove a Responses bridge or explain the rejection; Luna is also reported in chat mode."
+  },
+  "probes": [
+    {
+      "variant": "minimal",
+      "request": {
+        "model": "gpt-6.1-sol",
+        "input": "Reply with exactly OK.",
+        "max_output_tokens": 128,
+        "store": false
+      },
+      "model_calls": 1,
+      "tools_executed": 0,
+      "usage": {
+        "input_tokens": 11,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "audio_tokens": null,
+          "cached_tokens_details": null,
+          "image_tokens": null,
+          "text_tokens": null,
+          "video_tokens": null,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          }
+        },
+        "output_tokens": 5,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": null,
+          "text_tokens": null
+        },
+        "total_tokens": 16,
+        "cost": null
+      },
+      "http_error": null,
+      "trace_id": "26e5f67efb17cfca805b603964f03a21",
+      "status": "completed",
+      "output_text": "OK",
+      "output_types": [
+        "message"
+      ],
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/26e5f67efb17cfca805b603964f03a21",
+      "seconds": 2.917643,
+      "record": "runs/sol-compatibility/probe-045239f937e0/probe.json",
+      "record_sha256": "07d3504a5bbff940c44393822a3c017dbc82de02cc2718974c7b58a589c65af8",
+      "export": "runs/sol-compatibility/probe-045239f937e0/observations.json",
+      "export_sha256": "c50f1b162945999ad476ed9c8a0a06b1df873b32926b4042b4019f61469d2885",
+      "native_cost_usd": 7.2e-05,
+      "generation_count": 1,
+      "complete_payloads": true,
+      "parentage": true
+    },
+    {
+      "variant": "runner",
+      "request": {
+        "model": "gpt-6.1-sol",
+        "input": "Reply with exactly OK.",
+        "max_output_tokens": 128,
+        "store": false,
+        "reasoning": {
+          "effort": "medium",
+          "summary": "auto"
+        },
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "parallel_tool_calls": false
+      },
+      "model_calls": 1,
+      "tools_executed": 0,
+      "usage": {
+        "input_tokens": 11,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "audio_tokens": null,
+          "cached_tokens_details": null,
+          "image_tokens": null,
+          "text_tokens": null,
+          "video_tokens": null,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          }
+        },
+        "output_tokens": 5,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": null,
+          "text_tokens": null
+        },
+        "total_tokens": 16,
+        "cost": null
+      },
+      "http_error": null,
+      "trace_id": "d5cd5960e6b6d7b81a770825f3d69f35",
+      "status": "completed",
+      "output_text": "OK",
+      "output_types": [
+        "message"
+      ],
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/d5cd5960e6b6d7b81a770825f3d69f35",
+      "seconds": 2.801637,
+      "record": "runs/sol-compatibility/probe-06881312b119/probe.json",
+      "record_sha256": "ee52405c472ea111ffc36137ea74f41e8c8fa9d67b55b52cee2088192dc27ba3",
+      "export": "runs/sol-compatibility/probe-06881312b119/observations.json",
+      "export_sha256": "59710147dc2d2df005b49756e4f88706fcc6b127eaf054d74d56f470b593ee38",
+      "native_cost_usd": 7.2e-05,
+      "generation_count": 1,
+      "complete_payloads": true,
+      "parentage": true
+    },
+    {
+      "variant": "tool",
+      "request": {
+        "model": "gpt-6.1-sol",
+        "input": "Call diagnostic_echo with message OK. This is a synthetic API compatibility check.",
+        "max_output_tokens": 128,
+        "store": false,
+        "reasoning": {
+          "effort": "medium",
+          "summary": "auto"
+        },
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "parallel_tool_calls": false,
+        "tools": [
+          {
+            "type": "function",
+            "name": "diagnostic_echo",
+            "description": "Return a synthetic message; no tool will be executed.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message"
+              ],
+              "additionalProperties": false
+            },
+            "strict": false
+          }
+        ]
+      },
+      "model_calls": 1,
+      "tools_executed": 0,
+      "usage": {
+        "input_tokens": 140,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "audio_tokens": null,
+          "cached_tokens_details": null,
+          "image_tokens": null,
+          "text_tokens": null,
+          "video_tokens": null,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          }
+        },
+        "output_tokens": 19,
+        "output_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": null,
+          "text_tokens": null
+        },
+        "total_tokens": 159,
+        "cost": null
+      },
+      "http_error": null,
+      "trace_id": "cf7b7060d71057f1ae213b8f91fb442f",
+      "status": "completed",
+      "output_text": "",
+      "output_types": [
+        "function_call"
+      ],
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/cf7b7060d71057f1ae213b8f91fb442f",
+      "seconds": 3.459396,
+      "record": "runs/sol-compatibility/probe-c623d4a13b5e/probe.json",
+      "record_sha256": "bff79fb6354d477a1d2ba11dde71eae45ebe28aa03b4f0e55c3dd5a5b3068160",
+      "export": "runs/sol-compatibility/probe-c623d4a13b5e/observations.json",
+      "export_sha256": "647e7bf1636961282153166e3b9a68355559c788afebf6cef7b9b8757983357b",
+      "native_cost_usd": 0.00047,
+      "generation_count": 1,
+      "complete_payloads": true,
+      "parentage": true
+    }
+  ],
+  "total_model_calls": 3,
+  "total_tools_executed": 0,
+  "total_native_cost_usd": 0.000614,
+  "runtime_sha256": {
+    "ctf_agent/attempt.py": "08ed8e4c17ffd9514917e061899639f201e13bc0c1522f3ba1fcc481354469fb",
+    "ctf_agent/config.py": "754f6064788a00daf56103f62f9345fe5c6dded898688000ae5c4b9a45fb6989",
+    "ctf_agent/tools.py": "86b56d81d5a967227ffbcbfa7be3444b578309a1ae2df5278a7bf732e922285d",
+    "ctf_agent/__init__.py": "f888faa1ea0aa9200939d4fa9225c1e029e2ac6a485191541fffa11a3ef075d3",
+    "ctf_agent/manual.py": "3c950eaa2ce9146a97da9593b89e279e82194597c3440de1bccb32c8c5d8ce33",
+    "ctf_agent/docker.py": "e8eb2374ab09981f36b786b0b8d1db2a677e4ff6e2a1f91edb69b7ed2ccaf785",
+    "ctf_agent/sandbox.py": "52b6ec75467b9bca08f32c25846dbe520b0f1f7ccaf24a5b24df414e91b7f031",
+    "ctf_agent/launch.py": "db6b560fee4931bfac1c8f362c1bbb22eeb6d0f8a223ce92a29db2c3290ee3ef",
+    "ctf_agent/agent.py": "5bb398f9aac11785800859559fcd0d0fcf722bc154fdcdf04d35b814bad9d5ed",
+    "ctf_agent/challenge.py": "c38945984da5ec0becdc8e13c37646d96c2fe1a80e131e02655001518acd6b48",
+    "ctf_agent/__main__.py": "8d796dcab4f9d1fea31565c79d7ee97ac0dc6185aed5a5f8d4b11e9bc7a19299",
+    "configs/htb-sol.toml": "2e9abb0c51de309dcb84e3f421b9481f4e58af7c50d691a00e8744c49bf13253",
+    "configs/htb-manual.toml": "9840df20b6846c5c953399a28f600efff6cc468306b605c9ee5433fb85139fce",
+    "configs/development.toml": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b"
+  },
+  "conclusion": "Name and basic text/reasoning/replay/function-call requests work. Original full challenge request HTTP 400 cause remains unknown; no name/configuration fix is established.",
+  "limits": [
+    "Probes use 128 output tokens and a harmless short input. Original run used 8192 output tokens, a full system/task input and three production tool definitions.",
+    "No full challenge retry or follow-up function-result replay was performed. Successful synthetic calls do not prove every application request works.",
+    "Original raw gateway error body was intentionally suppressed before tracing. Its status does not identify the rejected field or rule.",
+    "Native diagnostic cost excludes the original failed request whose usage is unknown; no independent billing reconciliation."
+  ]
+}

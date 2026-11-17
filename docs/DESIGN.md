@@ -43,7 +43,7 @@ unchanged. The later prompt/output milestone is described below and in its
 The `feat/htb-manual` branch adds `setup-manual` and `run-manual`; CTFTiny's
 selection, answer boundary and default 600-second/40-call configuration remain.
 The original agent prompt/tools/model adapter are unchanged. A separate complete
-`configs/htb-manual.toml` selects 900 seconds/60 model calls/80 tool calls,
+`configs/htb-manual.toml` selects 1,800 seconds/100 model calls/120 tool calls,
 with other controls and model settings preserved. This is an integration fallback,
 not an agent-performance experiment or MCP client.
 

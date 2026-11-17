@@ -12,6 +12,146 @@ comparisons, the exact change, run references and conclusions. Keep raw evidence
 in Langfuse and run records; use `PROJECT_STATUS.md` for the overall checklist.
 This is Section 2 of [Part 1](../ASSIGNMENT.md), not the later competition Part 2.
 
+## Repeated Sol HTTP 400: provider rejection reproduced — November 17
+
+The user's unchanged retry `c49236369760` again stopped on the first request,
+with zero tools and clean cleanup/export. Two further diagnostic requests narrowed
+the cause: the original system prompt, three production tools and 8192-token cap
+with harmless user text completed; the latest failed initial API request, rebuilt
+from its recorded input/tools and unchanged model settings, returned HTTP 400.
+Its bounded error capture contains a nested provider `cyber_policy` code and the
+message that the content was flagged for possible cybersecurity risk. This
+identifies the reproduced rejection; the two original error bodies were not
+retained and cannot be independently inspected. No single triggering phrase is
+identified. No prompt rephrasing, alias change or fallback was attempted.
+
+These were API-only diagnostics: no solver, target contact or returned-tool
+execution. Five diagnostic requests total across the two stages; the original
+$0.000614 native subtotal covers only the first three. Rejected usage is unknown.
+No application/config change was made; diagnostics stopped, default Luna and the
+optional Sol profile remain. [Follow-up evidence](../evidence/sol-compatibility/followup.json).
+Original three-probe evidence below is preserved as its earlier checkpoint.
+
+## Sol HTTP 400 and bounded compatibility probes — November 17
+
+The user's first Sol Void attempt `b5a999ddfb5c` stopped at the first request with
+HTTP 400, zero tools and successful cleanup/export. Raw error details were excluded
+by the existing privacy hook. After the user suggested simple single calls, ran
+at most the three announced synthetic requests: plain text, runner reasoning/replay
+options, then one synthetic function definition. All completed; no function was
+executed. The exact configured name worked, so no alias variation was needed.
+
+Native Langfuse readback verified each root/generation and cost: $0.000614 combined.
+The probes changed the input, output cap and tool set compared with the failed full
+request, so they do not diagnose its cause or establish complete solver integration.
+No runtime/configuration change, challenge retry, Docker operation, target contact,
+commit or push. Preserve unknown failed-request usage and the original failure.
+The user may make one unchanged retry; recurring HTTP 400 needs a sanitized detailed
+diagnostic, rather than repeated name guessing. [Evidence and request snapshots](../evidence/sol-compatibility/README.md).
+
+## Optional Sol manual profile — November 17
+
+The user requested a ready-to-run GPT-6.1 Sol configuration for repeating their
+manual HTB test. Added `configs/htb-sol.toml`, selected explicitly with
+`--experiment`; Luna's manual and development defaults remain unchanged. Compared
+with the manual Luna profile, exactly four parsed fields differ: model identity
+and the three accounting rates. Medium reasoning, 8,192 output tokens, 900 seconds,
+60 model requests, 80 tools and all other settings remain fixed. Rates match the
+retained November 14 Duke metadata; they are not a new live pricing/billing check.
+
+Hypothesis for the user-selected comparison: Sol may improve decisions on the same
+task under the existing bounds, but may use different calls/tokens/time and has
+higher unit prices. A single repeat cannot establish a general model advantage;
+the operator must reset the remote instance and update changed endpoints for a
+fresh-state comparison. No assistant-started live trial is part of this milestone.
+
+Offline verification loaded the complete file through `load_experiment`, checked
+the exact four-field delta, the derived 60-request cap, unchanged 900-second/80-tool
+limits and matching recorded pricing rates. No new tests, dependency, runtime or
+prompt change, model call, Docker operation, target request, hosted mutation,
+commit or push. Stop for review; the user can run the existing manual command with
+the explicit profile. This is configuration readiness, not live Sol compatibility
+or a measured performance/cost result.
+
+## HTB manual wall and call limits — November 17
+
+After reviewing Omni Watch, the user requested more wall time and model turns,
+then selected a 30-minute wall limit. That run stopped at 900 seconds after 20
+model requests and 15 tool spans, with three solver restarts; its 60-request cap
+was not reached. The trace showed several unconfirmed bot-execution hypotheses,
+so a larger allowance may extend unproductive probing. The user will monitor live
+traces and can stop early.
+
+Updated both HTB-only profiles to 1,800 seconds, 100 model requests and 120 tool
+calls. The proportional call increase keeps the tool cap from binding too early
+if many model responses request small commands. Per-request timeout, solver/guard
+resource limits, reasoning, output cap and scope controls are unchanged. CTFTiny's
+development configuration remains unchanged. These are operational limits, not
+evidence of improved success or a cost guarantee; the longer wall can increase
+total spend. This change does not start a challenge attempt.
+
+Offline loader checks confirm both profiles parse and derive 100 model requests;
+the new wall/model/tool limits match. No model request, target contact, Docker
+operation or broad test suite was run. [Change record and checks](../evidence/htb-budget-update/README.md).
+
+## Narrative descriptions and newest manual attempt — November 17
+
+At the user's request, compared four supplied HTB descriptions with the newest
+manual run, DNS Dossier `695912dc3f8c`. No treatment was introduced. Seven model
+calls established actual service behavior and led to locally recorded human
+acceptance; about 136 of 167.377 active seconds were spent awaiting that verdict.
+The brief joking description did not prevent evidence-driven progress.
+
+The original export timed out. A read-only hosted retrieval saved a supplemental
+export with seven generations and six command tools, all with payloads, but no
+root/submission/terminal spans. Preserve `evidence_complete: false`; local accepted
+submission records do not fill missing hosted observations. Source/prompt identity
+matches current runtime. The [review](../evidence/htb-description-review/README.md)
+proposes retaining the original task text and, if desired, testing a small trusted
+framing clarification. No automatic rewriting, category playbook, memory change,
+prompt implementation, new run/model call, command replay or Docker operation.
+One successful control does not establish a benefit from additional instructions.
+
+## Earlier manual attempt: model-action evaluation — November 17
+
+Read-only review of user-run Blueprint Heist `c6bd2379fdc2`, explicitly limited
+by the user to model actions, not challenge analysis. No experimental treatment
+was introduced. The unchanged prompt inspected files first and explained actions;
+later repeated candidate lists, overbroad negative conclusions and an unvalidated
+diagnostic preceded text-only stopping after 212.4 seconds/16 model calls. No
+enforced budget caused the stop, but remaining budget does not prove solvability.
+All 16 generation/15 tool payloads, call-result replay links, current source/prompt
+identity and usage reconciliation passed. No submissions or recorded timeouts,
+restarts, scope incidents or cleanup errors. This one case does not support a
+category-wide missing procedure or an automatic prompt change. [Full review and
+observation references](../evidence/htb-latest-trace-review/README.md).
+Documentation/derived metadata only; no source/configuration, original record,
+new attempt/model call, command replay, Docker or hosted operation changed.
+
+## Operational/category preface assessment — November 17
+
+Read-only hypothesis review, **not an implemented experiment**. Directly checked
+selected traces and source contracts after repository/evidence orientation.
+Stale-session answers, delayed reads, high-volume inspection, artifact mutation
+and expensive computation align more closely with operational characteristics
+than category labels. Successful HTTP and small-file controls constrain blanket
+guidance. Verified NYU's pinned category/server-type template precedent without
+consulting challenge solutions; no causal benefit is established.
+
+Proposed first condition: unchanged original prompt plus one short stateful-network
+preface; fixed current CTFTiny settings/images and fresh controls. A formative
+four-task/two-trial/two-condition design would use 16 attempts; a category arm
+would require a separate comparison decision. This is a proposal, not spending
+authorization. Existing tool wording already requests same-connection interaction,
+so the hypothesis concerns more concrete emphasis/adoption. Prior connection,
+validation and notes trials remain distinct conditions with their limitations.
+
+[Assessment, selected observations, inventory checks and draft](../evidence/task-preface-review/README.md)
+retain the evidence and review limits. Documentation/derived metadata only;
+no runtime/configuration/tests, original records, model call, Docker operation,
+hosted write, recorded-command execution, commit or push changed. Stop for review
+before implementation or a paid pilot; manual HTB readiness remains separate.
+
 ## Planning/notes review and original-baseline rollback — November 16
 
 The user ran initial batch `055588a94b64` (five successes; the fifth export timed

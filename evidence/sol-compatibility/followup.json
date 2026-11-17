@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-17",
+  "scope": "Follow-up to repeated failure; two diagnostic model requests, no solver/target/tool execution. No runtime or configuration change.",
+  "latest_user_failure": {
+    "record": "runs/htb/attempts/challenge-14d10d57219e/run.json",
+    "record_sha256": "a51985d772d2e647903c7ea1bc529502873883418aa76c0d750afb2635c075de",
+    "export_sha256": "1263e24fc53daabe15f9e3cc7f20e92cb293d3b3b3679520ba8bde10977d9d1b",
+    "result": {
+      "run_id": "c49236369760",
+      "termination_reason": "response_source_error",
+      "model_calls": 1,
+      "tool_calls": 0,
+      "cleanup_errors": [],
+      "usage_complete": false,
+      "trace_id": "81fac67dea7e495fe28cf7d3ab7f72c5"
+    }
+  },
+  "probes": [
+    {
+      "variant": "production",
+      "model_calls": 1,
+      "tools_executed": 0,
+      "usage": {
+        "input_tokens": 976,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "audio_tokens": null,
+          "cached_tokens_details": null,
+          "image_tokens": null,
+          "text_tokens": null,
+          "video_tokens": null,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          }
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 36,
+          "audio_tokens": null,
+          "text_tokens": null
+        },
+        "total_tokens": 1019,
+        "cost": null
+      },
+      "http_error": null,
+      "trace_id": "597e0ebeb6ac1ca69eee8735edc2c019",
+      "status": "completed",
+      "output_text": "OK",
+      "output_types": [
+        "reasoning",
+        "message"
+      ],
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/597e0ebeb6ac1ca69eee8735edc2c019",
+      "seconds": 6.117249,
+      "record": "runs/sol-compatibility/probe-c6c45b8cd173/probe.json",
+      "record_sha256": "c1f25002d06255eea70af3d54820434a86d5bf7967a2c9b0f92ae42ce4c31f0a"
+    },
+    {
+      "variant": "recorded-first-request",
+      "model_calls": 1,
+      "tools_executed": 0,
+      "usage": null,
+      "http_error": {
+        "http_status": 400,
+        "message": "litellm.BadRequestError: litellm.ContentPolicyViolationError: ContentPolicyViolationError: OpenaiException - {\n  \"error\": {\n    \"message\": \"This content was flagged for possible cybersecurity risk. If this seems wrong, try rephrasing your request. If you\u2019re doing authorized security work that requires more cyber permissive safeguards, apply for Daybreak access via https://platform.openai.com/settings/organization/status-and-access before retrying.\",\n    \"type\": \"invalid_request\",\n    \"param\": null,\n    \"code\": \"cyber_policy\"\n  }\n}\nmodel=gpt-6.1-sol. content_policy_fallback=None. fallbacks=None.\n\nSet 'content_policy_fallback' - https://docs.litellm.ai/docs/routing#fallbacks\n\nLiteLLM: model group 'gpt-6.1-sol' failed with the error above. No fallback was attempted.",
+        "type": "invalid_request",
+        "code": "400",
+        "param": "None"
+      },
+      "trace_id": "38d7b5615be7da16f60ef02884f68c49",
+      "exception": "RuntimeError",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/38d7b5615be7da16f60ef02884f68c49",
+      "seconds": 6.778039,
+      "record": "runs/sol-compatibility/probe-068ec8d6f502/probe.json",
+      "record_sha256": "360125447974a0172e4d1be8d8db021f9442e541075257e24367b85f4773e3c6"
+    }
+  ],
+  "checks": {
+    "replay_input_matches_failed_generation": true,
+    "replay_tools_match_failed_generation": true,
+    "replay_parallel_setting_matches": true,
+    "replay_model_and_output_cap_match": true,
+    "replay_reasoning_matches": true,
+    "replay_storage_and_include_match": true,
+    "two_followup_requests_zero_tools": true,
+    "provider_cyber_policy_present": true,
+    "runtime_and_configs_match_previous_checkpoint": true
+  },
+  "script_sha256": "c212f2176e6cdb7da90c5438af82e115f7e035ab99ef9d01371e96878c6a5955",
+  "limits": [
+    "Original failed responses contain HTTP status only; the provider reason is directly observed in replay, not recovered from originals.",
+    "No single triggering phrase identified. No request rephrasing or fallback attempted.",
+    "No hosted readback for these two follow-up probes. Rejected usage/cost unknown. Earlier $0.000614 subtotal covers only the first three diagnostic calls."
+  ]
+}

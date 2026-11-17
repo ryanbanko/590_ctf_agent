@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-17",
+  "kind": "Documentation and retained-evidence checks; no runtime tests or new model call",
+  "record_hash_matches": true,
+  "public_task_hash_matches": true,
+  "supplemental_export_hash_matches": true,
+  "runtime_configuration_unchanged_during_review": true,
+  "prompt_identity_all_seven_requests": true,
+  "local_accepted_candidate_matches_observed_and_requested": true,
+  "local_markdown_file_links_checked": 199,
+  "missing_local_file_targets": [],
+  "metadata_excludes_candidate_value": true,
+  "review_document_sha256": {
+    "PROJECT_STATUS.md": "37bbc3430b94315f9e47207ef5c69d9a741190b4c0ce276c01119a8042efe753",
+    "docs/EXPERIMENTS.md": "5091230317c9702366dc8bd6b0532debfa22fe73aaa4ff5280a10b323b282035",
+    "docs/PROJECT_HISTORY.md": "abc5036238272457b78aa1787adfe0abbd5a3dfa22ee89dedf34f7932370eefd",
+    "evidence/README.md": "845c7038e5ad01b38aa5dcb270b24706d794c1acfa6d4c9de91bef29631eb241",
+    "evidence/htb-description-review/README.md": "84a8052a639b8aa7a7eaa57ca1f1cf6b0ff95572f4d1820ec2172dfbfeec84d7"
+  },
+  "original_record_still_marks_incomplete": true,
+  "git_diff_check_passed": true
+}

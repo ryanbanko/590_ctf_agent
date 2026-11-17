@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-17",
+  "checks": {
+    "both_HTB_profiles_have_30min_100_requests_120_tools": true,
+    "development_config_matches_HEAD": true,
+    "Luna_profile_only_changes_three_limits": true
+  },
+  "parsed_profiles": {
+    "htb-manual.toml": {
+      "wall_seconds": 1800.0,
+      "max_model_turns": 100,
+      "max_tool_calls": 120,
+      "max_requests": 100
+    },
+    "htb-sol.toml": {
+      "wall_seconds": 1800.0,
+      "max_model_turns": 100,
+      "max_tool_calls": 120,
+      "max_requests": 100
+    },
+    "development.toml": {
+      "wall_seconds": 600.0,
+      "max_model_turns": 40,
+      "max_tool_calls": 80,
+      "max_requests": 40
+    }
+  },
+  "development_config_sha256": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b",
+  "development_HEAD_sha256": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b",
+  "run_started": false
+}

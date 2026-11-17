@@ -16,6 +16,11 @@ for example `git show aedfd62:evidence/target-precleanup-snapshot/README.md`.
 
 | Folder | Contents | Used by |
 | --- | --- | --- |
+| `sol-compatibility/` | Two user-run Sol HTTP 400s; five diagnostic requests, with failed-request replay identifying a provider cyber-policy rejection | Current status, history and experiments |
+| `htb-budget-update/` | HTB Luna and Sol wall/model/tool allowances raised to 30 minutes/100/120; offline config checks | Current status, history and experiments |
+| `htb-description-review/` | November 17 narrative-description assessment and newest DNS Dossier run; local human acceptance, partial hosted refresh and unimplemented framing draft | Current status, history and experiments |
+| `htb-latest-trace-review/` | Earlier November 17 Blueprint Heist attempt, evaluated for observable model actions only; checked payloads/replay/usage and behavioral findings | Current status, history and experiments |
+| `task-preface-review/` | November 17 direct trace/source assessment of category versus operational prefaces, checked inventories, draft and unrun comparison proposal | Current status, history and experiments |
 | `htb-manual/` | Manual HTB integration, separate competition limits, offline checks and unverified live boundaries | Current status, README, DESIGN and history |
 | `ryan-shared-runs/` | Sanitized run records and traces: pilot, baseline and Experiments A–C | Report (results, trace review, answer-lookup check) |
 | `scored/` | Final metrics, trace-usage audit and figures; attempt records in the two root batch directories | Report, reporting scripts |

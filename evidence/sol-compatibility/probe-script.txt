@@ -1,0 +1,81 @@
+import argparse
+import json
+import os
+from pathlib import Path
+import time
+import uuid
+
+import httpx2
+from langfuse import Langfuse
+from langfuse.openai import OpenAI
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--variant', choices=['minimal', 'runner', 'tool'], required=True)
+parser.add_argument('--model', default='gpt-6.1-sol')
+args = parser.parse_args()
+request = {'model': args.model, 'input': 'Reply with exactly OK.',
+           'max_output_tokens': 128, 'store': False}
+if args.variant != 'minimal':
+    request.update(reasoning={'effort': 'medium', 'summary': 'auto'},
+                   include=['reasoning.encrypted_content'], parallel_tool_calls=False)
+if args.variant == 'tool':
+    request['input'] = 'Call diagnostic_echo with message OK. This is a synthetic API compatibility check.'
+    request['tools'] = [{'type': 'function', 'name': 'diagnostic_echo',
+                         'description': 'Return a synthetic message; no tool will be executed.',
+                         'parameters': {'type': 'object', 'properties': {'message': {'type': 'string'}},
+                                        'required': ['message'], 'additionalProperties': False}, 'strict': False}]
+
+secrets = [os.environ[k] for k in ('LITELLM_TOKEN', 'LANGFUSE_SECRET_KEY') if os.getenv(k)]
+record = {'variant': args.variant, 'request': request, 'model_calls': 0,
+          'tools_executed': 0, 'usage': None, 'http_error': None}
+
+def safe(value):
+    text = str(value)
+    for secret in secrets:
+        text = text.replace(secret, '[REDACTED]')
+    return text[:2000]
+
+def error_hook(response):
+    if response.is_error:
+        response.read()
+        try:
+            data = response.json()
+            error = data.get('error', {}) if isinstance(data, dict) else {}
+            if not isinstance(error, dict):
+                error = {'message': error}
+        except ValueError:
+            error = {'message': 'Non-JSON error body withheld'}
+        record['http_error'] = {'http_status': response.status_code,
+                               **{k: safe(error[k]) for k in ('message', 'type', 'code', 'param') if k in error}}
+        # Native tracing receives only the status, never the raw provider body.
+        raise RuntimeError(f'gateway_http_{response.status_code}')
+
+directory = Path('runs/sol-compatibility') / ('probe-' + uuid.uuid4().hex[:12])
+directory.mkdir(parents=True, mode=0o700)
+started = time.monotonic()
+lf = Langfuse(timeout=10)
+try:
+    if not lf.auth_check():
+        raise RuntimeError('Langfuse authentication failed before model request')
+    with lf.start_as_current_observation(name='sol-compatibility', input=request,
+            metadata={'variant': args.variant, 'synthetic': True}) as observation:
+        record['trace_id'] = observation.trace_id
+        try:
+            with OpenAI(api_key=os.environ['LITELLM_TOKEN'], base_url='https://litellm.oit.duke.edu/v1',
+                        max_retries=0, timeout=20,
+                        http_client=httpx2.Client(event_hooks={'response': [error_hook]})) as client:
+                record['model_calls'] = 1
+                response = client.responses.create(**request, name='model-response',
+                    langfuse_public_key=os.environ['LANGFUSE_PUBLIC_KEY'])
+                record.update(status=response.status, output_text=safe(response.output_text),
+                    output_types=[item.type for item in response.output],
+                    usage=response.usage.model_dump(mode='json') if response.usage else None)
+        except Exception as error:
+            record['exception'] = type(error).__name__
+        observation.update(output=record)
+    record['trace_url'] = lf.get_trace_url(trace_id=record['trace_id'])
+finally:
+    lf.shutdown()
+    record['seconds'] = round(time.monotonic() - started, 6)
+    (directory / 'probe.json').write_text(json.dumps(record, indent=2) + '\n')
+    print(json.dumps({'record': str(directory / 'probe.json'), **record}, indent=2))

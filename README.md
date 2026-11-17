@@ -185,12 +185,22 @@ ready. This command makes paid model calls:
 uv run --frozen --env-file .env python -m ctf_agent run-manual --task runs/htb/tasks/task-<id>/task.json
 ```
 
-The default [HTB configuration](configs/htb-manual.toml) allows 900 seconds,
-60 model calls and 80 tool calls. All other model/resource settings match the
+The default [HTB configuration](configs/htb-manual.toml) allows 1,800 seconds,
+100 model calls and 120 tool calls. All other model/resource settings match the
 CTFTiny development defaults. These are starting allowances, not a measured
 performance improvement or a dollar-budget guarantee. Use `--experiment FILE`
 to select another complete configuration. Human input time counts toward the
 same deadline, including file staging and solver startup.
+
+For an optional GPT-6.1 Sol comparison, add `--experiment configs/htb-sol.toml`
+to the same `run-manual` command. The [Sol profile](configs/htb-sol.toml) preserves
+medium reasoning and the same 1,800-second/100-model/120-tool limits, changing
+model identity and local pricing rates only. Those rates use the retained November 14 gateway snapshot. Harmless
+Sol API probes passed, but replay of the failed Void request received a provider
+`cyber_policy` rejection; repeated identical retries are not recommended.
+[Diagnostic evidence](evidence/sol-compatibility/README.md). A performance benefit
+has not been established. Luna remains the default. Reset the remote HTB instance and update its saved endpoint if needed
+before comparing fresh attempts.
 
 When the agent calls `submit_flag`, the terminal identifies the challenge and
 prints the exact candidate as a JSON string. Submit that candidate on the HTB

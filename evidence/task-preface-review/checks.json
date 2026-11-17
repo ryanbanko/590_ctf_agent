@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-17",
+  "local_markdown_targets_present": true,
+  "runtime_source_hashes_unchanged": true,
+  "baseline_identity": {
+    "ctf_agent/agent.py": true,
+    "ctf_agent/tools.py": true,
+    "configs/development.toml": true
+  },
+  "prior_record_and_export_hashes_match": true,
+  "selected_tool_references_resolve": 88,
+  "selected_trace_count": 14,
+  "tracked_changes_limited_to_review_documentation": [
+    "PROJECT_STATUS.md",
+    "docs/EXPERIMENTS.md",
+    "docs/PROJECT_HISTORY.md",
+    "evidence/README.md"
+  ],
+  "json_parsed": true,
+  "runtime_tests_repeated": false,
+  "new_model_calls": 0,
+  "new_challenge_attempts": 0,
+  "docker_operations": 0,
+  "hosted_writes": 0
+}

@@ -1,0 +1,253 @@
+{
+  "date": "2026-11-17",
+  "scope": "Description interpretation and observable agent actions; no challenge-solving recommendation or command replay.",
+  "record": "runs/htb/attempts/challenge-2dafb79dcf4a/run.json",
+  "record_sha256": "c4f8c7fdb6c8dc5ec398108286750c81dae7a76a04b11c6d4bc6cc8d1e3b4faa",
+  "public_task_sha256": "86217541db76343fd2ebb11c1b22b22eaf2cc6e044c7aa716ca45ac87d2553a3",
+  "supplemental_export": "runs/htb/attempts/challenge-2dafb79dcf4a/observations-refreshed.json",
+  "supplemental_export_sha256": "7d3693c20400fa9fb755d1954df9d40ec980302c8c91aed8129f63e605c6af8c",
+  "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/cf8bd4c48e91ce74885d36d5afb945e6",
+  "run_id": "695912dc3f8c",
+  "challenge_name": "DNS Dossier",
+  "selection": "Newest local manual run.json by modification time; activity timestamps also later than the preceding manual runs.",
+  "public_task": {
+    "name": "DNS Dossier",
+    "category": "Web",
+    "description": "Need a handy DNS lookup tool? Check out our newly developed utility tool \"DNS Dossier\"! It's still under beta, so please don't try inject any command!",
+    "files": [],
+    "endpoints": [
+      {
+        "address": "154.57.164.72",
+        "protocol": "tcp",
+        "port": 43145
+      }
+    ]
+  },
+  "local_result": {
+    "termination_reason": "success",
+    "verified_success": true,
+    "model_calls": 7,
+    "tool_calls": 7,
+    "active_seconds": 167.377236,
+    "solver_restarts": 0,
+    "scope_incidents": 0,
+    "scope_recoveries": 0,
+    "cleanup_errors": [],
+    "usage_complete": true
+  },
+  "original_export_status": {
+    "evidence_complete": false,
+    "trace_export_error_type": "TimeoutError"
+  },
+  "source_sha256": {
+    "ctf_agent/agent.py": "5bb398f9aac11785800859559fcd0d0fcf722bc154fdcdf04d35b814bad9d5ed",
+    "ctf_agent/attempt.py": "08ed8e4c17ffd9514917e061899639f201e13bc0c1522f3ba1fcc481354469fb",
+    "ctf_agent/tools.py": "86b56d81d5a967227ffbcbfa7be3444b578309a1ae2df5278a7bf732e922285d",
+    "ctf_agent/challenge.py": "c38945984da5ec0becdc8e13c37646d96c2fe1a80e131e02655001518acd6b48",
+    "ctf_agent/launch.py": "db6b560fee4931bfac1c8f362c1bbb22eeb6d0f8a223ce92a29db2c3290ee3ef",
+    "ctf_agent/manual.py": "3c950eaa2ce9146a97da9593b89e279e82194597c3440de1bccb32c8c5d8ce33",
+    "ctf_agent/sandbox.py": "52b6ec75467b9bca08f32c25846dbe520b0f1f7ccaf24a5b24df414e91b7f031",
+    "configs/development.toml": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b",
+    "configs/htb-manual.toml": "9840df20b6846c5c953399a28f600efff6cc468306b605c9ee5433fb85139fce"
+  },
+  "recorded_source_matches_current": true,
+  "retrieved_counts": {
+    "GENERATION": 7,
+    "TOOL": 6,
+    "EVENT": 4
+  },
+  "retrieval_meta": {
+    "pages": 1,
+    "fetchedItems": 17,
+    "truncated": false
+  },
+  "available_required_payloads_complete": true,
+  "all_returned_observations_ended": true,
+  "missing_expected_observations": [
+    "attempt root span",
+    "submit_flag tool span",
+    "attempt_stopping and sandbox_cleanup terminal events"
+  ],
+  "submission_events_without_candidate": [
+    {
+      "submission_id": "695912dc3f8c-7",
+      "run_id": "695912dc3f8c",
+      "challenge_id": "DNS Dossier",
+      "source": "htb-human-relay",
+      "status": "pending",
+      "timestamp": "2026-11-17T19:13:50.244854+00:00"
+    },
+    {
+      "submission_id": "695912dc3f8c-7",
+      "run_id": "695912dc3f8c",
+      "challenge_id": "DNS Dossier",
+      "source": "htb-human-relay",
+      "status": "accepted",
+      "timestamp": "2026-11-17T19:16:06.274215+00:00"
+    }
+  ],
+  "generations": [
+    {
+      "turn": 1,
+      "id": "3a0ee98911933f1d",
+      "start": "2026-11-17T19:13:20.343Z",
+      "end": "2026-11-17T19:13:23.995Z",
+      "prompt_matches_current": true,
+      "function_names": [
+        "run_command"
+      ],
+      "visible_purpose_present": true
+    },
+    {
+      "turn": 2,
+      "id": "1d02e4b1b2b67ee1",
+      "start": "2026-11-17T19:13:26.468Z",
+      "end": "2026-11-17T19:13:29.084Z",
+      "prompt_matches_current": true,
+      "function_names": [
+        "run_command"
+      ],
+      "visible_purpose_present": true
+    },
+    {
+      "turn": 3,
+      "id": "950caf1d4479b177",
+      "start": "2026-11-17T19:13:29.729Z",
+      "end": "2026-11-17T19:13:33.171Z",
+      "prompt_matches_current": true,
+      "function_names": [
+        "run_command"
+      ],
+      "visible_purpose_present": true
+    },
+    {
+      "turn": 4,
+      "id": "d388fff930d43511",
+      "start": "2026-11-17T19:13:34.509Z",
+      "end": "2026-11-17T19:13:37.881Z",
+      "prompt_matches_current": true,
+      "function_names": [
+        "run_command"
+      ],
+      "visible_purpose_present": true
+    },
+    {
+      "turn": 5,
+      "id": "6ed2d988009a39ba",
+      "start": "2026-11-17T19:13:39.560Z",
+      "end": "2026-11-17T19:13:43.318Z",
+      "prompt_matches_current": true,
+      "function_names": [
+        "run_command"
+      ],
+      "visible_purpose_present": true
+    },
+    {
+      "turn": 6,
+      "id": "70a5d103b40bb46a",
+      "start": "2026-11-17T19:13:44.600Z",
+      "end": "2026-11-17T19:13:46.819Z",
+      "prompt_matches_current": true,
+      "function_names": [
+        "run_command"
+      ],
+      "visible_purpose_present": true
+    },
+    {
+      "turn": 7,
+      "id": "67a35d3c98c4cd0d",
+      "start": "2026-11-17T19:13:47.581Z",
+      "end": "2026-11-17T19:13:50.160Z",
+      "prompt_matches_current": true,
+      "function_names": [
+        "submit_flag"
+      ],
+      "visible_purpose_present": true
+    }
+  ],
+  "tools": [
+    {
+      "step": 1,
+      "id": "aa69bf98fe23273c",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 2,
+      "id": "782936d7b7c4799e",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 3,
+      "id": "07cd616e584554d6",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 4,
+      "id": "e7c8414fbc3249d8",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 5,
+      "id": "62a940181261fdea",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    },
+    {
+      "step": 6,
+      "id": "43101021da2dbf95",
+      "name": "run_command",
+      "exit_code": 0,
+      "timed_out": false,
+      "truncated": false
+    }
+  ],
+  "findings": [
+    {
+      "steps": [
+        1,
+        2
+      ],
+      "finding": "Connected service gave no unsolicited banner; agent tested HTTP and used the returned page instead of concluding the target was unavailable."
+    },
+    {
+      "steps": [
+        3,
+        4
+      ],
+      "finding": "Agent established ordinary lookup behavior before a small discriminating test; the description was not treated as a complete technical specification."
+    },
+    {
+      "steps": [
+        5,
+        6,
+        7
+      ],
+      "finding": "Subsequent actions followed returned evidence; final generation requested submission of the observed candidate. Local records show human-relayed acceptance, while the hosted submission span is unavailable."
+    }
+  ],
+  "limits": [
+    "One successful case does not establish the benefit of a new prompt or performance across the supplied examples.",
+    "Source references in returned observations share one parent ID, but the root itself was not returned; full hosted ancestry/completeness cannot be verified.",
+    "Missing hosted terminal spans remain unresolved. Local acceptance and cleanup records are not relabeled as hosted trace evidence.",
+    "No model call, Docker operation, target request, recorded-command execution, hosted mutation, commit or push occurred during review."
+  ],
+  "submission_record_sha256": {
+    "runs/htb/attempts/challenge-2dafb79dcf4a/695912dc3f8c/submissions.jsonl": "36b3f6899ea362bd9a4d546326160513e2826d8491dfe9b3dbfa18f97cc43c1a"
+  },
+  "submission_candidate_matches_final_request": true,
+  "submitted_candidate_present_in_preceding_tool_output": true
+}

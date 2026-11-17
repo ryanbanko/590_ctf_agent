@@ -1,0 +1,2119 @@
+{
+  "date": "2026-11-17",
+  "kind": "assistant-assisted read-only runtime assessment",
+  "decision": "Propose one operational network preface experiment; no runtime change or new trial.",
+  "source_commit": "ea6388803f61c397c330f1368210c1aa5aad9a36",
+  "branch": "feat/htb-manual",
+  "source_sha256": {
+    "ctf_agent/agent.py": "5bb398f9aac11785800859559fcd0d0fcf722bc154fdcdf04d35b814bad9d5ed",
+    "ctf_agent/tools.py": "86b56d81d5a967227ffbcbfa7be3444b578309a1ae2df5278a7bf732e922285d",
+    "ctf_agent/attempt.py": "08ed8e4c17ffd9514917e061899639f201e13bc0c1522f3ba1fcc481354469fb",
+    "ctf_agent/challenge.py": "c38945984da5ec0becdc8e13c37646d96c2fe1a80e131e02655001518acd6b48",
+    "ctf_agent/launch.py": "db6b560fee4931bfac1c8f362c1bbb22eeb6d0f8a223ce92a29db2c3290ee3ef",
+    "ctf_agent/sandbox.py": "52b6ec75467b9bca08f32c25846dbe520b0f1f7ccaf24a5b24df414e91b7f031",
+    "docker/guard.py": "c42d2a43fef168dedb469c54416288d275d10821cd55a93c51dfbb37bc901f2f",
+    "configs/development.toml": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b",
+    "configs/htb-manual.toml": "9840df20b6846c5c953399a28f600efff6cc468306b605c9ee5433fb85139fce"
+  },
+  "baseline_identity": {
+    "ctf_agent/agent.py": true,
+    "ctf_agent/tools.py": true,
+    "configs/development.toml": true
+  },
+  "inventories": [
+    {
+      "review_source": "evidence/notes-baseline-review/review.json",
+      "review_sha256": "881d9f8ec17fb53a019394e7c2330d7da582dae4c51100454942d817da8d1988",
+      "rows": [
+        {
+          "run_id": "98e5ac9ca868",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-001/challenge-8b32fc3a0746/run.json",
+          "record_sha256": "6c72e25de0f9f12d7b837e09e1f11ce21554ee41c20fc5e7dc0de85851585c09",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "b4a886239549effdaeec024671674660950112aeffb1dc3d2fb713ef58499e98",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "b291028aaa4f",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-011/challenge-780ca647575b/run.json",
+          "record_sha256": "128c0b2ed71807fb0470fcedce3cd7443d696cd39c8e9e79d158938773e0c128",
+          "record_matches_prior": true,
+          "outcome": "completed_without_success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "6d29056973d9bc6cec7df8e2ba107268ae32ff0c4a5a6f05a6f8c3f42b4aaaa5",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "339dd07d8012",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-021/challenge-8b11d0b589ba/run.json",
+          "record_sha256": "aec334728501abae4c8ed56192da077f1ea39b38c109bfeec5258210901a3f9d",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "d38250fc64b4e43150dc211577eaf1a6bfe6a8bb6aca0c94e0974630010eb2d3",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "185b0ecc36f8",
+          "challenge_id": "cry-open-ellipti-ph",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-002/challenge-d81be9c2e228/run.json",
+          "record_sha256": "5693d8b0a3e79943a4475768456960ee1801409fe6245f2c4cb38ca1fb88a799",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [
+            {
+              "observation_id": "8a04db68be786730",
+              "type": "TOOL",
+              "field": "input"
+            },
+            {
+              "observation_id": "8a04db68be786730",
+              "type": "TOOL",
+              "field": "output"
+            },
+            {
+              "observation_id": "ca7753b242899411",
+              "type": "GENERATION",
+              "field": "input"
+            },
+            {
+              "observation_id": "ca7753b242899411",
+              "type": "GENERATION",
+              "field": "output"
+            },
+            {
+              "observation_id": "24f8a3b88dd13cfd",
+              "type": "TOOL",
+              "field": "input"
+            },
+            {
+              "observation_id": "24f8a3b88dd13cfd",
+              "type": "TOOL",
+              "field": "output"
+            },
+            {
+              "observation_id": "fa51947ccbe8a7b3",
+              "type": "GENERATION",
+              "field": "input"
+            },
+            {
+              "observation_id": "fa51947ccbe8a7b3",
+              "type": "GENERATION",
+              "field": "output"
+            }
+          ],
+          "export_sha256": "59c3682be0571e255a9785ebb080e3aca1cd0cf2e5029f213099ea7efa82707c",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "96c820e46c74",
+          "challenge_id": "cry-open-ellipti-ph",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-012/challenge-662594440c2f/run.json",
+          "record_sha256": "0018b0afae8840d20c165215660e8db0ee5253c39aab04ee01eb4f824411c829",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "32d8a399ea2a94ba9a8b720c7ce568a523f73c3be8f166ee9d67ed9657c81f55",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "fb9fa5e1d1bd",
+          "challenge_id": "cry-open-ellipti-ph",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-022/challenge-6c5ae3ca9b12/run.json",
+          "record_sha256": "41d6b4d1fb4fe47eeb9d4955fe064051a032dd713c189cc0daacf6ac99bae84e",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "d8174e55b91b231f82e96eff209722c88f24e7e683b52c00ea766728f6615f72",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "4373f926e73d",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-004/challenge-be5e6d93fffc/run.json",
+          "record_sha256": "43376e8a38a95cb70aeb8f30a8c84cd75786f8e9b4141123fccf41e6f7994172",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "10ec437e3451d78e6ad3f15e441820f6f29c685a638eb63f0f788fe66e5aff96",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "62c62407c81c",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-014/challenge-8be0ff13858c/run.json",
+          "record_sha256": "4583a4d332a3ce157f25cd41ea098a0582bbbfec2091e72932bcb329329561e5",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "e7a2b4c1f27d85a97434679679529a1d65e0d51c3acfbebf39062abdfebc2b99",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "8f0b8d86a0f4",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-024/challenge-11e40d79f944/run.json",
+          "record_sha256": "2d6afc2ef5492c26052b70f64244e6cda67b917ca9d27cb57d6aa9f0b4406975",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "617bf94c5f8ca6b3b4bc0935491d619273fa62bc0ce57525f0fe921266c8f753",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "e9d24da3da06",
+          "challenge_id": "pwn-roppity",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-003/challenge-fd826152864d/run.json",
+          "record_sha256": "e990b0e968a3d0a356b2a0a936ad5344ffe8eec462c5cbdc722ad241e7303a6b",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "d25b4c2f4f01083c99a94f609a360cfa1ff8973fe36c61204e24789c752585fe",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "de19c0726c74",
+          "challenge_id": "pwn-roppity",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-013/challenge-5ec71a704afd/run.json",
+          "record_sha256": "89fa6f06db05f93d5c9169067a63f35d78d1b5364e51fa74c7da6c8598c5c9a1",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "aa88f2427390bab16bdc09a0b87bd11ba56f183b1905c0452e8de282f0bb3889",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "5c1190692c19",
+          "challenge_id": "pwn-roppity",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-023/challenge-01975d7eb876/run.json",
+          "record_sha256": "8c5c3dd478b86207128b87a4668c4fd82121d5c9d76f9ad7b6a3dd66c35d1243",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "d5e428cac243c7eae8578d803d0b67bb99874cfa6af20def434be1ccf8579765",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "05d5dcc29926",
+          "challenge_id": "rev-a-walk-through-x86-part-2",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-006/challenge-4fb3878da4b8/run.json",
+          "record_sha256": "5fb2022d7859f41b6c363726e998980d43694b869aef80beb46aac089f02744b",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "df426b3f3a24c32f505462350823e811da5d6d5e2d7068ad8011ca442a2dbf4c",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "8fccf5cf92e6",
+          "challenge_id": "rev-a-walk-through-x86-part-2",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-016/challenge-9ffdb8d1da86/run.json",
+          "record_sha256": "b3f3a2c7f112245ba3441f2e8c40bf886e9653898452595b2b01acd8f0435efe",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "1ad8c3c452e6c0d39bd25b546bd65113ca7bddc653fe70a08b85967b1495b935",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "013730a57a0b",
+          "challenge_id": "rev-a-walk-through-x86-part-2",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-026/challenge-4dd994fbed7e/run.json",
+          "record_sha256": "8bba725307b24d035caa818e11e61aedd3b667a194e7a580d125e812b8b86e34",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "b8564812848e87d180661e03a9a1a96a8be3209c86839521f45aa2469e993b6f",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "4ed5c5203c6d",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-005/challenge-0a474ef6a59a/run.json",
+          "record_sha256": "9c8689a8eee7abb8866ce4eb55368e80da26cbbddd32b5e2afae1afc35531af8",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "5f70a0d4cbee82abde44189176dfc259f06336aab0279bc3384a49b32bce7ca7",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "dfd4e9e69e20",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-015/challenge-a9d1e05c9d28/run.json",
+          "record_sha256": "f1879008f1f962cd6f79ca252ab5aaaecf3b2e84c6a3986d6f83eedcf18d8ba1",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "f0d346b9b1ef507901f105f55e2705fe227388c59dd79094c31b423fd256d884",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "c648f18c4fe6",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-025/challenge-d6225d816c24/run.json",
+          "record_sha256": "20084fe0a2406ea710553fa5f6fed1eca5ed34972b6bce118fcbd50f1005c8d0",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "cdf58001bcd7755ec5b67a4931ea5e6187012ecb5532df3b1c5e7d6a55b51650",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "cd84bec2d6a6",
+          "challenge_id": "web-poem-collection",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-008/challenge-37f09e4117b9/run.json",
+          "record_sha256": "de519b1af4fcb8f93a64609819430079ac02bc1ad2b5bb692b2dfce0684512ef",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "fae5c90e5a98273d3634aef0740c76c6bba630077320623b7c0ce8028b2379b3",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "d6affadbbfb0",
+          "challenge_id": "web-poem-collection",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-018/challenge-fc6e74e86069/run.json",
+          "record_sha256": "7e58664b986ae5919ec67f2056479960fcb28ac9ca6b8ced6cd4d2c58e0be98c",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "828c8f7decac694a2f7bbf0fcd7db6b6f6a1f7bcc15a4a110c17739d74b099d1",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "c9269ce55025",
+          "challenge_id": "web-poem-collection",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-028/challenge-73bdc5756543/run.json",
+          "record_sha256": "76f44965a35055dae915557c319ebfd64203597a3eeeb7056022ff8713d94306",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "59f8389a259675da8ddf1add8ff1cae74e52ec6a4bf4d49a4dc8494081bbf123",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "00b24d636143",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-007/challenge-ae5fde31cf8a/run.json",
+          "record_sha256": "575df8cea946f8475f6cc50c08e00f35dd78417c39786777225d06a526311f34",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "93bd76e4e84dd9bc2e442f346460214948064f328ab1641545532e515955347e",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "59aeb000aff5",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-017/challenge-9368947fe4d9/run.json",
+          "record_sha256": "6ee8453b31d9d35a4e72a8fc06ef3ef804a4ae517033f9d0d494b7295850b18c",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "0912d538ff917ea9e94e4ed63a880592f83b186e7129338233f72410394d1803",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "e9d590d43641",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-027/challenge-f4c864045183/run.json",
+          "record_sha256": "b9ee6dfa990b99c4be7511f24115b95fc5d45af2f0a12ae906ec13e43cd59f0a",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "f9e665fb8e1fa2804f8fa216b51d00dd29471d5b3fd93c24c733fdb279668c2e",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "f7ccc5d7e114",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-009/challenge-7d1ce75d2906/run.json",
+          "record_sha256": "3c47c42a2054731b5c9e6754d7b89077e62fc1e58279f61be2e99f436454fbc7",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "b1ff23a1fbf15d1ba1e6d41db7bab1f0bf7c0999525b1f12b7380bd005576ae2",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "fd8707a7237b",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-019/challenge-445b125ab375/run.json",
+          "record_sha256": "16857aa05a9c1484bfef5e446b104764faba8ec2ed860036ee0429b21e434e3a",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "6e02971b9502d7c826454e25c01cf38a25f0d65d43f31a50f70003c39d39eade",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "646ee8d792fe",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-029/challenge-222f074a3dda/run.json",
+          "record_sha256": "b8e1055b2f507a604a2e34c65dd61134be33a98e3914b9e117fcb240ea1b6d45",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "a9b81575b10055f8d3c8d151735183cfb2503d890c517e6ec0ebb42a3818d362",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "04dc1fa5c1b9",
+          "challenge_id": "for-whyos",
+          "record": "runs/pilots/notes-comparison/baseline-test-practice/batch-39f3da0c8fa3/attempt-001/challenge-a5254712bb49/run.json",
+          "record_sha256": "339242a006eb510fbea5a77717fc1f9e4a835a09c20029d23ee7808de0dd1201",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "35107949a53a1d504375fc594d13c4e6af72f82ab5a8189a4b336ade3b7ab6fb",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "ea4c42ebf234",
+          "challenge_id": "for-whyos",
+          "record": "runs/pilots/notes-comparison/baseline-test-practice/batch-39f3da0c8fa3/attempt-003/challenge-c0d85228dcc5/run.json",
+          "record_sha256": "56f78bfaa1001611ed00ff83ce0b60a4eb0fe439a5a3cbfcca72ae61df80d286",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "d9200e0c3168d0ed13beefa7b216b03c79f9f67dd3a58db8da49512736d9e440",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "1be076c681aa",
+          "challenge_id": "for-whyos",
+          "record": "runs/pilots/notes-comparison/baseline-test-practice/batch-39f3da0c8fa3/attempt-005/challenge-b6dbcd6688d3/run.json",
+          "record_sha256": "4f34e951856fc680d42f5044f0bb5fde51651cd84184efbeb7c66b1916b8dd2d",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "4b8d8eee9318bbc7f218b6b7d702ddcca76ec81ab3900a8210ef5b4790d58afb",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "fc2817b9ddca",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-010/challenge-ee8cf01a3334/run.json",
+          "record_sha256": "1fb22446e7c2cbe287b801f007f4a8c14d789ccdf21007d119b58f14b44b8741",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "ae6c0f25c43252885faab840c0473bcfe0421a5240ff370e4b42674f3fac3947",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "7efb161a344d",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-020/challenge-0eefb7d065a1/run.json",
+          "record_sha256": "0569e8651bb9beb0fd8ec896195be1d56c4134ea02d6d06a03c53f69dd500fc6",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "b8c37c1776fa0ef93b59403fdff3ed1c3463036a5427dd814eb155e135c771c9",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "a6ad9c70d544",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-030/challenge-2a143868120d/run.json",
+          "record_sha256": "9ba6a9843c84694baa427f5e00de53ccf66081f104d6914102e96fd8149a25c0",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "9438a4c97fd2e4808b97049b4f87583eeaaa46f29eec9bc5d546a9770a4924bb",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "e24e5567c15d",
+          "challenge_id": "msc-quantum-leap",
+          "record": "runs/pilots/notes-comparison/baseline-test-practice/batch-39f3da0c8fa3/attempt-002/challenge-5fb4a3b0e383/run.json",
+          "record_sha256": "ebf28788919073b5b2b52d00f99ddeb169d15c0ef29a128ff61fb998f9699f19",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "429c696f0991bf6315ad232e2bd1ed4470a531a1562a5f1b23e1986a6d319056",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "2255ac8e6474",
+          "challenge_id": "msc-quantum-leap",
+          "record": "runs/pilots/notes-comparison/baseline-test-practice/batch-39f3da0c8fa3/attempt-004/challenge-0bb82ece8608/run.json",
+          "record_sha256": "1f6875e8df332cdbfffff672ad51f85263d46c4a642024de91a6c95a6df6b500",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "8f150e09103e91186c8cf926299a0f82d4043de987326590165164786f741748",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "b95a2f974f81",
+          "challenge_id": "msc-quantum-leap",
+          "record": "runs/pilots/notes-comparison/baseline-test-practice/batch-39f3da0c8fa3/attempt-006/challenge-845123631bf2/run.json",
+          "record_sha256": "27a142cb122d7db5f5ce1dfa061e1c5ae344da577d14d5f426b4ee818ea8ed21",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "d8d99eac5bfdace7af94f85099b77958260de8bf38f32f3a3c5373b771f1a76d",
+          "export_matches_prior": true
+        }
+      ],
+      "counts": {
+        "records": 36,
+        "record_hash_matches": 36,
+        "exports": 36,
+        "export_hash_matches": 36,
+        "TOOL": 354,
+        "GENERATION": 355,
+        "null_required_fields": 8
+      }
+    },
+    {
+      "review_source": "evidence/validation-full-review/review.json",
+      "review_sha256": "bd045aa75fe36fa23437a2c47bb31ba41f254bdbc1fbf5a09f6a8d2e1636be8b",
+      "rows": [
+        {
+          "run_id": "73adf84e317f",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-001/challenge-84f645126c0b/run.json",
+          "record_sha256": "484997b16d3ccbf3a824f8c85d857e414d64e35a1e2a4e11e9151d2badfb14ab",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "d80876888cec8ebfea8d5b11b11360ea629e1883a884670205e838e815fbd262",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "1f1f3cc9cccf",
+          "challenge_id": "cry-open-ellipti-ph",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-002/challenge-50066dc12407/run.json",
+          "record_sha256": "adc3fa62c198676ec77f31e9ce503f2bdfe082d6a6090aefc56db5a99fd5e5dd",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "f16da19947b0e5a4f27a6e85da1620844efa49935da81859c710bb5f977a794e",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "7aef8561835c",
+          "challenge_id": "pwn-roppity",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-003/challenge-e3aa1407a64a/run.json",
+          "record_sha256": "f9581b711db2cdb58d7b6958c068f342d44de963fb26b31433e434c0b63acd4c",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "74b411ba2cdd1ff7440dc304484f871796f244a9ff51e0835c1b1aa9ca1075d6",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "61bf8e65e52b",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-004/challenge-9f312678109c/run.json",
+          "record_sha256": "92a12d0365efde0cfbe96a59e4eded163edec5666b1f749f48700382dea7a6d1",
+          "record_matches_prior": true,
+          "outcome": "model_turn_limit",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "1cccfcb0c4bec8716d56527232e10f7136cfd08845ef0cc6abd3c14f2292b8bd",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "34bf8802d462",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-005/challenge-24230ce82176/run.json",
+          "record_sha256": "06504570b38f266688e98dfa52b267a583407eb58370026867b82753bf6ab562",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "c3c9fb13bb0de2a52423c43d31948b27e484436efa03f2feb8e3f377a3e4a784",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "bf60265bec28",
+          "challenge_id": "rev-a-walk-through-x86-part-2",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-006/challenge-93fc3527eba8/run.json",
+          "record_sha256": "ef5d594cf172de4c83dd95cb4a57c9fa9e0a83193f439380a4d4972520a34936",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "529725ad6625380975ee16870b0d50028cee9035cafda524d0813595ca2d9548",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "8de117805201",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-007/challenge-ce22b78854fc/run.json",
+          "record_sha256": "0d3a35fea709c32eecda5634051dafba7d60ffc1890758acef21b34255aed1f3",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "1af95033b0152bef9705d1be784683331bde0487106e4e02bec622b79c97fafa",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "741cacc3658d",
+          "challenge_id": "web-poem-collection",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-008/challenge-3afe9fbe849c/run.json",
+          "record_sha256": "bb25570e74fb2bcca031ad49f72cea416fb768770ff511c5d1d317c5c509cf35",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "6e5d58c697f574910fea9a7fdb7a3a0ac5185a440eefb92fce0444e12861eddd",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "7cb6751b1c8b",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-009/challenge-3c6966fd1737/run.json",
+          "record_sha256": "e05143279d09e7c7d0a8945a6a5362d1fc37b1f08a00ae1221d717d05dc760de",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "5b23e395f0a37cb30b4cc8b65aae01bb16a8042df6a14571e38448da4864806d",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "82cf202381e4",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-010/challenge-f89f110e4fb5/run.json",
+          "record_sha256": "071e0be090dfdb7618618e4a6156baee29854080ebd93fe3d7e830a099f0a778",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "6d1473c6ca55c5a98b51020716079521a06d3ea1e80638d7eac487fcaa985786",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "025a7b8a2b40",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-011/challenge-ab22602516b1/run.json",
+          "record_sha256": "b792a0e88914de121fae7dd12164a0bcea8aef241b62deeeedc515e20fe9efbc",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "7f7f775d68521311dbcc6f2ecd1c59ecb696a792b363e5a6e1e4179a4082a4b9",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "129593d60b56",
+          "challenge_id": "cry-open-ellipti-ph",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-012/challenge-531e489ff20c/run.json",
+          "record_sha256": "50e235b1f8507f1de3020ac66fbd66a02936ed34f5e47e37d2fe672b5a86acf6",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "0c289c9ac187e48d4aceae08ee71d61b01929474f55527ce47b9fd7cc6a9a259",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "3cdaaa4ffcad",
+          "challenge_id": "pwn-roppity",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-013/challenge-832db8b57883/run.json",
+          "record_sha256": "ea91feacc2d1440ee9d8fd1818a101563141d93b528885aa686a8c5a4f3f8c72",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "4be1ec3719644d5b728bf64bffe4614c65c28bf5e7db18b9608b92ac8d5c8c7f",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "27ae1380b413",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-014/challenge-5e5f59c2d148/run.json",
+          "record_sha256": "f928d4f01dc61eb97e3df097d0686ccb22874b67a2a139ce435cf1382748232d",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "3085425a9eb6adc492e5ee007e5f21a4b821273f17c43a1785b2cc8dd7248a1a",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "4fbd9b2b538b",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-015/challenge-06e6f9b03aec/run.json",
+          "record_sha256": "c63824e405dbdd5f9e7fa67fd3adad4d9205349c0d68df81696bee0462bfd39b",
+          "record_matches_prior": true,
+          "outcome": "wall_limit",
+          "export_present": true,
+          "null_required_fields": [
+            {
+              "observation_id": "db59ababda3a6cc7",
+              "type": "GENERATION",
+              "field": "output",
+              "qualification": "Final failed model request; explicit Request timed out. status; no successful reply inferred."
+            }
+          ],
+          "export_sha256": "00a1d4e7c303ec63f9ab2a8dcf6cb8df6bcefe10423d2705b2e941430a05fe36",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "127af6aed0ef",
+          "challenge_id": "rev-a-walk-through-x86-part-2",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-016/challenge-14f03317a2b2/run.json",
+          "record_sha256": "643ccb9a7706a7494d0e732c4db83da20a40b321a4337c23d400b5b7c0d913c2",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "4482564e494975f4585b0612a3071720b0bfa0df1594143b3d7f11dae1af49bf",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "6af52d5a5909",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-017/challenge-3a570f93a7f7/run.json",
+          "record_sha256": "34ba66da2e63d567fb07a6c9e415df161bcd5c014d5d052a0ff355b88254f415",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "f74c87cd53b41fd62e011191556debbda567342aa2805960b0c7f96af387c7e3",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "61e53ff14b63",
+          "challenge_id": "web-poem-collection",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-018/challenge-fd6107131c9d/run.json",
+          "record_sha256": "bdf13f3d3621ca143baad5099687ee423c12bde00c66f22e2aa06ad2d1ac2f7a",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "a0fac5797ae685007ac186892f26d8854d809fd80c522396523330facadbf03e",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "5c6e704d197e",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-019/challenge-2c6656aa7970/run.json",
+          "record_sha256": "b985c38bb463b13d78b36cbe36d01c3bf0c4aa896e2411d64f5f4c794f77201f",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "d17d0a0cc6432b07f2562d89fc7c74117afa3ff750ef6bb67ca083dcab0af291",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "a19d2323cb8a",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-020/challenge-14e3d567031a/run.json",
+          "record_sha256": "22b831d6f96a36f87dccaf24eae46654265d5e1b1f5c1485f45a222a0fdb1221",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "44c354f6ef2f71825b05be6a02765e267a296365a04ff36770cb0b874fcf575d",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "56ed780222b9",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-021/challenge-f3d92e89aaa3/run.json",
+          "record_sha256": "6f68aa49a2db28545934be8e143af39ce0d45faa6ea96f47fd6cad4dd379259e",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "f1596fc26f1c722c01382135c1e7ce3e4d9f2b0f3a6b9a5517aed6ae7bd590cf",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "23249d68acb4",
+          "challenge_id": "cry-open-ellipti-ph",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-022/challenge-28618e6557d3/run.json",
+          "record_sha256": "3eb0a7d02456a5f0422ded806c9cde97988e8488af3e4860fe05fac6ed8c0e86",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "2ddb55c5ca83aa119d07169c0eab7e3a3a6f705d9902ef8f59745956e6b19a24",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "83687a3f80cf",
+          "challenge_id": "pwn-roppity",
+          "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-023/challenge-69250b70ea02/run.json",
+          "record_sha256": "98bf20cb7adc90e1ac682790987d652da6ac5c29c246095fd42ca785244bb110",
+          "record_matches_prior": true,
+          "outcome": "response_source_error",
+          "export_present": false,
+          "null_required_fields": []
+        }
+      ],
+      "counts": {
+        "records": 23,
+        "record_hash_matches": 23,
+        "exports": 22,
+        "export_hash_matches": 22,
+        "TOOL": 247,
+        "GENERATION": 248,
+        "null_required_fields": 1,
+        "missing_exports": 1
+      }
+    },
+    {
+      "review_source": "evidence/planning-notes/rollback/review.json",
+      "review_sha256": "01fc6ed1850085ab2d8091fa049facf7516719fbfa06230f191ea304d906d1de",
+      "rows": [
+        {
+          "run_id": "8b0132ce9413",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/planning-notes-50/batch-055588a94b64/attempt-001/challenge-4fa2dd90b937/run.json",
+          "record_sha256": "89d2c3d58bd240c460343f20557ccf0bb61480df95b12e97e524cecb2bee3e1c",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "0c0f3b6242ab1cd0f50f4564901d1002f1ba0a1d236e9627ef2b4ca73b36ead7",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "f739906d33da",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/planning-notes-50/batch-055588a94b64/attempt-002/challenge-188030769852/run.json",
+          "record_sha256": "c5cc6fa5b34bc0ea27cbfef9a26db82bc44b42371cf883686d18bd707a1d5340",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "41cf7243aea0e514eff5b4ae67da5d516737ea2909526b29ac47e946aa388a53",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "250d927af346",
+          "challenge_id": "web-poem-collection",
+          "record": "runs/pilots/planning-notes-50/batch-055588a94b64/attempt-003/challenge-bd889aac8259/run.json",
+          "record_sha256": "65447c2c1082c2ccfe403d5ee914797d5d7acbda4e28ffa02f4df0e9eb02697e",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "fadb2845a43176a2a68f115303f819d6e82be65d0d8cc0b86c7fa12326bc770f",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "bed2f6a8913d",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/planning-notes-50/batch-055588a94b64/attempt-004/challenge-c60928fc58d2/run.json",
+          "record_sha256": "07cf1599324a6a8a40c754394967ba855216cac37eeb630918c048f143fc393f",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "0a679e4ed6a37887350b1e230b8a03795c48453d3ad42a92f8fee1d430e25bf0",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "10566b6e2bc0",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/planning-notes-50/batch-055588a94b64/attempt-005/challenge-dee7079d31e0/run.json",
+          "record_sha256": "bcacf66f3f399f78eadd9d3a5829b7eae7955ea695f7f93093a84aaae9ce00a3",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": false,
+          "null_required_fields": []
+        },
+        {
+          "run_id": "7e0ceadbab74",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/planning-notes-50/breadth-development/batch-e7f3dbb55808/attempt-001/challenge-655c6a261ee9/run.json",
+          "record_sha256": "364f0951c656ca796b2daac65b6eedb730f51021036654f4c6739fc3a7388c5e",
+          "record_matches_prior": true,
+          "outcome": "completed_without_success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "fcb7e033763036c4a3c7fccf8b610807d6725bc0579449f7630269c13ee3d5e1",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "f60bea30b491",
+          "challenge_id": "cry-open-ellipti-ph",
+          "record": "runs/pilots/planning-notes-50/breadth-development/batch-e7f3dbb55808/attempt-002/challenge-bf44a19791de/run.json",
+          "record_sha256": "0cd09822940a14a7a885b54b6073a5b5e1e7542b1e454235fc9b52fd5532dd9e",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "7d0dedbcfe7e48e5e95092fa442c39921ec2550bcacd7e6aa28ecd1ebcfb4614",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "e6bc8a3fd02b",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/planning-notes-50/breadth-development/batch-e7f3dbb55808/attempt-003/challenge-edb7b3806856/run.json",
+          "record_sha256": "534ffea99156aa9ddf951ed79ef5325835bd3e4bb9be9e06a67605219ec407c7",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "304b029ee5899fcf241ef0863d4b86ec64391584cd3527f8d97d3bdf7dfa0850",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "317cecdc1213",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/planning-notes-50/breadth-development/batch-e7f3dbb55808/attempt-004/challenge-40e44b34529c/run.json",
+          "record_sha256": "faf9a2b7e46abbaeac477bda8e65147c0e2cc3d8966b0b6af99fb18015eb0e24",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [
+            {
+              "observation_id": "cc41b285cd3f31f8",
+              "type": "TOOL",
+              "field": "input"
+            },
+            {
+              "observation_id": "cc41b285cd3f31f8",
+              "type": "TOOL",
+              "field": "output"
+            },
+            {
+              "observation_id": "60102e7739e52eb0",
+              "type": "GENERATION",
+              "field": "input"
+            },
+            {
+              "observation_id": "60102e7739e52eb0",
+              "type": "GENERATION",
+              "field": "output"
+            },
+            {
+              "observation_id": "a6ab5743d29c5eca",
+              "type": "TOOL",
+              "field": "input"
+            },
+            {
+              "observation_id": "a6ab5743d29c5eca",
+              "type": "TOOL",
+              "field": "output"
+            }
+          ],
+          "export_sha256": "1c3e578367e5752b3f020c6ac6ab6f7816f7d84409d355fd44f16bb0b8479304",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "ebc08728e106",
+          "challenge_id": "pwn-roppity",
+          "record": "runs/pilots/planning-notes-50/breadth-development/batch-e7f3dbb55808/attempt-005/challenge-22bf69eb1c6b/run.json",
+          "record_sha256": "541f1f13ef6e2ed70a568a50a1e9231ad71f172502c7ac7493650bcde783a86b",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "ebe0c820bb040b0653770fc3f184ebf42f08c33335c1085cd8ae3bfb88858272",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "4b74cdd28952",
+          "challenge_id": "rev-a-walk-through-x86-part-2",
+          "record": "runs/pilots/planning-notes-50/breadth-development/batch-e7f3dbb55808/attempt-006/challenge-96ed3fc533fc/run.json",
+          "record_sha256": "b63299aa61cc0300136f1def976b96e80d09012c514f507bcaa0f51c5ebea0c3",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "e27f13934e039aef27aaa2ff41f6ab11bff007a22c340207b51ca4d0265db39f",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "ea0e41d1f6ba",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/planning-notes-50/breadth-development/batch-e7f3dbb55808/attempt-007/challenge-c0ca3b1fe697/run.json",
+          "record_sha256": "b42ae7c7b5f198da3b791dd568ea115f6ffccb58eeffc55f01d1fc6e3ca926c2",
+          "record_matches_prior": true,
+          "outcome": "response_source_error",
+          "export_present": false,
+          "null_required_fields": []
+        }
+      ],
+      "counts": {
+        "records": 12,
+        "record_hash_matches": 12,
+        "exports": 10,
+        "export_hash_matches": 10,
+        "TOOL": 97,
+        "GENERATION": 98,
+        "missing_exports": 2,
+        "null_required_fields": 6
+      }
+    },
+    {
+      "review_source": "evidence/validation-pilot-review/review.json",
+      "review_sha256": "e2d741fbef7a31226148afd5f32edcbaf8c95ddfef4bb8c66addc85793675f11",
+      "rows": [
+        {
+          "run_id": "e9ab8570a818",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/validation-prompt/batch-bfa61beea669/attempt-001/challenge-b1981ab4d1ad/run.json",
+          "record_sha256": "9b8c4c1b391c0ea0c1033fefd3196c4a84eb744ddf0060e5a79aa6f65ad8c037",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "b96a67b383fc63d81c6fb3b403133de2b257cfc71875c439ab4a2ebcac3f4e7d",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "2f12be14f5b0",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/validation-prompt/batch-bfa61beea669/attempt-002/challenge-dce5a9949eeb/run.json",
+          "record_sha256": "bf751b5477625880c76990b16ad84454303c412ff84414e333a8a6e4960b9c8a",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "0c14d71b103fbf27293001422719e212d47d09c50ff9c7e84b7ba387de8ecf5c",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "55a4dbf15349",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/validation-prompt/batch-bfa61beea669/attempt-003/challenge-885f81642cb9/run.json",
+          "record_sha256": "85c619eb2ea9121a7bc3b5f6763bca5e04ed470bb3e899278a46744ad59d0a8a",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "5ebdd5289107565fcff217be12a1d62e04dc76ed90176bd0564e4c464732f73d",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "8320a09abdb5",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/validation-prompt/batch-bfa61beea669/attempt-004/challenge-567142d1ba63/run.json",
+          "record_sha256": "68e20a469149a634506f8c5bca05090aa47dcfca441156641d1b3038e938bce6",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "8f105c134510fa6fd85f260cbb5e500f0d5395586aa82f83b44a5cd9d970e166",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "5350f1831878",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/validation-prompt/batch-bfa61beea669/attempt-005/challenge-cc93d02e0308/run.json",
+          "record_sha256": "6245283ca6d659717970f6b8a500368faec320a15e1d63a769bc741dd9fadb43",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "9bfcc51162a2a6b760cbd74ed85b1bdca7f5c941a5809b14fe47c52f3214710f",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "eec53308a6e5",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/validation-prompt/batch-bfa61beea669/attempt-006/challenge-0cc0f435126f/run.json",
+          "record_sha256": "3df6e2db226ce0b613b35f6f13ac354487d6597e13f6e19bdfd70a30b79d0a8a",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "f725854732b069341845c3732e190bb0e6f64e9b611654452b74dce0a26bb7ab",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "98e5ac9ca868",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-001/challenge-8b32fc3a0746/run.json",
+          "record_sha256": "6c72e25de0f9f12d7b837e09e1f11ce21554ee41c20fc5e7dc0de85851585c09",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "b4a886239549effdaeec024671674660950112aeffb1dc3d2fb713ef58499e98",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "fc2817b9ddca",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-010/challenge-ee8cf01a3334/run.json",
+          "record_sha256": "1fb22446e7c2cbe287b801f007f4a8c14d789ccdf21007d119b58f14b44b8741",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "ae6c0f25c43252885faab840c0473bcfe0421a5240ff370e4b42674f3fac3947",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "b291028aaa4f",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-011/challenge-780ca647575b/run.json",
+          "record_sha256": "128c0b2ed71807fb0470fcedce3cd7443d696cd39c8e9e79d158938773e0c128",
+          "record_matches_prior": true,
+          "outcome": "completed_without_success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "6d29056973d9bc6cec7df8e2ba107268ae32ff0c4a5a6f05a6f8c3f42b4aaaa5",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "7efb161a344d",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-020/challenge-0eefb7d065a1/run.json",
+          "record_sha256": "0569e8651bb9beb0fd8ec896195be1d56c4134ea02d6d06a03c53f69dd500fc6",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "b8c37c1776fa0ef93b59403fdff3ed1c3463036a5427dd814eb155e135c771c9",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "339dd07d8012",
+          "challenge_id": "cry-lupin",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-021/challenge-8b11d0b589ba/run.json",
+          "record_sha256": "aec334728501abae4c8ed56192da077f1ea39b38c109bfeec5258210901a3f9d",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "d38250fc64b4e43150dc211577eaf1a6bfe6a8bb6aca0c94e0974630010eb2d3",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "a6ad9c70d544",
+          "challenge_id": "msc-algebra",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-030/challenge-2a143868120d/run.json",
+          "record_sha256": "9ba6a9843c84694baa427f5e00de53ccf66081f104d6914102e96fd8149a25c0",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "9438a4c97fd2e4808b97049b4f87583eeaaa46f29eec9bc5d546a9770a4924bb",
+          "export_matches_prior": true
+        }
+      ],
+      "counts": {
+        "records": 12,
+        "record_hash_matches": 12,
+        "exports": 12,
+        "export_hash_matches": 12,
+        "TOOL": 110,
+        "GENERATION": 111
+      }
+    },
+    {
+      "review_source": "evidence/validation-expanded-review/review.json",
+      "review_sha256": "48b7b1c3fc3e8bd1941b36d57ec025fbcc4d56a2d834e010bbda88663d9d98c8",
+      "rows": [
+        {
+          "run_id": "7b008496a52b",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-001/challenge-754e0985a848/run.json",
+          "record_sha256": "790650aaa9ef77440c1cdb6cd110108849b78269f54b114baf69f18a1fdd8782",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [
+            {
+              "observation_id": "cd96546a051c94aa",
+              "type": "TOOL",
+              "field": "input"
+            },
+            {
+              "observation_id": "cd96546a051c94aa",
+              "type": "TOOL",
+              "field": "output"
+            },
+            {
+              "observation_id": "7a9fe1bed25a4320",
+              "type": "GENERATION",
+              "field": "input"
+            },
+            {
+              "observation_id": "7a9fe1bed25a4320",
+              "type": "GENERATION",
+              "field": "output"
+            },
+            {
+              "observation_id": "c64db280df4f7358",
+              "type": "TOOL",
+              "field": "input"
+            },
+            {
+              "observation_id": "c64db280df4f7358",
+              "type": "TOOL",
+              "field": "output"
+            }
+          ],
+          "export_sha256": "87f27e539ae9aa283d81ef3c5597b30a723720ffdded8d126ce7bc4afb3b4de7",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "5d12aaf5eb8e",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-002/challenge-07815b513331/run.json",
+          "record_sha256": "8f8a3a4bb320509f0bd87f9cd70c3fe089b77310d322b04d869c493d118bcb59",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "b665cf3009f42ebe27644e1c5aead71ae5b501a136bc45caa9d0d49f0fcdc33b",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "bd6eaf2ca41b",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-003/challenge-ae5151b7f3b9/run.json",
+          "record_sha256": "63b5ce86833af95319684f852e877350e63ae8d78e54f169dbcebf066a6053de",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "4f29882e41bc6fba1653fbe7c89ab3e2090033ccc86758feddf8a26e5e604cfb",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "f86b85403e22",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-004/challenge-20e6e4a1073f/run.json",
+          "record_sha256": "80d3e9adf7ec1dc2e9375cc06158382f1b4750b140c93867fea7e7ae00e083d4",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "aba53ed89fec903460e368271e54d1937bce7eb7fe0a97f4f6a11ffa49cc8feb",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "9db2200a8eae",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-005/challenge-6fa5bf8e0c55/run.json",
+          "record_sha256": "34c54102a124a22928db4a406dca8a4cabe97f2614346ac080644feb7b657611",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "64a09bd3f8b73a418a1123e9193bfd5341941419892a1708d21447fdebaf0d62",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "fe967b23c21b",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-006/challenge-147fccf5e274/run.json",
+          "record_sha256": "e356b6cfa0e9e91474f298c40c94d4d4b009476bb6bfc944aa4ad39ad9786797",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "b037a170f5632754516ed9456d243e97bbaa7be3f229145a9141117226103a47",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "a817cfb29b06",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-007/challenge-79d8dbbd7376/run.json",
+          "record_sha256": "801a48cdb2084fe3d373a307ff7127885f5244d2945e7cefdd97e9fcd4b857ba",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "e54359f4bff72922758079dc3a5a124687a7759c002fd73d852b85c57a72365e",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "e0957d626a4f",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-008/challenge-1ae7298fb9c8/run.json",
+          "record_sha256": "ef06ba03fe68f50b53e4f9c79ec31092cde9422b6e33cd78f0be658f3cd8e52c",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "f0cd56b8505ffdce3b949d0ff9589b4efe754761ad13a8eff238217cdb90e6e4",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "e794e21ecbb7",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-009/challenge-300bb980773d/run.json",
+          "record_sha256": "dd33a255d8673d30cc1169a14000b9c45fb7afd3b1273fb3fcb728a2f4c50841",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "7cfe47388b7f906ee9d2dfbcf33da3f2e1d9f1d4221d6316c4d2d020b113095e",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "42994bf7f1eb",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-010/challenge-69a05a2c9195/run.json",
+          "record_sha256": "8e339a6ad3d6f009c3d15e1173bef6438bb4580c7a42ce681e868c5d79110977",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "67bb2aef43bcd8c6c086f95bea9a11734821b38f62928187c0daeba6cf53e11a",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "4ec428551a34",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-011/challenge-e02b74aff89e/run.json",
+          "record_sha256": "d688be288c2384cbf0a8886faa380b6428af7cd24f80bd92c02d42171063bf55",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "35134a74c212db0e473c453abbd5c31fc2d3053e8cca776c0829817315c81114",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "b4f72c9623c9",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/validation-prompt-expanded/batch-10010bdf842e/attempt-012/challenge-7dd495ec9851/run.json",
+          "record_sha256": "8549dd92ef4d90f070cdca9df57f2c5fc10409310fa7a338b83a2899a244fe0d",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "53b0cd870664e1128557628acebeb5d52f9cf483d1635e12367f97f0a4b670fb",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "4373f926e73d",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-004/challenge-be5e6d93fffc/run.json",
+          "record_sha256": "43376e8a38a95cb70aeb8f30a8c84cd75786f8e9b4141123fccf41e6f7994172",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "10ec437e3451d78e6ad3f15e441820f6f29c685a638eb63f0f788fe66e5aff96",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "4ed5c5203c6d",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-005/challenge-0a474ef6a59a/run.json",
+          "record_sha256": "9c8689a8eee7abb8866ce4eb55368e80da26cbbddd32b5e2afae1afc35531af8",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "5f70a0d4cbee82abde44189176dfc259f06336aab0279bc3384a49b32bce7ca7",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "00b24d636143",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-007/challenge-ae5fde31cf8a/run.json",
+          "record_sha256": "575df8cea946f8475f6cc50c08e00f35dd78417c39786777225d06a526311f34",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "93bd76e4e84dd9bc2e442f346460214948064f328ab1641545532e515955347e",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "f7ccc5d7e114",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-009/challenge-7d1ce75d2906/run.json",
+          "record_sha256": "3c47c42a2054731b5c9e6754d7b89077e62fc1e58279f61be2e99f436454fbc7",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "b1ff23a1fbf15d1ba1e6d41db7bab1f0bf7c0999525b1f12b7380bd005576ae2",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "62c62407c81c",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-014/challenge-8be0ff13858c/run.json",
+          "record_sha256": "4583a4d332a3ce157f25cd41ea098a0582bbbfec2091e72932bcb329329561e5",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "e7a2b4c1f27d85a97434679679529a1d65e0d51c3acfbebf39062abdfebc2b99",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "dfd4e9e69e20",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-015/challenge-a9d1e05c9d28/run.json",
+          "record_sha256": "f1879008f1f962cd6f79ca252ab5aaaecf3b2e84c6a3986d6f83eedcf18d8ba1",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "f0d346b9b1ef507901f105f55e2705fe227388c59dd79094c31b423fd256d884",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "59aeb000aff5",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-017/challenge-9368947fe4d9/run.json",
+          "record_sha256": "6ee8453b31d9d35a4e72a8fc06ef3ef804a4ae517033f9d0d494b7295850b18c",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "0912d538ff917ea9e94e4ed63a880592f83b186e7129338233f72410394d1803",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "fd8707a7237b",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-019/challenge-445b125ab375/run.json",
+          "record_sha256": "16857aa05a9c1484bfef5e446b104764faba8ec2ed860036ee0429b21e434e3a",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "6e02971b9502d7c826454e25c01cf38a25f0d65d43f31a50f70003c39d39eade",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "8f0b8d86a0f4",
+          "challenge_id": "pwn-pilot",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-024/challenge-11e40d79f944/run.json",
+          "record_sha256": "2d6afc2ef5492c26052b70f64244e6cda67b917ca9d27cb57d6aa9f0b4406975",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "617bf94c5f8ca6b3b4bc0935491d619273fa62bc0ce57525f0fe921266c8f753",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "c648f18c4fe6",
+          "challenge_id": "rev-gibberish-check",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-025/challenge-d6225d816c24/run.json",
+          "record_sha256": "20084fe0a2406ea710553fa5f6fed1eca5ed34972b6bce118fcbd50f1005c8d0",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "cdf58001bcd7755ec5b67a4931ea5e6187012ecb5532df3b1c5e7d6a55b51650",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "e9d590d43641",
+          "challenge_id": "web-shreeramquest",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-027/challenge-f4c864045183/run.json",
+          "record_sha256": "b9ee6dfa990b99c4be7511f24115b95fc5d45af2f0a12ae906ec13e43cd59f0a",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "f9e665fb8e1fa2804f8fa216b51d00dd29471d5b3fd93c24c733fdb279668c2e",
+          "export_matches_prior": true
+        },
+        {
+          "run_id": "646ee8d792fe",
+          "challenge_id": "for-1black0white",
+          "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-029/challenge-222f074a3dda/run.json",
+          "record_sha256": "b8e1055b2f507a604a2e34c65dd61134be33a98e3914b9e117fcb240ea1b6d45",
+          "record_matches_prior": true,
+          "outcome": "success",
+          "export_present": true,
+          "null_required_fields": [],
+          "export_sha256": "a9b81575b10055f8d3c8d151735183cfb2503d890c517e6ec0ebb42a3818d362",
+          "export_matches_prior": true
+        }
+      ],
+      "counts": {
+        "records": 24,
+        "record_hash_matches": 24,
+        "exports": 24,
+        "export_hash_matches": 24,
+        "TOOL": 238,
+        "null_required_fields": 6,
+        "GENERATION": 238
+      }
+    }
+  ],
+  "selected_trace_checks": [
+    {
+      "run_id": "fc2817b9ddca",
+      "challenge_id": "msc-algebra",
+      "category": "misc",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/13cd59c398552f84fd0f9cfca5edc437",
+      "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-010/challenge-ee8cf01a3334/run.json",
+      "finding": "Stale-session answers before same-session automation.",
+      "tool_references": [
+        {
+          "step": 2,
+          "observation_id": "8dd1e9a1922aa235",
+          "name": "run_command"
+        },
+        {
+          "step": 3,
+          "observation_id": "5191ccf75df73d3b",
+          "name": "run_command"
+        },
+        {
+          "step": 4,
+          "observation_id": "15132e3d0a427e6f",
+          "name": "run_command"
+        },
+        {
+          "step": 5,
+          "observation_id": "5ee55f67fdb13ee0",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 0,
+      "max_staged_handout_bytes": 0
+    },
+    {
+      "run_id": "7efb161a344d",
+      "challenge_id": "msc-algebra",
+      "category": "misc",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/efd3c4060e3a5f243108344dc91b125f",
+      "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-020/challenge-0eefb7d065a1/run.json",
+      "finding": "Stale-session answer and correction.",
+      "tool_references": [
+        {
+          "step": 2,
+          "observation_id": "3d05c3f62a816d15",
+          "name": "run_command"
+        },
+        {
+          "step": 3,
+          "observation_id": "7dfcc5f0308d18a7",
+          "name": "run_command"
+        },
+        {
+          "step": 4,
+          "observation_id": "b4a80296ebc2eeab",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 0,
+      "max_staged_handout_bytes": 0
+    },
+    {
+      "run_id": "a6ad9c70d544",
+      "challenge_id": "msc-algebra",
+      "category": "misc",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/ec6db22e7426705fd01ffd92a802fcd0",
+      "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-030/challenge-2a143868120d/run.json",
+      "finding": "Stale-session answer and correction.",
+      "tool_references": [
+        {
+          "step": 2,
+          "observation_id": "0775fd2861796336",
+          "name": "run_command"
+        },
+        {
+          "step": 3,
+          "observation_id": "5df26825a66f7dbf",
+          "name": "run_command"
+        },
+        {
+          "step": 4,
+          "observation_id": "8b73649ca880b151",
+          "name": "run_command"
+        },
+        {
+          "step": 5,
+          "observation_id": "bcef86d910101016",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 0,
+      "max_staged_handout_bytes": 0
+    },
+    {
+      "run_id": "fb9fa5e1d1bd",
+      "challenge_id": "cry-open-ellipti-ph",
+      "category": "crypto",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/7132ccaae7092fbee16ab7af5e3c81b3",
+      "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-022/challenge-6c5ae3ca9b12/run.json",
+      "finding": "Short timeouts and delayed data; no isolated newline cause.",
+      "tool_references": [
+        {
+          "step": 2,
+          "observation_id": "251716e52f773259",
+          "name": "run_command"
+        },
+        {
+          "step": 3,
+          "observation_id": "6684d64e48227104",
+          "name": "run_command"
+        },
+        {
+          "step": 5,
+          "observation_id": "84295c10e6087e7a",
+          "name": "run_command"
+        },
+        {
+          "step": 6,
+          "observation_id": "f695580707a0c269",
+          "name": "run_command"
+        },
+        {
+          "step": 7,
+          "observation_id": "064504ef2c59fb08",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 2,
+      "max_staged_handout_bytes": 1525
+    },
+    {
+      "run_id": "62c62407c81c",
+      "challenge_id": "pwn-pilot",
+      "category": "pwn",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/030a0c40b4e988f38cac717f93ed1e1f",
+      "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-014/challenge-8be0ff13858c/run.json",
+      "finding": "Partial banner and component checks.",
+      "tool_references": [
+        {
+          "step": 4,
+          "observation_id": "55cf44fb32bd432a",
+          "name": "run_command"
+        },
+        {
+          "step": 5,
+          "observation_id": "ff914707ca8d5b9a",
+          "name": "run_command"
+        },
+        {
+          "step": 8,
+          "observation_id": "41eb465c91a002d7",
+          "name": "run_command"
+        },
+        {
+          "step": 9,
+          "observation_id": "6b7675b80a679dfa",
+          "name": "run_command"
+        },
+        {
+          "step": 10,
+          "observation_id": "472e4a486ba15c20",
+          "name": "run_command"
+        },
+        {
+          "step": 14,
+          "observation_id": "fd0cc2e08cab0bd0",
+          "name": "run_command"
+        },
+        {
+          "step": 15,
+          "observation_id": "7a0e5397e38adebb",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 1,
+      "max_staged_handout_bytes": 10472
+    },
+    {
+      "run_id": "04dc1fa5c1b9",
+      "challenge_id": "for-whyos",
+      "category": "forensics",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/3b21fe96ea56bc0bd9ec267cdb5eccab",
+      "record": "runs/pilots/notes-comparison/baseline-test-practice/batch-39f3da0c8fa3/attempt-001/challenge-a5254712bb49/run.json",
+      "finding": "High-volume output and focused contextual search.",
+      "tool_references": [
+        {
+          "step": 11,
+          "observation_id": "d65d926ad3da8648",
+          "name": "run_command"
+        },
+        {
+          "step": 15,
+          "observation_id": "8214996903e0cce3",
+          "name": "submit_flag"
+        },
+        {
+          "step": 17,
+          "observation_id": "57f72a237c2cf7b5",
+          "name": "run_command"
+        },
+        {
+          "step": 18,
+          "observation_id": "127757f646c48df8",
+          "name": "submit_flag"
+        },
+        {
+          "step": 19,
+          "observation_id": "fccafaf1c6efb9f6",
+          "name": "run_command"
+        },
+        {
+          "step": 20,
+          "observation_id": "3890805f68a47bf0",
+          "name": "submit_flag"
+        }
+      ],
+      "public_endpoint_count": 0,
+      "public_file_count": 2,
+      "max_staged_handout_bytes": 23695720
+    },
+    {
+      "run_id": "f7ccc5d7e114",
+      "challenge_id": "for-1black0white",
+      "category": "forensics",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/7fe6a6052299620701e1d0be97f4f3aa",
+      "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-009/challenge-7d1ce75d2906/run.json",
+      "finding": "Small-file successful control.",
+      "tool_references": [
+        {
+          "step": 1,
+          "observation_id": "9dc378a24dc60b02",
+          "name": "run_command"
+        },
+        {
+          "step": 2,
+          "observation_id": "9a9c5d2ad56e6274",
+          "name": "run_command"
+        },
+        {
+          "step": 3,
+          "observation_id": "faf26477653a863a",
+          "name": "run_command"
+        },
+        {
+          "step": 4,
+          "observation_id": "af91ad11685011f9",
+          "name": "run_command"
+        },
+        {
+          "step": 5,
+          "observation_id": "70c20c42634e0ce9",
+          "name": "run_command"
+        },
+        {
+          "step": 6,
+          "observation_id": "1d81e9b473b139b9",
+          "name": "run_command"
+        },
+        {
+          "step": 7,
+          "observation_id": "8e8078171f18d44c",
+          "name": "submit_flag"
+        }
+      ],
+      "public_endpoint_count": 0,
+      "public_file_count": 1,
+      "max_staged_handout_bytes": 283
+    },
+    {
+      "run_id": "c648f18c4fe6",
+      "challenge_id": "rev-gibberish-check",
+      "category": "rev",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/a5ded56ca82257b6396bceb8b8338bb3",
+      "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-025/challenge-d6225d816c24/run.json",
+      "finding": "Original-checker contradiction and recovery.",
+      "tool_references": [
+        {
+          "step": 7,
+          "observation_id": "3dff04de24823d36",
+          "name": "run_command"
+        },
+        {
+          "step": 8,
+          "observation_id": "f267c21089171c50",
+          "name": "run_command"
+        },
+        {
+          "step": 9,
+          "observation_id": "20e3c9782f69eb02",
+          "name": "run_command"
+        },
+        {
+          "step": 11,
+          "observation_id": "d34ea4e51a233d17",
+          "name": "run_command"
+        },
+        {
+          "step": 12,
+          "observation_id": "78cc93158e09d7ce",
+          "name": "run_command"
+        },
+        {
+          "step": 15,
+          "observation_id": "28d9a3d8d11f1f89",
+          "name": "run_command"
+        },
+        {
+          "step": 16,
+          "observation_id": "3071c048aca2a09f",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 1,
+      "max_staged_handout_bytes": 39016
+    },
+    {
+      "run_id": "61bf8e65e52b",
+      "challenge_id": "pwn-pilot",
+      "category": "pwn",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/214a6f499c3c13a02dc83260d0de7a20",
+      "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-004/challenge-9f312678109c/run.json",
+      "finding": "Failed diagnostics and premature external hypotheses.",
+      "tool_references": [
+        {
+          "step": 17,
+          "observation_id": "a811fbf2d134c56b",
+          "name": "run_command"
+        },
+        {
+          "step": 18,
+          "observation_id": "ff48b0212e34ec92",
+          "name": "run_command"
+        },
+        {
+          "step": 23,
+          "observation_id": "66eefeb2b362440b",
+          "name": "run_command"
+        },
+        {
+          "step": 24,
+          "observation_id": "d89bae46eda3f2e4",
+          "name": "run_command"
+        },
+        {
+          "step": 25,
+          "observation_id": "10f658eca1554584",
+          "name": "run_command"
+        },
+        {
+          "step": 28,
+          "observation_id": "9b465811aeb4c60d",
+          "name": "run_command"
+        },
+        {
+          "step": 33,
+          "observation_id": "8eb09e83f5a633c9",
+          "name": "run_command"
+        },
+        {
+          "step": 36,
+          "observation_id": "ef3fd0cb94245e6b",
+          "name": "run_command"
+        },
+        {
+          "step": 37,
+          "observation_id": "73db89b1a4e5d9fb",
+          "name": "run_command"
+        },
+        {
+          "step": 38,
+          "observation_id": "560e4777b7249aad",
+          "name": "run_command"
+        },
+        {
+          "step": 39,
+          "observation_id": "990c08343b953087",
+          "name": "run_command"
+        },
+        {
+          "step": 40,
+          "observation_id": "f3adb2e09c5d2a0f",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 1,
+      "max_staged_handout_bytes": 10472
+    },
+    {
+      "run_id": "4fbd9b2b538b",
+      "challenge_id": "rev-gibberish-check",
+      "category": "rev",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/ed849dcfdc984e6c9770ed1bdd1cd1d7",
+      "record": "runs/pilots/validation-prompt-full/development/batch-aaab2a5084b8/attempt-015/challenge-06e6f9b03aec/run.json",
+      "finding": "Two command timeouts; bounded diagnostics arrive later.",
+      "tool_references": [
+        {
+          "step": 9,
+          "observation_id": "3907ff3c5737137f",
+          "name": "run_command"
+        },
+        {
+          "step": 10,
+          "observation_id": "e15d90ab583a23d1",
+          "name": "run_command"
+        },
+        {
+          "step": 14,
+          "observation_id": "8d239b92bf3055bb",
+          "name": "run_command"
+        },
+        {
+          "step": 15,
+          "observation_id": "0f828b6023a37f7e",
+          "name": "run_command"
+        },
+        {
+          "step": 25,
+          "observation_id": "743bcff6065dfd8f",
+          "name": "run_command"
+        },
+        {
+          "step": 26,
+          "observation_id": "4e21c47027a76fe1",
+          "name": "run_command"
+        },
+        {
+          "step": 27,
+          "observation_id": "565a7903d8f4e949",
+          "name": "run_command"
+        },
+        {
+          "step": 28,
+          "observation_id": "271ebd757fea0707",
+          "name": "run_command"
+        },
+        {
+          "step": 29,
+          "observation_id": "78da03f74c10b50e",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 1,
+      "max_staged_handout_bytes": 39016
+    },
+    {
+      "run_id": "f739906d33da",
+      "challenge_id": "rev-gibberish-check",
+      "category": "rev",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/7b99ab640ffae747889d3a594d7ed901",
+      "record": "runs/pilots/planning-notes-50/batch-055588a94b64/attempt-002/challenge-188030769852/run.json",
+      "finding": "Interrupted original-file modification; later orig variable reads changed file; throughput counterexample.",
+      "tool_references": [
+        {
+          "step": 4,
+          "observation_id": "d70a6d480a9e0906",
+          "name": "run_command"
+        },
+        {
+          "step": 5,
+          "observation_id": "f0962e53ebf4fd4f",
+          "name": "run_command"
+        },
+        {
+          "step": 6,
+          "observation_id": "d02672cb293bba46",
+          "name": "run_command"
+        },
+        {
+          "step": 10,
+          "observation_id": "206937701f1e7247",
+          "name": "run_command"
+        },
+        {
+          "step": 14,
+          "observation_id": "902cd0bad0241cde",
+          "name": "run_command"
+        },
+        {
+          "step": 15,
+          "observation_id": "ce0038a1fc7b43ae",
+          "name": "run_command"
+        },
+        {
+          "step": 16,
+          "observation_id": "a47cc90aadbcbc79",
+          "name": "run_command"
+        },
+        {
+          "step": 17,
+          "observation_id": "a1e8fda7e799bad2",
+          "name": "run_command"
+        },
+        {
+          "step": 18,
+          "observation_id": "d573d4ea7ae9c3d3",
+          "name": "run_command"
+        },
+        {
+          "step": 24,
+          "observation_id": "b845680c3c271c31",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 1,
+      "max_staged_handout_bytes": 39016
+    },
+    {
+      "run_id": "ebc08728e106",
+      "challenge_id": "pwn-roppity",
+      "category": "pwn",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/c6117041c9408075d4191ef4db19e314",
+      "record": "runs/pilots/planning-notes-50/breadth-development/batch-e7f3dbb55808/attempt-005/challenge-22bf69eb1c6b/run.json",
+      "finding": "Narrowing via separate component checks.",
+      "tool_references": [
+        {
+          "step": 5,
+          "observation_id": "8166226dd69fb04a",
+          "name": "run_command"
+        },
+        {
+          "step": 6,
+          "observation_id": "be7bdaac94847e24",
+          "name": "run_command"
+        },
+        {
+          "step": 7,
+          "observation_id": "109b3a7d08b2e283",
+          "name": "run_command"
+        },
+        {
+          "step": 8,
+          "observation_id": "533332ce5ac1cfa8",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 2,
+      "max_staged_handout_bytes": 2030544
+    },
+    {
+      "run_id": "b95a2f974f81",
+      "challenge_id": "msc-quantum-leap",
+      "category": "misc",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/fe6f00dcb4179b7a9f1c3c1391ad312a",
+      "record": "runs/pilots/notes-comparison/baseline-test-practice/batch-39f3da0c8fa3/attempt-006/challenge-845123631bf2/run.json",
+      "finding": "Tiny handout, expensive computation, exit 137 without established kill cause.",
+      "tool_references": [
+        {
+          "step": 1,
+          "observation_id": "f7cf5182e0a57a1f",
+          "name": "run_command"
+        },
+        {
+          "step": 8,
+          "observation_id": "7a76c1a0d19bd4fe",
+          "name": "run_command"
+        },
+        {
+          "step": 9,
+          "observation_id": "1edff1c5aa3c7373",
+          "name": "run_command"
+        },
+        {
+          "step": 10,
+          "observation_id": "3dd93a22e16feb60",
+          "name": "run_command"
+        },
+        {
+          "step": 12,
+          "observation_id": "d357782d6336ff64",
+          "name": "run_command"
+        },
+        {
+          "step": 13,
+          "observation_id": "21d87ffb123816b2",
+          "name": "run_command"
+        }
+      ],
+      "public_endpoint_count": 0,
+      "public_file_count": 1,
+      "max_staged_handout_bytes": 21
+    },
+    {
+      "run_id": "cd84bec2d6a6",
+      "challenge_id": "web-poem-collection",
+      "category": "web",
+      "trace_url": "https://us.cloud.langfuse.com/project/cmw17lafc0745ad0eekgn9a7j/traces/f898d464b70028a6f2480e36671af9b0",
+      "record": "runs/pilots/notes-comparison/baseline-development/batch-471fe180c113/attempt-008/challenge-37f09e4117b9/run.json",
+      "finding": "Short HTTP successful control.",
+      "tool_references": [
+        {
+          "step": 1,
+          "observation_id": "9c53c7e6b522946a",
+          "name": "run_command"
+        },
+        {
+          "step": 2,
+          "observation_id": "bf1858962eaafb11",
+          "name": "run_command"
+        },
+        {
+          "step": 3,
+          "observation_id": "db31592c87f8e021",
+          "name": "run_command"
+        },
+        {
+          "step": 4,
+          "observation_id": "7d465548866339a5",
+          "name": "submit_flag"
+        }
+      ],
+      "public_endpoint_count": 1,
+      "public_file_count": 0,
+      "max_staged_handout_bytes": 0
+    }
+  ],
+  "limits": [
+    "Historical review inventories overlap; do not sum them as independent trials.",
+    "Missing exports and payloads are not reconstructed.",
+    "Connection-pilot raw exports are external and were not reinspected.",
+    "No causal preface effect, routing accuracy, hidden reasoning or new solve result is established."
+  ]
+}

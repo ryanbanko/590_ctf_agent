@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-17",
+  "three_model_calls_only": true,
+  "zero_tools_executed": true,
+  "all_probes_completed": true,
+  "all_native_readbacks_complete": true,
+  "runtime_and_configs_unchanged": true,
+  "original_failed_record_preserved": true,
+  "probe_record_and_export_hashes_match": true,
+  "native_cost_sum_matches": true,
+  "missing_markdown_targets": [],
+  "whitespace_passed": true
+}

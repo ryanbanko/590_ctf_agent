@@ -9,6 +9,13 @@ and results. Historical proposal/approval records do not authorize new runs.
 
 | Period | Milestone | Detailed record |
 | --- | --- | --- |
+| November 17 | HTB manual profiles raised to 30 minutes/100 model requests/120 tools after monitored-run review; CTFTiny unchanged | [Rationale and checks](../evidence/htb-budget-update/README.md) |
+| November 17 follow-up | Second Sol user-run failure; two API-only diagnostics reproduce a provider cyber-policy rejection, no runtime/config change | [Diagnostic follow-up](../evidence/sol-compatibility/README.md#follow-up-after-the-second-user-run-failure) |
+| November 17 | First Sol request rejected with HTTP 400; three authorized synthetic probes passed, original cause unresolved | [Diagnostic evidence](../evidence/sol-compatibility/README.md) |
+| November 17 | Optional manual Sol profile prepared; exact model/pricing delta and config loading verified, no live run | [Condition and checks](EXPERIMENTS.md#optional-sol-manual-profile--november-17) |
+| November 17 | Narrative-description assessment and newest DNS Dossier trace review; local acceptance, partial hosted refresh, framing draft only | [Review and evidence limits](../evidence/htb-description-review/README.md) |
+| November 17 | Latest user-run manual trace evaluated for model actions only; no runtime change or new run | [Behavior review](../evidence/htb-latest-trace-review/README.md) |
+| November 17 | Read-only task-preface assessment; operational guidance recommended for a separate small experiment, no runtime change | [Evidence and proposed comparison](../evidence/task-preface-review/README.md) |
 | November 3–5 | Isolated tools, evaluator, tracing, model integration, libraries and reliability checks | Preserved milestone record below; experiment log and dated evidence |
 | November 6–7 | Ordinary Docker execution, supplied targets, NYU solver image and MongoDB ARM64 compatibility | [Design](DESIGN.md), [experiments](EXPERIMENTS.md), [reference provenance](REFERENCES.md) |
 | November 7–8 | Development trace review, validation/output changes, medium reasoning and scope recovery | [Shared development records](../evidence/ryan-shared-runs/README.md) |
@@ -28,6 +35,70 @@ and results. Historical proposal/approval records do not authorize new runs.
 | November 16 planning/notes candidate | Original prompt restored plus brief plans/optional notes; default model allowance 40 to 50; 41 offline checks passed, no live result | [Exact condition and verification](../evidence/planning-notes/README.md) |
 | November 16 review/rollback | Twelve candidate attempts recorded; no explicit note use in ten exports; original prompt/40-turn default restored and 41 checks passed | [Decision and rollback evidence](../evidence/planning-notes/rollback/README.md) |
 | November 16 manual HTB fallback | Feature branch, saved public tasks, human verdicts, separate 15-minute/60-call profile; 204 offline checks passed | [Implementation and limits](../evidence/htb-manual/README.md) |
+
+## Sol compatibility diagnosis — November 17
+
+The user's first Sol attempt failed with HTTP 400 before tool execution. Exact-name
+metadata checking and three subsequently authorized tiny synthetic requests passed
+plain text, reasoning/replay options and a returned function call. No tools were
+executed; native trace cost summed to $0.000614. No config/runtime fix is established:
+the failed full request has different task input, tool definitions and output cap.
+No challenge retry or Docker operation was started by the assistant. Preserve the
+failed record and unknown usage. [Requests and limits](../evidence/sol-compatibility/README.md).
+
+## Optional manual Sol configuration — November 17
+
+At the user's request, created `configs/htb-sol.toml` from the manual Luna profile.
+Only model identity and three pricing values change; the medium reasoning and
+900-second/60-request/80-tool settings are preserved. The ordinary loader, exact
+parsed delta and recorded November 14 gateway prices passed offline verification.
+Luna remains the default. No new live request, target operation, prompt/runtime
+change, commit or push. [Comparison limits and verification](EXPERIMENTS.md#optional-sol-manual-profile--november-17).
+
+## Narrative descriptions and DNS Dossier review — November 17
+
+The user supplied four HTB descriptions and requested assessment against the newest
+manual trace. DNS Dossier `695912dc3f8c` locally records human acceptance after
+seven model/seven tool calls; the model grounded its actions in observed service
+behavior. A read-only CLI refresh after the original export timeout recovered seven
+generations and six command tools, but no root/submission/terminal spans. Preserve
+the local acceptance and incomplete hosted evidence separately. Current runtime
+source/prompt identity passed. Retain original descriptions; a small framing draft
+remains proposed, with no runtime change, new model call, Docker operation,
+recorded-command execution, hosted mutation, commit or push. The earlier Blueprint
+review remains unchanged. [Evidence and next-step limits](../evidence/htb-description-review/README.md).
+
+## Earlier manual trace: model actions — November 17
+
+At the user's request, identified and read the newest local manual attempt,
+Blueprint Heist `c6bd2379fdc2`. The user explicitly narrowed review to model
+actions rather than cybersecurity challenge analysis. The run ended without
+success after 16 model calls/15 tools and 212.4 active seconds, with no submission
+or recorded timeout/restart/scope/cleanup incident. All required local payloads,
+prompt identity, result links, source identities and usage totals were checked.
+The review finds relevant initial inspection and clear purposes, followed by
+repeated variants, overbroad negative conclusions, an unvalidated diagnostic and
+an incompletely supported blocker at text-only stopping. No category-wide
+deficiency, alternative solution or prompt remedy is established. Only review
+documentation/derived metadata changed; no source/configuration, original record,
+command replay, new model call, container, hosted query/write, commit or push.
+[Evidence and limits](../evidence/htb-latest-trace-review/README.md).
+
+## Task-preface assessment — November 17
+
+The user requested repository context, direct trace checks and an assessment of
+category versus operational prompt prefaces. Rechecked 71 record/68 available
+export hashes across the baseline, partial full rerun and notes trial, plus the
+pilot/expanded inventories; inspected selected sequences in fourteen traces.
+Confirmed NYU's pinned category/server-type template includes from generic source.
+Recommended a small stateful-network preface comparison, keeping category
+playbooks and artifact/computation guidance separate. Existing connection wording
+already covers part of the proposed behavior; improved adoption remains unproven.
+Preserved missing exports/payloads and explicit failed-request output absence.
+Added assessment/derived metadata and checked links/JSON/whitespace. No source,
+configuration, test, original evidence, model call, challenge run, container,
+hosted mutation, commit or push changed. Implementation/pilot remain unapproved
+later milestones. [Findings and draft](../evidence/task-preface-review/README.md).
 
 ## Manual HTB fallback — November 16
 

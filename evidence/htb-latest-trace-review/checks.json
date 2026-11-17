@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-17",
+  "scope": "Model-action review only",
+  "record_hash_unchanged": true,
+  "export_hash_unchanged": true,
+  "runtime_sources_unchanged": true,
+  "missing_required_payload_fields": [],
+  "generation_count": 16,
+  "tool_count": 15,
+  "call_results_linked": 15,
+  "usage_reconciled": true,
+  "missing_local_links": [],
+  "runtime_tests_repeated": false,
+  "recorded_commands_replayed": 0,
+  "new_model_calls": 0,
+  "docker_operations": 0,
+  "hosted_queries_or_writes": 0
+}
