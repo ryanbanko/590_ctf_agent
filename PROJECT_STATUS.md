@@ -2,13 +2,13 @@
 
 Last reviewed: November 17, 2026 (America/New_York).
 
-HTB manual limits increased at the user's request: both Luna and optional Sol
-profiles now allow 1,800 seconds, 100 model requests and 120 tool calls. This
-responds to the Omni Watch attempt reaching 900 seconds after 20 requests; its
-three solver restarts and unverified exploit stage remain reasons to watch the
-live trace and stop early when useful. CTFTiny's 600-second/40-call defaults are
-unchanged. Config loading and derived request caps were checked offline; no
-challenge run was started. [Rationale and checks](evidence/htb-budget-update/README.md).
+HTB manual limits are now one hour, 200 model requests and 240 tool calls in both
+Luna and optional Sol profiles. The latest successful Omni Watch run used 1,650
+seconds and 45 model/tool calls; the higher limits are operator-selected ceilings,
+not evidence that longer attempts improve performance or a spending target. The
+user watches live traces and may stop early. CTFTiny's defaults are unchanged.
+Both profiles load with the derived request cap; no challenge run was started for
+this update. [Rationale and checks](evidence/htb-budget-update/README.md).
 
 Sol diagnostic follow-up: both user-run Void attempts stopped on first-request
 HTTP 400 with zero tools. After the initial three passing synthetic probes,

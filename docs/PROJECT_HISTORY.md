@@ -9,6 +9,7 @@ and results. Historical proposal/approval records do not authorize new runs.
 
 | Period | Milestone | Detailed record |
 | --- | --- | --- |
+| November 17 follow-up | HTB limits increased to one hour/200 model requests/240 tools after latest monitored success; CTFTiny unchanged | [Rationale and checks](../evidence/htb-budget-update/README.md) |
 | November 17 | HTB manual profiles raised to 30 minutes/100 model requests/120 tools after monitored-run review; CTFTiny unchanged | [Rationale and checks](../evidence/htb-budget-update/README.md) |
 | November 17 follow-up | Second Sol user-run failure; two API-only diagnostics reproduce a provider cyber-policy rejection, no runtime/config change | [Diagnostic follow-up](../evidence/sol-compatibility/README.md#follow-up-after-the-second-user-run-failure) |
 | November 17 | First Sol request rejected with HTTP 400; three authorized synthetic probes passed, original cause unresolved | [Diagnostic evidence](../evidence/sol-compatibility/README.md) |

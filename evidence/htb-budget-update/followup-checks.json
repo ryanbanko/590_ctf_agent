@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-17",
+  "checks": {
+    "both_HTB_profiles_load_one_hour_200_requests_240_tools": true,
+    "development_config_matches_HEAD": true,
+    "no_run_started": true
+  },
+  "parsed_profiles": {
+    "htb-manual.toml": {
+      "wall_seconds": 3600.0,
+      "max_model_turns": 200,
+      "max_tool_calls": 240,
+      "max_requests": 200
+    },
+    "htb-sol.toml": {
+      "wall_seconds": 3600.0,
+      "max_model_turns": 200,
+      "max_tool_calls": 240,
+      "max_requests": 200
+    },
+    "development.toml": {
+      "wall_seconds": 600.0,
+      "max_model_turns": 40,
+      "max_tool_calls": 80,
+      "max_requests": 40
+    }
+  },
+  "development_config_sha256": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b",
+  "development_HEAD_sha256": "4868782a73f5096fbe78a2c888ac68a8bb586532138f6feb600723169a10dd2b",
+  "reason": "User-selected ceiling after Omni Watch success using 1650.003 active seconds and 45 model/45 tool calls."
+}

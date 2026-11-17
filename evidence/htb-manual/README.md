@@ -32,8 +32,8 @@ milestones. Existing experiment/scored records were not changed.
   cancellation, EOF, Ctrl-C, unavailable verification and late verdicts cannot
   manufacture success. An interrupted process may leave a pending submission,
   rather than a fabricated final verdict.
-- `configs/htb-manual.toml` raises the HTB profile to wall_seconds=1800,
-  max_model_turns=100 (adapter max_requests=100) and max_tool_calls=120.
+- `configs/htb-manual.toml` raises the HTB profile to wall_seconds=3600,
+  max_model_turns=200 (adapter max_requests=200) and max_tool_calls=240.
   CTFTiny development limits remain unchanged. Larger allowances are not evidence
   of better performance or a guarantee of staying within a dollar budget.
 

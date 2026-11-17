@@ -94,6 +94,26 @@ Offline loader checks confirm both profiles parse and derive 100 model requests;
 the new wall/model/tool limits match. No model request, target contact, Docker
 operation or broad test suite was run. [Change record and checks](../evidence/htb-budget-update/README.md).
 
+## HTB manual limit extension — November 17
+
+After the 30-minute setting was in place, the user selected a one-hour wall limit
+and a 200-model-request ceiling. The latest Omni Watch run had succeeded in 1,650
+seconds with 45 model and 45 tool calls, so it did not exhaust the earlier
+30-minute/100-request/120-tool limits. The larger settings are an operator-chosen
+ceiling for future monitored attempts; they do not establish a need for more
+resources or predict improved performance. A one-hour attempt can permit greater
+spend if it continues for longer.
+
+Both HTB profiles now use 3,600 seconds, 200 model requests and 240 tool calls.
+The tool allowance keeps the observed roughly one-tool-per-request pattern from
+making the tool cap bind before the requested turn cap. CTFTiny defaults,
+per-request timeout, command timeout, output cap, resource/isolation bounds,
+scope and recovery behavior remain unchanged. The live operator can stop early.
+
+Offline config-loader verification confirms both profiles parse and derive the
+200-request cap; CTFTiny still matches `HEAD`. No model request, challenge run,
+Docker operation or broad test suite was run. [Checks and history](../evidence/htb-budget-update/README.md).
+
 ## Narrative descriptions and newest manual attempt — November 17
 
 At the user's request, compared four supplied HTB descriptions with the newest
