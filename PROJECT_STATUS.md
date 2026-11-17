@@ -2,6 +2,13 @@
 
 Last reviewed: November 17, 2026 (America/New_York).
 
+Manual HTB runs now receive this one-sentence preface immediately before the
+original task JSON in the initial user message: “Challenge descriptions vary in
+detail and may mix story, humor, and technical clues.” The system prompt,
+description text, saved `public-task.json`, task hash, and CTFTiny path are
+unchanged. The focused synthetic SDK-flow test passed. No model call or challenge
+attempt was started. [Implementation and check](evidence/htb-description-preface/README.md).
+
 HTB manual limits are now one hour, 200 model requests and 240 tool calls in both
 Luna and optional Sol profiles. The latest successful Omni Watch run used 1,650
 seconds and 45 model/tool calls; the higher limits are operator-selected ceilings,
@@ -38,8 +45,10 @@ finds evidence-driven discovery despite a brief joking description. The original
 export timed out; a read-only supplemental retrieval contains all seven generations
 and six command tools, but no root/submission/terminal spans. Local acceptance and
 cleanup records are distinct from missing hosted evidence; `evidence_complete`
-remains false. A small narrative-framing clarification is proposed, not implemented.
-No new attempt, runtime change or paid call occurred during review.
+remains false. The review's framing clarification was implemented in a separate
+offline-verified milestone; this is a prompt-framing hypothesis, not evidence of
+improved outcomes. No new attempt, runtime change or paid call occurred during
+the review. [Implementation and check](evidence/htb-description-preface/README.md).
 
 Earlier user-run manual trace: Blueprint Heist `c6bd2379fdc2` ended without success
 after 16 model calls/15 tools and 212.4 active seconds, with no submission,

@@ -23,6 +23,10 @@ from .challenge import challenge_target, contestant_files, load_challenge, publi
 from .config import load_experiment
 from .docker import docker
 
+MANUAL_HTB_PROMPT_PREFACE = (
+    "Challenge descriptions vary in detail and may mix story, humor, and technical clues."
+)
+
 
 def collect_provenance(settings: dict, *, target_images: dict | None = None) -> dict:
     images = {}
@@ -115,18 +119,20 @@ def run_challenge(settings: dict, dataset_json: Path, manifest_path: Path, chall
 
 
 def run_task(settings, directory, report, target, task, files, expected_flag, *,
-             langfuse, respond, model_usage, verify_candidate=None, verification_source="local-answer"):
+             langfuse, respond, model_usage, verify_candidate=None, verification_source="local-answer",
+             prompt_preface=None):
     """Common isolated execution for CTFTiny and manually prepared public tasks."""
     report["target"] = target
     report["provenance"] = collect_provenance(settings, target_images=target["images"])
     (directory / "public-task.json").write_text(task + "\n")
+    agent_task = f"{prompt_preface}\n\n{task}" if prompt_preface else task
     report["phase"] = "attempt"
     with run_attempt(settings, target["network"], target["endpoints"], expected_flag, directory,
                      langfuse=langfuse, label=report["challenge_id"], public_task=task,
                      respond=respond, model_usage=model_usage, mode=report["mode"],
                      verify_candidate=verify_candidate, verification_source=verification_source) as run:
         report["files"] = stage_files(files, run["solver"], run["remaining_seconds"]())
-        run_agent(task, run["respond"], run["call_tool"])
+        run_agent(agent_task, run["respond"], run["call_tool"])
 
 
 def finish_run(report, directory, started, langfuse, export_trace, *, expected_flag=None):
@@ -217,7 +223,8 @@ def run_manual_challenge(settings, task_path, directory, *, langfuse, respond, m
         with manual_network(task["endpoints"], directory / "target") as target:
             run_task(settings, directory, report, target, task_text, files, None,
                      langfuse=langfuse, respond=respond, model_usage=model_usage,
-                     verify_candidate=verifier, verification_source="htb-human-relay")
+                     verify_candidate=verifier, verification_source="htb-human-relay",
+                     prompt_preface=MANUAL_HTB_PROMPT_PREFACE)
         report["phase"] = "trace-export"
     except BaseException as error:
         report["error_type"] = type(error).__name__

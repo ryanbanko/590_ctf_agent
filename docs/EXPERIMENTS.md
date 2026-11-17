@@ -1764,3 +1764,24 @@ of the original generic assertion remains unconfirmed. The original failure is
 retained. These checks support mechanical recovery and unchanged blocking, not a
 model success improvement. No real retry or paid model call occurred.
 [Implementation evidence and limitations](../evidence/scope-recovery/README.md).
+
+## Manual HTB description preface — November 17
+
+The user approved a one-sentence contextual preface for manual HTB tasks:
+“Challenge descriptions vary in detail and may mix story, humor, and technical
+clues.” It is prepended to the initial user message immediately before the
+serialized public task. The sentence is informational; it does not prescribe a
+solving method or rewrite/interpret a description.
+
+The preface is passed only by `run_manual_challenge`; the shared runner's default
+and CTFTiny path receive no preface. The original task JSON remains the content of
+`public-task.json` and the input to `task_sha256`. The system prompt, endpoint
+scope, tools, isolation, tracing and stopping contracts are unchanged.
+
+The focused synthetic SDK-flow test passed. It checks the initial system message
+is unchanged, the initial user message contains the exact sentence before the
+original task JSON, and the saved public task remains byte-for-byte the original
+JSON plus its newline. No live challenge, model call, hosted mutation or Docker
+operation occurred. This verifies propagation and scope only; whether the sentence
+helps or changes behavior requires a separately authorized comparison.
+[Evidence and check result](../evidence/htb-description-preface/README.md).

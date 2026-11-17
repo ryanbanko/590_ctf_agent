@@ -16,10 +16,11 @@ import httpx2
 from langfuse.openai import OpenAI
 import pytest
 
-from ctf_agent.agent import AttemptStopped
+from ctf_agent.agent import AttemptStopped, SYSTEM_PROMPT
 from ctf_agent.agent import make_responder
 from ctf_agent.config import load_experiment
-from ctf_agent.launch import read_model_trace, run_manual_challenge
+from ctf_agent.launch import (MANUAL_HTB_PROMPT_PREFACE, read_model_trace,
+                              run_manual_challenge)
 from ctf_agent.manual import (import_handouts, load_manual_task, manual_network, manual_verdict,
                               setup_manual_task, terminal_line)
 from .fixtures.responses import tool_response
@@ -288,6 +289,12 @@ def test_manual_model_flow_exports_real_sdk_spans_without_hosted_access(
     assert report["evidence_complete"] and report["result"]["verified_success"]
     assert all(report["evidence_checks"].values())
     assert "expected_answer_not_in_root" not in report["evidence_checks"]
+    original_task = json.dumps(load_manual_task(path)[0], ensure_ascii=True)
+    assert requests[0]["input"][0] == {"role": "system", "content": SYSTEM_PROMPT}
+    assert requests[0]["input"][1] == {"role": "user",
+        "content": f"{MANUAL_HTB_PROMPT_PREFACE}\n\n{original_task}"}
+    saved_public_task = tmp_path / "run/public-task.json"
+    assert saved_public_task.read_text() == original_task + "\n"
     rows = json.loads((tmp_path / "run/observations.json").read_text())["data"]
     tool = next(row for row in rows if row["name"] == "submit_flag")
     assert tool["input"] == {"candidate": "synthetic-candidate"} and tool["output"] == {"correct": True}

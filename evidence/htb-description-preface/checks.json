@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-17",
+  "command": "UV_CACHE_DIR=/tmp/ctf-agent-uv-cache uv run pytest tests/test_manual.py::test_manual_model_flow_exports_real_sdk_spans_without_hosted_access -q",
+  "result": "passed",
+  "passed": 1,
+  "failed": 0,
+  "assertions": {
+    "system_prompt_unchanged": true,
+    "preface_precedes_original_manual_task_json": true,
+    "saved_public_task_is_unprefixed_original_json": true,
+    "ctftiny_scope": "preface parameter defaults to absent; CTFTiny call site unchanged"
+  },
+  "live_model_calls": 0,
+  "challenge_attempts": 0,
+  "docker_operations": 0
+}
