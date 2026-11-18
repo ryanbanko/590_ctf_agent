@@ -17,6 +17,7 @@ import httpx2
 from langfuse import Langfuse
 from langfuse.openai import OpenAI
 
+from . import htb_mcp
 from .agent import make_responder, reject_gateway_errors, run_agent
 from .attempt import run_attempt
 from .challenge import challenge_target, contestant_files, load_challenge, public_task, stage_files
@@ -196,6 +197,29 @@ def model_session(experiment_path: Path):
         client.shutdown()
 
 
+@contextmanager
+def open_model_clients(experiment_path: Path):
+    """Yield host clients plus base settings so a caller can build a fresh responder
+    per challenge (varying reasoning effort and request caps). Mirrors model_session
+    but exposes the raw model client instead of a single bound responder.
+    """
+    names = ("LITELLM_TOKEN", "LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY", "LANGFUSE_BASE_URL")
+    missing = [name for name in names if not os.getenv(name)]
+    if missing:
+        raise ValueError("Set host environment variables: " + ", ".join(missing))
+    settings, model = load_experiment(experiment_path)
+    client = Langfuse(timeout=10)
+    try:
+        if not client.auth_check():
+            raise RuntimeError("Langfuse authentication failed")
+        with OpenAI(api_key=os.environ["LITELLM_TOKEN"], base_url=model["base_url"],
+                    max_retries=0, timeout=model["request_seconds"],
+                    http_client=httpx2.Client(event_hooks={"response": [reject_gateway_errors]})) as model_client:
+            yield settings, model, client, model_client
+    finally:
+        client.shutdown()
+
+
 def launch_challenge(experiment_path: Path, dataset_json: Path, manifest_path: Path,
                        challenge_id: str, output_root: Path):
     with model_session(experiment_path) as (settings, client, respond, usage):
@@ -245,6 +269,81 @@ def launch_manual(experiment_path: Path, task_path: Path, output_root: Path):
         directory = output_root / ("challenge-" + uuid.uuid4().hex[:12])
         return run_manual_challenge(settings, task_path, directory, langfuse=client,
                                     respond=respond, model_usage=usage)
+
+
+def run_htb_challenge(settings, ctf_id: int, challenge_id: int, directory, *, langfuse, respond,
+                      model_usage, call, prompt_preface=MANUAL_HTB_PROMPT_PREFACE,
+                      verify_candidate=None, verification_source="htb-mcp",
+                      export_trace=read_model_trace):
+    """Run one HTB challenge over MCP: start container, solve, relay flag, stop.
+
+    `call` is the open HTB MCP session's call function. By default flag verdicts go
+    through HTB submit_flag; pass `verify_candidate` (candidate, remaining -> {'correct'})
+    to relay them another way, e.g. a human, without changing challenge fetch/spawn.
+    `prompt_preface` is additive task context (flag format, category hint, notes).
+    """
+    from .htb import build_task, htb_network, start_target, stop_target, verify_with_mcp
+
+    directory.mkdir(parents=True, exist_ok=False, mode=0o700)
+    started = time.monotonic()
+    report = {"mode": "htb-mcp", "phase": "container-startup", "evidence_complete": False,
+              "model_calls": 0, "model_settings": dict(model_usage["model_settings"]),
+              "verification_source": "htb-mcp", "local_answer_key": False,
+              "ctf_id": ctf_id, "htb_challenge_id": challenge_id}
+    container_started = False
+    try:
+        endpoints = start_target(call, challenge_id)
+        container_started = True
+        report["phase"] = "loading"
+        task, files, _ = build_task(call, ctf_id, challenge_id, directory, endpoints)
+        report["challenge_id"] = task["name"]
+        task_text = json.dumps(task, ensure_ascii=True)
+        report["task_sha256"] = hashlib.sha256(task_text.encode()).hexdigest()
+        report["phase"] = "target-startup"
+        verifier = verify_candidate if verify_candidate is not None else verify_with_mcp(call, challenge_id)
+        with htb_network(endpoints, directory / "target") as target:
+            run_task(settings, directory, report, target, task_text, files, None,
+                     langfuse=langfuse, respond=respond, model_usage=model_usage,
+                     verify_candidate=verifier, verification_source=verification_source,
+                     prompt_preface=prompt_preface)
+        report["phase"] = "trace-export"
+    except BaseException as error:
+        report["error_type"] = type(error).__name__
+        raise
+    finally:
+        if container_started:
+            report["container_stop_error"] = stop_target(call, challenge_id)
+        finish_run(report, directory, started, langfuse, export_trace)
+    return checked_report(report, export_trace)
+
+
+def launch_htb(experiment_path: Path, ctf_id: int, challenge_id: int, output_root: Path):
+    with model_session(experiment_path) as (settings, client, respond, usage):
+        with htb_mcp.htb_session() as call:
+            directory = output_root / ("challenge-" + uuid.uuid4().hex[:12])
+            return run_htb_challenge(settings, ctf_id, challenge_id, directory, langfuse=client,
+                                     respond=respond, model_usage=usage, call=call)
+
+
+def list_htb_challenges(ctf_id: int):
+    """Print the event's challenges (read-only); no model calls or containers."""
+    from .htb import category_label
+
+    with htb_mcp.htb_session() as call:
+        event = htb_mcp.retrieve_ctf(call, ctf_id)
+    if not isinstance(event, dict):
+        raise RuntimeError("Unexpected event payload from retrieve_ctf")
+    team = event.get("participating_team") or {}
+    challenges = event.get("challenges") or []
+    print(f'Event {ctf_id}: {event.get("name")} — team {team.get("name")} '
+          f'(points {team.get("points")}, solved {team.get("solved_challenges")}/{len(challenges)})')
+    for challenge in challenges:
+        solved = "SOLVED" if challenge.get("solved") else "      "
+        docker = "docker" if challenge.get("hasDocker") else "static"
+        has_file = "file" if challenge.get("filename") else "    "
+        print(f'  {solved} {challenge.get("id"):>6}  {challenge.get("difficulty", ""):<6} '
+              f'{category_label(challenge):<10} {docker} {has_file}  {challenge.get("name")}')
+    return event
 
 
 def launch_batch(experiment_path: Path, dataset_json: Path, manifest_path: Path,

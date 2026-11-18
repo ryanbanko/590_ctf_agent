@@ -13,10 +13,31 @@ def main():
     commands = parser.add_subparsers(dest="command", required=True)
     setup = commands.add_parser("setup-manual", help="Save a public HTB task from prompts; no model calls or Docker")
     setup.add_argument("--output", type=Path, default=Path("runs/htb/tasks"))
-    manual = commands.add_parser("run-manual", help="Run a saved HTB task with human-relayed flag verdicts (LIVE)")
-    manual.add_argument("--task", type=Path, required=True)
+    manual = commands.add_parser("run-manual",
+        help="Enter a challenge (unless --task) and run it with human-relayed flag verdicts (LIVE)")
+    manual.add_argument("--task", type=Path,
+        help="A saved task.json; omit to enter the challenge interactively and run it in one step")
     manual.add_argument("--experiment", type=Path, default=Path("configs/htb-manual.toml"))
     manual.add_argument("--output", type=Path, default=Path("runs/htb/attempts"))
+    manual.add_argument("--task-output", type=Path, default=Path("runs/htb/tasks"),
+        help="Where an interactively entered task is saved before running")
+    listing = commands.add_parser("htb-challenges", help="List an HTB event's challenges over MCP (read-only)")
+    listing.add_argument("--ctf-id", type=int, default=3755)
+    htb = commands.add_parser("run-htb", help="Run one HTB challenge over MCP end to end (LIVE)")
+    htb.add_argument("--ctf-id", type=int, default=3755)
+    htb.add_argument("--challenge", type=int, required=True, help="HTB challenge id (integer)")
+    htb.add_argument("--experiment", type=Path, default=Path("configs/htb-manual.toml"))
+    htb.add_argument("--output", type=Path, default=Path("runs/htb/attempts"))
+    event = commands.add_parser("run-htb-event", help="Attempt an HTB event's challenges, budget-paced (LIVE)")
+    event.add_argument("--ctf-id", type=int, default=3755)
+    event.add_argument("--experiment", type=Path, default=Path("configs/htb-manual.toml"))
+    event.add_argument("--output", type=Path, default=Path("runs/htb/events"))
+    event.add_argument("--budget", type=float, help="Global cost budget in USD; stops the event when reached")
+    event.add_argument("--limit", type=int, help="Attempt at most this many challenges (for testing)")
+    event.add_argument("--workers", type=int, default=1,
+        help="Concurrent challenges (default 1 = sequential; capped). Higher finishes faster for placement.")
+    event.add_argument("--manual-verify", action="store_true",
+        help="MCP fetches/spawns challenges, but YOU relay each flag (hedge if MCP submit misbehaves)")
     commands.add_parser("build-images", help="Build the solver, guard, and synthetic target")
     check = commands.add_parser("self-check", help="Run fixed synthetic controls checks; no model calls")
     check.add_argument("--output", type=Path, default=Path("runs"))
@@ -53,11 +74,44 @@ def main():
             else:
                 from .launch import launch_manual
 
-                launch_manual(args.experiment, args.task, args.output)
+                task = args.task
+                if task is None:
+                    from .manual import setup_manual_task
+
+                    task = setup_manual_task(args.task_output)
+                    print("\nStarting the agent on this task now (Ctrl-C to abort)...\n")
+                launch_manual(args.experiment, task, args.output)
         except (ValueError, OSError) as error:
             parser.error(str(error))
         except (KeyboardInterrupt, EOFError):
             raise SystemExit("Manual setup/run cancelled") from None
+    elif args.command == "htb-challenges":
+        from .launch import list_htb_challenges
+
+        try:
+            list_htb_challenges(args.ctf_id)
+        except (ValueError, RuntimeError) as error:
+            parser.error(str(error))
+    elif args.command == "run-htb":
+        from .launch import launch_htb
+
+        try:
+            launch_htb(args.experiment, args.ctf_id, args.challenge, args.output)
+        except (ValueError, OSError) as error:
+            parser.error(str(error))
+        except KeyboardInterrupt:
+            raise SystemExit("HTB run cancelled") from None
+    elif args.command == "run-htb-event":
+        from .compete import run_event, DEFAULT_POLICY
+
+        policy = dict(DEFAULT_POLICY, global_budget_usd=args.budget) if args.budget is not None else None
+        try:
+            run_event(args.experiment, args.ctf_id, args.output, policy=policy, limit=args.limit,
+                      workers=args.workers, manual_verify=args.manual_verify)
+        except (ValueError, OSError) as error:
+            parser.error(str(error))
+        except KeyboardInterrupt:
+            raise SystemExit("Event run cancelled") from None
     elif args.command == "build-images":
         settings = load_settings(args.config)
         for role, key in [("solver", "solver_image"), ("guard", "guard_image"), ("fixture", "target_image")]:

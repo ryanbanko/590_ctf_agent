@@ -191,13 +191,6 @@ CTFTiny development defaults. These are starting allowances, not a measured
 performance improvement or a dollar-budget guarantee. Use `--experiment FILE`
 to select another complete configuration. Human input time counts toward the
 same deadline, including file staging and solver startup.
-
-For an optional GPT-6.1 Sol comparison, add `--experiment configs/htb-sol.toml`
-to the same `run-manual` command. The [Sol profile](configs/htb-sol.toml) preserves
-medium reasoning and the same 3,600-second/200-model/240-tool limits, changing
-model identity and local pricing rates only. Those rates use the retained November 14 gateway snapshot. Harmless
-Sol API probes passed, but replay of the failed Void request received a provider
-`cyber_policy` rejection; repeated identical retries are not recommended.
 [Diagnostic evidence](evidence/sol-compatibility/README.md). A performance benefit
 has not been established. Luna remains the default. Reset the remote HTB instance and update its saved endpoint if needed
 before comparing fresh attempts.

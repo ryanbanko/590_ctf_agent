@@ -24,19 +24,15 @@ API request reproduced a provider **`cyber_policy` content rejection**. The repl
 executed no tools and started no solver/target interaction. The original errors
 retain status only, so their precise bodies remain unavailable. Five diagnostic
 model requests total; $0.000614 covers only the first three, not complete costs.
-Diagnostics are stopped; runtime/default Luna configuration remain unchanged and
-the optional Sol profile is retained. Preserve both failed runs and unknown usage.
+Diagnostics are stopped; runtime/default Luna configuration remain unchanged.
+The optional Sol profile was later removed (below). Preserve both failed runs and unknown usage.
 [Requests, evidence and limits](evidence/sol-compatibility/README.md).
 
-Optional [Sol manual profile](configs/htb-sol.toml) prepared at the user's request.
-It preserves the HTB limits and medium reasoning, changing only model identity
-and the three local pricing fields relative to Luna. Its wall/call limits were
-later raised together with Luna's profile to 1,800 seconds/100 requests/120 tools.
-Configuration loading and the derived 100-request cap passed offline checks.
-Pricing uses the retained November 14 gateway snapshot. Luna remains the default; select Sol with
-`--experiment configs/htb-sol.toml`. Preparation started no model call or challenge
-attempt; the later user run and diagnostic probes are recorded above.
-[Condition and verification](docs/EXPERIMENTS.md#optional-sol-manual-profile--november-17).
+The optional Sol comparison profile (`configs/htb-sol.toml`) was removed on
+November 18 at the user's request; the HTB work standardizes on the default Luna
+profile. Its preparation, limits, and the Sol diagnostic runs remain recorded in
+[EXPERIMENTS](docs/EXPERIMENTS.md#optional-sol-manual-profile--november-17) and the
+[Sol compatibility evidence](evidence/sol-compatibility/README.md).
 
 Previously reviewed manual trace: DNS Dossier `695912dc3f8c` records human-relayed
 acceptance after seven model/seven tool calls and 167.377 active seconds, including
