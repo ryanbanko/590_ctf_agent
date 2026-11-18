@@ -244,7 +244,7 @@ def test_competition_config_preserves_every_other_setting():
     baseline, model = load_experiment()
     manual, manual_model = load_experiment(Path("configs/htb-manual.toml"))
     assert manual == baseline | {"wall_seconds": 3600.0, "max_model_turns": 200, "max_tool_calls": 240}
-    assert manual_model == model | {"max_requests": 200}
+    assert manual_model == model | {"max_requests": 200, "max_output_tokens": 32768}
 
 
 def test_manual_model_flow_exports_real_sdk_spans_without_hosted_access(

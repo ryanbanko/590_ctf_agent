@@ -186,8 +186,8 @@ uv run --frozen --env-file .env python -m ctf_agent run-manual --task runs/htb/t
 ```
 
 The default [HTB configuration](configs/htb-manual.toml) allows 3,600 seconds,
-200 model calls and 240 tool calls. All other model/resource settings match the
-CTFTiny development defaults. These are starting allowances, not a measured
+200 model calls, 240 tool calls and 32,768 output tokens per response. All other
+model/resource settings match the CTFTiny development defaults. These are starting allowances, not a measured
 performance improvement or a dollar-budget guarantee. Use `--experiment FILE`
 to select another complete configuration. Human input time counts toward the
 same deadline, including file staging and solver startup.

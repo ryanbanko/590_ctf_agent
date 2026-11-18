@@ -22,7 +22,7 @@ cpus = 1.0
 model = "gpt-6-luna"
 base_url = "https://litellm.oit.duke.edu/v1"
 reasoning_effort = "medium"
-max_output_tokens = 8192
+max_output_tokens = 32768 # Raised from 8192: avoid model_response_incomplete on heavy reasoning.
 max_input_bytes = 2097152 # Serialized request bytes, including JSON and encrypted replay.
 request_seconds = 90.0
 # Gateway/official pricing snapshot, rechecked before live use.
