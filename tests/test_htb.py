@@ -70,6 +70,13 @@ def test_connection_endpoints_docker_ports_list():
     assert ports == [1337, 1338]
 
 
+def test_connection_endpoints_real_htb_shape():
+    # The exact container_status payload observed live from HTB.
+    data = {"status": "ready", "hostname": "154.57.164.68", "ports": [36058]}
+    assert htb.connection_endpoints(data, resolve=no_resolve) == [
+        {"address": "154.57.164.68", "protocol": "tcp", "port": 36058}]
+
+
 def test_connection_endpoints_empty_until_ready():
     assert htb.connection_endpoints({}, resolve=no_resolve) == []
     assert htb.connection_endpoints({"ip": "1.2.3.4"}, resolve=no_resolve) == []  # no port yet
@@ -155,6 +162,17 @@ def test_start_target_polls_until_endpoint():
     endpoints = htb.start_target(fake_call, 79390, interval=1.0, sleep=waits.append)
     assert endpoints == [{"address": "83.136.9.9", "protocol": "tcp", "port": 32100}]
     assert waits  # it slept at least once while waiting
+
+
+def test_start_target_tolerates_already_started():
+    # start_container 403 "already started" must not crash; poll status instead.
+    def fake_call(name, arguments=None, **kwargs):
+        if name == "start_container":
+            raise HtbMcpError("start_container", "already requested to start", 403)
+        return {"status": "ready", "hostname": "154.57.164.68", "ports": [36058]}
+
+    endpoints = htb.start_target(fake_call, 79390, sleep=lambda s: None)
+    assert endpoints == [{"address": "154.57.164.68", "protocol": "tcp", "port": 36058}]
 
 
 def test_start_target_times_out():

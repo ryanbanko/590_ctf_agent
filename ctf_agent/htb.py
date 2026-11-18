@@ -200,10 +200,15 @@ def start_target(call, challenge_id: int, *, budget: float = 120.0, interval: fl
     which one carries host:port is not yet observed. Raises if nothing reachable
     appears within `budget` seconds.
     """
-    start = htb_mcp.start_container(call, challenge_id)
-    endpoints = connection_endpoints(start)
-    if endpoints:
-        return endpoints
+    try:
+        endpoints = connection_endpoints(htb_mcp.start_container(call, challenge_id))
+        if endpoints:
+            return endpoints
+    except HtbMcpError:
+        # "You have already requested to start this container" (403) and transient
+        # start errors are not fatal: the instance may already be up, so fall
+        # through and poll container_status for its endpoint.
+        pass
     deadline = time.monotonic() + budget
     while True:
         try:
