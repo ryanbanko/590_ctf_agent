@@ -44,10 +44,12 @@ def test_unknown_difficulty_sorts_last():
 
 # --- per-challenge limits ---------------------------------------------------
 
-def test_challenge_limits_by_difficulty():
-    assert compete.challenge_limits(challenge(1, "very easy"), POLICY)["max_model_turns"] == 40
-    assert compete.challenge_limits(challenge(1, "insane"), POLICY)["reasoning_effort"] == "high"
-    assert compete.challenge_limits(challenge(1, "unknown"), POLICY) == POLICY["default_limits"]
+def test_challenge_limits_uniform_across_difficulties():
+    for diff in ("very easy", "easy", "medium", "hard", "insane", "unknown"):
+        limits = compete.challenge_limits(challenge(1, diff), POLICY)
+        assert limits["max_model_turns"] == 200
+        assert limits["wall_seconds"] == 3600.0
+        assert limits["reasoning_effort"] == "high"
 
 
 # --- budget gating ----------------------------------------------------------
@@ -190,8 +192,8 @@ def test_run_event_plans_limits_notes_and_solves(tmp_path, monkeypatch):
     assert round(summary["spent_usd"], 4) == 0.06      # all three costs summed
     assert summary["status"] == "completed"
     # per-challenge difficulty caps applied
-    assert captured[10]["settings"]["max_model_turns"] == 40
-    assert captured[12]["settings"]["max_model_turns"] == 120
+    assert captured[10]["settings"]["max_model_turns"] == 200
+    assert captured[12]["settings"]["max_model_turns"] == 200
     assert captured[12]["model_usage"]["model"]["reasoning_effort"] == "high"
     # preface carries flag format + the per-category hint (12 is pwn)
     assert "HTB{...}" in captured[12]["preface"]

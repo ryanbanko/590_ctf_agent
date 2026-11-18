@@ -19,23 +19,22 @@ DIFFICULTY_ORDER = ["very easy", "easy", "medium", "hard", "insane"]
 
 # Per-difficulty attempt ceilings. These are caps, not targets: the agent stops
 # as soon as it solves. Wall seconds are generous relative to turns.
-# Tuned for a ~$25 team key and a "5+ challenges completed" rubric: favour breadth
-# (harvest easy/medium solves) over depth (expensive hard attempts that may not
-# solve). The global budget is set BELOW the real key: the recorded local cost
-# estimate omits the cache-write premium and so undercounts true billing, and the
-# last in-flight attempt commits before its cost is seen, so headroom is required.
-# These numbers are starting points; recalibrate from real per-challenge costs.
+# Budget is not the constraint here, so every difficulty gets the full allowance:
+# 3600s wall, 200 model turns, high reasoning effort. Easiest-first ordering still
+# harvests likely solves early, but nothing is starved by a tighter per-difficulty
+# cap. The global budget is a safety ceiling only (real per-challenge cost is cents).
+UNIFORM_LIMITS = {"max_model_turns": 200, "wall_seconds": 3600.0, "reasoning_effort": "high"}
 DEFAULT_POLICY = {
-    "global_budget_usd": 20.0,           # ~80% of a $25 key: margin for undercount + final overshoot
-    "reserve_hard_below_fraction": 0.40,  # defer hard/insane while remaining budget < 40%
-    "skip_categories": [],               # e.g. ["hardware"] when unsupported locally
-    "default_limits": {"max_model_turns": 80, "wall_seconds": 1500.0, "reasoning_effort": "medium"},
+    "global_budget_usd": 20.0,            # safety ceiling; actual spend is cents/challenge
+    "reserve_hard_below_fraction": 0.40,  # defer hard/insane only if budget ever runs low (won't normally fire)
+    "skip_categories": [],                # e.g. ["hardware"] when unsupported locally
+    "default_limits": dict(UNIFORM_LIMITS),
     "difficulty_limits": {
-        "very easy": {"max_model_turns": 40, "wall_seconds": 900.0, "reasoning_effort": "medium"},
-        "easy":      {"max_model_turns": 60, "wall_seconds": 1200.0, "reasoning_effort": "medium"},
-        "medium":    {"max_model_turns": 100, "wall_seconds": 1800.0, "reasoning_effort": "high"},
-        "hard":      {"max_model_turns": 120, "wall_seconds": 2400.0, "reasoning_effort": "high"},
-        "insane":    {"max_model_turns": 140, "wall_seconds": 3000.0, "reasoning_effort": "high"},
+        "very easy": dict(UNIFORM_LIMITS),
+        "easy":      dict(UNIFORM_LIMITS),
+        "medium":    dict(UNIFORM_LIMITS),
+        "hard":      dict(UNIFORM_LIMITS),
+        "insane":    dict(UNIFORM_LIMITS),
     },
 }
 
