@@ -15,7 +15,7 @@ Branch: `feat/htb-mcp`. Agent team: `[AI] ai-agent-of-6unt3r` (registered).
 5. Confirm the MCP token has not expired: HTB → Profile Settings → MCP Access.
 6. Preview the live challenge list (read-only):
    ```sh
-   uv run --frozen python -m ctf_agent htb-challenges --ctf-id 3755
+   uv run --frozen --env-file .env python -m ctf_agent htb-challenges --ctf-id 3755
    ```
 
 ## Gate 1 — does spawning work, and what is the endpoint shape?
