@@ -282,7 +282,8 @@ def run_htb_challenge(settings, ctf_id: int, challenge_id: int, directory, *, la
     to relay them another way, e.g. a human, without changing challenge fetch/spawn.
     `prompt_preface` is additive task context (flag format, category hint, notes).
     """
-    from .htb import build_task, htb_network, start_target, stop_target, verify_with_mcp
+    from .htb import build_task, find_challenge, htb_network, start_target, stop_target, verify_with_mcp
+    from . import htb_mcp
 
     directory.mkdir(parents=True, exist_ok=False, mode=0o700)
     started = time.monotonic()
@@ -292,8 +293,11 @@ def run_htb_challenge(settings, ctf_id: int, challenge_id: int, directory, *, la
               "ctf_id": ctf_id, "htb_challenge_id": challenge_id}
     container_started = False
     try:
-        endpoints = start_target(call, challenge_id)
-        container_started = True
+        # Only container challenges (hasDocker) have a target to spawn; file-only
+        # challenges (crypto/misc) run on the downloaded files with no endpoint.
+        needs_container = bool(find_challenge(htb_mcp.retrieve_ctf(call, ctf_id), challenge_id).get("hasDocker"))
+        endpoints = start_target(call, challenge_id) if needs_container else []
+        container_started = needs_container
         report["phase"] = "loading"
         task, files, _ = build_task(call, ctf_id, challenge_id, directory, endpoints)
         report["challenge_id"] = task["name"]
