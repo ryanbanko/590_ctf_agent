@@ -95,7 +95,7 @@ def validate_response(response: dict, used_ids: set[str]) -> None:
         raise ValueError("Assistant response exceeds the 1 MiB limit")
 
 
-def run_agent(public_task: str, respond, call_tool) -> str:
+def run_agent(public_task: str, respond, call_tool, *, receive_guidance=None) -> str:
     """Pass public history between bounded model/tool functions and return a reason."""
     if not isinstance(public_task, str) or not public_task.strip():
         raise ValueError("public_task must be nonempty public text")
@@ -104,6 +104,8 @@ def run_agent(public_task: str, respond, call_tool) -> str:
     tools = [{"type": "function", "function": tool} for tool in TOOL_DEFINITIONS]
     try:
         while True:
+            if receive_guidance is not None:
+                messages.extend(receive_guidance())
             response = respond(messages=deepcopy(messages), tools=deepcopy(tools))
             messages.append(response)
             calls = response.get("tool_calls", [])

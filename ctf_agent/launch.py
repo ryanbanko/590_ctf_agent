@@ -120,7 +120,7 @@ def run_challenge(settings: dict, dataset_json: Path, manifest_path: Path, chall
 
 def run_task(settings, directory, report, target, task, files, expected_flag, *,
              langfuse, respond, model_usage, verify_candidate=None, verification_source="local-answer",
-             prompt_preface=None):
+             prompt_preface=None, allow_guidance=False):
     """Common isolated execution for CTFTiny and manually prepared public tasks."""
     report["target"] = target
     report["provenance"] = collect_provenance(settings, target_images=target["images"])
@@ -130,9 +130,11 @@ def run_task(settings, directory, report, target, task, files, expected_flag, *,
     with run_attempt(settings, target["network"], target["endpoints"], expected_flag, directory,
                      langfuse=langfuse, label=report["challenge_id"], public_task=task,
                      respond=respond, model_usage=model_usage, mode=report["mode"],
-                     verify_candidate=verify_candidate, verification_source=verification_source) as run:
+                     verify_candidate=verify_candidate, verification_source=verification_source,
+                     allow_guidance=allow_guidance) as run:
         report["files"] = stage_files(files, run["solver"], run["remaining_seconds"]())
-        run_agent(agent_task, run["respond"], run["call_tool"])
+        run_agent(agent_task, run["respond"], run["call_tool"],
+                  receive_guidance=run.get("receive_guidance"))
 
 
 def finish_run(report, directory, started, langfuse, export_trace, *, expected_flag=None):
@@ -205,7 +207,7 @@ def launch_challenge(experiment_path: Path, dataset_json: Path, manifest_path: P
 
 
 def run_manual_challenge(settings, task_path, directory, *, langfuse, respond, model_usage,
-                         verify_candidate=None, export_trace=read_model_trace):
+                         verify_candidate=None, export_trace=read_model_trace, allow_guidance=False):
     from .manual import load_manual_task, manual_network, manual_verdict
 
     directory.mkdir(parents=True, exist_ok=False, mode=0o700)
@@ -224,7 +226,7 @@ def run_manual_challenge(settings, task_path, directory, *, langfuse, respond, m
             run_task(settings, directory, report, target, task_text, files, None,
                      langfuse=langfuse, respond=respond, model_usage=model_usage,
                      verify_candidate=verifier, verification_source="htb-human-relay",
-                     prompt_preface=MANUAL_HTB_PROMPT_PREFACE)
+                     prompt_preface=MANUAL_HTB_PROMPT_PREFACE, allow_guidance=allow_guidance)
         report["phase"] = "trace-export"
     except BaseException as error:
         report["error_type"] = type(error).__name__
@@ -234,7 +236,7 @@ def run_manual_challenge(settings, task_path, directory, *, langfuse, respond, m
     return checked_report(report, export_trace)
 
 
-def launch_manual(experiment_path: Path, task_path: Path, output_root: Path):
+def launch_manual(experiment_path: Path, task_path: Path, output_root: Path, *, allow_guidance=False):
     from .manual import load_manual_task
 
     # Validate before creating clients or contacting hosted services.
@@ -244,7 +246,7 @@ def launch_manual(experiment_path: Path, task_path: Path, output_root: Path):
     with model_session(experiment_path) as (settings, client, respond, usage):
         directory = output_root / ("challenge-" + uuid.uuid4().hex[:12])
         return run_manual_challenge(settings, task_path, directory, langfuse=client,
-                                    respond=respond, model_usage=usage)
+                                    respond=respond, model_usage=usage, allow_guidance=allow_guidance)
 
 
 def launch_batch(experiment_path: Path, dataset_json: Path, manifest_path: Path,

@@ -38,6 +38,43 @@ unchanged. The later prompt/output milestone is described below and in its
 
 ## One challenge path
 
+### Optional human guidance — November 18
+
+Manual HTB runs can opt in with `--allow-guidance`. `guidance.py` owns a host-only
+queue, with atomic publication of bounded message files and a lock used only by
+senders to serialize publication. No socket or background listener is added.
+`guide --run DIRECTORY --message TEXT` queues input; `--status` reads local receipts.
+Each run has its own inbox and process/state record. The controller checks a
+bounded directory listing before a model request and reads each new file once.
+Files remain as immutable queued-message evidence; an in-memory ID set prevents
+duplicate insertion during the attempt. Per-message and total limits are 4,096
+UTF-8 bytes and 64 messages. No crash-resume/exactly-once-across-crashes claim is made.
+
+The conversation loop accepts an optional callback returning public user messages.
+The trusted runner supplies it only for enabled manual runs. It checks the original
+deadline and request allowance before reading. Messages are appended after all
+previous tool results using the exact wrapper “Human guidance: Consider this
+alongside the evidence gathered so far.” History then follows the existing native
+Responses replay. The system prompt and tool definitions are unchanged.
+
+Local `guidance/events.jsonl` receipts and root-linked Langfuse events identify
+the text, message ID, queue timestamp and receiving request attempt. Receipt
+recording occurs after the responder returns/raises, using its invocation timestamp,
+so expiry before invocation cannot falsely count as delivery. Inclusion is not
+provider acceptance or proof that guidance influenced the model. An unresolved
+request or abrupt process loss can leave an unconfirmed receipt; original message
+files are preserved. Metadata distinguishes enabled guidance from actual human
+assistance. Telemetry/inbox failures disable the optional channel visibly rather
+than stopping a solve; partial recording remains a possible failure limitation.
+
+Disabled guidance has no filesystem queue operations or prompt additions. An empty
+enabled inbox performs a bounded directory listing without creating model/tool
+calls. The original no-tool-response, success, incident, cancellation and limit
+stops remain terminal. Unsent messages stay undelivered; the command rejects known
+closed/dead runs, although a send racing closure can still be saved without delivery.
+The queue stays outside the solver; no host tools or mounts are exposed to it.
+[Verification and limits](../evidence/htb-guidance/README.md).
+
 ### Manual HTB integration — November 16
 
 The `feat/htb-manual` branch adds `setup-manual` and `run-manual`; CTFTiny's

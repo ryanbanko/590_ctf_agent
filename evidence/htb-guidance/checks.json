@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-18",
+  "branch": "feat/htb-guidance",
+  "base_commit": "7cb183717dfb99c70776e4c89418338e47724ac0",
+  "verification": {
+    "focused_command": "UV_CACHE_DIR=/tmp/ctf-agent-uv-cache uv run --frozen pytest tests/test_agent.py tests/test_agent_controls.py tests/test_model.py tests/test_manual.py tests/test_guidance.py tests/test_contracts.py -q --junitxml=evidence/htb-guidance/offline-tests.xml",
+    "focused_passed": 113,
+    "docker_deselected": 2,
+    "launcher_command": "UV_CACHE_DIR=/tmp/ctf-agent-uv-cache uv run --frozen pytest tests/test_batch.py tests/test_development.py -q --junitxml=evidence/htb-guidance/launcher-tests.xml",
+    "launcher_passed": 25,
+    "total_passed": 138,
+    "unchanged_system_prompt_ast": true,
+    "unchanged_from_base": {
+      "ctf_agent/tools.py": true,
+      "ctf_agent/config.py": true,
+      "ctf_agent/manual.py": true,
+      "ctf_agent/sandbox.py": true,
+      "configs/development.toml": true,
+      "configs/htb-manual.toml": true,
+      "configs/htb-sol.toml": true,
+      "pyproject.toml": true,
+      "uv.lock": true
+    },
+    "cli_help": "guide --help passed",
+    "whitespace": "git diff --check passed"
+  },
+  "earlier_checks": [
+    {
+      "result": "20 passed; initial focused checks"
+    },
+    {
+      "result": "no tests collected; nonexistent test_config.py argument corrected"
+    },
+    {
+      "result": "108 passed, 1 failed, 2 deselected; pre-existing stale manual-config test expectation corrected"
+    },
+    {
+      "result": "111 passed, 2 deselected; before additional terminal-boundary checks"
+    }
+  ],
+  "source_sha256": {
+    "ctf_agent/guidance.py": "7fc0877d0e130fe8fdb9f023d4178ee59b8e0917f0b12e71f09607a426fe04b0",
+    "ctf_agent/agent.py": "16776f6d4f0971091456e4f7fbc8d6a24bb4c0e684949f92479db1367ae9debb",
+    "ctf_agent/attempt.py": "665c29f9876f9d154966e9329e400c8e60f1e59b6154f08af4ec1cc53271cfca",
+    "ctf_agent/launch.py": "0a46eb7eda17be3137c19272f789b0b8b135203fa1a4ca798ff6addce3305e8e",
+    "ctf_agent/__main__.py": "27f1aff2327e277be0b541efbd24d57df8f94aa6505dcf1560cc57e25ee0619b",
+    "tests/test_guidance.py": "34a49e8ee94c6dbb6fd7025e8ecdb2ba04ae9127b7427f02e7a5d2f70e78ac13",
+    "tests/test_manual.py": "d6422d013f78028d9b0118583575a65b840090993b345ee825fc99f25690c60e"
+  },
+  "live_model_requests": 0,
+  "real_challenge_attempts": 0,
+  "docker_operations": 0,
+  "hosted_mutations": 0,
+  "committed": false,
+  "pushed": false
+}

@@ -50,7 +50,8 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
                 expected_flag: str | None, output_root: Path, *, langfuse: Langfuse,
                 label: str = "synthetic", public_task: str = "Synthetic controls check", respond=None,
                 model_usage: dict | None = None, mode: str = "synthetic-controls",
-                verify_candidate=None, verification_source: str = "local-answer"):
+                verify_candidate=None, verification_source: str = "local-answer",
+                allow_guidance: bool = False):
     """Own one run and yield bounded respond/call_tool functions plus result metadata.
 
     The answer stays in this trusted scope. Neither the loop nor Langfuse receives
@@ -61,6 +62,8 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
     validate_settings(settings)
     if (expected_flag is None) == (verify_candidate is None):
         raise ValueError("Supply either a private answer or an external verification function")
+    if allow_guidance and mode != "htb-manual":
+        raise ValueError("Human guidance is available only for manual HTB runs")
     run_id = uuid.uuid4().hex[:12]
     directory = output_root / run_id
     directory.mkdir(parents=True, exist_ok=False, mode=0o700)
@@ -83,6 +86,19 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
             sandbox["directory"] = directory
             sandbox.update(scope_limit=settings["max_scope_recoveries"], endpoints=endpoints)
             used_ids = set()
+            guidance = None
+
+            def check_model_turn():
+                remaining_seconds(state)
+                if result["scripted_turns"] + result["model_calls"] >= settings["max_model_turns"]:
+                    stop_attempt(state, "model_turn_limit")
+                    raise AttemptStopped(result["termination_reason"])
+
+            def read_guidance():
+                from .guidance import receive_guidance
+
+                check_model_turn()
+                return receive_guidance(guidance, observation, lambda: remaining_seconds(state))
 
             def record_submission(row: dict, status: str):
                 # Durable controller-only records; candidates never enter the root summary.
@@ -174,9 +190,7 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
                     if tool["function"]["name"] == "run_command":
                         tool["function"]["parameters"]["properties"]["timeout_seconds"].update(
                             maximum=settings["command_seconds"], default=settings["command_seconds"])
-                if result["scripted_turns"] + result["model_calls"] >= settings["max_model_turns"]:
-                    stop_attempt(state, "model_turn_limit")
-                    raise AttemptStopped(result["termination_reason"])
+                check_model_turn()
                 result["agent_mode"] = "model" if model_usage is not None else "scripted"
                 if model_usage is None:
                     result["scripted_turns"] += 1
@@ -187,7 +201,22 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
                                   "timeout_seconds": timeout})
                 with context as generation:
                     try:
-                        response = respond(messages=messages, tools=tools, timeout_seconds=timeout)
+                        if guidance is not None:
+                            from .guidance import dispatch_guidance, timestamp
+
+                            timeout = remaining_seconds(state)
+                            request_number = (result["scripted_turns"] + result["model_calls"]
+                                              + (model_usage is not None))
+                            sent_at = timestamp()
+                            try:
+                                response = respond(messages=messages, tools=tools, timeout_seconds=timeout)
+                            finally:
+                                # Record only when the responder was actually invoked, even if it failed.
+                                count = dispatch_guidance(guidance, observation, request_number, sent_at)
+                                result["guidance_messages"] += count
+                                result["human_assisted"] = result["guidance_messages"] > 0
+                        else:
+                            response = respond(messages=messages, tools=tools, timeout_seconds=timeout)
                     except AttemptStopped as stopped:
                         stop_attempt(state, str(stopped))
                         raise AttemptStopped(result["termination_reason"]) from None
@@ -245,6 +274,16 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
                                             timeout=min(5, remaining_seconds(state)))
                 observation.update(metadata={"image_ids": image_ids})
                 start_sandbox(sandbox, settings, network, endpoints, lambda: remaining_seconds(state))
+                if allow_guidance:
+                    from .guidance import start_guidance
+
+                    result.update(guidance_enabled=True, guidance_messages=0, human_assisted=False)
+                    try:
+                        guidance = start_guidance(output_root, run_id)
+                        run["receive_guidance"] = read_guidance
+                    except (OSError, ValueError) as error:
+                        result["guidance_errors"] = 1
+                        print(f"Could not enable guidance ({type(error).__name__}); solve continues.", flush=True)
                 yield run
             except BaseException as error:
                 if result["termination_reason"] is None:
@@ -254,6 +293,11 @@ def run_attempt(settings: dict, network: str, endpoints: list[dict],
             finally:
                 if result["termination_reason"] is None:
                     stop_attempt(state, "completed_without_success")
+                if guidance is not None:
+                    from .guidance import close_guidance
+
+                    close_guidance(guidance, result["termination_reason"], observation)
+                    result["guidance_errors"] = guidance["errors"]
                 state["watchdog_done"].set()
                 watchdog.join(timeout=4)
                 result["active_seconds"] = round(time.monotonic() - started, 6)

@@ -1,6 +1,19 @@
 # Project status
 
-Last reviewed: November 17, 2026 (America/New_York).
+Last reviewed: November 18, 2026 (America/New_York).
+
+Optional human guidance is implemented on `feat/htb-guidance`, branched from the
+clean `htb-manual` commit `7cb1837`. Enable only for manual HTB runs with
+`--allow-guidance`; a second-terminal `guide` command queues a message for the next
+model request using the agreed “Human guidance” wrapper. Disabled runs create/check
+no inbox. Local receipts and Langfuse events distinguish queued messages from
+request inclusion, and enabled from human-assisted attempts. Text-only stopping,
+deadlines, verification and enforced scope are preserved. The focused offline
+checks passed (113 controller/SDK/manual/guidance checks plus 25 launcher/batch
+checks; two Docker cases deselected). Empty-inbox checks measured a median 3.21 ms
+for 200 checks locally. No model call, real challenge, Docker operation, hosted
+mutation, commit or push was performed. Review before a separate live trial.
+[Implementation, checks and limitations](evidence/htb-guidance/README.md).
 
 Manual HTB runs now receive this one-sentence preface immediately before the
 original task JSON in the initial user message: “Challenge descriptions vary in
@@ -90,9 +103,10 @@ Git-ignored; old benchmark records are unchanged.
 
 **Before this milestone, the original `0395835` prompt and 40-turn default were restored.** The
 user withdrew planning/notes plus 50 turns after review found limited adoption
-and no demonstrated benefit. Both agent.py and development.toml match that commit
-byte-for-byte. The manual integration now extends shared controller/launch code;
-the rollback's other-file identity claims describe that earlier checkpoint.
+and no demonstrated benefit. At the rollback checkpoint, agent.py and
+development.toml matched that commit byte-for-byte. Manual integration extends
+shared controller/launch code, and optional guidance now adds a conversation hook;
+the rollback's source-identity claims describe that earlier checkpoint.
 All 41 focused offline rollback checks passed. At that checkpoint, remaining
 uncommitted work was documentation and retained experiment evidence.
 [Decision, review and verification](evidence/planning-notes/rollback/README.md).
@@ -208,8 +222,9 @@ Agent/tool/model behavior retains scored baseline **`aedfd62`**, with the new
 two-image target-listener correction and additive usage-accounting records.
 The active agent prompt/tools/model adapter and CTFTiny default configuration match
 `0395835`, including the original practice-baseline prompt and 40-turn allowance.
-The manual branch extends orchestration/verification; its separate configuration
-uses 900 seconds/60 model calls/80 tools. Both withdrawn candidates and
+The manual branch extends orchestration/verification and adds an optional human
+guidance hook; its separate configuration now uses 3600 seconds/200 model calls/
+240 tools. Both withdrawn candidates and
 their original settings/results remain in evidence.
 Team reporting/submission updates through
 **`36307ce`** and historical scored records remain unchanged. The configuration source is

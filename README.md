@@ -192,6 +192,40 @@ performance improvement or a dollar-budget guarantee. Use `--experiment FILE`
 to select another complete configuration. Human input time counts toward the
 same deadline, including file staging and solver startup.
 
+**Optional human guidance.** Add `--allow-guidance` to `run-manual` to enable
+messages from a second terminal. The running terminal prints the run directory
+and a ready-to-copy command after the solver starts:
+
+```sh
+uv run --frozen python -m ctf_agent guide --run runs/htb/attempts/challenge-<id> --message "Please check the complete output before repeating that command."
+uv run --frozen python -m ctf_agent guide --run runs/htb/attempts/challenge-<id> --status
+```
+
+The `guide` command uses local files and needs no credentials or Docker. It reports
+`queued`; the controller reads messages before the next model request, after
+current tool calls finish. Each message is a user message prefaced with
+“Human guidance: Consider this alongside the evidence gathered so far.”
+It remains in the conversation. Messages are limited to 4,096 UTF-8 bytes each
+and 64 per attempt. Guidance text and receipt records are saved locally and
+included in tracing; use the same care as with other model inputs.
+
+`--status` reports `included_in_request` once the responder invocation finishes
+(or raises), with its request number and invocation timestamp. This records a
+request attempt, not provider acceptance or evidence the model followed it.
+Messages arriving during that invocation wait for another request. After closure,
+messages without a request receipt are `undelivered`; known closed/dead runs reject
+new messages. A final text-only response, success, cancellation or expired limit
+still ends the attempt. Guidance cannot interrupt, extend or resume it.
+
+Without `--allow-guidance`, no inbox is created or checked. Enabled empty inboxes
+add no model requests, tools or tokens. Inbox errors visibly disable guidance
+while the solve continues. Enabled runs record `guidance_enabled`; runs with
+messages included in a request record `human_assisted` and `guidance_messages`.
+The inbox lives under the run's host-only `guidance/` directory and is never
+mounted or staged into the solver. Delivery is tracked during this process;
+crash recovery and replay after restarting are unsupported.
+[Offline checks and measured overhead](evidence/htb-guidance/README.md).
+
 For an optional GPT-6.1 Sol comparison, add `--experiment configs/htb-sol.toml`
 to the same `run-manual` command. The [Sol profile](configs/htb-sol.toml) preserves
 medium reasoning and the same 3,600-second/200-model/240-tool limits, changing

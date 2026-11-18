@@ -17,6 +17,12 @@ def main():
     manual.add_argument("--task", type=Path, required=True)
     manual.add_argument("--experiment", type=Path, default=Path("configs/htb-manual.toml"))
     manual.add_argument("--output", type=Path, default=Path("runs/htb/attempts"))
+    manual.add_argument("--allow-guidance", action="store_true", help="Enable optional human messages between model turns")
+    guide = commands.add_parser("guide", help="Queue human guidance or inspect its delivery status; no model calls")
+    guide.add_argument("--run", type=Path, required=True)
+    guidance_action = guide.add_mutually_exclusive_group(required=True)
+    guidance_action.add_argument("--message")
+    guidance_action.add_argument("--status", action="store_true")
     commands.add_parser("build-images", help="Build the solver, guard, and synthetic target")
     check = commands.add_parser("self-check", help="Run fixed synthetic controls checks; no model calls")
     check.add_argument("--output", type=Path, default=Path("runs"))
@@ -44,7 +50,19 @@ def main():
     batch.add_argument("--trials", type=int, default=1)
     batch.add_argument("--output", type=Path, default=Path("runs/batches"))
     args = parser.parse_args()
-    if args.command in {"setup-manual", "run-manual"}:
+    if args.command == "guide":
+        import json
+        from .guidance import guidance_status, queue_guidance
+
+        try:
+            if args.status:
+                print(json.dumps(guidance_status(args.run), indent=2, ensure_ascii=True))
+            else:
+                row = queue_guidance(args.run, args.message)
+                print(f'Guidance {row["id"]}: queued for the next model request. Use --status to check delivery.')
+        except (ValueError, OSError, KeyError, TypeError) as error:
+            parser.error(str(error))
+    elif args.command in {"setup-manual", "run-manual"}:
         try:
             if args.command == "setup-manual":
                 from .manual import setup_manual_task
@@ -53,7 +71,7 @@ def main():
             else:
                 from .launch import launch_manual
 
-                launch_manual(args.experiment, args.task, args.output)
+                launch_manual(args.experiment, args.task, args.output, allow_guidance=args.allow_guidance)
         except (ValueError, OSError) as error:
             parser.error(str(error))
         except (KeyboardInterrupt, EOFError):

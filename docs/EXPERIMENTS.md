@@ -12,6 +12,41 @@ comparisons, the exact change, run references and conclusions. Keep raw evidence
 in Langfuse and run records; use `PROJECT_STATUS.md` for the overall checklist.
 This is Section 2 of [Part 1](../ASSIGNMENT.md), not the later competition Part 2.
 
+## Optional human guidance: implementation and offline checks — November 18
+
+Hypothesis before live testing: allowing a watching human to supply a correction
+or suggestion between model turns may help recover from a mistaken conclusion
+without restarting an attempt. This changes the condition to human-assisted solving
+when guidance is used; it is not evidence of an autonomous performance improvement.
+The user approved implementation/offline checks only and explicitly retained
+text-only stopping. A live usefulness comparison remains separate.
+
+Implemented on `feat/htb-guidance` from clean `htb-manual` commit `7cb1837`:
+manual-only `--allow-guidance`, a second-terminal `guide` command, a bounded local
+file queue, user-message insertion before the next request, and local/Langfuse
+receipt records. The exact wrapper is “Human guidance: Consider this alongside
+the evidence gathered so far.” Message text stays verbatim after the wrapper.
+No system-prompt, tool, model, budget, dependency, solver image or scope change.
+Without the flag there are no queue filesystem operations. Enabled but unused
+guidance adds no model/tool calls or prompt text.
+
+113 controller/conversation/native SDK/manual/guidance checks plus 25 launcher/batch
+checks passed, with two Docker cases deselected. Checks compare disabled and empty
+inboxes for histories, tool schemas, counters and five stopping conditions; verify
+guidance arriving during response/tool work, persistence/order, malformed queue
+handling, symlink rejection, bounds, late input, expiry, source failure and startup
+failure. Native mocked-transport requests confirm insertion after linked tool
+results without extra requests/tools. A pre-existing test still expected the older
+manual budgets; corrected its expectation to the existing committed profile.
+
+Seven local timing samples of 200 empty-inbox checks had a median total of 3.21 ms
+(0.016 ms/check). This is a small local-directory measurement on this Mac, not a
+general latency guarantee. No real challenge, paid model request, Docker operation,
+hosted mutation, commit or push occurred. Provider acceptance/model adoption,
+live routing and behavioral benefit are untested. No crash-resume feature exists;
+an abrupt process loss can leave delivery unconfirmed. Review before a live trial.
+[Implementation, command history and evidence](../evidence/htb-guidance/README.md).
+
 ## Repeated Sol HTTP 400: provider rejection reproduced — November 17
 
 The user's unchanged retry `c49236369760` again stopped on the first request,

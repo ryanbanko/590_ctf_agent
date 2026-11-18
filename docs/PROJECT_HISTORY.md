@@ -9,6 +9,7 @@ and results. Historical proposal/approval records do not authorize new runs.
 
 | Period | Milestone | Detailed record |
 | --- | --- | --- |
+| November 18 | Optional manual HTB human guidance via a second-terminal command; 138 offline checks and measured queue overhead | [Implementation and limits](../evidence/htb-guidance/README.md) |
 | November 17 | One-sentence description context added to initial manual HTB task message; focused offline check passed | [Implementation and limits](../evidence/htb-description-preface/README.md) |
 | November 17 follow-up | HTB limits increased to one hour/200 model requests/240 tools after latest monitored success; CTFTiny unchanged | [Rationale and checks](../evidence/htb-budget-update/README.md) |
 | November 17 | HTB manual profiles raised to 30 minutes/100 model requests/120 tools after monitored-run review; CTFTiny unchanged | [Rationale and checks](../evidence/htb-budget-update/README.md) |
@@ -37,6 +38,25 @@ and results. Historical proposal/approval records do not authorize new runs.
 | November 16 planning/notes candidate | Original prompt restored plus brief plans/optional notes; default model allowance 40 to 50; 41 offline checks passed, no live result | [Exact condition and verification](../evidence/planning-notes/README.md) |
 | November 16 review/rollback | Twelve candidate attempts recorded; no explicit note use in ten exports; original prompt/40-turn default restored and 41 checks passed | [Decision and rollback evidence](../evidence/planning-notes/rollback/README.md) |
 | November 16 manual HTB fallback | Feature branch, saved public tasks, human verdicts, separate 15-minute/60-call profile; 204 offline checks passed | [Implementation and limits](../evidence/htb-manual/README.md) |
+
+## Optional human guidance — November 18
+
+The user approved a branch from current `htb-manual` and an optional file-backed
+second-terminal command. Created `feat/htb-guidance` from clean `7cb1837`. The first
+branch creation encountered read-only Git metadata; the authorized escalated retry
+succeeded. Manual runs opt in with `--allow-guidance`; `guide --run ... --message ...`
+queues bounded input, and `--status` reports local request receipts. The agent gets
+the exact agreed “Human guidance” wrapper before its next model request, after
+completed tool results. Disabled runs perform no queue operations. Existing
+text-only termination, deadlines, scope and verification remain.
+
+113 focused controller/SDK/manual/guidance checks and 25 launcher/batch checks passed.
+The wider check initially found a pre-existing test expecting old 900-second/60-turn
+limits; updated only that expectation to the already committed 3600/200/240 profile.
+No configuration values changed. A local empty-inbox microbenchmark measured median
+3.21 ms for 200 checks. No paid model request, real challenge, Docker operation,
+hosted mutation, commit or push occurred. This is mechanical verification, not an
+effectiveness result. [Evidence and limits](../evidence/htb-guidance/README.md).
 
 ## Sol compatibility diagnosis — November 17
 

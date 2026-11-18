@@ -16,6 +16,7 @@ for example `git show aedfd62:evidence/target-precleanup-snapshot/README.md`.
 
 | Folder | Contents | Used by |
 | --- | --- | --- |
+| `htb-guidance/` | Optional human-guidance queue, offline equivalence/delivery checks and measured empty-inbox overhead | Current status, README, design, history and experiments |
 | `htb-description-preface/` | One-sentence manual HTB prompt preface; focused synthetic propagation check and scope limits | Current status, history and experiments |
 | `sol-compatibility/` | Two user-run Sol HTTP 400s; five diagnostic requests, with failed-request replay identifying a provider cyber-policy rejection | Current status, history and experiments |
 | `htb-budget-update/` | HTB Luna and Sol limits now one hour/200 model requests/240 tools; offline config checks | Current status, history and experiments |

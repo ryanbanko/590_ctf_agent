@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-18",
+  "kind": "local synthetic microbenchmark; no model or solver",
+  "checks_per_sample": 200,
+  "sample_total_ms": [
+    4.488125,
+    3.218792,
+    3.212083,
+    3.124666,
+    3.302208,
+    3.182625,
+    3.140792
+  ],
+  "median_total_ms": 3.212083,
+  "median_per_check_ms": 0.016060414999999998,
+  "limit": "Small empty local directory on this Mac; no network filesystems or performance guarantee."
+}
